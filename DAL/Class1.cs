@@ -4,10 +4,6 @@ namespace IDAL
 {
     namespace DO
     {
-        public class Class1
-        {
-
-        }
         public struct Station
         {
             public int ID { get; set; }
@@ -71,7 +67,7 @@ namespace IDAL
 
             public override string ToString()
             {
-                return $"Drone ID:{DroneID}, Station ID{StationID}"; 
+                return $"Drone ID:{DroneID}, Station ID: {StationID}"; 
             }
         }
         public class Enums
@@ -110,67 +106,88 @@ namespace DalObject
             internal static int NextCustomer = 0;
             internal static int NextPackage = 0;
 
-            static int PackageId = 1;
+            internal static int PackageID = 1;
         }
 
+        /// <summary>
+        /// Initialize all entity arrays with random variables
+        /// </summary>/
         public static void Initialize() {
-
+            Random random = new Random();
             string[] RandomNames = new string[100] { "James", "Robert", "John", "Michael", "William", "David", "Richard", "Joseph", "Thomas", "Charles", "Mary", "Patricia", "Jennifer", "Linda", "Elizabeth", "Barbara", "Susan", "Jessica", "Sarah", "Karen", "Christopher", "Daniel", "Matthew", "Anthony", "Mark", "Donald", "Steven", "Paul", "Andrew", "Joshua", "Nancy", "Lisa", "Betty", "Margaret", "Sandra", "Ashley", "Kimberly", "Emily", "Donna", "Michelle", "Kenneth", "Kevin", "Brian", "George", "Edward", "Ronald", "Timothy", "Jason", "Jeffrey", "Ryan", "Dorothy", "Carol", "Amanda", "Melissa", "Deborah", "Stephanie", "Rebecca", "Sharon", "Laura", "Cynthia", "Jacob", "Gary", "Nicholas", "Eric", "Jonathan", "Stephen", "Larry", "Justin", "Scott", "Brandon", "Kathleen", "Amy", "Shirley", "Angela", "Helen", "Anna", "Brenda", "Pamela", "Nicole", "Emma", "Benjamin", "Samuel", "Gregory", "Frank", "Alexander", "Raymond", "Patrick", "Jack", "Dennis", "Samantha", "Katherine", "Christine", "Debra", "Rachel", "Catherine", "Carolyn", "Janet", "Ruth", "Jerry", "Maria" };
 
-            while (Config.NextStation < 2)
+            int randomStation = random.Next(2,  6);
+            while (Config.NextStation < randomStation)
             {
-                Stations[Config.NextStation].ID = 1;
-                Stations[Config.NextStation].Name = 123;
+                Stations[Config.NextStation].ID = Config.NextStation + 1;
+                Stations[Config.NextStation].Name = Config.NextStation + 1 * 32;
                 Stations[Config.NextStation].NumChargeSlots = 5;
-                Stations[Config.NextStation].Latitude = 1000.0;
-                Stations[Config.NextStation].Longitude = 1000.0;
+                // get a random double between 0-90 then randomly multiply by +/- 1 
+                Stations[Config.NextStation].Latitude = (random.NextDouble() * 90) * (random.Next(0, 2) * 2 - 1);
+                // longitude is always positive
+                Stations[Config.NextStation].Longitude = random.NextDouble() * 180;
                 Config.NextStation++;
-                }
+            }
 
-            while(Config.NextDrone < 5)
+            int randomDrones = random.Next(5, 11);
+            while(Config.NextDrone < randomDrones)
             {
-                Drones[Config.NextDrone].ID = 2;
-                Drones[Config.NextDrone].Model = "MX2";
-                Drones[Config.NextDrone].MaxWeight = Enums.WeightCategories.light;
+                Drones[Config.NextDrone].ID = Config.NextDrone + 1;
+                Drones[Config.NextDrone].Model = $"MX{random.Next(1,6)}";
+                Drones[Config.NextDrone].MaxWeight = (Enums.WeightCategories)random.Next(0, 3);
                 Drones[Config.NextDrone].Status = Enums.DroneStatuses.free;
                 Drones[Config.NextDrone].BatteryLevel = 100.0;
                 Config.NextDrone++;
             }
 
-            while (Config.NextCustomer < 10)
+            int randomCustomers = random.Next(10,  101);
+            while (Config.NextCustomer < randomCustomers)
             {
-                Customers[Config.NextCustomer].ID = 291816;
+                Customers[Config.NextCustomer].ID = Config.NextCustomer + 100000;
                 Customers[Config.NextCustomer].Name = RandomNames[Config.NextCustomer];
-                Customers[Config.NextCustomer].Phone = "123456789";
-                Customers[Config.NextCustomer].Latitude = 1000.0;
-                Customers[Config.NextCustomer].Longitude = 1000.0;
+                Customers[Config.NextCustomer].Phone = random.Next(100000000, 1000000000).ToString();
+                // get a random double between 0-90 then randomly multiply by +/- 1 
+                Customers[Config.NextCustomer].Latitude = (random.NextDouble() * 90) * (random.Next(0, 2) * 2 - 1);
+                // longitude is always positive
+                Customers[Config.NextCustomer].Longitude = random.NextDouble() * 180;
                 Config.NextCustomer++;
             }
-            while(Config.NextPackage < 10)
+
+            int randomPackages = random.Next(10, 1001);
+            while(Config.NextPackage < randomPackages)
             {
-                Packages[Config.NextPackage].ID = 123;
-                Packages[Config.NextPackage].SenderID = 123;
-                Packages[Config.NextPackage].ReceiverID = 123;
-                Packages[Config.NextPackage].Weight = Enums.WeightCategories.light;
-                Packages[Config.NextPackage].Priority = Enums.Priorities.regular;
+                Packages[Config.NextPackage].ID = Config.PackageID;
+                // Choose ID from a random customer based on the size of our Customers array
+                Packages[Config.NextPackage].SenderID = Customers[random.Next(0,randomCustomers)].ID;
+                Packages[Config.NextPackage].ReceiverID = Customers[random.Next(0, randomCustomers)].ID;
+                Packages[Config.NextPackage].Weight = (Enums.WeightCategories)random.Next(0, 3);
+                Packages[Config.NextPackage].Priority = (Enums.Priorities)random.Next(0,3);
                 Packages[Config.NextPackage].DroneID = 0;
                 Packages[Config.NextPackage].Requested = DateTime.Now;
-                Packages[Config.NextPackage].Scheduled = DateTime.UtcNow;
-                Packages[Config.NextPackage].PickedUp = DateTime.Today;
-                Packages[Config.NextPackage].Delivered = DateTime.UnixEpoch;
+                Config.PackageID++;
                 Config.NextPackage++;
             }
-
         }
     }
 
     public class DalObject
     {
+        /// <summary>
+        /// Constructor adds initial values to the entity arrays
+        /// </summary>
         public DalObject()
         {
             DataSource.Initialize();
         }
-        //      adding base station to the stations list
+
+        /// <summary>
+        /// Adding a new station to the array
+        /// </summary>
+        /// <param name="id">Station id</param>
+        /// <param name="name">Station name</param>
+        /// <param name="numChargeSlots">Numbers of free charging slots avaliable</param>
+        /// <param name="latitude">Station latitude location</param>
+        /// <param name="longitude">Station longitude location</param>
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
         {
             if (DataSource.Config.NextStation < 5)
@@ -188,7 +205,15 @@ namespace DalObject
                 Console.WriteLine("ERROR: Max numbers of stations reached.");
             }
         }
-        //    • adding a drone to the existing drones list
+
+        /// <summary>
+        /// Add a new drone to the drone list
+        /// </summary>
+        /// <param name="id">Drone ID</param>
+        /// <param name="model">Drone model</param>
+        /// <param name="maxWeight">Maximum weight drone can handle</param>
+        /// <param name="status">Drone status</param>
+        /// <param name="batteryLevel">Drone battery level</param>
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight, Enums.DroneStatuses status, double batteryLevel = 100.0)
         {
             if  (DataSource.Config.NextDrone < 10)
@@ -206,7 +231,15 @@ namespace DalObject
                 Console.WriteLine("ERROR: Max numbers of drones reached.");
             }
         }
-        //    • adding a new customer to the customers list
+
+        /// <summary> 
+        /// Add a new customer to a list 
+        /// </summary>
+        /// <param name="id">Customer ID</param>
+        /// <param name="name">Customer name</param>
+        /// <param name="phone">Customer phone number</param>
+        /// <param name="latitude">Customer latitude location</param>
+        /// <param name="longitude">Customer longitude location</param>
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {
             if(DataSource.Config.NextCustomer < 100)
@@ -224,23 +257,33 @@ namespace DalObject
                 Console.WriteLine("ERROR: Max number of customers reached.");
             }
         }
-        //    • receiving a package to deliver
-        public void AddPackage(int id, int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, DateTime requested , int droneID = 0)
+
+        /// <summary>
+        /// Add a package that needs to be delivered
+        /// </summary>
+        /// <param name="senderID">Package sender ID</param>
+        /// <param name="receiverID">Package receiver ID</param>
+        /// <param name="weight">Package weight</param>
+        /// <param name="priority">Priority of package delivery</param>
+        /// <param name="requested">Time package was added</param>
+        /// <param name="droneID">ID of drone delivering package</param>
+        public void AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int droneID = 0)
         {
             if(DataSource.Config.NextPackage < 1000)
             {
-                DataSource.Packages[DataSource.Config.NextPackage].ID = id;
+                DataSource.Packages[DataSource.Config.NextPackage].ID = DataSource.Config.PackageID;
                 DataSource.Packages[DataSource.Config.NextPackage].SenderID = senderID;
                 DataSource.Packages[DataSource.Config.NextPackage].ReceiverID = receiverID;
                 DataSource.Packages[DataSource.Config.NextPackage].Weight = weight;
                 DataSource.Packages[DataSource.Config.NextPackage].Priority = priority;
                 DataSource.Packages[DataSource.Config.NextPackage].DroneID = droneID;
-                DataSource.Packages[DataSource.Config.NextPackage].Requested = requested;//DateTime.Now;
+                DataSource.Packages[DataSource.Config.NextPackage].Requested = DateTime.Now;
                 /*
                 DataSource.Packages[DataSource.Config.NextPackage].Scheduled = scheduled;
                 DataSource.Packages[DataSource.Config.NextPackage].PickedUp = pickedUp;
                 DataSource.Packages[DataSource.Config.NextPackage].Delivered = delivered;
                 */
+                DataSource.Config.PackageID++;
                 DataSource.Config.NextPackage++;
                 Console.WriteLine("Success");
             }
@@ -249,32 +292,14 @@ namespace DalObject
                 Console.WriteLine("ERROR: Max number of packages reached.");
             }
         }
-        //2. Updating options
-        //public Drone? ScanDrones(int droneID)
-        //{
-        //    foreach (Drone drone in DataSource.Drones)
-        //    {
-        //        if (drone.ID == droneID)
-        //        {
-        //            return drone;
-        //        }
-        //    }
-        //    return null;
-        //}
 
-        //public Package? ScanPackages(int packageID)
-        //{
-        //    foreach (Package package in DataSource.Packages)
-        //    {
-        //        if (package.ID == packageID)
-        //        {
-        //            return package;
-        //        }
-        //    }
-        //    return null;
-        //}
-        //    • assigning a package to a drone
-        public void AssignPackage(int packageID, int droneID)
+        /// <summary>
+        /// assign a package to a drone to deliver
+        /// </summary>
+        /// <param name="packageID">the Package ID</param>
+        /// <param name="droneID">the Drone ID</param>
+        /// <returns>true if success, false otherwise</returns>/
+        public bool AssignPackage(int packageID, int droneID)
         {
             for (int i = 0; i < DataSource.Config.NextDrone; i++)
             {
@@ -288,15 +313,21 @@ namespace DalObject
                         {
                             package.DroneID = droneID;
                             package.Scheduled = DateTime.Now;
-                            Console.WriteLine("Success");
-                            break;
+                            return true;
                         }
                     }
                 }
             }
+            return false;
         }
-        //    • collecting a package by a drone
-        public void CollectPackage(int packageID, int droneID)
+
+        /// <summary>
+        /// Drone collects the assigned package
+        /// </summary>
+        /// <param name="packageID">Package ID</param>
+        /// <param name="droneID">Drone ID</param>
+        /// <returns>True if success ,else false</returns>
+        public bool CollectPackage(int packageID, int droneID)
         {
             for (int i = 0; i < DataSource.Config.NextDrone; i++)
             {
@@ -312,21 +343,22 @@ namespace DalObject
                             {
                                 package.PickedUp = DateTime.Now;
                                 drone.Status = Enums.DroneStatuses.delivery;
-                                Console.WriteLine("Success");
-                                break;
+                                return true;
                             }
                         }
                     }
-                    else
-                    {
-                        Console.WriteLine("ERROR: Drone unavailable.");
-                        break;
-                    }
                 }
             }
+            return false;
         }
-        //    • providing a package to a customer
-        public void DeliverPackage(int packageID, int droneID)
+
+        /// <summary>
+        /// Drone delivers a package to the customer
+        /// </summary>
+        /// <param name="packageID">Package ID</param>
+        /// <param name="droneID">Drone ID</param>
+        /// <returns>True if success ,else false</returns>
+        public bool DeliverPackage(int packageID, int droneID)
         {
             for (int i = 0; i < DataSource.Config.NextDrone; i++)
             {
@@ -341,21 +373,73 @@ namespace DalObject
                             package.Delivered = DateTime.Now;
                             package.DroneID = 0;
                             drone.Status = Enums.DroneStatuses.free;
-                            Console.WriteLine("Success");
-                            break;
+                            return true;
                         }
                     }
                 }
             }
+            return false;
         }
-        //    • sending a drone to a charge in a base station
-        //    - by changing the drone’s status and adding a record(instance) of
-        //    a drone battery charger entity
-        //    - the station is selected by the user in the main menu(It is 
-        //    recommended to provide a list of stations to the user)      
-        //   •   releasing a drone from charging in a base station 
-        //3. Display options(all chosen by a number):
-        //    • Display a base station
+        
+        /// <summary>
+        /// Send a drone to charge in a base station 
+        /// </summary>
+        /// <param name="droneID">drone ID</param>
+        /// <param name="stationID">station ID</param>
+        /// <returns>True if success ,else false</returns>
+        public bool ChargeDrone(int droneID, int stationID)
+        {
+            for (int i = 0; i < DataSource.Config.NextDrone; i++)
+            {
+                if (DataSource.Drones[i].ID == droneID)
+                {
+                    for(int j = 0; j < DataSource.Config.NextStation; j++)
+                    {
+                        if (DataSource.Stations[j].ID == stationID)
+                        {
+                            DataSource.Drones[i].Status = Enums.DroneStatuses.maintenance;
+                            DataSource.Stations[j].NumChargeSlots--;
+                            DroneCharge droneCharge = new DroneCharge();
+                            droneCharge.DroneID = droneID;
+                            droneCharge.StationID = stationID;
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Releasing a drone from a charge station
+        /// </summary>
+        /// <param name="droneID">Drone ID</param>
+        /// <param name="stationID">Station ID</param>
+        /// <returns>True if success ,else false</returns>        
+        public bool ReleaseDroneFromCharging(int droneID, int stationID)
+        {
+            for (int i = 0; i < DataSource.Config.NextDrone; i++)
+            {
+                if (DataSource.Drones[i].ID == droneID)
+                {
+                    for (int j = 0; j < DataSource.Config.NextStation; j++)
+                    {
+                        if (DataSource.Stations[j].ID == stationID)
+                        {
+                            DataSource.Drones[i].Status = Enums.DroneStatuses.free;
+                            DataSource.Stations[j].NumChargeSlots++;
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        
+        /// <summary>
+        /// Display a specific station to the user
+        /// </summary>
+        /// <param name="stationID">Station ID</param>
         public void DisplayStation(int stationID)
         {
             for (int i = 0; i < DataSource.Config.NextStation; i++)
@@ -366,7 +450,11 @@ namespace DalObject
                 }
             }
         }
-        //    • Display a drone
+
+        /// <summary>
+        /// Display a specific drone to the user
+        /// </summary>
+        /// <param name="droneID">Drone ID</param>
         public void DisplayDrone(int droneID)
         {
             for (int i = 0; i < DataSource.Config.NextDrone; i++)
@@ -377,7 +465,11 @@ namespace DalObject
                 }
             }
         }
-        //    • Display a customer
+
+        /// <summary>
+        /// Display a specific customer to the user
+        /// </summary>
+        /// <param name="customerID">Customer ID</param>
         public void DisplayCustomer(int customerID)
         {
             for (int i = 0; i < DataSource.Config.NextCustomer; i++)
@@ -388,7 +480,11 @@ namespace DalObject
                 }
             }
         }
-        //    • Display a package
+
+        /// <summary>
+        /// Display a specific package to the user
+        /// </summary>
+        /// <param name="packageID">Package ID</param>
         public void DisplayPackage(int packageID)
         {
             for (int i = 0; i < DataSource.Config.NextPackage; i++)
@@ -399,8 +495,10 @@ namespace DalObject
                 }
             }
         }
-        //4. List display options
-        //    • Displaying base stations list
+
+        /// <summary>
+        /// Display all stations to the user
+        /// </summary>
         public void DisplayStationsList()
         {
             for (int i = 0; i < DataSource.Config.NextStation; i++)
@@ -408,7 +506,10 @@ namespace DalObject
                 Console.WriteLine(DataSource.Stations[i].ToString());
             }
         }
-        //    • Displaying drones list
+
+        /// <summary>
+        /// Display all drones to the user
+        /// </summary>
         public void DisplayDronesList()
         {
             for (int i = 0; i < DataSource.Config.NextDrone; i++)
@@ -416,7 +517,10 @@ namespace DalObject
                 Console.WriteLine(DataSource.Drones[i].ToString());
             }
         }
-        //    • Displaying customers list
+
+        /// <summary>
+        /// Display all customers to the user
+        /// </summary>
         public void DisplayCustomersList()
         {
             for (int i = 0; i < DataSource.Config.NextCustomer; i++)
@@ -424,7 +528,10 @@ namespace DalObject
                 Console.WriteLine(DataSource.Customers[i].ToString());
             }
         }
-        //    • Displaying packages list
+
+        /// <summary>
+        /// Display all packages to the user 
+        /// </summary>
         public void DisplayPackagesList()
         {
             for (int i = 0; i < DataSource.Config.NextPackage; i++)
@@ -432,7 +539,10 @@ namespace DalObject
                 Console.WriteLine(DataSource.Packages[i].ToString());
             }
         }
-        //    • Displaying packages not assigned yet to a drone
+
+        /// <summary>
+        /// Display all packages not assigned to a drone
+        /// </summary>
         public void DisplayUnassignedPackagesList()
         {
             for (int i = 0; i < DataSource.Config.NextPackage; i++)
@@ -443,7 +553,10 @@ namespace DalObject
                 }
             }
         }
-        //    • Displaying base stations with unoccupied charging station*/
+        
+        /// <summary>
+        /// Display all stations with free charge slots
+        /// </summary>
         public void DisplayUnoccupiedStationsList()
         {
             for (int i = 0; i < DataSource.Config.NextStation; i++)
