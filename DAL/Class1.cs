@@ -303,16 +303,14 @@ namespace DalObject
         {
             for (int i = 0; i < DataSource.Config.NextDrone; i++)
             {
-                Drone drone = DataSource.Drones[i];
-                if (drone.ID == droneID)
+                if (DataSource.Drones[i].ID == droneID)
                 {
                     for (int j = 0; j < DataSource.Config.NextPackage; j++)
                     {
-                        Package package = DataSource.Packages[j];
-                        if (package.ID == packageID)
+                        if (DataSource.Packages[j].ID == packageID)
                         {
-                            package.DroneID = droneID;
-                            package.Scheduled = DateTime.Now;
+                            DataSource.Packages[j].DroneID = droneID;
+                            DataSource.Packages[j].Scheduled = DateTime.Now;
                             return true;
                         }
                     }
@@ -331,18 +329,16 @@ namespace DalObject
         {
             for (int i = 0; i < DataSource.Config.NextDrone; i++)
             {
-                Drone drone = DataSource.Drones[i];
-                if (drone.ID == droneID)
+                if (DataSource.Drones[i].ID == droneID)
                 {
-                    if (drone.Status == Enums.DroneStatuses.free)
+                    if (DataSource.Drones[i].Status == Enums.DroneStatuses.free)
                     {
                         for (int j = 0; j < DataSource.Config.NextPackage; j++)
                         {
-                            Package package = DataSource.Packages[j];
-                            if (package.ID == packageID)
+                            if (DataSource.Packages[j].ID == packageID)
                             {
-                                package.PickedUp = DateTime.Now;
-                                drone.Status = Enums.DroneStatuses.delivery;
+                                DataSource.Packages[j].PickedUp = DateTime.Now;
+                                DataSource.Drones[i].Status = Enums.DroneStatuses.delivery;
                                 return true;
                             }
                         }
@@ -362,17 +358,15 @@ namespace DalObject
         {
             for (int i = 0; i < DataSource.Config.NextDrone; i++)
             {
-                Drone drone = DataSource.Drones[i];
-                if (drone.ID == droneID)
+                if (DataSource.Drones[i].ID == droneID)
                 {
                     for (int j = 0; j < DataSource.Config.NextPackage; j++)
                     {
-                        Package package = DataSource.Packages[j];
-                        if (package.ID == packageID)
+                        if (DataSource.Packages[j].ID == packageID)
                         {
-                            package.Delivered = DateTime.Now;
-                            package.DroneID = 0;
-                            drone.Status = Enums.DroneStatuses.free;
+                            DataSource.Packages[j].Delivered = DateTime.Now;
+                            DataSource.Packages[j].DroneID = 0;
+                            DataSource.Drones[i].Status = Enums.DroneStatuses.free;
                             return true;
                         }
                     }
