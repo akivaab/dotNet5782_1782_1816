@@ -12,10 +12,10 @@ namespace ConsoleUI
             do
             {
                 Console.WriteLine("Main Menu:");
-                Console.WriteLine("1. Adding options:");
-                Console.WriteLine("2. Updating options:");
-                Console.WriteLine("3. Display options:");
-                Console.WriteLine("4. List display options:");
+                Console.WriteLine("1. Adding options");
+                Console.WriteLine("2. Updating options");
+                Console.WriteLine("3. Display options");
+                Console.WriteLine("4. List Display options");
                 Console.WriteLine("5. Exit");
                 Console.Write("Choose an option: ");
                 int.TryParse(Console.ReadLine(), out option);
@@ -59,7 +59,7 @@ namespace ConsoleUI
                     double stationLatitude, stationLongitude;
                     Console.Write("Input ID: ");
                     int.TryParse(Console.ReadLine(), out stationID);
-                    Console.Write("Input Name: ");
+                    Console.Write("Input name: ");
                     int.TryParse(Console.ReadLine(), out stationName);
                     Console.Write("Input number of free charge slots: ");
                     int.TryParse(Console.ReadLine(), out numChargeSlots);
@@ -77,13 +77,13 @@ namespace ConsoleUI
                     double batteryLevel;
                     Console.Write("Input ID: ");
                     int.TryParse(Console.ReadLine(), out droneID);
-                    Console.Write("Input Model: ");
+                    Console.Write("Input model: ");
                     model = Console.ReadLine();
                     Console.Write("Input maximum weight capacity (0: light, 1: medium , 2: heavy): ");
                     IDAL.DO.Enums.WeightCategories.TryParse(Console.ReadLine(), out maxWeight);
-                    Console.Write("Input Status (0: free, 1: maintenance): ");
+                    Console.Write("Input status (0: free, 1: maintenance): ");
                     IDAL.DO.Enums.DroneStatuses.TryParse(Console.ReadLine(), out status);
-                    Console.Write("Input Battery Level (0.0-100.0): ");
+                    Console.Write("Input battery level (0.0-100.0): ");
                     double.TryParse(Console.ReadLine(), out batteryLevel);
                     dal.AddDrone(droneID, model, maxWeight, status, batteryLevel);
                     break;
@@ -93,13 +93,13 @@ namespace ConsoleUI
                     double customerLatitude, customerLongitude;
                     Console.Write("Input ID: ");
                     int.TryParse(Console.ReadLine(), out customerID);
-                    Console.Write("Input Name: ");
+                    Console.Write("Input name: ");
                     customerName = Console.ReadLine();
                     Console.Write("Input phone number: ");
                     phone = Console.ReadLine();
-                    Console.Write("Input Latitude: ");
+                    Console.Write("Input latitude: ");
                     double.TryParse(Console.ReadLine(), out customerLatitude);
-                    Console.Write("Input Longitude: ");
+                    Console.Write("Input longitude: ");
                     double.TryParse(Console.ReadLine(), out customerLongitude);
                     dal.AddCustomer(customerID, customerName, phone, customerLatitude, customerLongitude);
                     break;
@@ -130,7 +130,7 @@ namespace ConsoleUI
             Console.WriteLine("3. Deliver package to customer");
             Console.WriteLine("4. Send drone to charge");
             Console.WriteLine("5. Release drone from chargine station");
-            Console.Write("Choose an adding option: ");
+            Console.Write("Choose an updating option: ");
             int updatingOption;
             int.TryParse(Console.ReadLine(), out updatingOption);
             switch(updatingOption)
@@ -183,11 +183,11 @@ namespace ConsoleUI
         public static void DisplayingOptions(DalObject.DalObject dal)
         {
             Console.WriteLine("Displaying Options:");
-            Console.WriteLine("1. Display Station:");
-            Console.WriteLine("2. Display Drone");
-            Console.WriteLine("3. Display Customer");
-            Console.WriteLine("4. Display Package");
-            Console.Write("Choose an adding option: ");
+            Console.WriteLine("1. Display station");
+            Console.WriteLine("2. Display drone");
+            Console.WriteLine("3. Display customer");
+            Console.WriteLine("4. Display package");
+            Console.Write("Choose a displaying option: ");
             int displayingOption;
             int.TryParse(Console.ReadLine(), out displayingOption);
             switch(displayingOption)
@@ -224,13 +224,13 @@ namespace ConsoleUI
         public static void ListDisplayingOptions(DalObject.DalObject dal)
         {
             Console.WriteLine("List Displaying Options:");
-            Console.WriteLine("1. Display All Stations:");
-            Console.WriteLine("2. Display All Drones");
-            Console.WriteLine("3. Display All Customers");
-            Console.WriteLine("4. Display All Packages");
+            Console.WriteLine("1. Display all stations");
+            Console.WriteLine("2. Display all drones");
+            Console.WriteLine("3. Display all customers");
+            Console.WriteLine("4. Display all packages");
             Console.WriteLine("5. Display all unassigned packages");
             Console.WriteLine("6. Display all stations with unoccupied charging slots");
-            Console.Write("Choose an adding option: ");
+            Console.Write("Choose a list displaying option: ");
             int listDisplayingOption;
             int.TryParse(Console.ReadLine(), out listDisplayingOption);
             switch(listDisplayingOption)
