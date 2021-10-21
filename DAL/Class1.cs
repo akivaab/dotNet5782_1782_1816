@@ -13,7 +13,7 @@ namespace IDAL
             public double Longitude { get; set; }
             public override string ToString()
             {
-                return $"Station Name: {Name}, ID:{ID} Position: {Latitude}, {Longitude}";
+                return $"Station Name: {Name}, ID: {ID}, Number of charger slots: {NumChargeSlots}, Position: {Latitude}, {Longitude}";
             }
         }
         public struct Drone
@@ -56,7 +56,7 @@ namespace IDAL
             public override string ToString()
             {
                 return $"Package ID:{ID}, senderID: {SenderID}, ReceiverID: {ReceiverID}, Weight: {Weight}, Priority: {Priority}, Drone ID: {DroneID}," +
-                    $" Time requested: {Requested}, Time scheduled {Scheduled}, Time picked up: {PickedUp}, Time delivered{Delivered}" ;
+                    $" Time requested: {Requested}, Time scheduled {Scheduled}, Time picked up: {PickedUp}, Time delivered {Delivered}" ;
             }
 
         }
@@ -440,7 +440,7 @@ namespace DalObject
             {
                 if (DataSource.Stations[i].ID == stationID)
                 {
-                    Console.WriteLine(DataSource.Stations[i].ToString());
+                    Console.WriteLine(DataSource.Stations[i]);
                 }
             }
         }
@@ -455,7 +455,7 @@ namespace DalObject
             {
                 if (DataSource.Drones[i].ID == droneID)
                 {
-                    Console.WriteLine(DataSource.Drones[i].ToString());
+                    Console.WriteLine(DataSource.Drones[i]);
                 }
             }
         }
@@ -470,7 +470,7 @@ namespace DalObject
             {
                 if (DataSource.Customers[i].ID == customerID)
                 {
-                    Console.WriteLine(DataSource.Customers[i].ToString());
+                    Console.WriteLine(DataSource.Customers[i]);
                 }
             }
         }
@@ -485,7 +485,7 @@ namespace DalObject
             {
                 if (DataSource.Packages[i].ID == packageID)
                 {
-                    Console.WriteLine(DataSource.Packages[i].ToString());
+                    Console.WriteLine(DataSource.Packages[i]);
                 }
             }
         }
@@ -497,7 +497,7 @@ namespace DalObject
         {
             for (int i = 0; i < DataSource.Config.NextStation; i++)
             {
-                Console.WriteLine(DataSource.Stations[i].ToString());
+                Console.WriteLine(DataSource.Stations[i]);
             }
         }
 
@@ -508,7 +508,7 @@ namespace DalObject
         {
             for (int i = 0; i < DataSource.Config.NextDrone; i++)
             {
-                Console.WriteLine(DataSource.Drones[i].ToString());
+                Console.WriteLine(DataSource.Drones[i]);
             }
         }
 
@@ -519,7 +519,7 @@ namespace DalObject
         {
             for (int i = 0; i < DataSource.Config.NextCustomer; i++)
             {
-                Console.WriteLine(DataSource.Customers[i].ToString());
+                Console.WriteLine(DataSource.Customers[i]);
             }
         }
 
@@ -530,7 +530,7 @@ namespace DalObject
         {
             for (int i = 0; i < DataSource.Config.NextPackage; i++)
             {
-                Console.WriteLine(DataSource.Packages[i].ToString());
+                Console.WriteLine(DataSource.Packages[i]);
             }
         }
 
@@ -543,7 +543,7 @@ namespace DalObject
             {
                 if (DataSource.Packages[i].DroneID == 0)
                 {
-                    Console.WriteLine(DataSource.Packages[i].ToString());
+                    Console.WriteLine(DataSource.Packages[i]);
                 }
             }
         }
@@ -557,7 +557,7 @@ namespace DalObject
             {
                 if (DataSource.Stations[i].NumChargeSlots > 0)
                 {
-                    Console.WriteLine(DataSource.Stations[i].ToString());
+                    Console.WriteLine(DataSource.Stations[i]);
                 }
             }
         }
