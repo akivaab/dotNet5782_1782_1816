@@ -34,7 +34,7 @@ namespace ConsoleUI
                         ListDisplayingOptions(dal);
                         break;
                     case 5:
-                        Console.WriteLine("Bye:");
+                        Console.WriteLine("Bye");
                         break;
                     default:
                         break;

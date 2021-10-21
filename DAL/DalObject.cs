@@ -1,172 +1,8 @@
 ﻿using System;
-
-namespace IDAL
-{
-    namespace DO
-    {
-        public struct Station
-        {
-            public int ID { get; set; }
-            public int Name { get; set; }
-            public int NumChargeSlots { get; set; }
-            public double Latitude { get; set; }
-            public double Longitude { get; set; }
-            public override string ToString()
-            {
-                return $"Station Name: {Name}, ID: {ID}, Number of charger slots: {NumChargeSlots}, Position: {Latitude}, {Longitude}";
-            }
-        }
-        public struct Drone
-        {
-            public int ID { get; set; }
-            public string Model { get; set; }
-            public Enums.WeightCategories MaxWeight { get; set; }
-            public Enums.DroneStatuses Status { get; set; }
-            public double BatteryLevel { get; set; }
-            public override string ToString()
-            {
-                return $"Drone ID: {ID}, Model: {Model}, Status: {Status}, Battery Level: {BatteryLevel}, Max. Weight: {MaxWeight}";
-            }
-        }
-        public struct Customer
-        {
-            public int ID { get; set; }
-            public string Name { get; set; }
-            public string Phone { get; set; }
-            public double Latitude { get; set; }
-            public double Longitude { get; set; }
-            public override string ToString()
-            {
-                return $"Customer Name: {Name}, ID: {ID}, Phone Number: {Phone}, Location: {Latitude}, {Longitude}";
-            }
-        }
-        public struct Package
-        {
-            public int ID { get; set; }
-            public int SenderID { get; set; }
-            public int ReceiverID { get; set; }
-            public Enums.WeightCategories Weight { get; set; }
-            public Enums.Priorities Priority { get; set; }
-            public int DroneID { get; set; }
-            public DateTime Requested { get; set; }
-            public DateTime Scheduled { get; set; }
-            public DateTime PickedUp { get; set; }
-            public DateTime Delivered { get; set; }
-            public override string ToString()
-            {
-                return $"Package ID: {ID}, Sender ID: {SenderID}, Receiver ID: {ReceiverID}, Weight: {Weight}, Priority: {Priority}, Drone ID: {DroneID}, " +
-                       $"Time requested: {Requested}, Time scheduled: {Scheduled}, Time picked up: {PickedUp}, Time delivered: {Delivered}";
-            }
-        }
-        public struct DroneCharge
-        {
-            public int DroneID { get; set; }
-            public int StationID { get; set; }
-
-            public override string ToString()
-            {
-                return $"Drone ID: {DroneID}, Station ID: {StationID}"; 
-            }
-        }
-        public class Enums
-        {
-            public enum WeightCategories
-            {
-                light, medium, heavy
-            }
-            public enum Priorities
-            {
-                regular, fast, emergency
-            }
-            public enum DroneStatuses
-            {
-                free, maintenance, delivery
-            }
-        }
-    }
-}
+using IDAL.DO;
 
 namespace DalObject
 {
-    using IDAL.DO;
-    public class DataSource
-    {
-        internal static Station[] Stations = new Station[5];
-        internal static Drone[] Drones = new Drone[10];
-        internal static Customer[] Customers = new Customer[100];
-        internal static Package[] Packages = new Package[1000];
-
-        internal class Config
-        {
-            internal static int NextStation = 0;
-            internal static int NextDrone = 0;
-            internal static int NextCustomer = 0;
-            internal static int NextPackage = 0;
-
-            internal static int PackageID = 1;
-        }
-
-        /// <summary>
-        /// Initialize all entity arrays with random variables
-        /// </summary>/
-        public static void Initialize() {
-            Random random = new Random();
-            string[] RandomNames = new string[100] { "James", "Robert", "John", "Michael", "William", "David", "Richard", "Joseph", "Thomas", "Charles", "Mary", "Patricia", "Jennifer", "Linda", "Elizabeth", "Barbara", "Susan", "Jessica", "Sarah", "Karen", "Christopher", "Daniel", "Matthew", "Anthony", "Mark", "Donald", "Steven", "Paul", "Andrew", "Joshua", "Nancy", "Lisa", "Betty", "Margaret", "Sandra", "Ashley", "Kimberly", "Emily", "Donna", "Michelle", "Kenneth", "Kevin", "Brian", "George", "Edward", "Ronald", "Timothy", "Jason", "Jeffrey", "Ryan", "Dorothy", "Carol", "Amanda", "Melissa", "Deborah", "Stephanie", "Rebecca", "Sharon", "Laura", "Cynthia", "Jacob", "Gary", "Nicholas", "Eric", "Jonathan", "Stephen", "Larry", "Justin", "Scott", "Brandon", "Kathleen", "Amy", "Shirley", "Angela", "Helen", "Anna", "Brenda", "Pamela", "Nicole", "Emma", "Benjamin", "Samuel", "Gregory", "Frank", "Alexander", "Raymond", "Patrick", "Jack", "Dennis", "Samantha", "Katherine", "Christine", "Debra", "Rachel", "Catherine", "Carolyn", "Janet", "Ruth", "Jerry", "Maria" };
-
-            int randomStation = random.Next(2, 5);
-            while (Config.NextStation < randomStation)
-            {
-                Stations[Config.NextStation].ID = Config.NextStation + 1;
-                Stations[Config.NextStation].Name = (Config.NextStation + 1) * 32;
-                Stations[Config.NextStation].NumChargeSlots = 5;
-                // get a random double between 0-90, then randomly multiply by +/- 1 
-                Stations[Config.NextStation].Latitude = (random.NextDouble() * 90) * (random.Next(0, 2) * 2 - 1);
-                // longitude is always a positive double between 0-180
-                Stations[Config.NextStation].Longitude = random.NextDouble() * 180;
-                Config.NextStation++;
-            }
-
-            int randomDrones = random.Next(5, 10);
-            while(Config.NextDrone < randomDrones)
-            {
-                Drones[Config.NextDrone].ID = Config.NextDrone + 1;
-                Drones[Config.NextDrone].Model = $"MX{random.Next(1,6)}";
-                Drones[Config.NextDrone].MaxWeight = (Enums.WeightCategories)random.Next(0, 3);
-                Drones[Config.NextDrone].Status = Enums.DroneStatuses.free;
-                Drones[Config.NextDrone].BatteryLevel = 100.0;
-                Config.NextDrone++;
-            }
-
-            int randomCustomers = random.Next(10, 100);
-            while (Config.NextCustomer < randomCustomers)
-            {
-                Customers[Config.NextCustomer].ID = Config.NextCustomer + 100000;
-                Customers[Config.NextCustomer].Name = RandomNames[Config.NextCustomer];
-                Customers[Config.NextCustomer].Phone = random.Next(100000000, 1000000000).ToString();
-                // get a random double between 0-90, then randomly multiply by +/- 1 
-                Customers[Config.NextCustomer].Latitude = (random.NextDouble() * 90) * (random.Next(0, 2) * 2 - 1);
-                // longitude is always a positive double between 0-180
-                Customers[Config.NextCustomer].Longitude = random.NextDouble() * 180;
-                Config.NextCustomer++;
-            }
-
-            int randomPackages = random.Next(10, 1000);
-            while(Config.NextPackage < randomPackages)
-            {
-                Packages[Config.NextPackage].ID = Config.PackageID;
-                // Choose ID from a random customer based on the size of our Customers array
-                Packages[Config.NextPackage].SenderID = Customers[random.Next(0, randomCustomers)].ID;
-                Packages[Config.NextPackage].ReceiverID = Customers[random.Next(0, randomCustomers)].ID;
-                Packages[Config.NextPackage].Weight = (Enums.WeightCategories)random.Next(0, 3);
-                Packages[Config.NextPackage].Priority = (Enums.Priorities)random.Next(0, 3);
-                Packages[Config.NextPackage].DroneID = 0;
-                Packages[Config.NextPackage].Requested = DateTime.Now;
-                Config.PackageID++;
-                Config.NextPackage++;
-            }
-        }
-    }
-
     public class DalObject
     {
         /// <summary>
@@ -213,7 +49,7 @@ namespace DalObject
         /// <param name="batteryLevel">Drone battery level</param>
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight, Enums.DroneStatuses status, double batteryLevel = 100.0)
         {
-            if  (DataSource.Config.NextDrone < 10)
+            if (DataSource.Config.NextDrone < 10)
             {
                 DataSource.Drones[DataSource.Config.NextDrone].ID = id;
                 DataSource.Drones[DataSource.Config.NextDrone].Model = model;
@@ -239,7 +75,7 @@ namespace DalObject
         /// <param name="longitude">Customer longitude location</param>
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {
-            if(DataSource.Config.NextCustomer < 100)
+            if (DataSource.Config.NextCustomer < 100)
             {
                 DataSource.Customers[DataSource.Config.NextCustomer].ID = id;
                 DataSource.Customers[DataSource.Config.NextCustomer].Name = name;
@@ -265,7 +101,7 @@ namespace DalObject
         /// <param name="droneID">ID of drone delivering package</param>
         public void AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int droneID = 0)
         {
-            if(DataSource.Config.NextPackage < 1000)
+            if (DataSource.Config.NextPackage < 1000)
             {
                 DataSource.Packages[DataSource.Config.NextPackage].ID = DataSource.Config.PackageID;
                 DataSource.Packages[DataSource.Config.NextPackage].SenderID = senderID;
@@ -370,7 +206,7 @@ namespace DalObject
             }
             return false;
         }
-        
+
         /// <summary>
         /// Send a drone to charge in a base station 
         /// </summary>
@@ -383,7 +219,7 @@ namespace DalObject
             {
                 if (DataSource.Drones[i].ID == droneID)
                 {
-                    for(int j = 0; j < DataSource.Config.NextStation; j++)
+                    for (int j = 0; j < DataSource.Config.NextStation; j++)
                     {
                         if (DataSource.Stations[j].ID == stationID)
                         {
@@ -425,7 +261,7 @@ namespace DalObject
             }
             return false;
         }
-        
+
         /// <summary>
         /// Display a specific station to the user
         /// </summary>
@@ -543,7 +379,7 @@ namespace DalObject
                 }
             }
         }
-        
+
         /// <summary>
         /// Display all stations with available charge slots
         /// </summary>
