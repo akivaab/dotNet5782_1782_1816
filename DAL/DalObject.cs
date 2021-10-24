@@ -99,7 +99,8 @@ namespace DalObject
         /// <param name="weight">Package weight</param>
         /// <param name="priority">Priority of package delivery</param>
         /// <param name="droneID">ID of drone delivering package</param>
-        public void AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int droneID = 0)
+        /// <returns>automatic package ID, or -1 if adding a package failed</returns>
+        public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int droneID = 0)
         {
             if (DataSource.Config.NextPackage < 1000)
             {
@@ -110,18 +111,15 @@ namespace DalObject
                 DataSource.Packages[DataSource.Config.NextPackage].Priority = priority;
                 DataSource.Packages[DataSource.Config.NextPackage].DroneID = droneID;
                 DataSource.Packages[DataSource.Config.NextPackage].Requested = DateTime.Now;
-                /*
-                DataSource.Packages[DataSource.Config.NextPackage].Scheduled = scheduled;
-                DataSource.Packages[DataSource.Config.NextPackage].PickedUp = pickedUp;
-                DataSource.Packages[DataSource.Config.NextPackage].Delivered = delivered;
-                */
                 DataSource.Config.PackageID++;
                 DataSource.Config.NextPackage++;
                 Console.WriteLine("Success");
+                return DataSource.Config.PackageID;
             }
             else
             {
                 Console.WriteLine("ERROR: Max number of packages reached.");
+                return -1;
             }
         }
 

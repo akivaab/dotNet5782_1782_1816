@@ -133,7 +133,7 @@ namespace ConsoleUI
             Console.Write("Choose an updating option: ");
             int updatingOption;
             int.TryParse(Console.ReadLine(), out updatingOption);
-            switch(updatingOption)
+            switch (updatingOption)
             {
                 case 1:
                     int assignPackageID, assignDroneID;
@@ -190,7 +190,7 @@ namespace ConsoleUI
             Console.Write("Choose a displaying option: ");
             int displayingOption;
             int.TryParse(Console.ReadLine(), out displayingOption);
-            switch(displayingOption)
+            switch (displayingOption)
             {
                 case 1:
                     int stationID;
@@ -233,7 +233,7 @@ namespace ConsoleUI
             Console.Write("Choose a list displaying option: ");
             int listDisplayingOption;
             int.TryParse(Console.ReadLine(), out listDisplayingOption);
-            switch(listDisplayingOption)
+            switch (listDisplayingOption)
             {
                 case 1:
                     dal.DisplayStationsList();
