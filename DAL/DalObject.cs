@@ -131,24 +131,18 @@ namespace DalObject
         /// <param name="packageID">Package ID</param>
         /// <param name="droneID">Drone ID</param>
         /// <returns>true if assigned successfully, false otherwise</returns>
-        public bool AssignPackage(int packageID, int droneID)
+        public void AssignPackage(int packageID, int droneID)
         {
-            for (int i = 0; i < DataSource.Config.NextDrone; i++)
+            int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
+            int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
+            if (droneIndex == -1 || packageIndex == -1)
             {
-                if (DataSource.Drones[i].ID == droneID)
-                {
-                    for (int j = 0; j < DataSource.Config.NextPackage; j++)
-                    {
-                        if (DataSource.Packages[j].ID == packageID)
-                        {
-                            DataSource.Packages[j].DroneID = droneID;
-                            DataSource.Packages[j].Scheduled = DateTime.Now;
-                            return true;
-                        }
-                    }
-                }
+                throw UndefinedObjectException();
             }
-            return false;
+            Package package = DataSource.Packages[packageIndex];
+            package.DroneID = droneID;
+            package.Scheduled = DateTime.Now;
+            DataSource.Packages[packageIndex] = package;
         }
 
         /// <summary>
@@ -157,27 +151,20 @@ namespace DalObject
         /// <param name="packageID">Package ID</param>
         /// <param name="droneID">Drone ID</param>
         /// <returns>True if collected successfully, false otherwise</returns>
-        public bool CollectPackage(int packageID, int droneID)
+        public void CollectPackage(int packageID, int droneID)
         {
-            for (int i = 0; i < DataSource.Config.NextDrone; i++)
+            int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
+            int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
+            if (droneIndex == -1 || packageIndex == -1)
             {
-                if (DataSource.Drones[i].ID == droneID)
-                {
-                    if (DataSource.Drones[i].Status == Enums.DroneStatuses.free)
-                    {
-                        for (int j = 0; j < DataSource.Config.NextPackage; j++)
-                        {
-                            if (DataSource.Packages[j].ID == packageID)
-                            {
-                                DataSource.Packages[j].PickedUp = DateTime.Now;
-                                DataSource.Drones[i].Status = Enums.DroneStatuses.delivery;
-                                return true;
-                            }
-                        }
-                    }
-                }
+                throw UndefinedObjectException();
             }
-            return false;
+            Package package = DataSource.Packages[packageIndex];
+            package.PickedUp = DateTime.Now;    
+            DataSource.Packages[packageIndex] = package;
+            //Drone drone = DataSource.Drones[droneIndex];
+            //drone.Status = Enums.DroneStatuses.delivery;
+            //DataSource.Drones[droneIndex] = drone;
         }
 
         /// <summary>
@@ -186,25 +173,21 @@ namespace DalObject
         /// <param name="packageID">Package ID</param>
         /// <param name="droneID">Drone ID</param>
         /// <returns>True if delivered successfully, false otherwise</returns>
-        public bool DeliverPackage(int packageID, int droneID)
+        public void DeliverPackage(int packageID, int droneID)
         {
-            for (int i = 0; i < DataSource.Config.NextDrone; i++)
+            int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
+            int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
+            if (droneIndex == -1 || packageIndex == -1)
             {
-                if (DataSource.Drones[i].ID == droneID)
-                {
-                    for (int j = 0; j < DataSource.Config.NextPackage; j++)
-                    {
-                        if (DataSource.Packages[j].ID == packageID)
-                        {
-                            DataSource.Packages[j].Delivered = DateTime.Now;
-                            DataSource.Packages[j].DroneID = 0;
-                            DataSource.Drones[i].Status = Enums.DroneStatuses.free;
-                            return true;
-                        }
-                    }
-                }
+                throw UndefinedObjectException();
             }
-            return false;
+            Package package = DataSource.Packages[packageIndex];
+            package.Delivered = DateTime.Now;
+            package.DroneID = 0;
+            DataSource.Packages[packageIndex] = package;
+            //Drone drone = DataSource.Drones[droneIndex];
+            //drone.Status = Enums.DroneStatuses.free;
+            //DataSource.Drones[droneIndex] = drone;
         }
 
         /// <summary>
@@ -213,27 +196,23 @@ namespace DalObject
         /// <param name="droneID">drone ID</param>
         /// <param name="stationID">station ID</param>
         /// <returns>True if success ,else false</returns>
-        public bool ChargeDrone(int droneID, int stationID)
+        public void ChargeDrone(int droneID, int stationID)
         {
-            for (int i = 0; i < DataSource.Config.NextDrone; i++)
+            int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
+            int stationIndex = DataSource.Stations.FindIndex(station => station.ID == stationID);
+            if (droneIndex == -1 || stationIndex == -1)
             {
-                if (DataSource.Drones[i].ID == droneID)
-                {
-                    for (int j = 0; j < DataSource.Config.NextStation; j++)
-                    {
-                        if (DataSource.Stations[j].ID == stationID)
-                        {
-                            DataSource.Drones[i].Status = Enums.DroneStatuses.maintenance;
-                            DataSource.Stations[j].NumChargeSlots--;
-                            DroneCharge droneCharge = new DroneCharge();
-                            droneCharge.DroneID = droneID;
-                            droneCharge.StationID = stationID;
-                            return true;
-                        }
-                    }
-                }
+                throw UndefinedObjectException();
             }
-            return false;
+            //Drone drone = DataSource.Drones[droneIndex];
+            //drone.Status = Enums.DroneStatuses.maintenance;
+            //DataSource.Drones[droneIndex] = drone;
+            Station station = DataSource.Stations[stationIndex];
+            station.NumChargeSlots--;
+            DataSource.Stations[stationIndex] = station;
+            DroneCharge droneCharge = new DroneCharge();
+            droneCharge.DroneID = droneID;
+            droneCharge.StationID = stationID;
         }
 
         /// <summary>
@@ -242,24 +221,20 @@ namespace DalObject
         /// <param name="droneID">Drone ID</param>
         /// <param name="stationID">Station ID</param>
         /// <returns>True if released successfully, false otherwise</returns>        
-        public bool ReleaseDroneFromCharging(int droneID, int stationID)
+        public void ReleaseDroneFromCharging(int droneID, int stationID)
         {
-            for (int i = 0; i < DataSource.Config.NextDrone; i++)
+            int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
+            int stationIndex = DataSource.Stations.FindIndex(station => station.ID == stationID);
+            if (droneIndex == -1 || stationIndex == -1)
             {
-                if (DataSource.Drones[i].ID == droneID)
-                {
-                    for (int j = 0; j < DataSource.Config.NextStation; j++)
-                    {
-                        if (DataSource.Stations[j].ID == stationID)
-                        {
-                            DataSource.Drones[i].Status = Enums.DroneStatuses.free;
-                            DataSource.Stations[j].NumChargeSlots++;
-                            return true;
-                        }
-                    }
-                }
+                throw UndefinedObjectException();
             }
-            return false;
+            //Drone drone = DataSource.Drones[droneIndex];
+            //drone.Status = Enums.DroneStatuses.free;
+            //DataSource.Drones[droneIndex] = drone;
+            Station station = DataSource.Stations[stationIndex];
+            station.NumChargeSlots++;
+            DataSource.Stations[stationIndex] = station;
         }
 
         /// <summary>
@@ -268,13 +243,13 @@ namespace DalObject
         /// <param name="stationID">Station ID</param>
         public void DisplayStation(int stationID)
         {
-            for (int i = 0; i < DataSource.Config.NextStation; i++)
+            int stationIndex = DataSource.Stations.FindIndex(station => station.ID == stationID);
+            if (stationIndex == -1)
             {
-                if (DataSource.Stations[i].ID == stationID)
-                {
-                    Console.WriteLine(DataSource.Stations[i]);
-                }
+                throw UndefinedObjectException();
             }
+            Console.WriteLine(DataSource.Stations[stationIndex]);
+       
         }
 
         /// <summary>
@@ -283,13 +258,12 @@ namespace DalObject
         /// <param name="droneID">Drone ID</param>
         public void DisplayDrone(int droneID)
         {
-            for (int i = 0; i < DataSource.Config.NextDrone; i++)
+            int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
+            if (droneIndex == -1)
             {
-                if (DataSource.Drones[i].ID == droneID)
-                {
-                    Console.WriteLine(DataSource.Drones[i]);
-                }
+                throw UndefinedObjectException();
             }
+            Console.WriteLine(DataSource.Drones[droneIndex]);
         }
 
         /// <summary>
@@ -298,13 +272,12 @@ namespace DalObject
         /// <param name="customerID">Customer ID</param>
         public void DisplayCustomer(int customerID)
         {
-            for (int i = 0; i < DataSource.Config.NextCustomer; i++)
+            int customerIndex = DataSource.Customers.FindIndex(customer => customer.ID == customerID);
+            if (customerIndex == -1)
             {
-                if (DataSource.Customers[i].ID == customerID)
-                {
-                    Console.WriteLine(DataSource.Customers[i]);
-                }
+                throw UndefinedObjectException();
             }
+            Console.WriteLine(DataSource.Customers[customerIndex]);
         }
 
         /// <summary>
@@ -313,13 +286,12 @@ namespace DalObject
         /// <param name="packageID">Package ID</param>
         public void DisplayPackage(int packageID)
         {
-            for (int i = 0; i < DataSource.Config.NextPackage; i++)
+            int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
+            if (packageID == -1)
             {
-                if (DataSource.Packages[i].ID == packageID)
-                {
-                    Console.WriteLine(DataSource.Packages[i]);
-                }
+                throw UndefinedObjectException();
             }
+            Console.WriteLine(DataSource.Packages[packageIndex]);
         }
 
         /// <summary>
@@ -327,7 +299,7 @@ namespace DalObject
         /// </summary>
         public void DisplayStationsList()
         {
-            for (int i = 0; i < DataSource.Config.NextStation; i++)
+            for (int i = 0; i < DataSource.Stations.Count; i++)
             {
                 Console.WriteLine(DataSource.Stations[i]);
             }
@@ -338,7 +310,7 @@ namespace DalObject
         /// </summary>
         public void DisplayDronesList()
         {
-            for (int i = 0; i < DataSource.Config.NextDrone; i++)
+            for (int i = 0; i < DataSource.Drones.Count; i++)
             {
                 Console.WriteLine(DataSource.Drones[i]);
             }
@@ -349,7 +321,7 @@ namespace DalObject
         /// </summary>
         public void DisplayCustomersList()
         {
-            for (int i = 0; i < DataSource.Config.NextCustomer; i++)
+            for (int i = 0; i < DataSource.Customers.Count; i++)
             {
                 Console.WriteLine(DataSource.Customers[i]);
             }
@@ -360,7 +332,7 @@ namespace DalObject
         /// </summary>
         public void DisplayPackagesList()
         {
-            for (int i = 0; i < DataSource.Config.NextPackage; i++)
+            for (int i = 0; i < DataSource.Packages.Count; i++)
             {
                 Console.WriteLine(DataSource.Packages[i]);
             }
@@ -371,7 +343,7 @@ namespace DalObject
         /// </summary>
         public void DisplayUnassignedPackagesList()
         {
-            for (int i = 0; i < DataSource.Config.NextPackage; i++)
+            for (int i = 0; i < DataSource.Packages.Count; i++)
             {
                 if (DataSource.Packages[i].DroneID == 0)
                 {
@@ -385,7 +357,7 @@ namespace DalObject
         /// </summary>
         public void DisplayUnoccupiedStationsList()
         {
-            for (int i = 0; i < DataSource.Config.NextStation; i++)
+            for (int i = 0; i < DataSource.Stations.Count; i++)
             {
                 if (DataSource.Stations[i].NumChargeSlots > 0)
                 {
