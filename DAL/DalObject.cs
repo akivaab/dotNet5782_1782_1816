@@ -23,21 +23,22 @@ namespace DalObject
         /// <param name="longitude">Station longitude location</param>
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
         {
-            if (DataSource.Stations.Count < 5)
+            if (DataSource.Stations.Count >= 5)
             {
-                Station station = new();
-                station.ID = id;
-                station.Name = name;
-                station.NumChargeSlots = numChargeSlots;
-                station.Latitude = latitude;
-                station.Longitude = longitude;
-                DataSource.Stations.Add(station);
-                Console.WriteLine("Success");
+                throw ExceededLimitException();
             }
-            else
+            if (DataSource.Stations.FindIndex(station => station.ID == id) != -1)
             {
-                Console.WriteLine("ERROR: Max numbers of stations reached.");
+                throw NonUniqueIdException();
             }
+            Station station = new();
+            station.ID = id;
+            station.Name = name;
+            station.NumChargeSlots = numChargeSlots;
+            station.Latitude = latitude;
+            station.Longitude = longitude;
+            DataSource.Stations.Add(station);
+            Console.WriteLine("Success");
         }
 
         /// <summary>
@@ -50,19 +51,20 @@ namespace DalObject
         /// <param name="batteryLevel">Drone battery level</param>
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
         {
-            if (DataSource.Drones.Count < 10)
+            if (DataSource.Drones.Count >= 10)
             {
-                Drone drone = new();
-                drone.ID = id;
-                drone.Model = model;
-                drone.MaxWeight = maxWeight;
-                DataSource.Drones.Add(drone);
-                Console.WriteLine("Success");
+                throw ExceededLimitException();
             }
-            else
+            if (DataSource.Drones.FindIndex(drone => drone.ID == id) != -1)
             {
-                Console.WriteLine("ERROR: Max numbers of drones reached.");
+                throw NonUniqueIdException();
             }
+            Drone drone = new();
+            drone.ID = id;
+            drone.Model = model;
+            drone.MaxWeight = maxWeight;
+            DataSource.Drones.Add(drone);
+            Console.WriteLine("Success");
         }
 
         /// <summary> 
@@ -75,21 +77,22 @@ namespace DalObject
         /// <param name="longitude">Customer longitude location</param>
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {
-            if (DataSource.Customers.Count < 100)
+            if (DataSource.Customers.Count >= 100)
             {
-                Customer customer = new();
-                customer.ID = id;
-                customer.Name = name;
-                customer.Phone = phone;
-                customer.Latitude = latitude;
-                customer.Longitude = longitude;
-                DataSource.Customers.Add(customer);
-                Console.WriteLine("Success");
+                throw ExceededLimitException();
             }
-            else
+            if (DataSource.Customers.FindIndex(customer => customer.ID == id) != -1)
             {
-                Console.WriteLine("ERROR: Max number of customers reached.");
+                throw NonUniqueIdException();
             }
+            Customer customer = new();
+            customer.ID = id;
+            customer.Name = name;
+            customer.Phone = phone;
+            customer.Latitude = latitude;
+            customer.Longitude = longitude;
+            DataSource.Customers.Add(customer);
+            Console.WriteLine("Success");
         }
 
         /// <summary>
@@ -103,26 +106,28 @@ namespace DalObject
         /// <returns>automatic package ID, or -1 if adding a package failed</returns>
         public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int droneID = 0)
         {
-            if (DataSource.Packages.Count < 1000)
+            if (DataSource.Packages.Count >= 1000)
             {
-                Package package = new();
-                package.ID = DataSource.Config.PackageID;
-                package.SenderID = senderID;
-                package.ReceiverID = receiverID;
-                package.Weight = weight;
-                package.Priority = priority;
-                package.DroneID = droneID;
-                package.Requested = DateTime.Now;
-                DataSource.Config.PackageID++;
-                DataSource.Packages.Add(package);
-                Console.WriteLine("Success");
-                return DataSource.Config.PackageID;
+                throw ExceededLimitException();
             }
-            else
+            if (DataSource.Customers.FindIndex(customer => customer.ID == senderID) == -1 ||
+                DataSource.Customers.FindIndex(customer => customer.ID == receiverID) == -1 ||
+                (droneID != 0 && DataSource.Drones.FindIndex(drone => drone.ID == droneID) == -1))
             {
-                Console.WriteLine("ERROR: Max number of packages reached.");
-                return -1;
+                throw UndefinedObjectException();
             }
+            Package package = new();
+            package.ID = DataSource.Config.PackageID;
+            package.SenderID = senderID;
+            package.ReceiverID = receiverID;
+            package.Weight = weight;
+            package.Priority = priority;
+            package.DroneID = droneID;
+            package.Requested = DateTime.Now;
+            DataSource.Config.PackageID++;
+            DataSource.Packages.Add(package);
+            Console.WriteLine("Success");
+            return DataSource.Config.PackageID;
         }
 
         /// <summary>
