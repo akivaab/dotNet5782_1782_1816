@@ -1,0 +1,153 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace IDal
+{
+    interface IDal
+    {
+        /// <summary>
+        /// Add a new station to the array
+        /// </summary>
+        /// <param name="id">Station id</param>
+        /// <param name="name">Station name</param>
+        /// <param name="numChargeSlots">Number of free charging slots avaliable</param>
+        /// <param name="latitude">Station latitude location</param>
+        /// <param name="longitude">Station longitude location</param>
+        
+        public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude);
+        
+        /// <summary>
+        /// Add a new drone to the drone array
+        /// </summary>
+        /// <param name="id">Drone ID</param>
+        /// <param name="model">Drone model</param>
+        /// <param name="maxWeight">Maximum weight the drone can handle</param>
+        /// <param name="status">Drone status</param>
+        /// <param name="batteryLevel">Drone battery level</param>
+        public void AddDrone(int id, string model, IDAL.DO.Enums.WeightCategories maxWeight);
+
+        /// <summary> 
+        /// Add a new customer to the customer array 
+        /// </summary>
+        /// <param name="id">Customer ID</param>
+        /// <param name="name">Customer name</param>
+        /// <param name="phone">Customer phone number</param>
+        /// <param name="latitude">Customer latitude location</param>
+        /// <param name="longitude">Customer longitude location</param>
+        public void AddCustomer(int id, string name, string phone, double latitude, double longitude);
+
+        /// <summary>
+        /// Add a package that needs to be delivered to the package array
+        /// </summary>
+        /// <param name="senderID">Package sender ID</param>
+        /// <param name="receiverID">Package receiver ID</param>
+        /// <param name="weight">Package weight</param>
+        /// <param name="priority">Priority of package delivery</param>
+        /// <param name="droneID">ID of drone delivering package</param>
+        /// <returns>automatic package ID, or -1 if adding a package failed</returns>
+        public int AddPackage(int senderID, int receiverID, IDAL.DO.Enums.WeightCategories weight, IDAL.DO.Enums.Priorities priority, int droneID = 0);
+
+        /// <summary>
+        /// Assign a package to a drone to deliver
+        /// </summary>
+        /// <param name="packageID">Package ID</param>
+        /// <param name="droneID">Drone ID</param>
+        /// <returns>true if assigned successfully, false otherwise</returns>
+        public void AssignPackage(int packageID, int droneID);
+
+        /// <summary>
+        /// Drone collects the assigned package
+        /// </summary>
+        /// <param name="packageID">Package ID</param>
+        /// <param name="droneID">Drone ID</param>
+        /// <returns>True if collected successfully, false otherwise</returns>
+        public void CollectPackage(int packageID, int droneID);
+
+        /// <summary>
+        /// Drone delivers a package to the customer
+        /// </summary>
+        /// <param name="packageID">Package ID</param>
+        /// <param name="droneID">Drone ID</param>
+        /// <returns>True if delivered successfully, false otherwise</returns>
+        public void DeliverPackage(int packageID, int droneID);
+
+        /// <summary>
+        /// Send a drone to charge in a base station 
+        /// </summary>
+        /// <param name="droneID">drone ID</param>
+        /// <param name="stationID">station ID</param>
+        /// <returns>True if success ,else false</returns>
+        public void ChargeDrone(int droneID, int stationID);        
+
+        /// <summary>
+        /// Release drone from a charging station
+        /// </summary>
+        /// <param name="droneID">Drone ID</param>
+        /// <param name="stationID">Station ID</param>
+        /// <returns>True if released successfully, false otherwise</returns>        
+        public void ReleaseDroneFromCharging(int droneID, int stationID);
+
+        /// <summary>
+        /// Display a specific station to the user
+        /// </summary>
+        /// <param name="stationID">Station ID</param>
+        public void DisplayStation(int stationID);
+
+        /// <summary>
+        /// Display a specific drone to the user
+        /// </summary>
+        /// <param name="droneID">Drone ID</param>
+        public void DisplayDrone(int droneID);
+
+        /// <summary>
+        /// Display a specific customer to the user
+        /// </summary>
+        /// <param name="customerID">Customer ID</param>
+        public void DisplayCustomer(int customerID);
+
+        /// <summary>
+        /// Display a specific package to the user
+        /// </summary>
+        /// <param name="packageID">Package ID</param>
+        public void DisplayPackage(int packageID);
+
+        /// <summary>
+        /// Display all stations to the user
+        /// </summary>
+        public void DisplayStationsList();
+
+        /// <summary>
+        /// Display all drones to the user
+        /// </summary>
+        public void DisplayDronesList();
+
+         /// <summary>
+        /// Display all customers to the user
+        /// </summary>
+        public void DisplayCustomersList();
+
+        /// <summary>
+        /// Display all packages to the user 
+        /// </summary>
+        public void DisplayPackagesList();
+
+        /// <summary>
+        /// Display all packages not assigned to a drone
+        /// </summary>
+        public void DisplayUnassignedPackagesList();
+
+        /// <summary>
+        /// Display all stations with available charge slots
+        /// </summary>
+        public void DisplayUnoccupiedStationsList();
+
+        /// <summary>
+        /// Represents the statistics of a drone's power consumption 
+        /// </summary>
+        /// <returns>array of doubles for how much power is consumed for different tasks</returns>
+        public double[] PowerConsumption();
+    }
+}

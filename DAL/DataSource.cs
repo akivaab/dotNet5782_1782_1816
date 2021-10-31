@@ -14,6 +14,11 @@ namespace DalObject
         internal class Config
         {
             internal static int PackageID = 1;
+            internal static double Free;
+            internal static double LightWeight;
+            internal static double MidWeight;
+            internal static double HeavyWeight;
+            internal static double ChargingRate;
         }
 
         /// <summary>
