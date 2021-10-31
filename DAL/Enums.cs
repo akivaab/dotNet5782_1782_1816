@@ -13,10 +13,6 @@ namespace IDAL
             {
                 regular, fast, emergency
             }
-            public enum DroneStatuses
-            {
-                free, maintenance, delivery
-            }
         }
     }
 }

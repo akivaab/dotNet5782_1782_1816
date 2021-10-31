@@ -23,14 +23,15 @@ namespace DalObject
         /// <param name="longitude">Station longitude location</param>
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
         {
-            if (DataSource.Config.NextStation < 5)
+            if (DataSource.Stations.Count < 5)
             {
-                DataSource.Stations[DataSource.Config.NextStation].ID = id;
-                DataSource.Stations[DataSource.Config.NextStation].Name = name;
-                DataSource.Stations[DataSource.Config.NextStation].NumChargeSlots = numChargeSlots;
-                DataSource.Stations[DataSource.Config.NextStation].Latitude = latitude;
-                DataSource.Stations[DataSource.Config.NextStation].Longitude = longitude;
-                DataSource.Config.NextStation++;
+                Station station = new();
+                station.ID = id;
+                station.Name = name;
+                station.NumChargeSlots = numChargeSlots;
+                station.Latitude = latitude;
+                station.Longitude = longitude;
+                DataSource.Stations.Add(station);
                 Console.WriteLine("Success");
             }
             else
@@ -47,16 +48,15 @@ namespace DalObject
         /// <param name="maxWeight">Maximum weight the drone can handle</param>
         /// <param name="status">Drone status</param>
         /// <param name="batteryLevel">Drone battery level</param>
-        public void AddDrone(int id, string model, Enums.WeightCategories maxWeight, Enums.DroneStatuses status, double batteryLevel = 100.0)
+        public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
         {
-            if (DataSource.Config.NextDrone < 10)
+            if (DataSource.Drones.Count < 10)
             {
-                DataSource.Drones[DataSource.Config.NextDrone].ID = id;
-                DataSource.Drones[DataSource.Config.NextDrone].Model = model;
-                DataSource.Drones[DataSource.Config.NextDrone].MaxWeight = maxWeight;
-                DataSource.Drones[DataSource.Config.NextDrone].Status = status;
-                DataSource.Drones[DataSource.Config.NextDrone].BatteryLevel = batteryLevel;
-                DataSource.Config.NextDrone++;
+                Drone drone = new();
+                drone.ID = id;
+                drone.Model = model;
+                drone.MaxWeight = maxWeight;
+                DataSource.Drones.Add(drone);
                 Console.WriteLine("Success");
             }
             else
@@ -75,14 +75,15 @@ namespace DalObject
         /// <param name="longitude">Customer longitude location</param>
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {
-            if (DataSource.Config.NextCustomer < 100)
+            if (DataSource.Customers.Count < 100)
             {
-                DataSource.Customers[DataSource.Config.NextCustomer].ID = id;
-                DataSource.Customers[DataSource.Config.NextCustomer].Name = name;
-                DataSource.Customers[DataSource.Config.NextCustomer].Phone = phone;
-                DataSource.Customers[DataSource.Config.NextCustomer].Latitude = latitude;
-                DataSource.Customers[DataSource.Config.NextCustomer].Longitude = longitude;
-                DataSource.Config.NextCustomer++;
+                Customer customer = new();
+                customer.ID = id;
+                customer.Name = name;
+                customer.Phone = phone;
+                customer.Latitude = latitude;
+                customer.Longitude = longitude;
+                DataSource.Customers.Add(customer);
                 Console.WriteLine("Success");
             }
             else
@@ -102,17 +103,18 @@ namespace DalObject
         /// <returns>automatic package ID, or -1 if adding a package failed</returns>
         public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int droneID = 0)
         {
-            if (DataSource.Config.NextPackage < 1000)
+            if (DataSource.Packages.Count < 1000)
             {
-                DataSource.Packages[DataSource.Config.NextPackage].ID = DataSource.Config.PackageID;
-                DataSource.Packages[DataSource.Config.NextPackage].SenderID = senderID;
-                DataSource.Packages[DataSource.Config.NextPackage].ReceiverID = receiverID;
-                DataSource.Packages[DataSource.Config.NextPackage].Weight = weight;
-                DataSource.Packages[DataSource.Config.NextPackage].Priority = priority;
-                DataSource.Packages[DataSource.Config.NextPackage].DroneID = droneID;
-                DataSource.Packages[DataSource.Config.NextPackage].Requested = DateTime.Now;
+                Package package = new();
+                package.ID = DataSource.Config.PackageID;
+                package.SenderID = senderID;
+                package.ReceiverID = receiverID;
+                package.Weight = weight;
+                package.Priority = priority;
+                package.DroneID = droneID;
+                package.Requested = DateTime.Now;
                 DataSource.Config.PackageID++;
-                DataSource.Config.NextPackage++;
+                DataSource.Packages.Add(package);
                 Console.WriteLine("Success");
                 return DataSource.Config.PackageID;
             }
