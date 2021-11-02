@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using IDAL.DO;
 
 namespace IDal
 {
-    interface IDal
+    public interface IDal
     {
         /// <summary>
         /// Add a new station to the array
@@ -94,55 +91,65 @@ namespace IDal
         /// Display a specific station to the user
         /// </summary>
         /// <param name="stationID">Station ID</param>
-        public void DisplayStation(int stationID);
+        /// <returns>The station with this ID</returns>
+        public Station DisplayStation(int stationID);
 
         /// <summary>
         /// Display a specific drone to the user
         /// </summary>
         /// <param name="droneID">Drone ID</param>
-        public void DisplayDrone(int droneID);
+        /// <returns>The drone with this ID</returns>
+        public Drone DisplayDrone(int droneID);
 
         /// <summary>
         /// Display a specific customer to the user
         /// </summary>
         /// <param name="customerID">Customer ID</param>
-        public void DisplayCustomer(int customerID);
+        /// <return>The customer with this ID</return>
+        public Customer DisplayCustomer(int customerID);
 
         /// <summary>
         /// Display a specific package to the user
         /// </summary>
         /// <param name="packageID">Package ID</param>
-        public void DisplayPackage(int packageID);
+        /// <return>The package with this ID</return> 
+        public Package DisplayPackage(int packageID);
 
         /// <summary>
         /// Display all stations to the user
         /// </summary>
-        public void DisplayStationsList();
+        /// <returns>List of all stations</returns>
+        public IEnumerable<Station> DisplayStationsList();
 
         /// <summary>
         /// Display all drones to the user
         /// </summary>
-        public void DisplayDronesList();
+        /// <returns>List of all drones</returns>
+        public IEnumerable<Drone> DisplayDronesList();
 
          /// <summary>
         /// Display all customers to the user
         /// </summary>
-        public void DisplayCustomersList();
+        /// <returns>List of all customers</returns>
+        public IEnumerable<Customer> DisplayCustomersList();
 
         /// <summary>
         /// Display all packages to the user 
         /// </summary>
-        public void DisplayPackagesList();
+        /// <returns>List of all packages</returns>
+        public IEnumerable<Package> DisplayPackagesList();
 
         /// <summary>
         /// Display all packages not assigned to a drone
         /// </summary>
-        public void DisplayUnassignedPackagesList();
+        /// <returns>List of all appropriate packages</returns>
+        public IEnumerable<Package> DisplayUnassignedPackagesList();
 
         /// <summary>
         /// Display all stations with available charge slots
         /// </summary>
-        public void DisplayUnoccupiedStationsList();
+        /// <returns>List of all appropriate stations</returns>
+        public IEnumerable<Station> DisplayUnoccupiedStationsList();
 
         /// <summary>
         /// Represents the statistics of a drone's power consumption 

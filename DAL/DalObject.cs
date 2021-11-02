@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using IDAL.DO;
 
 namespace DalObject
@@ -30,7 +31,6 @@ namespace DalObject
             station.Latitude = latitude;
             station.Longitude = longitude;
             DataSource.Stations.Add(station);
-            Console.WriteLine("Success");
         }
 
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
@@ -48,7 +48,6 @@ namespace DalObject
             drone.Model = model;
             drone.MaxWeight = maxWeight;
             DataSource.Drones.Add(drone);
-            Console.WriteLine("Success");
         }
 
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
@@ -68,7 +67,6 @@ namespace DalObject
             customer.Latitude = latitude;
             customer.Longitude = longitude;
             DataSource.Customers.Add(customer);
-            Console.WriteLine("Success");
         }
 
         public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int droneID = 0)
@@ -93,7 +91,6 @@ namespace DalObject
             package.Requested = DateTime.Now;
             DataSource.Config.PackageID++;
             DataSource.Packages.Add(package);
-            Console.WriteLine("Success");
             return DataSource.Config.PackageID;
         }
 
@@ -179,99 +176,110 @@ namespace DalObject
             DataSource.Stations[stationIndex] = station;
         }
 
-        public void DisplayStation(int stationID)
+        public Station DisplayStation(int stationID)
         {
             int stationIndex = DataSource.Stations.FindIndex(station => station.ID == stationID);
             if (stationIndex == -1)
             {
                 throw new UndefinedObjectException();
             }
-            Console.WriteLine(DataSource.Stations[stationIndex]);
-
+            return DataSource.Stations[stationIndex];
         }
 
-        public void DisplayDrone(int droneID)
+        public Drone DisplayDrone(int droneID)
         {
             int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
             if (droneIndex == -1)
             {
                 throw new UndefinedObjectException();
             }
-            Console.WriteLine(DataSource.Drones[droneIndex]);
+            return DataSource.Drones[droneIndex];
         }
 
-        public void DisplayCustomer(int customerID)
+        public Customer DisplayCustomer(int customerID)
         {
             int customerIndex = DataSource.Customers.FindIndex(customer => customer.ID == customerID);
             if (customerIndex == -1)
             {
                 throw new UndefinedObjectException();
             }
-            Console.WriteLine(DataSource.Customers[customerIndex]);
+            return DataSource.Customers[customerIndex];
         }
 
-        public void DisplayPackage(int packageID)
+        public Package DisplayPackage(int packageID)
         {
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
-            if (packageID == -1)
+            if (packageIndex == -1)
             {
                 throw new UndefinedObjectException();
             }
-            Console.WriteLine(DataSource.Packages[packageIndex]);
+            return DataSource.Packages[packageIndex];
         }
 
-        public void DisplayStationsList()
+        public IEnumerable<Station> DisplayStationsList()
         {
+            List<Station> stations = new();
             for (int i = 0; i < DataSource.Stations.Count; i++)
             {
-                Console.WriteLine(DataSource.Stations[i]);
+                stations.Add(DataSource.Stations[i]);
             }
+            return stations;
         }
 
-        public void DisplayDronesList()
+        public IEnumerable<Drone> DisplayDronesList()
         {
+            List<Drone> drones = new();
             for (int i = 0; i < DataSource.Drones.Count; i++)
             {
-                Console.WriteLine(DataSource.Drones[i]);
+                drones.Add(DataSource.Drones[i]);
             }
+            return drones;
         }
 
-        public void DisplayCustomersList()
+        public IEnumerable<Customer> DisplayCustomersList()
         {
+            List<Customer> customers = new();
             for (int i = 0; i < DataSource.Customers.Count; i++)
             {
-                Console.WriteLine(DataSource.Customers[i]);
+                customers.Add(DataSource.Customers[i]);
             }
+            return customers;
         }
 
-        public void DisplayPackagesList()
+        public IEnumerable<Package> DisplayPackagesList()
         {
+            List<Package> packages = new();
             for (int i = 0; i < DataSource.Packages.Count; i++)
             {
-                Console.WriteLine(DataSource.Packages[i]);
+                packages.Add(DataSource.Packages[i]);
             }
+            return packages;
         }
 
-        public void DisplayUnassignedPackagesList()
+        public IEnumerable<Package> DisplayUnassignedPackagesList()
         {
+            List<Package> packages = new();
             for (int i = 0; i < DataSource.Packages.Count; i++)
             {
                 if (DataSource.Packages[i].DroneID == 0)
                 {
-                    Console.WriteLine(DataSource.Packages[i]);
+                    packages.Add(DataSource.Packages[i]);
                 }
             }
+            return packages;
         }
 
-        public void DisplayUnoccupiedStationsList()
+        public IEnumerable<Station> DisplayUnoccupiedStationsList()
         {
+            List<Station> stations = new();
             for (int i = 0; i < DataSource.Stations.Count; i++)
             {
                 if (DataSource.Stations[i].NumChargeSlots > 0)
                 {
-                    Console.WriteLine(DataSource.Stations[i]);
+                    stations.Add(DataSource.Stations[i]);
                 }
             }
+            return stations;
         }
 
         public double[] PowerConsumption()

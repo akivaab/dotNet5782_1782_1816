@@ -1,5 +1,5 @@
 ﻿using System;
-using DalObject;
+using IDAL.DO;
 
 namespace ConsoleUI
 {
@@ -7,7 +7,7 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            DalObject.DalObject dal = new DalObject.DalObject();
+            IDal.IDal dal = new DalObject.DalObject();
             int option;
             do
             {
@@ -42,7 +42,7 @@ namespace ConsoleUI
             } while (option != 5);
         }
 
-        public static void AddingOptions(DalObject.DalObject dal)
+        public static void AddingOptions(IDal.IDal dal)
         {
             Console.WriteLine("Adding Options:");
             Console.WriteLine("1. Add new base station");
@@ -52,135 +52,157 @@ namespace ConsoleUI
             Console.Write("Choose an adding option: ");
             int addingOption;
             int.TryParse(Console.ReadLine(), out addingOption);
-            switch (addingOption)
+            try
             {
-                case 1:
-                    int stationID, stationName, numChargeSlots;
-                    double stationLatitude, stationLongitude;
-                    Console.Write("Input ID: ");
-                    int.TryParse(Console.ReadLine(), out stationID);
-                    Console.Write("Input name: ");
-                    int.TryParse(Console.ReadLine(), out stationName);
-                    Console.Write("Input number of free charge slots: ");
-                    int.TryParse(Console.ReadLine(), out numChargeSlots);
-                    Console.Write("Input latitude: ");
-                    double.TryParse(Console.ReadLine(), out stationLatitude);
-                    Console.Write("Input longitude: ");
-                    double.TryParse(Console.ReadLine(), out stationLongitude);
-                    dal.AddStation(stationID, stationName, numChargeSlots, stationLatitude, stationLongitude);
-                    break;
-                case 2:
-                    int droneID;
-                    string model;
-                    IDAL.DO.Enums.WeightCategories maxWeight;
-                    IDAL.DO.Enums.DroneStatuses status;
-                    double batteryLevel;
-                    Console.Write("Input ID: ");
-                    int.TryParse(Console.ReadLine(), out droneID);
-                    Console.Write("Input model: ");
-                    model = Console.ReadLine();
-                    Console.Write("Input maximum weight capacity (0: light, 1: medium , 2: heavy): ");
-                    IDAL.DO.Enums.WeightCategories.TryParse(Console.ReadLine(), out maxWeight);
-                    Console.Write("Input status (0: free, 1: maintenance): ");
-                    IDAL.DO.Enums.DroneStatuses.TryParse(Console.ReadLine(), out status);
-                    Console.Write("Input battery level (0.0-100.0): ");
-                    double.TryParse(Console.ReadLine(), out batteryLevel);
-                    dal.AddDrone(droneID, model, maxWeight, status, batteryLevel);
-                    break;
-                case 3:
-                    int customerID;
-                    string customerName, phone;
-                    double customerLatitude, customerLongitude;
-                    Console.Write("Input ID: ");
-                    int.TryParse(Console.ReadLine(), out customerID);
-                    Console.Write("Input name: ");
-                    customerName = Console.ReadLine();
-                    Console.Write("Input phone number: ");
-                    phone = Console.ReadLine();
-                    Console.Write("Input latitude: ");
-                    double.TryParse(Console.ReadLine(), out customerLatitude);
-                    Console.Write("Input longitude: ");
-                    double.TryParse(Console.ReadLine(), out customerLongitude);
-                    dal.AddCustomer(customerID, customerName, phone, customerLatitude, customerLongitude);
-                    break;
-                case 4:
-                    int senderID, receiverID;
-                    IDAL.DO.Enums.WeightCategories weight;
-                    IDAL.DO.Enums.Priorities priority;
-                    Console.Write("Input sender ID: ");
-                    int.TryParse(Console.ReadLine(), out senderID);
-                    Console.Write("Input receiver ID: ");
-                    int.TryParse(Console.ReadLine(), out receiverID);
-                    Console.Write("Input package weight (0: light, 1: medium , 2: heavy): ");
-                    IDAL.DO.Enums.WeightCategories.TryParse(Console.ReadLine(), out weight);
-                    Console.Write("Input package priority (0: regular, 1: fast, 2: emergency): ");
-                    IDAL.DO.Enums.WeightCategories.TryParse(Console.ReadLine(), out priority);
-                    dal.AddPackage(senderID, receiverID, weight, priority);
-                    break;
-                default:
-                    break;
+                switch (addingOption)
+                {
+                    case 1:
+                        int stationID, stationName, numChargeSlots;
+                        double stationLatitude, stationLongitude;
+                        Console.Write("Input ID: ");
+                        int.TryParse(Console.ReadLine(), out stationID);
+                        Console.Write("Input name: ");
+                        int.TryParse(Console.ReadLine(), out stationName);
+                        Console.Write("Input number of free charge slots: ");
+                        int.TryParse(Console.ReadLine(), out numChargeSlots);
+                        Console.Write("Input latitude: ");
+                        double.TryParse(Console.ReadLine(), out stationLatitude);
+                        Console.Write("Input longitude: ");
+                        double.TryParse(Console.ReadLine(), out stationLongitude);
+                        dal.AddStation(stationID, stationName, numChargeSlots, stationLatitude, stationLongitude);
+                        break;
+                    case 2:
+                        int droneID;
+                        string model;
+                        IDAL.DO.Enums.WeightCategories maxWeight;
+                        //IDAL.DO.Enums.DroneStatuses status;
+                        double batteryLevel;
+                        Console.Write("Input ID: ");
+                        int.TryParse(Console.ReadLine(), out droneID);
+                        Console.Write("Input model: ");
+                        model = Console.ReadLine();
+                        Console.Write("Input maximum weight capacity (0: light, 1: medium , 2: heavy): ");
+                        IDAL.DO.Enums.WeightCategories.TryParse(Console.ReadLine(), out maxWeight);
+                        //Console.Write("Input status (0: free, 1: maintenance): ");
+                        //IDAL.DO.Enums.DroneStatuses.TryParse(Console.ReadLine(), out status);
+                        Console.Write("Input battery level (0.0-100.0): ");
+                        double.TryParse(Console.ReadLine(), out batteryLevel);
+                        dal.AddDrone(droneID, model, maxWeight);
+                        break;
+                    case 3:
+                        int customerID;
+                        string customerName, phone;
+                        double customerLatitude, customerLongitude;
+                        Console.Write("Input ID: ");
+                        int.TryParse(Console.ReadLine(), out customerID);
+                        Console.Write("Input name: ");
+                        customerName = Console.ReadLine();
+                        Console.Write("Input phone number: ");
+                        phone = Console.ReadLine();
+                        Console.Write("Input latitude: ");
+                        double.TryParse(Console.ReadLine(), out customerLatitude);
+                        Console.Write("Input longitude: ");
+                        double.TryParse(Console.ReadLine(), out customerLongitude);
+                        dal.AddCustomer(customerID, customerName, phone, customerLatitude, customerLongitude);
+                        break;
+                    case 4:
+                        int senderID, receiverID;
+                        IDAL.DO.Enums.WeightCategories weight;
+                        IDAL.DO.Enums.Priorities priority;
+                        Console.Write("Input sender ID: ");
+                        int.TryParse(Console.ReadLine(), out senderID);
+                        Console.Write("Input receiver ID: ");
+                        int.TryParse(Console.ReadLine(), out receiverID);
+                        Console.Write("Input package weight (0: light, 1: medium , 2: heavy): ");
+                        IDAL.DO.Enums.WeightCategories.TryParse(Console.ReadLine(), out weight);
+                        Console.Write("Input package priority (0: regular, 1: fast, 2: emergency): ");
+                        IDAL.DO.Enums.WeightCategories.TryParse(Console.ReadLine(), out priority);
+                        dal.AddPackage(senderID, receiverID, weight, priority);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (ExceededLimitException e)
+            {
+                Console.WriteLine($"{e}:\nThe maximum number of objects of this type allowed has already been reached.");
+            }
+            catch (NonUniqueIdException e)
+            {
+                Console.WriteLine($"{e}:\nAn object of this type with this ID already exists.");
+            }
+            catch (UndefinedObjectException e)
+            {
+                Console.WriteLine($"{e}:\nAn object you referenced does not exist.");
             }
         }
 
-        public static void UpdatingOptions(DalObject.DalObject dal)
+        public static void UpdatingOptions(IDal.IDal dal)
         {
             Console.WriteLine("Updatinging Options:");
             Console.WriteLine("1. Assign package to drone");
             Console.WriteLine("2. Collect package by drone");
             Console.WriteLine("3. Deliver package to customer");
             Console.WriteLine("4. Send drone to charge");
-            Console.WriteLine("5. Release drone from chargine station");
+            Console.WriteLine("5. Release drone from charging station");
             Console.Write("Choose an updating option: ");
             int updatingOption;
             int.TryParse(Console.ReadLine(), out updatingOption);
-            switch (updatingOption)
+            try
             {
-                case 1:
-                    int assignPackageID, assignDroneID;
-                    Console.Write("Input Package ID: ");
-                    int.TryParse(Console.ReadLine(), out assignPackageID);
-                    Console.Write("Input Drone ID: ");
-                    int.TryParse(Console.ReadLine(), out assignDroneID);
-                    dal.AssignPackage(assignPackageID, assignDroneID);
-                    break;
-                case 2:
-                    int collectPackageID, collectDroneID;
-                    Console.Write("Input Package ID: ");
-                    int.TryParse(Console.ReadLine(), out collectPackageID);
-                    Console.Write("Input Drone ID: ");
-                    int.TryParse(Console.ReadLine(), out collectDroneID);
-                    dal.CollectPackage(collectPackageID, collectDroneID);
-                    break;
-                case 3:
-                    int deliveryPackageID, deliveryDroneID;
-                    Console.Write("Input Package ID: ");
-                    int.TryParse(Console.ReadLine(), out deliveryPackageID);
-                    Console.Write("Input Drone ID: ");
-                    int.TryParse(Console.ReadLine(), out deliveryDroneID);
-                    dal.DeliverPackage(deliveryPackageID, deliveryDroneID);
-                    break;
-                case 4:
-                    int chargeDroneID, chargeStationID;
-                    Console.Write("Input Drone ID: ");
-                    int.TryParse(Console.ReadLine(), out chargeDroneID);
-                    Console.Write("Input Station ID: ");
-                    int.TryParse(Console.ReadLine(), out chargeStationID);
-                    dal.ChargeDrone(chargeDroneID, chargeStationID);
-                    break;
-                case 5:
-                    int doneChargeDroneID, doneChargeStationID;
-                    Console.Write("Input Drone ID: ");
-                    int.TryParse(Console.ReadLine(), out doneChargeDroneID);
-                    Console.Write("Input Station ID: ");
-                    int.TryParse(Console.ReadLine(), out doneChargeStationID);
-                    dal.ReleaseDroneFromCharging(doneChargeDroneID, doneChargeStationID);
-                    break;
-                default:
-                    break;
+                switch (updatingOption)
+                {
+                    case 1:
+                        int assignPackageID, assignDroneID;
+                        Console.Write("Input Package ID: ");
+                        int.TryParse(Console.ReadLine(), out assignPackageID);
+                        Console.Write("Input Drone ID: ");
+                        int.TryParse(Console.ReadLine(), out assignDroneID);
+                        dal.AssignPackage(assignPackageID, assignDroneID);
+                        break;
+                    case 2:
+                        int collectPackageID, collectDroneID;
+                        Console.Write("Input Package ID: ");
+                        int.TryParse(Console.ReadLine(), out collectPackageID);
+                        Console.Write("Input Drone ID: ");
+                        int.TryParse(Console.ReadLine(), out collectDroneID);
+                        dal.CollectPackage(collectPackageID, collectDroneID);
+                        break;
+                    case 3:
+                        int deliveryPackageID, deliveryDroneID;
+                        Console.Write("Input Package ID: ");
+                        int.TryParse(Console.ReadLine(), out deliveryPackageID);
+                        Console.Write("Input Drone ID: ");
+                        int.TryParse(Console.ReadLine(), out deliveryDroneID);
+                        dal.DeliverPackage(deliveryPackageID, deliveryDroneID);
+                        break;
+                    case 4:
+                        int chargeDroneID, chargeStationID;
+                        Console.Write("Input Drone ID: ");
+                        int.TryParse(Console.ReadLine(), out chargeDroneID);
+                        Console.Write("Input Station ID: ");
+                        int.TryParse(Console.ReadLine(), out chargeStationID);
+                        dal.ChargeDrone(chargeDroneID, chargeStationID);
+                        break;
+                    case 5:
+                        int doneChargeDroneID, doneChargeStationID;
+                        Console.Write("Input Drone ID: ");
+                        int.TryParse(Console.ReadLine(), out doneChargeDroneID);
+                        Console.Write("Input Station ID: ");
+                        int.TryParse(Console.ReadLine(), out doneChargeStationID);
+                        dal.ReleaseDroneFromCharging(doneChargeDroneID, doneChargeStationID);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (UndefinedObjectException e)
+            {
+                Console.WriteLine($"{e}:\nThe object you wish to update is not defined.");
             }
         }
 
-        public static void DisplayingOptions(DalObject.DalObject dal)
+        public static void DisplayingOptions(IDal.IDal dal)
         {
             Console.WriteLine("Displaying Options:");
             Console.WriteLine("1. Display station");
@@ -190,38 +212,45 @@ namespace ConsoleUI
             Console.Write("Choose a displaying option: ");
             int displayingOption;
             int.TryParse(Console.ReadLine(), out displayingOption);
-            switch (displayingOption)
+            try
             {
-                case 1:
-                    int stationID;
-                    Console.Write("Input Station ID: ");
-                    int.TryParse(Console.ReadLine(), out stationID);
-                    dal.DisplayStation(stationID);
-                    break;
-                case 2:
-                    int droneID;
-                    Console.Write("Input Drone ID: ");
-                    int.TryParse(Console.ReadLine(), out droneID);
-                    dal.DisplayDrone(droneID);
-                    break;
-                case 3:
-                    int customerID;
-                    Console.Write("Input Customer ID: ");
-                    int.TryParse(Console.ReadLine(), out customerID);
-                    dal.DisplayCustomer(customerID);
-                    break;
-                case 4:
-                    int packageID;
-                    Console.Write("Input Package ID: ");
-                    int.TryParse(Console.ReadLine(), out packageID);
-                    dal.DisplayPackage(packageID);
-                    break;
-                default:
-                    break;
+                switch (displayingOption)
+                {
+                    case 1:
+                        int stationID;
+                        Console.Write("Input Station ID: ");
+                        int.TryParse(Console.ReadLine(), out stationID);
+                        Console.WriteLine(dal.DisplayStation(stationID));
+                        break;
+                    case 2:
+                        int droneID;
+                        Console.Write("Input Drone ID: ");
+                        int.TryParse(Console.ReadLine(), out droneID);
+                        Console.WriteLine(dal.DisplayDrone(droneID));
+                        break;
+                    case 3:
+                        int customerID;
+                        Console.Write("Input Customer ID: ");
+                        int.TryParse(Console.ReadLine(), out customerID);
+                        Console.WriteLine(dal.DisplayCustomer(customerID));
+                        break;
+                    case 4:
+                        int packageID;
+                        Console.Write("Input Package ID: ");
+                        int.TryParse(Console.ReadLine(), out packageID);
+                        Console.WriteLine(dal.DisplayPackage(packageID));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (UndefinedObjectException e)
+            {
+                Console.WriteLine($"{e}:\nThe object you wish to display is not defined.");
             }
         }
 
-        public static void ListDisplayingOptions(DalObject.DalObject dal)
+        public static void ListDisplayingOptions(IDal.IDal dal)
         {
             Console.WriteLine("List Displaying Options:");
             Console.WriteLine("1. Display all stations");
@@ -236,22 +265,40 @@ namespace ConsoleUI
             switch (listDisplayingOption)
             {
                 case 1:
-                    dal.DisplayStationsList();
+                    foreach (Station station in dal.DisplayStationsList())
+                    {
+                        Console.WriteLine(station);
+                    }
                     break;
                 case 2:
-                    dal.DisplayDronesList();
+                    foreach ( Drone drone in dal.DisplayDronesList())
+                    {
+                        Console.WriteLine(drone);
+                    }
                     break;
                 case 3:
-                    dal.DisplayCustomersList();
+                    foreach (Customer customer in dal.DisplayCustomersList())
+                    {
+                        Console.WriteLine(customer);
+                    }
                     break;
                 case 4:
-                    dal.DisplayPackagesList();
+                    foreach (Package package in dal.DisplayPackagesList())
+                    {
+                        Console.WriteLine(package);
+                    }
                     break;
                 case 5:
-                    dal.DisplayUnassignedPackagesList();
+                    foreach (Package package in dal.DisplayUnassignedPackagesList())
+                    {
+                        Console.WriteLine(package);
+                    }
                     break;
                 case 6:
-                    dal.DisplayUnoccupiedStationsList();
+                    foreach (Station station in dal.DisplayUnoccupiedStationsList())
+                    {
+                        Console.WriteLine(station);
+                    }
                     break;
                 default:
                     break;
