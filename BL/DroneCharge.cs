@@ -1,9 +1,11 @@
-﻿
-namespace IDAL
+﻿using System;
+using System.Collections.Generic;
+
+namespace IBL
 {
-    namespace DO
+    namespace BO
     {
-        public struct DroneCharge
+        public class DroneCharge
         {
             public int DroneID { get; set; }
             public int StationID { get; set; }
