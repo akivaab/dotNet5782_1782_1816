@@ -155,6 +155,6 @@ namespace IDal
         /// Represents the statistics of a drone's power consumption 
         /// </summary>
         /// <returns>array of doubles for how much power is consumed for different tasks</returns>
-        public double[] PowerConsumption();
+        public double[] DronePowerConsumption();
     }
 }
