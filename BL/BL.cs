@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using IBL.BO;
-using IDAL.DO;
 
 namespace IBL
 {
@@ -11,7 +10,6 @@ namespace IBL
 
         public BL()
         {
-           
             IDAL.IDal dalObject = new DalObject.DalObject();
             double[] powerConsumption = dalObject.DronePowerConsumption();
             IEnumerable<Drone> enumerable = dalObject.DisplayDronesList();

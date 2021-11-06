@@ -19,6 +19,10 @@ namespace IBL
             {
                 free, maintenance, delivery
             }
+            public enum PackageStatus
+            {
+                created, assigned, collected, delivered
+            }
         }
     }
 }
