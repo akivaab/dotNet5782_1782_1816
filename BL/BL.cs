@@ -12,7 +12,7 @@ namespace IBL
         public BL()
         {
            
-            IDal.IDal dalObject = new DalObject.DalObject();
+            IDAL.IDal dalObject = new DalObject.DalObject();
             double[] powerConsumption = dalObject.DronePowerConsumption();
             IEnumerable<Drone> enumerable = dalObject.DisplayDronesList();
             drones = (List<Drone>)enumerable;

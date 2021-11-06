@@ -3,7 +3,7 @@ using IDAL.DO;
 
 namespace DalObject
 {
-    public partial class DalObject : IDal.IDal
+    public partial class DalObject : IDAL.IDal
     {
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {

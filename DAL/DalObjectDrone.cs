@@ -3,7 +3,7 @@ using IDAL.DO;
 
 namespace DalObject
 {
-    public partial class DalObject : IDal.IDal
+    public partial class DalObject : IDAL.IDal
     {
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
         {

@@ -3,7 +3,7 @@ using IDAL.DO;
 
 namespace DalObject
 {
-    public partial class DalObject : IDal.IDal
+    public partial class DalObject : IDAL.IDal
     {
         /// <summary>
         /// Constructor adds initial values to the entity arrays

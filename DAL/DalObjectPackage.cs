@@ -4,7 +4,7 @@ using IDAL.DO;
 
 namespace DalObject
 {
-    public partial class DalObject : IDal.IDal
+    public partial class DalObject : IDAL.IDal
     {
         public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int droneID = 0)
         {
