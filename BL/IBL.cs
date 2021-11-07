@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using IBL.BO;
 
 
 namespace IBL
@@ -8,13 +8,11 @@ namespace IBL
     {
         public void AddStation(int stationID, string name, double latitude, double longitude, int numChargingSlots);
 
-        //need to add weight
-        public void AddDrone(int droneID ,int stationID);
+        public void AddDrone(int droneID, Enums.WeightCategories weight ,int stationID);
 
-        public void Addcustomer(int customerID, string name, string phone);
+        public void AddCustomer(int customerID, string name, string phone);
 
-        //need add the weight/status field
-        public void AddPackage(int senderID ,int receiverId );
+        public void AddPackage(int senderID ,int receiverId, Enums.WeightCategories weight, Enums.Priorities priority);
 
         public void UpdateDroneName(int droneID, string name);
 

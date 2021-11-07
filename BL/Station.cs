@@ -6,11 +6,11 @@ namespace IBL
     {
         public class Station
         {
-            public int ID { get; }
-            public int Name { get; }
-            public Location Location { get; }
-            public int AvailableChargeSlots { get; }
-            public List<DroneCharging> DronesCharging { get; }
+            public int ID { get; set; }
+            public int Name { get; set; }
+            public Location Location { get; set; }
+            public int AvailableChargeSlots { get; set; }
+            public List<DroneCharging> DronesCharging { get; set; }
             public override string ToString()
             {
                 return $"Station ID: {ID}, Name: {Name}, Location {Location}, Available Charging Slots: {AvailableChargeSlots}\n" +

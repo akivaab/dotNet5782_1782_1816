@@ -5,8 +5,8 @@ namespace IBL
     {
         public class DroneCharging
         {
-            public int ID { get; }
-            public double Battery { get; }
+            public int ID { get; set; }
+            public double Battery { get; set; }
             public override string ToString()
             {
                 return $"Drone ID: {ID}, Battery Status: {Battery}";

@@ -6,48 +6,48 @@ namespace IBL
 {
     public partial class BL : IBL
     {
-        public List<Drone> drones;
+        public List<DroneToList> drones;
 
         public BL()
         {
             IDAL.IDal dalObject = new DalObject.DalObject();
             double[] powerConsumption = dalObject.DronePowerConsumption();
-            IEnumerable<Drone> enumerable = dalObject.DisplayDronesList();
-            drones = (List<Drone>)enumerable;
+            IEnumerable<IDAL.DO.Drone> dataLayerDrones = dalObject.DisplayDronesList();
+            
 
         }
 
-        public void Addcustomer(int CustomeID, string Name, string Phone)
+        public void AddCustomer(int customerID, string name, string phone)
         {
             throw new NotImplementedException();
         }
 
-        public void AddDrone(int DroneID, int stationID)
+        public void AddDrone(int droneID, Enums.WeightCategories weight, int stationID)
         {
             throw new NotImplementedException();
         }
 
-        public void AddPackage(int SenderID, int ReceiverId)
+        public void AddPackage(int senderID, int receiverId, Enums.WeightCategories weight, Enums.Priorities priority)
         {
             throw new NotImplementedException();
         }
 
-        public void AddStation(int StationID, string Name, double latitude, double longitude, int numChargeSlots)
+        public void AddStation(int stationID, string name, double latitude, double longitude, int numChargeSlots)
         {
             throw new NotImplementedException();
         }
 
-        public void AssignPackageDrone(int DroneID)
+        public void AssignPackageDrone(int droneID)
         {
             throw new NotImplementedException();
         }
 
-        public void CollectPackage(int DroneID)
+        public void CollectPackage(int droneID)
         {
             throw new NotImplementedException();
         }
 
-        public void DeliveryPackage(int DroneID)
+        public void DeliveryPackage(int droneID)
         {
             throw new NotImplementedException();
         }
@@ -77,12 +77,12 @@ namespace IBL
             throw new NotImplementedException();
         }
 
-        public void DisplayCustomer(int CustomerID)
+        public void DisplayCustomer(int customerID)
         {
             throw new NotImplementedException();
         }
 
-        public void DisplayDrone(int DroneID)
+        public void DisplayDrone(int droneID)
         {
             throw new NotImplementedException();
         }
@@ -92,37 +92,37 @@ namespace IBL
             throw new NotImplementedException();
         }
 
-        public void DisplayPackage(int PackageID)
+        public void DisplayPackage(int packageID)
         {
             throw new NotImplementedException();
         }
 
-        public void DisplayStation(int StationID)
+        public void DisplayStation(int stationID)
         {
             throw new NotImplementedException();
         }
 
-        public void ReleaseFromCharge(int DroneID, DateTime ChargingTime)
+        public void ReleaseFromCharge(int droneID, DateTime chargingTime)
         {
             throw new NotImplementedException();
         }
 
-        public void SendDroneCharge(int DroneID)
+        public void SendDroneCharge(int droneID)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateCustomer(int CustomerID, string Name, string phone)
+        public void UpdateCustomer(int customerID, string name, string phone)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateDroneName(int DroneID, string Name)
+        public void UpdateDroneName(int droneID, string name)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateStation(int StationID, string Name, int NumberChargingSlots)
+        public void UpdateStation(int stationID, string name, int numChargingSlots)
         {
             throw new NotImplementedException();
         }

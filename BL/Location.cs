@@ -5,8 +5,8 @@ namespace IBL
     {
         public class Location
         {
-            public double Latitude { get; }
-            public double Longitude { get; }
+            public double Latitude { get; set; }
+            public double Longitude { get; set; }
             public override string ToString()
             {
                 return $"{Latitude}, {Longitude}";

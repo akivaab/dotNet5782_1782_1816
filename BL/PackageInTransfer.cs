@@ -5,15 +5,15 @@ namespace IBL
     {
         public class PackageInTransfer
         {
-            public int ID { get; }
-            public Enums.WeightCategories Weight { get; }
-            public Enums.Priorities Priority { get; }
-            public bool Status { get; }
-            public CustomerForPackage Sender { get; }
-            public CustomerForPackage Receiver { get; }
-            public Location CollectLocation { get; }
-            public Location DeliveryLocation { get; }
-            public double DeliveryDistance { get; }
+            public int ID { get; set; }
+            public Enums.WeightCategories Weight { get; set; }
+            public Enums.Priorities Priority { get; set; }
+            public bool Status { get; set; }
+            public CustomerForPackage Sender { get; set; }
+            public CustomerForPackage Receiver { get; set; }
+            public Location CollectLocation { get; set; }
+            public Location DeliveryLocation { get; set; }
+            public double DeliveryDistance { get; set; }
             public override string ToString()
             {
                 return $"Package ID: {ID}, weight: {Weight}, priority: {Priority}\n" +

@@ -5,10 +5,10 @@ namespace IBL
     {
         public class StationToList
         {
-            public int ID { get; }
-            public int Name { get; }
-            public int NumAvailableChargeSlots { get; }
-            public int NumOccupiedChargeSlots { get; }
+            public int ID { get; set; }
+            public int Name { get; set; }
+            public int NumAvailableChargeSlots { get; set; }
+            public int NumOccupiedChargeSlots { get; set; }
             public override string ToString()
             {
                 return $"Station ID: {ID}, Name: {Name}\n" +
