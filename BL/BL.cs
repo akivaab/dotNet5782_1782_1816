@@ -13,6 +13,7 @@ namespace IBL
             IDAL.IDal dalObject = new DalObject.DalObject();
             double[] powerConsumption = dalObject.DronePowerConsumption();
             IEnumerable<IDAL.DO.Drone> dataLayerDrones = dalObject.DisplayDronesList();
+            //IEnumerable<IDAL.DO.Package> dataLayerPackages = dalObject.DisplayPackagesList();
             
 
         }

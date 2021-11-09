@@ -7,7 +7,7 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            IDal.IDal dal = new DalObject.DalObject();
+            IDAL.IDal dal = new DalObject.DalObject();
             int option;
             do
             {
@@ -42,7 +42,7 @@ namespace ConsoleUI
             } while (option != 5);
         }
 
-        public static void AddingOptions(IDal.IDal dal)
+        public static void AddingOptions(IDAL.IDal dal)
         {
             Console.WriteLine("Adding Options:");
             Console.WriteLine("1. Add new base station");
@@ -137,7 +137,7 @@ namespace ConsoleUI
             }
         }
 
-        public static void UpdatingOptions(IDal.IDal dal)
+        public static void UpdatingOptions(IDAL.IDal dal)
         {
             Console.WriteLine("Updatinging Options:");
             Console.WriteLine("1. Assign package to drone");
@@ -202,7 +202,7 @@ namespace ConsoleUI
             }
         }
 
-        public static void DisplayingOptions(IDal.IDal dal)
+        public static void DisplayingOptions(IDAL.IDal dal)
         {
             Console.WriteLine("Displaying Options:");
             Console.WriteLine("1. Display station");
@@ -250,7 +250,7 @@ namespace ConsoleUI
             }
         }
 
-        public static void ListDisplayingOptions(IDal.IDal dal)
+        public static void ListDisplayingOptions(IDAL.IDal dal)
         {
             Console.WriteLine("List Displaying Options:");
             Console.WriteLine("1. Display all stations");
