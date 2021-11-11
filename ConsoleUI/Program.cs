@@ -74,19 +74,13 @@ namespace ConsoleUI
                     case 2:
                         int droneID;
                         string model;
-                        IDAL.DO.Enums.WeightCategories maxWeight;
-                        //IDAL.DO.Enums.DroneStatuses status;
-                        double batteryLevel;
+                        Enums.WeightCategories maxWeight;
                         Console.Write("Input ID: ");
                         int.TryParse(Console.ReadLine(), out droneID);
                         Console.Write("Input model: ");
                         model = Console.ReadLine();
                         Console.Write("Input maximum weight capacity (0: light, 1: medium , 2: heavy): ");
-                        IDAL.DO.Enums.WeightCategories.TryParse(Console.ReadLine(), out maxWeight);
-                        //Console.Write("Input status (0: free, 1: maintenance): ");
-                        //IDAL.DO.Enums.DroneStatuses.TryParse(Console.ReadLine(), out status);
-                        Console.Write("Input battery level (0.0-100.0): ");
-                        double.TryParse(Console.ReadLine(), out batteryLevel);
+                        Enums.WeightCategories.TryParse(Console.ReadLine(), out maxWeight);
                         dal.AddDrone(droneID, model, maxWeight);
                         break;
                     case 3:
@@ -107,25 +101,25 @@ namespace ConsoleUI
                         break;
                     case 4:
                         int senderID, receiverID;
-                        IDAL.DO.Enums.WeightCategories weight;
-                        IDAL.DO.Enums.Priorities priority;
+                        Enums.WeightCategories weight;
+                        Enums.Priorities priority;
                         Console.Write("Input sender ID: ");
                         int.TryParse(Console.ReadLine(), out senderID);
                         Console.Write("Input receiver ID: ");
                         int.TryParse(Console.ReadLine(), out receiverID);
                         Console.Write("Input package weight (0: light, 1: medium , 2: heavy): ");
-                        IDAL.DO.Enums.WeightCategories.TryParse(Console.ReadLine(), out weight);
+                        Enums.WeightCategories.TryParse(Console.ReadLine(), out weight);
                         Console.Write("Input package priority (0: regular, 1: fast, 2: emergency): ");
-                        IDAL.DO.Enums.WeightCategories.TryParse(Console.ReadLine(), out priority);
+                        Enums.WeightCategories.TryParse(Console.ReadLine(), out priority);
                         dal.AddPackage(senderID, receiverID, weight, priority);
                         break;
                     default:
                         break;
                 }
             }
-            catch (ExceededLimitException e)
+            catch (IllegalArgumentException e)
             {
-                Console.WriteLine($"{e}:\nThe maximum number of objects of this type allowed has already been reached.");
+                Console.WriteLine($"{e}:\nOne of the arguments you entered is illegal.");
             }
             catch (NonUniqueIdException e)
             {
@@ -271,7 +265,7 @@ namespace ConsoleUI
                     }
                     break;
                 case 2:
-                    foreach ( Drone drone in dal.DisplayDronesList())
+                    foreach (Drone drone in dal.DisplayDronesList())
                     {
                         Console.WriteLine(drone);
                     }

@@ -4,11 +4,10 @@ namespace IDAL
 {
     namespace DO
     {
-        public class ExceededLimitException : Exception
+        public class IllegalArgumentException : Exception
         {
-            public ExceededLimitException() : base() { }
+            public IllegalArgumentException() : base() {}
         }
-
         public class NonUniqueIdException : Exception
         {
             public NonUniqueIdException() : base() {}

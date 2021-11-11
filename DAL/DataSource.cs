@@ -10,15 +10,16 @@ namespace DalObject
         internal static List<Drone> Drones = new();
         internal static List<Customer> Customers = new();
         internal static List<Package> Packages = new();
+        internal static List<DroneCharge> DroneCharges = new();
 
         internal class Config
         {
             internal static int PackageID = 1;
-            internal static double Free;
-            internal static double LightWeight;
-            internal static double MidWeight;
-            internal static double HeavyWeight;
-            internal static double ChargingRate;
+            internal static double Free = 2.0;
+            internal static double LightWeight = 5.0;
+            internal static double MidWeight = 10.0;
+            internal static double HeavyWeight = 15.0;
+            internal static double ChargingRate = 25.0;
         }
 
         /// <summary>

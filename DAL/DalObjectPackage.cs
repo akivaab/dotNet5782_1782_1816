@@ -8,10 +8,6 @@ namespace DalObject
     {
         public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int droneID = 0)
         {
-            if (DataSource.Packages.Count >= 1000)
-            {
-                throw new ExceededLimitException();
-            }
             if (DataSource.Customers.FindIndex(customer => customer.ID == senderID) == -1 ||
                 DataSource.Customers.FindIndex(customer => customer.ID == receiverID) == -1 ||
                 (droneID != 0 && DataSource.Drones.FindIndex(drone => drone.ID == droneID) == -1))
@@ -56,9 +52,6 @@ namespace DalObject
             Package package = DataSource.Packages[packageIndex];
             package.PickedUp = DateTime.Now;
             DataSource.Packages[packageIndex] = package;
-            //Drone drone = DataSource.Drones[droneIndex];
-            //drone.Status = Enums.DroneStatuses.delivery;
-            //DataSource.Drones[droneIndex] = drone;
         }
 
         public void DeliverPackage(int packageID, int droneID)
@@ -73,9 +66,6 @@ namespace DalObject
             package.Delivered = DateTime.Now;
             package.DroneID = 0;
             DataSource.Packages[packageIndex] = package;
-            //Drone drone = DataSource.Drones[droneIndex];
-            //drone.Status = Enums.DroneStatuses.free;
-            //DataSource.Drones[droneIndex] = drone;
         }
 
         public Package DisplayPackage(int packageID)

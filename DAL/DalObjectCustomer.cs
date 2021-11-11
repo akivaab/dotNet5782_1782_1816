@@ -7,9 +7,9 @@ namespace DalObject
     {
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {
-            if (DataSource.Customers.Count >= 100)
+            if (latitude < -90 || latitude > 90 || longitude < 0 || longitude > 180)
             {
-                throw new ExceededLimitException();
+                throw new IllegalArgumentException();
             }
             if (DataSource.Customers.FindIndex(customer => customer.ID == id) != -1)
             {

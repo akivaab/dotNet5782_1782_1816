@@ -7,10 +7,6 @@ namespace DalObject
     {
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
         {
-            if (DataSource.Drones.Count >= 10)
-            {
-                throw new ExceededLimitException();
-            }
             if (DataSource.Drones.FindIndex(drone => drone.ID == id) != -1)
             {
                 throw new NonUniqueIdException();
@@ -30,31 +26,28 @@ namespace DalObject
             {
                 throw new UndefinedObjectException();
             }
-            //Drone drone = DataSource.Drones[droneIndex];
-            //drone.Status = Enums.DroneStatuses.maintenance;
-            //DataSource.Drones[droneIndex] = drone;
             Station station = DataSource.Stations[stationIndex];
             station.NumChargeSlots--;
             DataSource.Stations[stationIndex] = station;
             DroneCharge droneCharge = new DroneCharge();
             droneCharge.DroneID = droneID;
             droneCharge.StationID = stationID;
+            DataSource.DroneCharges.Add(droneCharge);
         }
 
         public void ReleaseDroneFromCharging(int droneID, int stationID)
         {
             int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
             int stationIndex = DataSource.Stations.FindIndex(station => station.ID == stationID);
-            if (droneIndex == -1 || stationIndex == -1)
+            int droneChargeIndex = DataSource.DroneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID);
+            if (droneIndex == -1 || stationIndex == -1 || droneChargeIndex == -1)
             {
                 throw new UndefinedObjectException();
             }
-            //Drone drone = DataSource.Drones[droneIndex];
-            //drone.Status = Enums.DroneStatuses.free;
-            //DataSource.Drones[droneIndex] = drone;
             Station station = DataSource.Stations[stationIndex];
             station.NumChargeSlots++;
             DataSource.Stations[stationIndex] = station;
+            DataSource.DroneCharges.Remove(DataSource.DroneCharges[droneChargeIndex]);
         }
 
         public Drone DisplayDrone(int droneID)

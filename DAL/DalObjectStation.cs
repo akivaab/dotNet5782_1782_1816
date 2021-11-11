@@ -15,9 +15,9 @@ namespace DalObject
 
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
         {
-            if (DataSource.Stations.Count >= 5)
+            if (latitude < -90 || latitude > 90 || longitude < 0 || longitude > 180)
             {
-                throw new ExceededLimitException();
+                throw new IllegalArgumentException();
             }
             if (DataSource.Stations.FindIndex(station => station.ID == id) != -1)
             {
