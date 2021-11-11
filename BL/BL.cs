@@ -28,11 +28,11 @@ namespace IBL
                     droneToList.Status = Enums.DroneStatus.delivery;
                     if (package.Assigned != DateTime.MinValue && package.Collected == DateTime.MinValue) //assigned but not collected
                     {
-                        droneToList.Location = ClosestStation(package.SenderID); //station closest to sender
+                        droneToList.Location = closestStation(dalObject, package.SenderID); //station closest to sender
                     }
                     else if (package.Collected != DateTime.MinValue)
                     {
-                        droneToList.Location = LocationOf(package.SenderID); //sender location
+                        droneToList.Location = getCustomerLocation(dalObject, package.SenderID); //sender location
                     }
                     droneToList.Battery = HighEnoughRandomPower();
                     droneToList.PackageID = package.ID;
@@ -50,7 +50,6 @@ namespace IBL
                 if (randInt == 1)
                 {
                     droneToList.Status = Enums.DroneStatus.available;
-                    List<IDAL.DO.Package> dataLayerPackages = (List<IDAL.DO.Package>)dalObject.DisplayPackagesList();
                     IDAL.DO.Customer customer = RandomReceiverDeliveredPackage(dataLayerPackages);
                     double customerLatitude = customer.Latitude;
                     double customerLongitude = customer.Longitude;
