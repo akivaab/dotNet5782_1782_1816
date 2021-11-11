@@ -12,10 +12,66 @@ namespace IBL
         {
             IDAL.IDal dalObject = new DalObject.DalObject();
             double[] powerConsumption = dalObject.DronePowerConsumption();
-            IEnumerable<IDAL.DO.Drone> dataLayerDrones = dalObject.DisplayDronesList();
-            //IEnumerable<IDAL.DO.Package> dataLayerPackages = dalObject.DisplayPackagesList();
-            
+            List<IDAL.DO.Drone> dataLayerDrones = (List<IDAL.DO.Drone>)dalObject.DisplayDronesList();
 
+            List<IDAL.DO.Package> dataLayerPackages = (List<IDAL.DO.Package>)dalObject.DisplayPackagesList();
+            foreach (IDAL.DO.Package package in dataLayerPackages)
+            {
+                if (package.Delivered == DateTime.MinValue && package.DroneID != 0) //undelivered, drone assigned
+                {
+                    IDAL.DO.Drone drone = dataLayerDrones.Find(drone => drone.ID == package.DroneID);
+                    dataLayerDrones.Remove(drone);
+                    DroneToList droneToList = new();
+                    droneToList.ID = drone.ID;
+                    droneToList.Model = drone.Model;
+                    droneToList.Weight = (Enums.WeightCategories)drone.MaxWeight;
+                    droneToList.Status = Enums.DroneStatus.delivery;
+                    if (package.Assigned != DateTime.MinValue && package.Collected == DateTime.MinValue) //assigned but not collected
+                    {
+                        droneToList.Location = ClosestStation(package.SenderID); //station closest to sender
+                    }
+                    else if (package.Collected != DateTime.MinValue)
+                    {
+                        droneToList.Location = LocationOf(package.SenderID); //sender location
+                    }
+                    droneToList.Battery = HighEnoughRandomPower();
+                    droneToList.PackageID = package.ID;
+                    drones.Add(droneToList);
+                }
+            }
+            Random random = new Random();
+            foreach (IDAL.DO.Drone drone in dataLayerDrones) //remaining drones not delivering
+            {
+                DroneToList droneToList = new();
+                droneToList.ID = drone.ID;
+                droneToList.Model = drone.Model;
+                droneToList.Weight = (Enums.WeightCategories)drone.MaxWeight;
+                int randInt = random.Next(1, 3);
+                if (randInt == 1)
+                {
+                    droneToList.Status = Enums.DroneStatus.available;
+                    List<IDAL.DO.Package> dataLayerPackages = (List<IDAL.DO.Package>)dalObject.DisplayPackagesList();
+                    IDAL.DO.Customer customer = RandomReceiverDeliveredPackage(dataLayerPackages);
+                    double customerLatitude = customer.Latitude;
+                    double customerLongitude = customer.Longitude;
+                    droneToList.Location.Latitude = customerLatitude;
+                    droneToList.Location.Longitude = customerLongitude;
+                    droneToList.Battery = HighEnoughRandomPower();
+                }
+                else if (randInt == 2)
+                {
+                    droneToList.Status = Enums.DroneStatus.maintenance;
+                    List<IDAL.DO.Station> dataLayerStations = (List<IDAL.DO.Station>)dalObject.DisplayStationsList();
+                    int randStation = random.Next(dataLayerStations.Count);
+                    double stationLatitude = dataLayerStations[randStation].Latitude;
+                    double stationLongitude = dataLayerStations[randStation].Longitude;
+                    droneToList.Location.Latitude = stationLatitude;
+                    droneToList.Location.Longitude = stationLongitude;
+                    droneToList.Battery = random.Next(20);
+                }
+                droneToList.PackageID = 0;
+                drones.Add(droneToList);
+            }
         }
 
         public void AddCustomer(int customerID, string name, string phone)

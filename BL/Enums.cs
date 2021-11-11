@@ -17,7 +17,7 @@ namespace IBL
             }
             public enum DroneStatus
             {
-                free, maintenance, delivery
+                available, maintenance, delivery
             }
             public enum PackageStatus
             {

@@ -22,6 +22,9 @@ namespace DalObject
             package.Priority = priority;
             package.DroneID = droneID;
             package.Requested = DateTime.Now;
+            package.Assigned = DateTime.MinValue;
+            package.Collected = DateTime.MinValue;
+            package.Delivered = DateTime.MinValue;
             DataSource.Config.PackageID++;
             DataSource.Packages.Add(package);
             return DataSource.Config.PackageID;
@@ -37,7 +40,7 @@ namespace DalObject
             }
             Package package = DataSource.Packages[packageIndex];
             package.DroneID = droneID;
-            package.Scheduled = DateTime.Now;
+            package.Assigned = DateTime.Now;
             DataSource.Packages[packageIndex] = package;
         }
 
@@ -50,7 +53,7 @@ namespace DalObject
                 throw new UndefinedObjectException();
             }
             Package package = DataSource.Packages[packageIndex];
-            package.PickedUp = DateTime.Now;
+            package.Collected = DateTime.Now;
             DataSource.Packages[packageIndex] = package;
         }
 
