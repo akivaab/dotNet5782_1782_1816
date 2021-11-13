@@ -7,10 +7,10 @@ namespace IBL
     public partial class BL : IBL
     {
         public List<DroneToList> drones;
-
+        public IDAL.IDal dalObject;
         public BL()
         {
-            IDAL.IDal dalObject = new DalObject.DalObject();
+            dalObject = new DalObject.DalObject();
             double[] powerConsumption = dalObject.DronePowerConsumption();
             List<IDAL.DO.Drone> dalDrones = (List<IDAL.DO.Drone>)dalObject.DisplayDronesList();
 
@@ -72,114 +72,144 @@ namespace IBL
                 drones.Add(droneToList);
             }
         }
-        public void AddCustomer(int customerID, string name, string phone)
+        public Station AddStation(int stationID, int name, Location location, int numAvailableChargingSlots)
+        {
+            Station station = new();
+            station.ID = stationID;
+            station.Name = name;
+            station.Location = location;
+            station.AvailableChargeSlots = numAvailableChargingSlots;
+            station.DronesCharging = new List<DroneCharging>();
+
+            dalObject.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
+            return station;
+        }
+        public Drone AddDrone(int droneID, string model, Enums.WeightCategories weight, int stationID)
+        {
+            Drone drone = new();
+            drone.ID = droneID;
+            drone.Model = model;
+            drone.Weight = weight;
+            Random random = new Random();
+            drone.Battery = random.Next(20, 41);
+            drone.Status = Enums.DroneStatus.maintenance;
+            IDAL.DO.Station station = ((List<IDAL.DO.Station>)dalObject.DisplayStationsList()).Find(s => s.ID == stationID);
+            Location location = new();
+            location.Latitude = station.Latitude;
+            location.Longitude = station.Longitude;
+            drone.Location = location;
+
+            dalObject.AddDrone(droneID, model, (IDAL.DO.Enums.WeightCategories)weight);
+            return drone;
+        }
+        public Customer AddCustomer(int customerID, string name, string phone, Location location)
+        {
+            Customer customer = new();
+            customer.ID = customerID;
+            customer.Name = name;
+            customer.Phone = phone;
+            customer.Location = location;
+
+            dalObject.AddCustomer(customerID, name, phone, location.Latitude, location.Longitude);
+            return customer;
+        }
+        public Package AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority)
+        {
+            Package package = new();
+            List<IDAL.DO.Customer> customers = (List<IDAL.DO.Customer>)dalObject.DisplayCustomersList();
+            IDAL.DO.Customer sender = customers.Find(s => s.ID == senderID);
+            IDAL.DO.Customer receiver = customers.Find(r => r.ID == receiverID);
+            CustomerForPackage packageSender = new();
+            packageSender.ID = sender.ID;
+            packageSender.Name = sender.Name;
+            CustomerForPackage packageReceiver = new();
+            packageReceiver.ID = receiver.ID;
+            packageReceiver.Name = receiver.Name;
+            package.Sender = packageSender;
+            package.Receiver = packageReceiver;
+            package.Weight = weight;
+            package.Priority = priority;
+            package.DroneDelivering = null;
+            package.RequestTime = DateTime.MinValue;
+            package.AssigningTime = DateTime.MinValue;
+            package.CollectingTime = DateTime.MinValue;
+            package.DeliveringTime = DateTime.MinValue;
+
+            dalObject.AddPackage(senderID, receiverID, (IDAL.DO.Enums.WeightCategories)weight, (IDAL.DO.Enums.Priorities)priority);
+            return package;
+        }
+        public Drone UpdateDroneModel(int droneID, string model)
         {
             throw new NotImplementedException();
         }
-
-        public void AddDrone(int droneID, Enums.WeightCategories weight, int stationID)
+        public void UpdateStation(int stationID, string name = "", int numChargingSlots = -1)
         {
             throw new NotImplementedException();
         }
-
-        public void AddPackage(int senderID, int receiverId, Enums.WeightCategories weight, Enums.Priorities priority)
+        public void UpdateCustomer(int customerID, string name = "", string phone = "")
         {
             throw new NotImplementedException();
         }
-
-        public void AddStation(int stationID, string name, double latitude, double longitude, int numChargeSlots)
+        public void SendDroneToCharge(int droneID)
         {
             throw new NotImplementedException();
         }
-
-        public void AssignPackageDrone(int droneID)
+        public void ReleaseFromCharge(int droneID, DateTime chargingTime)
         {
             throw new NotImplementedException();
         }
-
+        public void AssignPackage(int droneID)
+        {
+            throw new NotImplementedException();
+        }
         public void CollectPackage(int droneID)
         {
             throw new NotImplementedException();
         }
-
-        public void DeliveryPackage(int droneID)
+        public void DeliverPackage(int droneID)
         {
             throw new NotImplementedException();
         }
-
-        public void DisplayAllCustomers()
+        public void DisplayStation(int stationID)
         {
             throw new NotImplementedException();
         }
-
-        public void DisplayAllDrones()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DisplayAllPackage()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DisplayAllStation()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DisplayAllUnassignedPackages()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DisplayCustomer(int customerID)
-        {
-            throw new NotImplementedException();
-        }
-
         public void DisplayDrone(int droneID)
         {
             throw new NotImplementedException();
         }
-
+        public void DisplayCustomer(int customerID)
+        {
+            throw new NotImplementedException();
+        }
+        public void DisplayPackage(int packageID)
+        {
+            throw new NotImplementedException();
+        }
+        public void DisplayAllStations()
+        {
+            throw new NotImplementedException();
+        }
+        public void DisplayAllDrones()
+        {
+            throw new NotImplementedException();
+        }
+        public void DisplayAllCustomers()
+        {
+            throw new NotImplementedException();
+        }
+        public void DisplayAllPackages()
+        {
+            throw new NotImplementedException();
+        }
+        public void DisplayAllUnassignedPackages()
+        {
+            throw new NotImplementedException();
+        }
         public void DisplayFreeStations()
         {
             throw new NotImplementedException();
         }
 
-        public void DisplayPackage(int packageID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DisplayStation(int stationID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReleaseFromCharge(int droneID, DateTime chargingTime)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SendDroneCharge(int droneID)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateCustomer(int customerID, string name, string phone)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateDroneName(int droneID, string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateStation(int stationID, string name, int numChargingSlots)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

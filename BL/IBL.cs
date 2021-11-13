@@ -6,29 +6,29 @@ namespace IBL
 {
     public interface IBL
     {
-        public void AddStation(int stationID, string name, double latitude, double longitude, int numChargingSlots);
+        public Station AddStation(int stationID, int name, Location location, int numAvailableChargingSlots);
 
-        public void AddDrone(int droneID, Enums.WeightCategories weight ,int stationID);
+        public Drone AddDrone(int droneID, string model, Enums.WeightCategories weight, int stationID);
 
-        public void AddCustomer(int customerID, string name, string phone);
+        public Customer AddCustomer(int customerID, string name, string phone, Location location);
 
-        public void AddPackage(int senderID ,int receiverId, Enums.WeightCategories weight, Enums.Priorities priority);
+        public Package AddPackage(int senderID ,int receiverID, Enums.WeightCategories weight, Enums.Priorities priority);
 
-        public void UpdateDroneName(int droneID, string name);
+        public Drone UpdateDroneModel(int droneID, string model);
 
-        public void UpdateStation(int stationID, string name, int numbChargingSlots);
+        public void UpdateStation(int stationID, string name = "", int numChargingSlots = -1);
 
-        public void UpdateCustomer(int customerID, string name, string phone);
+        public void UpdateCustomer(int customerID, string name = "", string phone= "");
 
-        public void SendDroneCharge(int droneID);
+        public void SendDroneToCharge(int droneID);
 
         public void ReleaseFromCharge(int droneID, DateTime chargingTime);
 
-        public void AssignPackageDrone(int droneID);
+        public void AssignPackage(int droneID);
 
         public void CollectPackage(int droneID);
 
-        public void DeliveryPackage(int droneID);
+        public void DeliverPackage(int droneID);
 
         public void DisplayStation(int stationID);
 
@@ -38,13 +38,13 @@ namespace IBL
 
         public void DisplayPackage(int packageID);
 
-        public void DisplayAllStation();
+        public void DisplayAllStations();
 
         public void DisplayAllDrones();
 
         public void DisplayAllCustomers();
 
-        public void DisplayAllPackage();
+        public void DisplayAllPackages();
 
         public void DisplayAllUnassignedPackages();
 
