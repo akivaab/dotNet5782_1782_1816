@@ -12,15 +12,15 @@ namespace IBL
         {
             IDAL.IDal dalObject = new DalObject.DalObject();
             double[] powerConsumption = dalObject.DronePowerConsumption();
-            List<IDAL.DO.Drone> dataLayerDrones = (List<IDAL.DO.Drone>)dalObject.DisplayDronesList();
+            List<IDAL.DO.Drone> dalDrones = (List<IDAL.DO.Drone>)dalObject.DisplayDronesList();
 
-            List<IDAL.DO.Package> dataLayerPackages = (List<IDAL.DO.Package>)dalObject.DisplayPackagesList();
-            foreach (IDAL.DO.Package package in dataLayerPackages)
+            List<IDAL.DO.Package> dalPackages = (List<IDAL.DO.Package>)dalObject.DisplayPackagesList();
+            foreach (IDAL.DO.Package package in dalPackages)
             {
                 if (package.Delivered == DateTime.MinValue && package.DroneID != 0) //undelivered, drone assigned
                 {
-                    IDAL.DO.Drone drone = dataLayerDrones.Find(drone => drone.ID == package.DroneID);
-                    dataLayerDrones.Remove(drone);
+                    IDAL.DO.Drone drone = dalDrones.Find(drone => drone.ID == package.DroneID);
+                    dalDrones.Remove(drone);
                     DroneToList droneToList = new();
                     droneToList.ID = drone.ID;
                     droneToList.Model = drone.Model;
@@ -28,19 +28,19 @@ namespace IBL
                     droneToList.Status = Enums.DroneStatus.delivery;
                     if (package.Assigned != DateTime.MinValue && package.Collected == DateTime.MinValue) //assigned but not collected
                     {
-                        droneToList.Location = closestStation(dalObject, package.SenderID); //station closest to sender
+                        droneToList.Location = closestStationToCustomer(dalObject, package.SenderID); //station closest to sender
                     }
                     else if (package.Collected != DateTime.MinValue)
                     {
                         droneToList.Location = getCustomerLocation(dalObject, package.SenderID); //sender location
                     }
-                    droneToList.Battery = HighEnoughRandomPower();
+                    droneToList.Battery = randomBatteryPower(dalObject, powerConsumption[(int)package.Weight]);//NOT IMPLEMENTED
                     droneToList.PackageID = package.ID;
                     drones.Add(droneToList);
                 }
             }
             Random random = new Random();
-            foreach (IDAL.DO.Drone drone in dataLayerDrones) //remaining drones not delivering
+            foreach (IDAL.DO.Drone drone in dalDrones) //remaining drones not delivering
             {
                 DroneToList droneToList = new();
                 droneToList.ID = drone.ID;
@@ -48,16 +48,6 @@ namespace IBL
                 droneToList.Weight = (Enums.WeightCategories)drone.MaxWeight;
                 int randInt = random.Next(1, 3);
                 if (randInt == 1)
-                {
-                    droneToList.Status = Enums.DroneStatus.available;
-                    IDAL.DO.Customer customer = RandomReceiverDeliveredPackage(dataLayerPackages);
-                    double customerLatitude = customer.Latitude;
-                    double customerLongitude = customer.Longitude;
-                    droneToList.Location.Latitude = customerLatitude;
-                    droneToList.Location.Longitude = customerLongitude;
-                    droneToList.Battery = HighEnoughRandomPower();
-                }
-                else if (randInt == 2)
                 {
                     droneToList.Status = Enums.DroneStatus.maintenance;
                     List<IDAL.DO.Station> dataLayerStations = (List<IDAL.DO.Station>)dalObject.DisplayStationsList();
@@ -68,11 +58,20 @@ namespace IBL
                     droneToList.Location.Longitude = stationLongitude;
                     droneToList.Battery = random.Next(20);
                 }
+                else if (randInt == 2)
+                {
+                    droneToList.Status = Enums.DroneStatus.available;
+                    IDAL.DO.Customer customer = packageReceiver(dalObject, dalPackages);
+                    double customerLatitude = customer.Latitude;
+                    double customerLongitude = customer.Longitude;
+                    droneToList.Location.Latitude = customerLatitude;
+                    droneToList.Location.Longitude = customerLongitude;
+                    droneToList.Battery = randomBatteryPower(dalObject, powerConsumption[0]);//NOT IMPLEMENTED
+                }
                 droneToList.PackageID = 0;
                 drones.Add(droneToList);
             }
         }
-
         public void AddCustomer(int customerID, string name, string phone)
         {
             throw new NotImplementedException();
