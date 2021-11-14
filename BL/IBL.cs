@@ -14,9 +14,9 @@ namespace IBL
 
         public Package AddPackage(int senderID ,int receiverID, Enums.WeightCategories weight, Enums.Priorities priority);
 
-        public Drone UpdateDroneModel(int droneID, string model);
+        public void UpdateDroneModel(int droneID, string model);
 
-        public void UpdateStation(int stationID, string name = "", int numChargingSlots = -1);
+        public void UpdateStation(int stationID, int name = -1, int numChargingSlots = -1);
 
         public void UpdateCustomer(int customerID, string name = "", string phone= "");
 
