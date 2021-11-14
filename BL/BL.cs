@@ -232,7 +232,35 @@ namespace IBL
         }
         public void ReleaseFromCharge(int droneID, DateTime chargingTime)
         {
-            throw new NotImplementedException();
+            foreach (IDAL.DO.DroneCharge charge  in droneCharges)
+            {
+                if(charge.DroneID == droneID)
+                {
+                    int droneIndex = drones.FindIndex(d => d.ID == droneID);
+                    //check drone status
+                    if(drones[droneIndex].Status != Enums.DroneStatus.maintenance)
+                    {
+                        throw new UnableToRelease();
+                    }
+                    // check droneId
+                    List<IDAL.DO.Drone> dalDroneList = (List<IDAL.DO.Drone>)dalObject.DisplayDronesList();
+                    int dalDroneIndex = dalDroneList.FindIndex(d => d.ID == droneID);
+                    if (droneIndex == -1 || dalDroneIndex == -1)
+                    {
+                        throw new UndefinedObjectException();
+                    }
+                    drones[droneIndex].Status = Enums.DroneStatus.available;
+                    //need to calculate the baterry over the time charging
+                    drones[droneIndex].Battery = 100.0;
+                    List<IDAL.DO.Station> dalStationList = (List<IDAL.DO.Station>)dalObject.DisplayStationsList();
+                    int stationIndex = dalStationList.FindIndex(s => s.ID == charge.StationID);
+                    IDAL.DO.Station stationTomodify = dalStationList[0];
+                    stationTomodify.NumChargeSlots += 1;
+
+                    droneCharges.Remove(charge);
+                }
+            }
+            
         }
         public void AssignPackage(int droneID)
         {

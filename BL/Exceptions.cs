@@ -17,6 +17,11 @@ namespace IBL
         {
             public UnableToCharge() : base() { }
         }
+
+        public class UnableToRelease : Exception
+        {
+            public UnableToRelease() : base() { }
+        }
     }
 }
 
