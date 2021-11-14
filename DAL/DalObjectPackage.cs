@@ -83,12 +83,15 @@ namespace DalObject
 
         public IEnumerable<Package> DisplayPackagesList()
         {
+            /*
             List<Package> packages = new();
             for (int i = 0; i < DataSource.Packages.Count; i++)
             {
                 packages.Add(DataSource.Packages[i]);
             }
             return packages;
+            */
+            return DataSource.Packages;
         }
 
         public IEnumerable<Package> DisplayUnassignedPackagesList()

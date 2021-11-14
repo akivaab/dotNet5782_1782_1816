@@ -36,12 +36,15 @@ namespace DalObject
 
         public IEnumerable<Customer> DisplayCustomersList()
         {
+            /*
             List<Customer> customers = new();
             for (int i = 0; i < DataSource.Customers.Count; i++)
             {
                 customers.Add(DataSource.Customers[i]);
             }
             return customers;
+            */
+            return DataSource.Customers;
         }
     }
 }

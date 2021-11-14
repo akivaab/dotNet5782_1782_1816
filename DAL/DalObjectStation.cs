@@ -44,12 +44,15 @@ namespace DalObject
 
         public IEnumerable<Station> DisplayStationsList()
         {
+            /*
             List<Station> stations = new();
             for (int i = 0; i < DataSource.Stations.Count; i++)
             {
                 stations.Add(DataSource.Stations[i]);
             }
             return stations;
+            */
+            return DataSource.Stations;
         }
 
         public IEnumerable<Station> DisplayUnoccupiedStationsList()

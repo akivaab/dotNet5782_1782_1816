@@ -62,12 +62,15 @@ namespace DalObject
 
         public IEnumerable<Drone> DisplayDronesList()
         {
+            /*
             List<Drone> drones = new();
             for (int i = 0; i < DataSource.Drones.Count; i++)
             {
                 drones.Add(DataSource.Drones[i]);
             }
             return drones;
+            */
+            return DataSource.Drones;
         }
 
         public double[] DronePowerConsumption()
