@@ -130,7 +130,7 @@ namespace IBL
             package.Weight = weight;
             package.Priority = priority;
             package.DroneDelivering = null;
-            package.RequestTime = DateTime.MinValue;
+            package.RequestTime = DateTime.Now;
             package.AssigningTime = DateTime.MinValue;
             package.CollectingTime = DateTime.MinValue;
             package.DeliveringTime = DateTime.MinValue;
@@ -140,7 +140,18 @@ namespace IBL
         }
         public Drone UpdateDroneModel(int droneID, string model)
         {
-            throw new NotImplementedException();
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
+            //List<IDAL.DO.Drone> dalDroneList = (List<IDAL.DO.Drone>)dalObject.DisplayDronesList();
+            //int dalDroneIndex = dalDroneList.FindIndex(d => d.ID == droneID);
+            if (droneIndex == -1 /*|| dalDroneIndex == -1*/)
+            {
+                throw new UndefinedObjectException();
+            }
+            drones[droneIndex].Model = model;
+            //IDAL.DO.Drone droneToModify = dalDroneList[dalDroneIndex];
+            //dalDroneList.Remove(droneToModify);
+            //droneToModify.Model = model;
+            //dalDroneList.Add(droneToModify);
         }
         public void UpdateStation(int stationID, string name = "", int numChargingSlots = -1)
         {
