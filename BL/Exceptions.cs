@@ -13,6 +13,10 @@ namespace IBL
         {
             public UndefinedObjectException() : base() { }
         }
+        public class UnableToCharge : Exception
+        {
+            public UnableToCharge() : base() { }
+        }
     }
 }
 

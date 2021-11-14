@@ -8,6 +8,7 @@ namespace IBL
     {
         public List<DroneToList> drones;
         public IDAL.IDal dalObject;
+        public List<IDAL.DO.DroneCharge> droneCharges;
         public BL()
         {
             dalObject = new DalObject.DalObject();
@@ -195,7 +196,39 @@ namespace IBL
         }
         public void SendDroneToCharge(int droneID)
         {
-            throw new NotImplementedException();
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
+            List<IDAL.DO.Drone> dalDroneList = (List<IDAL.DO.Drone>)dalObject.DisplayDronesList();
+            int dalDroneIndex = dalDroneList.FindIndex(d => d.ID == droneID);
+            if(droneIndex == -1 || dalDroneIndex == -1)
+            {
+                throw new UndefinedObjectException();
+            }
+            //how do i know the min battery level , so he can go to the station?
+            if(drones[droneIndex].Status != Enums.DroneStatus.available || drones[droneIndex].Battery < 20)
+            {
+                throw new UnableToCharge();
+            }
+            List<IDAL.DO.Station> dalStationList = (List<IDAL.DO.Station>)dalObject.DisplayStationsList();
+            int stationIndex = dalStationList.FindIndex(s => s.ID == 0);
+            // i dont know how to find the closet station yet
+            if (dalStationList[0].NumChargeSlots == 0)
+            {
+                throw new UnableToCharge();
+            }
+            // i dont know how to find the closet station yet
+            IDAL.DO.Station stationTomodify = dalStationList[0];
+            stationTomodify.NumChargeSlots -= 1;
+            drones[droneIndex].Location.Latitude = stationTomodify.Latitude;
+            drones[droneIndex].Location.Longitude = stationTomodify.Longitude;
+            drones[droneIndex].Battery -= 20.0;
+            drones[droneIndex].Status = Enums.DroneStatus.maintenance;
+
+            IDAL.DO.DroneCharge droneToCharge = new IDAL.DO.DroneCharge();
+            droneToCharge.DroneID = droneID;
+            droneToCharge.StationID = stationTomodify.ID;
+            droneCharges.Add(droneToCharge);
+
+           
         }
         public void ReleaseFromCharge(int droneID, DateTime chargingTime)
         {
@@ -203,6 +236,7 @@ namespace IBL
         }
         public void AssignPackage(int droneID)
         {
+
             throw new NotImplementedException();
         }
         public void CollectPackage(int droneID)
