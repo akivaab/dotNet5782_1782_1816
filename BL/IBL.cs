@@ -12,7 +12,7 @@ namespace IBL
 
         public Customer AddCustomer(int customerID, string name, string phone, Location location);
 
-        public Package AddPackage(int senderID ,int receiverID, Enums.WeightCategories weight, Enums.Priorities priority);
+        public Package AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority);
 
         public void UpdateDroneModel(int droneID, string model);
 
@@ -22,7 +22,7 @@ namespace IBL
 
         public void SendDroneToCharge(int droneID);
 
-        public void ReleaseFromCharge(int droneID, DateTime chargingTime);
+        public void ReleaseFromCharge(int droneID, double chargingTime);
 
         public void AssignPackage(int droneID);
 
