@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using IBL.BO;
 
 
@@ -30,24 +31,24 @@ namespace IBL
 
         public void DeliverPackage(int droneID);
 
-        public void DisplayStation(int stationID);
+        public Station DisplayStation(int stationID);
 
-        public void DisplayDrone(int droneID);
+        public Drone DisplayDrone(int droneID);
 
-        public void DisplayCustomer(int customerID);
+        public Customer DisplayCustomer(int customerID);
 
-        public void DisplayPackage(int packageID);
+        public Package DisplayPackage(int packageID);
 
-        public void DisplayAllStations();
+        public List<StationToList> DisplayAllStations();
 
-        public void DisplayAllDrones();
+        public List<DroneToList> DisplayAllDrones();
 
-        public void DisplayAllCustomers();
+        public List<CustomerToList> DisplayAllCustomers();
 
-        public void DisplayAllPackages();
+        public List<PackageToList> DisplayAllPackages();
 
-        public void DisplayAllUnassignedPackages();
+        public List<PackageToList> DisplayAllUnassignedPackages();
 
-        public void DisplayFreeStations();
+        public List<StationToList> DisplayFreeStations();
     }
 }

@@ -38,9 +38,20 @@ namespace IBL
         private Location getClosestStation(Location location)
         {
             List<IDAL.DO.Station> dalStations = (List<IDAL.DO.Station>)DalObject.DisplayStationsList();
+            return getClosestStation(location, dalStations);
+        }
+
+        /// <summary>
+        /// Of the stations provided, find the station closest to some location.
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="stations"></param>
+        /// <returns>Location of the closest station</returns>
+        private Location getClosestStation(Location location, List<IDAL.DO.Station> stations)
+        {
             double min = double.MaxValue;
             Location closestStationLocation = new();
-            foreach (IDAL.DO.Station station in dalStations)
+            foreach (IDAL.DO.Station station in stations)
             {
                 Location stationLocation = new(station.Latitude, station.Longitude);
                 double distance = getDistance(location, stationLocation);
@@ -52,6 +63,22 @@ namespace IBL
             }
             return closestStationLocation;
         }
+        private List<IDAL.DO.Station> getReachableStations(DroneToList drone)
+        {
+            List<IDAL.DO.Station> availableStations = new List<IDAL.DO.Station>(DalObject.DisplayUnoccupiedStationsList());
+            List<IDAL.DO.Station> reachableStations = new List<IDAL.DO.Station>();
+            foreach (IDAL.DO.Station station in availableStations)
+            {
+                Location stationLocation = new(station.Latitude, station.Longitude);
+                double requiredBattery = PowerConsumption[0] * getDistance(drone.Location, stationLocation);
+                if (requiredBattery <= drone.Battery)
+                {
+                    reachableStations.Add(station);
+                }
+            }
+            return reachableStations;
+        }
+
         /// <summary>
         /// Find the location of a customer.
         /// </summary>
@@ -108,7 +135,7 @@ namespace IBL
         /// <returns>ID of the best package</returns>
         private int findBestPackage(List<IDAL.DO.Package> dalPackages, DroneToList drone)
         {
-            
+            //TODO:
         }
     }
 }

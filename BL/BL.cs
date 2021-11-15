@@ -198,61 +198,49 @@ namespace IBL
         public void SendDroneToCharge(int droneID)
         {
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
-            List<IDAL.DO.Drone> dalDroneList = (List<IDAL.DO.Drone>)DalObject.DisplayDronesList();
-            int dalDroneIndex = dalDroneList.FindIndex(d => d.ID == droneID);
-            if (droneIndex == -1 || dalDroneIndex == -1)
+            if (droneIndex == -1)
             {
                 throw new UndefinedObjectException();
             }
-            //how do i know the min battery level , so he can go to the station?
-            if (Drones[droneIndex].Status != Enums.DroneStatus.available || Drones[droneIndex].Battery < 20)
+            List<IDAL.DO.Station> reachableStations = getReachableStations(Drones[droneIndex]);
+            if (Drones[droneIndex].Status != Enums.DroneStatus.available || reachableStations.Count == 0)
             {
                 throw new UnableToCharge();
             }
-            List<IDAL.DO.Station> dalStationList = (List<IDAL.DO.Station>)DalObject.DisplayStationsList();
-            int stationIndex = dalStationList.FindIndex(s => s.ID == 0);
-            // i dont know how to find the closet station yet
-            if (dalStationList[0].NumChargeSlots == 0)
+            Location closestStationLocation = getClosestStation(Drones[droneIndex].Location, reachableStations);
+            List<IDAL.DO.Station> dalStations = new List<IDAL.DO.Station>(DalObject.DisplayStationsList());
+            int stationIndex = dalStations.FindIndex(s => s.Latitude == closestStationLocation.Latitude && s.Longitude == closestStationLocation.Longitude);
+            if (stationIndex == -1)
             {
-                throw new UnableToCharge();
+                throw new UndefinedObjectException();
             }
-            // i dont know how to find the closet station yet
-            IDAL.DO.Station stationTomodify = dalStationList[0];
-            DalObject.ChargeDrone(droneID, stationTomodify.ID);
-            Drones[droneIndex].Location.Latitude = stationTomodify.Latitude;
-            Drones[droneIndex].Location.Longitude = stationTomodify.Longitude;
-            Drones[droneIndex].Battery -= 20.0;
+            Drones[droneIndex].Battery -= PowerConsumption[0] * getDistance(Drones[droneIndex].Location, closestStationLocation);
+            Drones[droneIndex].Location = closestStationLocation;
             Drones[droneIndex].Status = Enums.DroneStatus.maintenance;
- 
+            DalObject.ChargeDrone(droneID, dalStations[stationIndex].ID);
         }
         public void ReleaseFromCharge(int droneID, double chargingTime)
         {
-            foreach (IDAL.DO.DroneCharge charge  in droneCharges)
+            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
+            if (droneIndex == -1)
             {
-                if(charge.DroneID == droneID)
-                {
-                    int droneIndex = drones.FindIndex(d => d.ID == droneID);
-                    //check drone status
-                    if(drones[droneIndex].Status != Enums.DroneStatus.maintenance)
-                    {
-                        throw new UnableToRelease();
-                    }
-                    // check droneId
-                    List<IDAL.DO.Drone> dalDroneList = (List<IDAL.DO.Drone>)dalObject.DisplayDronesList();
-                    int dalDroneIndex = dalDroneList.FindIndex(d => d.ID == droneID);
-                    if (droneIndex == -1 || dalDroneIndex == -1)
-                    {
-                        throw new UndefinedObjectException();
-                    }
-                    drones[droneIndex].Status = Enums.DroneStatus.available;
-                    //need to calculate the baterry over the time charging
-                    drones[droneIndex].Battery = 100.0;
-                    List<IDAL.DO.Station> dalStationList = (List<IDAL.DO.Station>)dalObject.DisplayStationsList();
-                    int stationIndex = dalStationList.FindIndex(s => s.ID == charge.StationID);
-                    IDAL.DO.Station stationTomodify = dalStationList[0];
-                    stationTomodify.NumChargeSlots += 1;
-                }
+                throw new UndefinedObjectException();
             }
+            //check drone status
+            if (Drones[droneIndex].Status != Enums.DroneStatus.maintenance)
+            {
+                throw new UnableToRelease();
+            }
+            Drones[droneIndex].Battery = ChargeRatePerHour * chargingTime;
+            Drones[droneIndex].Status = Enums.DroneStatus.available;
+
+            List<IDAL.DO.Station> dalStationList = new List<IDAL.DO.Station>(DalObject.DisplayStationsList());
+            int stationIndex = dalStationList.FindIndex(s => s.Latitude == Drones[droneIndex].Location.Latitude && s.Longitude == Drones[droneIndex].Location.Longitude);
+            if (stationIndex == -1)
+            {
+                throw new Exception();
+            }
+            DalObject.ReleaseDroneFromCharging(droneID, dalStationList[stationIndex].ID);
         }
         public void AssignPackage(int droneID)
         {
@@ -265,7 +253,7 @@ namespace IBL
             {
                 throw new Exception();
             }
-            List<IDAL.DO.Package> dalPackages = new List<IDAL.DO.Package>(DalObject.DisplayPackagesList());
+            List<IDAL.DO.Package> dalPackages = new List<IDAL.DO.Package>(DalObject.DisplayUnassignedPackagesList());
             int bestPackageID = findBestPackage(dalPackages, Drones[droneIndex]);
             if (bestPackageID == -1)
             {
@@ -322,46 +310,45 @@ namespace IBL
             Drones[droneIndex].Status = Enums.DroneStatus.available;
             DalObject.DeliverPackage(dalPackage.ID, droneID);
         }
-        public void DisplayStation(int stationID)
+        public Station DisplayStation(int stationID)
         {
             throw new NotImplementedException();
         }
-        public void DisplayDrone(int droneID)
+        public Drone DisplayDrone(int droneID)
         {
             throw new NotImplementedException();
         }
-        public void DisplayCustomer(int customerID)
+        public Customer DisplayCustomer(int customerID)
         {
             throw new NotImplementedException();
         }
-        public void DisplayPackage(int packageID)
+        public Package DisplayPackage(int packageID)
         {
             throw new NotImplementedException();
         }
-        public void DisplayAllStations()
+        public List<StationToList> DisplayAllStations()
         {
             throw new NotImplementedException();
         }
-        public void DisplayAllDrones()
+        public List<DroneToList> DisplayAllDrones()
         {
             throw new NotImplementedException();
         }
-        public void DisplayAllCustomers()
+        public List<CustomerToList> DisplayAllCustomers()
         {
             throw new NotImplementedException();
         }
-        public void DisplayAllPackages()
+        public List<PackageToList> DisplayAllPackages()
         {
             throw new NotImplementedException();
         }
-        public void DisplayAllUnassignedPackages()
+        public List<PackageToList> DisplayAllUnassignedPackages()
         {
             throw new NotImplementedException();
         }
-        public void DisplayFreeStations()
+        public List<StationToList> DisplayFreeStations()
         {
             throw new NotImplementedException();
         }
-
     }
 }
