@@ -33,13 +33,13 @@ namespace IBL
                     droneToList.Status = Enums.DroneStatus.delivery;
                     if (package.Assigned != DateTime.MinValue && package.Collected == DateTime.MinValue) //assigned but not collected
                     {
-                        droneToList.Location = getClosestStation(DalObject, getCustomerLocation(DalObject, package.SenderID)); //station closest to sender
+                        droneToList.Location = getClosestStation(getCustomerLocation(package.SenderID)); //station closest to sender
                     }
                     else if (package.Collected != DateTime.MinValue)
                     {
-                        droneToList.Location = getCustomerLocation(DalObject, package.SenderID); //sender location
+                        droneToList.Location = getCustomerLocation(package.SenderID); //sender location
                     }
-                    droneToList.Battery = randomBatteryPower(DalObject, droneToList, package, powerConsumption[(int)package.Weight]);
+                    droneToList.Battery = randomBatteryPower(droneToList, package, powerConsumption[(int)package.Weight]);
                     droneToList.PackageID = package.ID;
                     Drones.Add(droneToList);
                 }
@@ -66,11 +66,11 @@ namespace IBL
                 else if (randInt == 2)
                 {
                     droneToList.Status = Enums.DroneStatus.available;
-                    IDAL.DO.Customer customer = packageReceiver(DalObject, dalPackages);
+                    IDAL.DO.Customer customer = packageReceiver(dalPackages);
                     droneToList.Location = new Location(customer.Latitude, customer.Longitude);
-                    droneToList.Battery = random.Next((int)Math.Ceiling(powerConsumption[(int)Enums.WeightCategories.free] * getDistance(droneToList.Location, getClosestStation(DalObject, droneToList.Location))), 100);
+                    droneToList.Battery = random.Next((int)Math.Ceiling(powerConsumption[(int)Enums.WeightCategories.free] * getDistance(droneToList.Location, getClosestStation(droneToList.Location))), 100);
                 }
-                droneToList.PackageID = 0;
+                droneToList.PackageID = -1;
                 Drones.Add(droneToList);
             }
         }
@@ -91,7 +91,7 @@ namespace IBL
             Drone drone = new();
             drone.ID = droneID;
             drone.Model = model;
-            drone.Weight = weight;
+            drone.MaxWeight = weight;
             Random random = new Random();
             drone.Battery = random.Next(20, 41);
             drone.Status = Enums.DroneStatus.maintenance;
@@ -256,16 +256,71 @@ namespace IBL
         }
         public void AssignPackage(int droneID)
         {
-
-            throw new NotImplementedException();
+            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
+            if (droneIndex == -1)
+            {
+                throw new UndefinedObjectException();
+            }
+            if (Drones[droneIndex].Status != Enums.DroneStatus.available)
+            {
+                throw new Exception();
+            }
+            List<IDAL.DO.Package> dalPackages = new List<IDAL.DO.Package>(DalObject.DisplayPackagesList());
+            int bestPackageID = findBestPackage(dalPackages, Drones[droneIndex]);
+            if (bestPackageID == -1)
+            {
+                throw new Exception();
+            }
+            Drones[droneIndex].Status = Enums.DroneStatus.delivery;
+            Drones[droneIndex].PackageID = bestPackageID;
+            DalObject.AssignPackage(bestPackageID, droneID);
         }
         public void CollectPackage(int droneID)
         {
-            throw new NotImplementedException();
+            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
+            if (droneIndex == -1)
+            {
+                throw new UndefinedObjectException();
+            }
+            if (Drones[droneIndex].PackageID == -1)
+            {
+                throw new Exception();
+            }
+            List<IDAL.DO.Package> dalPackages = new List<IDAL.DO.Package>(DalObject.DisplayPackagesList());
+            int dalPackageIndex = dalPackages.FindIndex(p => p.ID == Drones[droneIndex].PackageID);
+            IDAL.DO.Package dalPackage = dalPackages[dalPackageIndex];
+            if (dalPackageIndex == -1 || dalPackage.Assigned == DateTime.MinValue || dalPackage.Collected != DateTime.MinValue)
+            {
+                throw new Exception();
+            }
+            Location senderLocation = getCustomerLocation(dalPackage.SenderID);
+            Drones[droneIndex].Battery -= PowerConsumption[0] * getDistance(Drones[droneIndex].Location, senderLocation);
+            Drones[droneIndex].Location = senderLocation;
+            DalObject.CollectPackage(dalPackage.ID, droneID);
         }
         public void DeliverPackage(int droneID)
         {
-            throw new NotImplementedException();
+            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
+            if (droneIndex == -1)
+            {
+                throw new UndefinedObjectException();
+            }
+            if (Drones[droneIndex].PackageID == -1)
+            {
+                throw new Exception();
+            }
+            List<IDAL.DO.Package> dalPackages = new List<IDAL.DO.Package>(DalObject.DisplayPackagesList());
+            int dalPackageIndex = dalPackages.FindIndex(p => p.ID == Drones[droneIndex].PackageID);
+            IDAL.DO.Package dalPackage = dalPackages[dalPackageIndex];
+            if (dalPackageIndex == -1 || dalPackage.Collected == DateTime.MinValue || dalPackage.Delivered != DateTime.MinValue)
+            {
+                throw new Exception();
+            }
+            Location receiverLocation = getCustomerLocation(dalPackage.ReceiverID);
+            Drones[droneIndex].Battery -= PowerConsumption[(int)dalPackage.Weight] * getDistance(Drones[droneIndex].Location, receiverLocation);
+            Drones[droneIndex].Location = receiverLocation;
+            Drones[droneIndex].Status = Enums.DroneStatus.available;
+            DalObject.DeliverPackage(dalPackage.ID, droneID);
         }
         public void DisplayStation(int stationID)
         {
