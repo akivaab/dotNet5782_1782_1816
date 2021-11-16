@@ -297,9 +297,15 @@ namespace IBL
             }
             DroneToList droneToList = Drones[droneIndex];
 
-
             IDAL.DO.Package dalPackage = DalObject.DisplayPackage(droneToList.PackageID);
-            PackageInTransfer packageInTransfer = new(dalPackage.ID, dalPackage.Weight, dalPackage.Priority, );
+            bool status = dalPackage.Collected != DateTime.MinValue ? true : false;
+            IDAL.DO.Customer sender = DalObject.DisplayCustomer(dalPackage.SenderID);
+            IDAL.DO.Customer receiver = DalObject.DisplayCustomer(dalPackage.ReceiverID);
+            CustomerForPackage packageSender = new(sender.ID, sender.Name);
+            CustomerForPackage packageReceiver = new(receiver.ID, receiver.Name);
+            Location collectLocation = new(sender.Latitude, sender.Longitude);
+            Location deliveryLocation = new(receiver.Latitude, receiver.Longitude);
+            PackageInTransfer packageInTransfer = new(dalPackage.ID, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, status, packageSender, packageReceiver, collectLocation, deliveryLocation, getDistance(collectLocation, deliveryLocation));
 
             Drone drone = new(droneToList.ID, droneToList.Model, droneToList.MaxWeight, droneToList.Battery, droneToList.Status, packageInTransfer, droneToList.Location);
             return drone;
