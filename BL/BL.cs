@@ -314,27 +314,87 @@ namespace IBL
         }
         public List<StationToList> DisplayAllStations()
         {
-            throw new NotImplementedException();
+            List<IDAL.DO.Station> dalStations = new(DalObject.DisplayStationsList());
+            List<StationToList> stationToLists = new();
+            foreach (IDAL.DO.Station dalStation in dalStations)
+            {
+                Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
+                List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location == stationLocation);
+                stationToLists.Add(new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count));
+            }
+            return stationToLists;
         }
         public List<DroneToList> DisplayAllDrones()
         {
-            throw new NotImplementedException();
+            return Drones;
         }
         public List<CustomerToList> DisplayAllCustomers()
         {
-            throw new NotImplementedException();
+            List<IDAL.DO.Customer> dalCustomers = new(DalObject.DisplayCustomersList());
+            List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
+            List<CustomerToList> customerToLists = new();
+            int numDeliveredPackagesSent = 0;
+            int numUndeliveredPackagesSent = 0;
+            int numPackagesReceived = 0;
+            int numPackagesExpected = 0;
+            foreach (IDAL.DO.Customer dalCustomer in dalCustomers)
+            {
+                numDeliveredPackagesSent = dalPackages.FindAll(p => p.SenderID == dalCustomer.ID && p.Delivered != DateTime.MinValue).Count;
+                numUndeliveredPackagesSent = dalPackages.FindAll(p => p.SenderID == dalCustomer.ID && p.Collected != DateTime.MinValue && p.Delivered == DateTime.MinValue).Count;
+                numPackagesReceived = dalPackages.FindAll(p => p.ReceiverID == dalCustomer.ID && p.Delivered != DateTime.MinValue).Count;
+                numPackagesExpected = dalPackages.FindAll(p => p.ReceiverID == dalCustomer.ID && p.Delivered == DateTime.MinValue).Count;
+                customerToLists.Add(new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected));
+            }
+            return customerToLists;
         }
         public List<PackageToList> DisplayAllPackages()
         {
-            throw new NotImplementedException();
+            List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
+            List<PackageToList> packageToLists = new();
+            foreach (IDAL.DO.Package dalPackage in dalPackages)
+            {
+                string senderName = DalObject.DisplayCustomer(dalPackage.SenderID).Name;
+                string receiverName = DalObject.DisplayCustomer(dalPackage.ReceiverID).Name;
+                Enums.PackageStatus status = Enums.PackageStatus.created;
+                if (dalPackage.Delivered != DateTime.MinValue)
+                {
+                    status = Enums.PackageStatus.delivered;
+                }
+                else if (dalPackage.Collected != DateTime.MinValue)
+                {
+                    status = Enums.PackageStatus.collected;
+                }
+                else if (dalPackage.Assigned != DateTime.MinValue)
+                {
+                    status = Enums.PackageStatus.assigned;
+                }
+                packageToLists.Add(new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, status));
+            }
+            return packageToLists;
         }
         public List<PackageToList> DisplayAllUnassignedPackages()
         {
-            throw new NotImplementedException();
+            List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayUnassignedPackagesList());
+            List<PackageToList> packageToLists = new();
+            foreach (IDAL.DO.Package dalPackage in dalPackages)
+            {
+                string senderName = DalObject.DisplayCustomer(dalPackage.SenderID).Name;
+                string receiverName = DalObject.DisplayCustomer(dalPackage.ReceiverID).Name;
+                packageToLists.Add(new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, Enums.PackageStatus.created));
+            }
+            return packageToLists;
         }
         public List<StationToList> DisplayFreeStations()
         {
-            throw new NotImplementedException();
+            List<IDAL.DO.Station> dalStations = new(DalObject.DisplayFreeStationsList());
+            List<StationToList> stationToLists = new();
+            foreach (IDAL.DO.Station dalStation in dalStations)
+            {
+                Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
+                List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location == stationLocation);
+                stationToLists.Add(new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count));
+            }
+            return stationToLists;
         }
     }
 }

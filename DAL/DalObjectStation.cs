@@ -55,7 +55,7 @@ namespace DalObject
             return DataSource.Stations;
         }
 
-        public IEnumerable<Station> DisplayUnoccupiedStationsList()
+        public IEnumerable<Station> DisplayFreeStationsList()
         {
             List<Station> stations = new();
             for (int i = 0; i < DataSource.Stations.Count; i++)

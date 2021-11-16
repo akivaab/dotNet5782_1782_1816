@@ -72,7 +72,7 @@ namespace IBL
         /// <returns>List of reachable stations</returns>
         private List<IDAL.DO.Station> getReachableStations(DroneToList drone)
         {
-            List<IDAL.DO.Station> availableStations = new(DalObject.DisplayUnoccupiedStationsList());
+            List<IDAL.DO.Station> availableStations = new(DalObject.DisplayFreeStationsList());
             List<IDAL.DO.Station> reachableStations = new();
             foreach (IDAL.DO.Station station in availableStations)
             {

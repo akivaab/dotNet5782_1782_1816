@@ -149,7 +149,7 @@ namespace IDAL
         /// Display all stations with available charge slots
         /// </summary>
         /// <returns>List of all appropriate stations</returns>
-        public IEnumerable<Station> DisplayUnoccupiedStationsList();
+        public IEnumerable<Station> DisplayFreeStationsList();
 
         /// <summary>
         /// Represents the statistics of a drone's power consumption 

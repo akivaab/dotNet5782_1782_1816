@@ -9,6 +9,13 @@ namespace IBL
             public int Name { get; set; }
             public int NumAvailableChargeSlots { get; set; }
             public int NumOccupiedChargeSlots { get; set; }
+            public StationToList(int id, int name, int numAvailableChargeSlots, int numOccupiedChargeSlots)
+            {
+                ID = id;
+                Name = name;
+                NumAvailableChargeSlots = numAvailableChargeSlots;
+                NumOccupiedChargeSlots = numOccupiedChargeSlots;
+            }
             public override string ToString()
             {
                 return $"Station ID: {ID}, Name: {Name}\n" +

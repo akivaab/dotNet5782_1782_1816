@@ -12,7 +12,16 @@ namespace IBL
             public int NumUndeliveredPackagesSent { get; set; }
             public int NumPackagesReceived { get; set; }
             public int NumPackagesExpected { get; set; }
-
+            public CustomerToList(int id, string name, string phone, int numDeliveredPackagesSent, int numUndeliveredPackagesSent, int numPackagesReceived, int numPackagesExpected)
+            {
+                ID = id;
+                Name = name;
+                Phone = phone;
+                NumDeliveredPackagesSent = numDeliveredPackagesSent;
+                NumUndeliveredPackagesSent = numUndeliveredPackagesSent;
+                NumPackagesReceived = numPackagesReceived;
+                NumPackagesExpected = numPackagesExpected;
+            }
             public override string ToString()
             {
                 return $"Customer ID: {ID}, Name: {Name}, Phone Number: {Phone}\n" +

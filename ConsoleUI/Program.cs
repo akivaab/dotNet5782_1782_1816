@@ -289,7 +289,7 @@ namespace ConsoleUI
                     }
                     break;
                 case 6:
-                    foreach (Station station in dal.DisplayUnoccupiedStationsList())
+                    foreach (Station station in dal.DisplayFreeStationsList())
                     {
                         Console.WriteLine(station);
                     }
