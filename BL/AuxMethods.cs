@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using IBL.BO;
 
 namespace IBL
@@ -63,6 +64,12 @@ namespace IBL
             }
             return closestStationLocation;
         }
+
+        /// <summary>
+        /// Gets a list of stations that a drone is capable of reaching before running out of battery. 
+        /// </summary>
+        /// <param name="drone"></param>
+        /// <returns>List of reachable stations</returns>
         private List<IDAL.DO.Station> getReachableStations(DroneToList drone)
         {
             List<IDAL.DO.Station> availableStations = new List<IDAL.DO.Station>(DalObject.DisplayUnoccupiedStationsList());
@@ -135,7 +142,23 @@ namespace IBL
         /// <returns>ID of the best package</returns>
         private int findBestPackage(List<IDAL.DO.Package> dalPackages, DroneToList drone)
         {
-            //TODO:
+            List<IDAL.DO.Package> bestPackages = new List<IDAL.DO.Package>(dalPackages);
+            bestPackages.RemoveAll(p => p.Weight.CompareTo(drone.MaxWeight) > 0);
+            bestPackages.RemoveAll(p =>
+            {
+                Location senderLocation = getCustomerLocation(p.SenderID);
+                Location receiverLocation = getCustomerLocation(p.ReceiverID);
+                double requiredDistance = getDistance(drone.Location, senderLocation);
+                requiredDistance += getDistance(senderLocation, receiverLocation);
+                requiredDistance += getDistance(receiverLocation, getClosestStation(receiverLocation));
+                double requiredBattery = PowerConsumption[(int)p.Weight] * requiredDistance;
+                return requiredBattery > drone.Battery;
+            });
+
+            bestPackages = (List<IDAL.DO.Package>)bestPackages.OrderByDescending(p => p.Priority)
+                .ThenByDescending(p => p.Weight)
+                .ThenBy(p => getDistance(drone.Location, getCustomerLocation(p.SenderID)));
+            return bestPackages[0].ID;
         }
     }
 }

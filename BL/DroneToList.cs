@@ -7,7 +7,7 @@ namespace IBL
         {
             public int ID { get; set; }
             public string Model { get; set; }
-            public Enums.WeightCategories Weight { get; set; }
+            public Enums.WeightCategories MaxWeight { get; set; }
             public double Battery { get; set; }
             public Enums.DroneStatus Status { get; set; }
             public Location Location { get; set; }
