@@ -14,6 +14,18 @@ namespace IBL
             public Location CollectLocation { get; set; }
             public Location DeliveryLocation { get; set; }
             public double DeliveryDistance { get; set; }
+            public PackageInTransfer(int id, Enums.WeightCategories weight, Enums.Priorities priority, bool status, CustomerForPackage sender, CustomerForPackage receiver, Location collectLocation, Location deliveryLocation, double deliveryDistance)
+            {
+                ID = id;
+                Weight = weight;
+                Priority = priority;
+                Status = status;
+                Sender = sender;
+                Receiver = receiver;
+                CollectLocation = collectLocation;
+                DeliveryLocation = deliveryLocation;
+                DeliveryDistance = deliveryDistance;
+            }
             public override string ToString()
             {
                 return $"Package ID: {ID}, weight: {Weight}, priority: {Priority}\n" +

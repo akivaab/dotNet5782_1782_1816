@@ -12,6 +12,19 @@ namespace IBL
             public Enums.DroneStatus Status { get; set; }
             public Location Location { get; set; }
             public int PackageID { get; set; }
+            public DroneToList(int id, string model, Enums.WeightCategories maxWeight, double battery, Enums.DroneStatus status, Location location, int packageID)
+            {
+                ID = id;
+                Model = model;
+                MaxWeight = maxWeight;
+                Battery = battery;
+                Status = status;
+                Location = location;
+                PackageID = packageID;
+            }
+            public DroneToList()
+            {
+            }
             public override string ToString()
             {
                 return $"Drone ID: {ID}, Model: {Model}, Weight: {MaxWeight}, Status: {Status}, Location {Location}\n" +

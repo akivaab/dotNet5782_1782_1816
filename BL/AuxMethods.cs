@@ -101,15 +101,14 @@ namespace IBL
         /// <summary>
         /// Return a random battery level between the amount necessary to deliver and return to a station and 100.
         /// </summary>
-        /// <param name="droneToList"></param>
+        /// <param name="droneLocation"></param>
         /// <param name="package"></param>
         /// <param name="powerConsumed"></param>
         /// <returns>A random double representing battery level</returns>
-        private double randomBatteryPower(DroneToList droneToList, IDAL.DO.Package package, double powerConsumed)
+        private double randomBatteryPower(Location droneLocation, IDAL.DO.Package package, double powerConsumed)
         {
             IDAL.DO.Customer sender = DalObject.DisplayCustomer(package.SenderID);
             IDAL.DO.Customer receiver = DalObject.DisplayCustomer(package.ReceiverID);
-            Location droneLocation = droneToList.Location;
             Location senderLocation = new Location(sender.Latitude, sender.Longitude);
             Location receiverLocation = new Location(receiver.Latitude, receiver.Longitude);
             double distanceToDeliver = getDistance(droneLocation, senderLocation);

@@ -26,21 +26,17 @@ namespace IBL
                 {
                     IDAL.DO.Drone drone = dalDrones.Find(drone => drone.ID == package.DroneID);
                     dalDrones.Remove(drone);
-                    DroneToList droneToList = new();
-                    droneToList.ID = drone.ID;
-                    droneToList.Model = drone.Model;
-                    droneToList.MaxWeight = (Enums.WeightCategories)drone.MaxWeight;
-                    droneToList.Status = Enums.DroneStatus.delivery;
+                    Location droneLocation = new();
                     if (package.Assigned != DateTime.MinValue && package.Collected == DateTime.MinValue) //assigned but not collected
                     {
-                        droneToList.Location = getClosestStation(getCustomerLocation(package.SenderID)); //station closest to sender
+                        droneLocation = getClosestStation(getCustomerLocation(package.SenderID)); //station closest to sender
                     }
                     else if (package.Collected != DateTime.MinValue)
                     {
-                        droneToList.Location = getCustomerLocation(package.SenderID); //sender location
+                        droneLocation = getCustomerLocation(package.SenderID); //sender location
                     }
-                    droneToList.Battery = randomBatteryPower(droneToList, package, powerConsumption[(int)package.Weight]);
-                    droneToList.PackageID = package.ID;
+                    double battery = randomBatteryPower(droneLocation, package, powerConsumption[(int)package.Weight]);
+                    DroneToList droneToList = new(drone.ID, drone.Model, (Enums.WeightCategories)drone.MaxWeight, battery, Enums.DroneStatus.delivery, droneLocation, package.ID);
                     Drones.Add(droneToList);
                 }
             }
@@ -84,9 +80,11 @@ namespace IBL
         {
             Random random = new Random();
             IDAL.DO.Station dalStation = DalObject.DisplayStation(stationID);
-            
-            Drone drone = new(droneID, model, weight, random.Next(20, 41), Enums.DroneStatus.maintenance, null, new Location(dalStation.Latitude, dalStation.Longitude));
+            double battery = random.Next(20, 41);
+            Location droneLocation = new Location(dalStation.Latitude, dalStation.Longitude);
+            Drone drone = new(droneID, model, weight, battery, Enums.DroneStatus.maintenance, null, droneLocation);
             DalObject.AddDrone(droneID, model, (IDAL.DO.Enums.WeightCategories)weight);
+            Drones.Add(new DroneToList(droneID, model, weight, battery, Enums.DroneStatus.maintenance, droneLocation, -1));
             return drone;
         }
         public Customer AddCustomer(int customerID, string name, string phone, Location location)
@@ -290,7 +288,7 @@ namespace IBL
             
             return new Station(dalStation.ID, dalStation.Name, stationLocation, dalStation.AvailableChargeSlots, dronesCharging);
         }
-        public Drone DisplayDrone(int droneID)
+        public Drone DisplayDrone(int droneID) //WORK IN PROGRESS
         {
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
@@ -298,10 +296,12 @@ namespace IBL
                 throw new UndefinedObjectException();
             }
             DroneToList droneToList = Drones[droneIndex];
-            
 
 
-            Drone drone = new(droneToList.ID, droneToList.Model, droneToList.MaxWeight, droneToList.Battery, droneToList.Status, , droneToList.Location);
+            IDAL.DO.Package dalPackage = DalObject.DisplayPackage(droneToList.PackageID);
+            PackageInTransfer packageInTransfer = new(dalPackage.ID, dalPackage.Weight, dalPackage.Priority, );
+
+            Drone drone = new(droneToList.ID, droneToList.Model, droneToList.MaxWeight, droneToList.Battery, droneToList.Status, packageInTransfer, droneToList.Location);
             return drone;
         }
         public Customer DisplayCustomer(int customerID)
