@@ -36,7 +36,7 @@ namespace DalObject
                 Station station = new();
                 station.ID = Stations.Count + 1;
                 station.Name = (Stations.Count + 1) * 32;
-                station.NumChargeSlots = 5;
+                station.AvailableChargeSlots = 5;
                 // get a random double between 0-90, then randomly multiply by +/- 1 
                 station.Latitude = (random.NextDouble() * 90) * (random.Next(0, 2) * 2 - 1);
                 // longitude is always a positive double between 0-180

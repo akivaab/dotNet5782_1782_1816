@@ -26,7 +26,7 @@ namespace DalObject
             Station station = new();
             station.ID = id;
             station.Name = name;
-            station.NumChargeSlots = numChargeSlots;
+            station.AvailableChargeSlots = numChargeSlots;
             station.Latitude = latitude;
             station.Longitude = longitude;
             DataSource.Stations.Add(station);
@@ -60,7 +60,7 @@ namespace DalObject
             List<Station> stations = new();
             for (int i = 0; i < DataSource.Stations.Count; i++)
             {
-                if (DataSource.Stations[i].NumChargeSlots > 0)
+                if (DataSource.Stations[i].AvailableChargeSlots > 0)
                 {
                     stations.Add(DataSource.Stations[i]);
                 }

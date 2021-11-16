@@ -16,6 +16,20 @@ namespace IBL
             public DateTime AssigningTime { get; set; }
             public DateTime CollectingTime { get; set; }
             public DateTime DeliveringTime { get; set; }
+
+            public Package(int id, CustomerForPackage sender, CustomerForPackage receiver, Enums.WeightCategories weight, Enums.Priorities priority, DroneDelivering droneDelivering, DateTime requestTime, DateTime assigningTime, DateTime collectingTime, DateTime deliveringTime)
+            {
+                ID = id;
+                Sender = sender;
+                Receiver = receiver;
+                Weight = weight;
+                Priority = priority;
+                DroneDelivering = droneDelivering;
+                RequestTime = requestTime;
+                AssigningTime = assigningTime;
+                CollectingTime = collectingTime;
+                DeliveringTime = deliveringTime;
+            }
             public override string ToString()
             {
                 return $"Package ID: {ID}, Weight {Weight}, Priority: {Priority}\n" +

@@ -38,7 +38,7 @@ namespace IBL
         /// <returns>Location of the closest station</returns>
         private Location getClosestStation(Location location)
         {
-            List<IDAL.DO.Station> dalStations = (List<IDAL.DO.Station>)DalObject.DisplayStationsList();
+            List<IDAL.DO.Station> dalStations = new(DalObject.DisplayStationsList());
             return getClosestStation(location, dalStations);
         }
 
@@ -72,8 +72,8 @@ namespace IBL
         /// <returns>List of reachable stations</returns>
         private List<IDAL.DO.Station> getReachableStations(DroneToList drone)
         {
-            List<IDAL.DO.Station> availableStations = new List<IDAL.DO.Station>(DalObject.DisplayUnoccupiedStationsList());
-            List<IDAL.DO.Station> reachableStations = new List<IDAL.DO.Station>();
+            List<IDAL.DO.Station> availableStations = new(DalObject.DisplayUnoccupiedStationsList());
+            List<IDAL.DO.Station> reachableStations = new();
             foreach (IDAL.DO.Station station in availableStations)
             {
                 Location stationLocation = new(station.Latitude, station.Longitude);
@@ -93,9 +93,8 @@ namespace IBL
         /// <returns>Location of a customer</returns>
         private Location getCustomerLocation(int customerID)
         {
-            List<IDAL.DO.Customer> dalCustomers = (List<IDAL.DO.Customer>)DalObject.DisplayCustomersList();
-            IDAL.DO.Customer customer = dalCustomers.Find(c => c.ID == customerID);
-            Location customerLocation = new(customer.Latitude, customer.Longitude);
+            IDAL.DO.Customer dalCustomer = DalObject.DisplayCustomer(customerID);
+            Location customerLocation = new(dalCustomer.Latitude, dalCustomer.Longitude);
             return customerLocation;
         }
 
@@ -108,9 +107,8 @@ namespace IBL
         /// <returns>A random double representing battery level</returns>
         private double randomBatteryPower(DroneToList droneToList, IDAL.DO.Package package, double powerConsumed)
         {
-            List<IDAL.DO.Customer> dalCustomers = new List<IDAL.DO.Customer>(DalObject.DisplayCustomersList());
-            IDAL.DO.Customer sender = dalCustomers.Find(s => s.ID == package.SenderID);
-            IDAL.DO.Customer receiver = dalCustomers.Find(r => r.ID == package.ReceiverID);
+            IDAL.DO.Customer sender = DalObject.DisplayCustomer(package.SenderID);
+            IDAL.DO.Customer receiver = DalObject.DisplayCustomer(package.ReceiverID);
             Location droneLocation = droneToList.Location;
             Location senderLocation = new Location(sender.Latitude, sender.Longitude);
             Location receiverLocation = new Location(receiver.Latitude, receiver.Longitude);
@@ -131,7 +129,7 @@ namespace IBL
             List<IDAL.DO.Package> deliveredPackages = dalPackages.FindAll(package => package.Delivered != DateTime.MinValue);
             Random random = new Random();
             int receiverID = deliveredPackages[random.Next(deliveredPackages.Count)].ReceiverID;
-            return ((List<IDAL.DO.Customer>)DalObject.DisplayCustomersList()).Find(customer => customer.ID == receiverID);
+            return DalObject.DisplayCustomer(receiverID);
         }
 
         /// <summary>
@@ -142,7 +140,7 @@ namespace IBL
         /// <returns>ID of the best package</returns>
         private int findBestPackage(List<IDAL.DO.Package> dalPackages, DroneToList drone)
         {
-            List<IDAL.DO.Package> bestPackages = new List<IDAL.DO.Package>(dalPackages);
+            List<IDAL.DO.Package> bestPackages = new(dalPackages);
             bestPackages.RemoveAll(p => p.Weight.CompareTo(drone.MaxWeight) > 0);
             bestPackages.RemoveAll(p =>
             {

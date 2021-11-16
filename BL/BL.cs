@@ -17,9 +17,9 @@ namespace IBL
             Array.Copy(powerConsumption, PowerConsumption, 4);
             ChargeRatePerHour = powerConsumption[4];
 
-            List<IDAL.DO.Drone> dalDrones = new List<IDAL.DO.Drone>(DalObject.DisplayDronesList());
+            List<IDAL.DO.Drone> dalDrones = new(DalObject.DisplayDronesList());
 
-            List<IDAL.DO.Package> dalPackages = new List<IDAL.DO.Package>(DalObject.DisplayPackagesList());
+            List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
             foreach (IDAL.DO.Package package in dalPackages)
             {
                 if (package.Delivered == DateTime.MinValue && package.DroneID != 0) //undelivered, drone assigned
@@ -55,7 +55,7 @@ namespace IBL
                 if (randInt == 1)
                 {
                     droneToList.Status = Enums.DroneStatus.maintenance;
-                    List<IDAL.DO.Station> dataLayerStations = new List<IDAL.DO.Station>(DalObject.DisplayStationsList());
+                    List<IDAL.DO.Station> dataLayerStations = new(DalObject.DisplayStationsList());
                     int randStation = random.Next(dataLayerStations.Count);
                     double stationLatitude = dataLayerStations[randStation].Latitude;
                     double stationLongitude = dataLayerStations[randStation].Longitude;
@@ -76,68 +76,34 @@ namespace IBL
         }
         public Station AddStation(int stationID, int name, Location location, int numAvailableChargingSlots)
         {
-            Station station = new();
-            station.ID = stationID;
-            station.Name = name;
-            station.Location = location;
-            station.AvailableChargeSlots = numAvailableChargingSlots;
-            station.DronesCharging = new List<DroneCharging>();
-
+            Station station = new(stationID, name, location, numAvailableChargingSlots, new List<DroneCharging>());
             DalObject.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
             return station;
         }
         public Drone AddDrone(int droneID, string model, Enums.WeightCategories weight, int stationID)
         {
-            Drone drone = new();
-            drone.ID = droneID;
-            drone.Model = model;
-            drone.MaxWeight = weight;
             Random random = new Random();
-            drone.Battery = random.Next(20, 41);
-            drone.Status = Enums.DroneStatus.maintenance;
-            IDAL.DO.Station station = ((List<IDAL.DO.Station>)DalObject.DisplayStationsList()).Find(s => s.ID == stationID);
-            Location location = new();
-            location.Latitude = station.Latitude;
-            location.Longitude = station.Longitude;
-            drone.Location = location;
-
+            IDAL.DO.Station dalStation = DalObject.DisplayStation(stationID);
+            
+            Drone drone = new(droneID, model, weight, random.Next(20, 41), Enums.DroneStatus.maintenance, null, new Location(dalStation.Latitude, dalStation.Longitude));
             DalObject.AddDrone(droneID, model, (IDAL.DO.Enums.WeightCategories)weight);
             return drone;
         }
         public Customer AddCustomer(int customerID, string name, string phone, Location location)
         {
-            Customer customer = new();
-            customer.ID = customerID;
-            customer.Name = name;
-            customer.Phone = phone;
-            customer.Location = location;
-
+            Customer customer = new(customerID, name, phone, location, new List<PackageForCustomer>(), new List<PackageForCustomer>());
             DalObject.AddCustomer(customerID, name, phone, location.Latitude, location.Longitude);
             return customer;
         }
         public Package AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority)
         {
-            Package package = new();
-            List<IDAL.DO.Customer> customers = new List<IDAL.DO.Customer>(DalObject.DisplayCustomersList());
-            IDAL.DO.Customer sender = customers.Find(s => s.ID == senderID);
-            IDAL.DO.Customer receiver = customers.Find(r => r.ID == receiverID);
-            CustomerForPackage packageSender = new();
-            packageSender.ID = sender.ID;
-            packageSender.Name = sender.Name;
-            CustomerForPackage packageReceiver = new();
-            packageReceiver.ID = receiver.ID;
-            packageReceiver.Name = receiver.Name;
-            package.Sender = packageSender;
-            package.Receiver = packageReceiver;
-            package.Weight = weight;
-            package.Priority = priority;
-            package.DroneDelivering = null;
-            package.RequestTime = DateTime.Now;
-            package.AssigningTime = DateTime.MinValue;
-            package.CollectingTime = DateTime.MinValue;
-            package.DeliveringTime = DateTime.MinValue;
-
-            DalObject.AddPackage(senderID, receiverID, (IDAL.DO.Enums.WeightCategories)weight, (IDAL.DO.Enums.Priorities)priority);
+            IDAL.DO.Customer sender = DalObject.DisplayCustomer(senderID);
+            IDAL.DO.Customer receiver = DalObject.DisplayCustomer(receiverID);
+            CustomerForPackage packageSender = new(sender.ID, sender.Name);
+            CustomerForPackage packageReceiver = new(receiver.ID, receiver.Name);
+            
+            int packageID = DalObject.AddPackage(senderID, receiverID, (IDAL.DO.Enums.WeightCategories)weight, (IDAL.DO.Enums.Priorities)priority);
+            Package package = new(packageID, packageSender, packageReceiver, weight, priority, null, DateTime.Now, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue);
             return package;
         }
         public void UpdateDroneModel(int droneID, string model)
@@ -155,7 +121,7 @@ namespace IBL
             droneToModify.Model = model;
             dalDroneList.Insert(droneIndex, droneToModify);
         }
-        public void UpdateStation(int stationID, int name = -1, int numChargingSlots = -1)
+        public void UpdateStation(int stationID, int name = -1, int totalChargingSlots = -1)
         {
             List<IDAL.DO.Station> dalStationList = (List<IDAL.DO.Station>)DalObject.DisplayStationsList();
             int stationIndex = dalStationList.FindIndex(s => s.ID == stationID);
@@ -163,17 +129,18 @@ namespace IBL
             {
                 throw new UndefinedObjectException();
             }
-            IDAL.DO.Station station = dalStationList[stationIndex];
+            IDAL.DO.Station dalStation = dalStationList[stationIndex];
             dalStationList.RemoveAt(stationIndex);
             if (name != -1)
             {
-                station.Name = name;
+                dalStation.Name = name;
             }
-            if (numChargingSlots != -1)
+            if (totalChargingSlots != -1)
             {
-                station.NumChargeSlots = numChargingSlots;
+                List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location == new Location(dalStation.Latitude, dalStation.Longitude));
+                dalStation.AvailableChargeSlots = totalChargingSlots - dronesAtStation.Count;
             }
-            dalStationList.Insert(stationIndex, station);
+            dalStationList.Insert(stationIndex, dalStation);
         }
         public void UpdateCustomer(int customerID, string name = "", string phone = "")
         {
@@ -208,8 +175,8 @@ namespace IBL
                 throw new UnableToCharge();
             }
             Location closestStationLocation = getClosestStation(Drones[droneIndex].Location, reachableStations);
-            List<IDAL.DO.Station> dalStations = new List<IDAL.DO.Station>(DalObject.DisplayStationsList());
-            int stationIndex = dalStations.FindIndex(s => s.Latitude == closestStationLocation.Latitude && s.Longitude == closestStationLocation.Longitude);
+            List<IDAL.DO.Station> dalStations = new(DalObject.DisplayStationsList());
+            int stationIndex = dalStations.FindIndex(s => new Location(s.Latitude, s.Longitude) == closestStationLocation);
             if (stationIndex == -1)
             {
                 throw new UndefinedObjectException();
@@ -235,7 +202,7 @@ namespace IBL
             Drones[droneIndex].Status = Enums.DroneStatus.available;
 
             List<IDAL.DO.Station> dalStationList = new List<IDAL.DO.Station>(DalObject.DisplayStationsList());
-            int stationIndex = dalStationList.FindIndex(s => s.Latitude == Drones[droneIndex].Location.Latitude && s.Longitude == Drones[droneIndex].Location.Longitude);
+            int stationIndex = dalStationList.FindIndex(s => new Location(s.Latitude, s.Longitude) == Drones[droneIndex].Location);
             if (stationIndex == -1)
             {
                 throw new Exception();
@@ -253,7 +220,7 @@ namespace IBL
             {
                 throw new Exception();
             }
-            List<IDAL.DO.Package> dalPackages = new List<IDAL.DO.Package>(DalObject.DisplayUnassignedPackagesList());
+            List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayUnassignedPackagesList());
             int bestPackageID = findBestPackage(dalPackages, Drones[droneIndex]);
             if (bestPackageID == -1)
             {
@@ -274,10 +241,8 @@ namespace IBL
             {
                 throw new Exception();
             }
-            List<IDAL.DO.Package> dalPackages = new List<IDAL.DO.Package>(DalObject.DisplayPackagesList());
-            int dalPackageIndex = dalPackages.FindIndex(p => p.ID == Drones[droneIndex].PackageID);
-            IDAL.DO.Package dalPackage = dalPackages[dalPackageIndex];
-            if (dalPackageIndex == -1 || dalPackage.Assigned == DateTime.MinValue || dalPackage.Collected != DateTime.MinValue)
+            IDAL.DO.Package dalPackage = DalObject.DisplayPackage(Drones[droneIndex].PackageID);
+            if (dalPackage.Assigned == DateTime.MinValue || dalPackage.Collected != DateTime.MinValue)
             {
                 throw new Exception();
             }
@@ -297,10 +262,8 @@ namespace IBL
             {
                 throw new Exception();
             }
-            List<IDAL.DO.Package> dalPackages = new List<IDAL.DO.Package>(DalObject.DisplayPackagesList());
-            int dalPackageIndex = dalPackages.FindIndex(p => p.ID == Drones[droneIndex].PackageID);
-            IDAL.DO.Package dalPackage = dalPackages[dalPackageIndex];
-            if (dalPackageIndex == -1 || dalPackage.Collected == DateTime.MinValue || dalPackage.Delivered != DateTime.MinValue)
+            IDAL.DO.Package dalPackage = DalObject.DisplayPackage(Drones[droneIndex].PackageID);
+            if (dalPackage.Collected == DateTime.MinValue || dalPackage.Delivered != DateTime.MinValue)
             {
                 throw new Exception();
             }
@@ -312,11 +275,34 @@ namespace IBL
         }
         public Station DisplayStation(int stationID)
         {
-            throw new NotImplementedException();
+            IDAL.DO.Station dalStation = DalObject.DisplayStation(stationID);
+            Location stationLocation = new Location(dalStation.Latitude, dalStation.Longitude);
+            
+            //find drones at this station
+            List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location == stationLocation);
+            
+            //initialize DroneCharging entities
+            List<DroneCharging> dronesCharging = new();
+            foreach (DroneToList drone in dronesAtStation)
+            {
+                dronesCharging.Add(new DroneCharging(drone.ID, drone.Battery));
+            }
+            
+            return new Station(dalStation.ID, dalStation.Name, stationLocation, dalStation.AvailableChargeSlots, dronesCharging);
         }
         public Drone DisplayDrone(int droneID)
         {
-            throw new NotImplementedException();
+            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
+            if (droneIndex == -1)
+            {
+                throw new UndefinedObjectException();
+            }
+            DroneToList droneToList = Drones[droneIndex];
+            
+
+
+            Drone drone = new(droneToList.ID, droneToList.Model, droneToList.MaxWeight, droneToList.Battery, droneToList.Status, , droneToList.Location);
+            return drone;
         }
         public Customer DisplayCustomer(int customerID)
         {

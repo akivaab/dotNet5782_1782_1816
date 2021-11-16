@@ -27,7 +27,7 @@ namespace DalObject
                 throw new UndefinedObjectException();
             }
             Station station = DataSource.Stations[stationIndex];
-            station.NumChargeSlots--;
+            station.AvailableChargeSlots--;
             DataSource.Stations[stationIndex] = station;
             DroneCharge droneCharge = new DroneCharge();
             droneCharge.DroneID = droneID;
@@ -45,7 +45,7 @@ namespace DalObject
                 throw new UndefinedObjectException();
             }
             Station station = DataSource.Stations[stationIndex];
-            station.NumChargeSlots++;
+            station.AvailableChargeSlots++;
             DataSource.Stations[stationIndex] = station;
             DataSource.DroneCharges.Remove(DataSource.DroneCharges[droneChargeIndex]);
         }
