@@ -14,7 +14,7 @@ namespace IBL
             public int PackageID { get; set; }
             public override string ToString()
             {
-                return $"Drone ID: {ID}, Model: {Model}, Weight: {Weight}, Status: {Status}, Location {Location}\n" +
+                return $"Drone ID: {ID}, Model: {Model}, Weight: {MaxWeight}, Status: {Status}, Location {Location}\n" +
                     $"Assigned to deliver Package {PackageID}";
             }
         }

@@ -29,7 +29,7 @@ namespace IBL
                     DroneToList droneToList = new();
                     droneToList.ID = drone.ID;
                     droneToList.Model = drone.Model;
-                    droneToList.Weight = (Enums.WeightCategories)drone.MaxWeight;
+                    droneToList.MaxWeight = (Enums.WeightCategories)drone.MaxWeight;
                     droneToList.Status = Enums.DroneStatus.delivery;
                     if (package.Assigned != DateTime.MinValue && package.Collected == DateTime.MinValue) //assigned but not collected
                     {
@@ -50,7 +50,7 @@ namespace IBL
                 DroneToList droneToList = new();
                 droneToList.ID = drone.ID;
                 droneToList.Model = drone.Model;
-                droneToList.Weight = (Enums.WeightCategories)drone.MaxWeight;
+                droneToList.MaxWeight = (Enums.WeightCategories)drone.MaxWeight;
                 int randInt = random.Next(1, 3);
                 if (randInt == 1)
                 {
