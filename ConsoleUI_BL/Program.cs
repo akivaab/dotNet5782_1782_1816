@@ -154,10 +154,41 @@ namespace ConsoleUI_BL
                 switch (updatingOption)
                 {
                     case 1:
+                        int droneID;
+                        string model;
+                        Console.WriteLine("Input drone ID: ");
+                        int.TryParse(Console.ReadLine(), out droneID);
+                        Console.WriteLine("Input drone model: ");
+                        model = Console.ReadLine();
+                        bl.UpdateDroneModel(droneID, model);
                         break;
                     case 2:
+                        int stationID, stationName, numChargingSlots;
+                        Console.WriteLine("Input station ID: ");
+                        int.TryParse(Console.ReadLine(), out stationID);
+                        Console.WriteLine("Input station name (optional): ");
+                        var readName = Console.ReadLine();
+                        Console.WriteLine("Input number of charging slots: (optional): ");
+                        var readNumChargeSlots = Console.ReadLine();
+                        if (String.IsNullOrWhiteSpace(readNumChargeSlots))
+                        {
+                            int.TryParse(readName, out stationName);
+                            bl.UpdateStation(stationID, stationName);
+                        }
+                        if (String.IsNullOrWhiteSpace(readName))
+                        {
+                            int.TryParse(readNumChargeSlots, out numChargingSlots);
+                            bl.UpdateStation(stationID, -1, numChargingSlots);
+                        }
+
                         break;
                     case 3:
+                        int customerID;
+                        string customerName, phone;
+                        Console.WriteLine("Input customer ID: ");
+                        int.TryParse(Console.ReadLine(), out customerID);
+
+                        bl.UpdateCustomer(customerID);
                         break;
                     case 4:
                         int droneToChargeID;
@@ -181,20 +212,16 @@ namespace ConsoleUI_BL
                         bl.AssignPackage(assignDroneID);
                         break;
                     case 7:
-                        int collectPackageID, collectDroneID;
-                        Console.Write("Input Package ID: ");
-                        int.TryParse(Console.ReadLine(), out collectPackageID);
+                        int collectDroneID;
                         Console.Write("Input Drone ID: ");
                         int.TryParse(Console.ReadLine(), out collectDroneID);
-                        bl.CollectPackage(collectPackageID, collectDroneID);
+                        bl.CollectPackage(collectDroneID);
                         break;
                     case 8:
-                        int deliveryPackageID, deliveryDroneID;
-                        Console.Write("Input Package ID: ");
-                        int.TryParse(Console.ReadLine(), out deliveryPackageID);
+                        int deliveryDroneID;
                         Console.Write("Input Drone ID: ");
                         int.TryParse(Console.ReadLine(), out deliveryDroneID);
-                        bl.DeliverPackage(deliveryPackageID, deliveryDroneID);
+                        bl.DeliverPackage(deliveryDroneID);
                         break;
                     default:
                         break;
@@ -203,6 +230,129 @@ namespace ConsoleUI_BL
             catch (UndefinedObjectException e)
             {
                 Console.WriteLine($"{e}:\nThe object you wish to update is not defined.");
+            }
+            catch (UnableToChargeException e)
+            {
+                Console.WriteLine($"{e}:\nThe drone is unable to be sent to a station to charge.");
+            }
+            catch (UnableToReleaseException e)
+            {
+                Console.WriteLine($"{e}:\nThe drone is unable to be released from a charging slot.");
+            }
+            catch (UnableToAssignException e)
+            {
+                Console.WriteLine($"{e}:\nThis drone cannot be assigned a package.");
+            }
+            catch (UnableToCollectException e)
+            {
+                Console.WriteLine($"{e}:\nThis drone is unable to collect a package.");
+            }
+            catch (UnableToDeliverException e)
+            {
+                Console.WriteLine($"{e}:\nThis drone is unable to deliver a package.");
+            }
+        }
+
+        public static void DisplayingOptions(IBL.IBL bl)
+        {
+            Console.WriteLine("Displaying Options:");
+            Console.WriteLine("1. Display station");
+            Console.WriteLine("2. Display drone");
+            Console.WriteLine("3. Display customer");
+            Console.WriteLine("4. Display package");
+            Console.Write("Choose a displaying option: ");
+            int displayingOption;
+            int.TryParse(Console.ReadLine(), out displayingOption);
+            try
+            {
+                switch (displayingOption)
+                {
+                    case 1:
+                        int stationID;
+                        Console.Write("Input Station ID: ");
+                        int.TryParse(Console.ReadLine(), out stationID);
+                        Console.WriteLine(bl.DisplayStation(stationID));
+                        break;
+                    case 2:
+                        int droneID;
+                        Console.Write("Input Drone ID: ");
+                        int.TryParse(Console.ReadLine(), out droneID);
+                        Console.WriteLine(bl.DisplayDrone(droneID));
+                        break;
+                    case 3:
+                        int customerID;
+                        Console.Write("Input Customer ID: ");
+                        int.TryParse(Console.ReadLine(), out customerID);
+                        Console.WriteLine(bl.DisplayCustomer(customerID));
+                        break;
+                    case 4:
+                        int packageID;
+                        Console.Write("Input Package ID: ");
+                        int.TryParse(Console.ReadLine(), out packageID);
+                        Console.WriteLine(bl.DisplayPackage(packageID));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (UndefinedObjectException e)
+            {
+                Console.WriteLine($"{e}:\nThe object you wish to display is not defined.");
+            }
+        }
+
+        public static void ListDisplayingOptions(IBL.IBL bl)
+        {
+            Console.WriteLine("List Displaying Options:");
+            Console.WriteLine("1. Display all stations");
+            Console.WriteLine("2. Display all drones");
+            Console.WriteLine("3. Display all customers");
+            Console.WriteLine("4. Display all packages");
+            Console.WriteLine("5. Display all unassigned packages");
+            Console.WriteLine("6. Display all stations with unoccupied charging slots");
+            Console.Write("Choose a list displaying option: ");
+            int listDisplayingOption;
+            int.TryParse(Console.ReadLine(), out listDisplayingOption);
+            switch (listDisplayingOption)
+            {
+                case 1:
+                    foreach (StationToList station in bl.DisplayAllStations())
+                    {
+                        Console.WriteLine(station);
+                    }
+                    break;
+                case 2:
+                    foreach (DroneToList drone in bl.DisplayAllDrones())
+                    {
+                        Console.WriteLine(drone);
+                    }
+                    break;
+                case 3:
+                    foreach (CustomerToList customer in bl.DisplayAllCustomers())
+                    {
+                        Console.WriteLine(customer);
+                    }
+                    break;
+                case 4:
+                    foreach (PackageToList package in bl.DisplayAllPackages())
+                    {
+                        Console.WriteLine(package);
+                    }
+                    break;
+                case 5:
+                    foreach (PackageToList package in bl.DisplayAllUnassignedPackages())
+                    {
+                        Console.WriteLine(package);
+                    }
+                    break;
+                case 6:
+                    foreach (StationToList station in bl.DisplayFreeStations())
+                    {
+                        Console.WriteLine(station);
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     }
