@@ -66,7 +66,7 @@ namespace IBL
         }
 
         /// <summary>
-        /// Gets a list of stations that a drone is capable of reaching before running out of battery. 
+        /// Gets a list of stations that a drone carrying no weight is capable of reaching before running out of battery. 
         /// </summary>
         /// <param name="drone"></param>
         /// <returns>List of reachable stations</returns>
@@ -77,7 +77,7 @@ namespace IBL
             foreach (IDAL.DO.Station station in availableStations)
             {
                 Location stationLocation = new(station.Latitude, station.Longitude);
-                double requiredBattery = PowerConsumption[0] * getDistance(drone.Location, stationLocation);
+                double requiredBattery = PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(drone.Location, stationLocation);
                 if (requiredBattery <= drone.Battery)
                 {
                     reachableStations.Add(station);
@@ -111,9 +111,11 @@ namespace IBL
             IDAL.DO.Customer receiver = DalObject.DisplayCustomer(package.ReceiverID);
             Location senderLocation = new Location(sender.Latitude, sender.Longitude);
             Location receiverLocation = new Location(receiver.Latitude, receiver.Longitude);
+
             double distanceToDeliver = getDistance(droneLocation, senderLocation);
             distanceToDeliver += getDistance(senderLocation, receiverLocation);
             distanceToDeliver += getDistance(receiverLocation, getClosestStation(receiverLocation));
+            
             Random random = new Random();
             return random.Next((int)Math.Ceiling(distanceToDeliver * powerConsumed), 101);
         }
@@ -123,7 +125,7 @@ namespace IBL
         /// </summary>
         /// <param name="dalPackages"></param>
         /// <returns>Random customer that received a package</returns>
-        private IDAL.DO.Customer packageReceiver(List<IDAL.DO.Package> dalPackages)
+        private IDAL.DO.Customer randomPackageReceiver(List<IDAL.DO.Package> dalPackages)
         {
             List<IDAL.DO.Package> deliveredPackages = dalPackages.FindAll(package => package.Delivered != DateTime.MinValue);
             Random random = new Random();
@@ -140,14 +142,20 @@ namespace IBL
         private int findBestPackage(List<IDAL.DO.Package> dalPackages, DroneToList drone)
         {
             List<IDAL.DO.Package> bestPackages = new(dalPackages);
+
+            //remove packages to heavy for drone to lift
             bestPackages.RemoveAll(p => p.Weight.CompareTo(drone.MaxWeight) > 0);
+            
+            //remove packages whose delivery will consume more battery than the drone has
             bestPackages.RemoveAll(p =>
             {
                 Location senderLocation = getCustomerLocation(p.SenderID);
                 Location receiverLocation = getCustomerLocation(p.ReceiverID);
+               
                 double requiredDistance = getDistance(drone.Location, senderLocation);
                 requiredDistance += getDistance(senderLocation, receiverLocation);
                 requiredDistance += getDistance(receiverLocation, getClosestStation(receiverLocation));
+                
                 double requiredBattery = PowerConsumption[(int)p.Weight] * requiredDistance;
                 return requiredBattery > drone.Battery;
             });

@@ -62,7 +62,7 @@ namespace IBL
                 else if (randInt == 2)
                 {
                     droneToList.Status = Enums.DroneStatus.available;
-                    IDAL.DO.Customer customer = packageReceiver(dalPackages);
+                    IDAL.DO.Customer customer = randomPackageReceiver(dalPackages);
                     droneToList.Location = new Location(customer.Latitude, customer.Longitude);
                     droneToList.Battery = random.Next((int)Math.Ceiling(powerConsumption[(int)Enums.WeightCategories.free] * getDistance(droneToList.Location, getClosestStation(droneToList.Location))), 100);
                 }
@@ -76,15 +76,15 @@ namespace IBL
             DalObject.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
             return station;
         }
-        public Drone AddDrone(int droneID, string model, Enums.WeightCategories weight, int stationID)
+        public Drone AddDrone(int droneID, string model, Enums.WeightCategories maxWeight, int stationID)
         {
             Random random = new Random();
             IDAL.DO.Station dalStation = DalObject.DisplayStation(stationID);
             double battery = random.Next(20, 41);
             Location droneLocation = new Location(dalStation.Latitude, dalStation.Longitude);
-            Drone drone = new(droneID, model, weight, battery, Enums.DroneStatus.maintenance, null, droneLocation);
-            DalObject.AddDrone(droneID, model, (IDAL.DO.Enums.WeightCategories)weight);
-            Drones.Add(new DroneToList(droneID, model, weight, battery, Enums.DroneStatus.maintenance, droneLocation, -1));
+            Drone drone = new(droneID, model, maxWeight, battery, Enums.DroneStatus.maintenance, null, droneLocation);
+            DalObject.AddDrone(droneID, model, (IDAL.DO.Enums.WeightCategories)maxWeight);
+            Drones.Add(new DroneToList(droneID, model, maxWeight, battery, Enums.DroneStatus.maintenance, droneLocation, -1));
             return drone;
         }
         public Customer AddCustomer(int customerID, string name, string phone, Location location)
@@ -170,7 +170,7 @@ namespace IBL
             List<IDAL.DO.Station> reachableStations = getReachableStations(Drones[droneIndex]);
             if (Drones[droneIndex].Status != Enums.DroneStatus.available || reachableStations.Count == 0)
             {
-                throw new UnableToCharge();
+                throw new UnableToChargeException();
             }
             Location closestStationLocation = getClosestStation(Drones[droneIndex].Location, reachableStations);
             List<IDAL.DO.Station> dalStations = new(DalObject.DisplayStationsList());
@@ -194,7 +194,7 @@ namespace IBL
             //check drone status
             if (Drones[droneIndex].Status != Enums.DroneStatus.maintenance)
             {
-                throw new UnableToRelease();
+                throw new UnableToReleaseException();
             }
             Drones[droneIndex].Battery = ChargeRatePerHour * chargingTime;
             Drones[droneIndex].Status = Enums.DroneStatus.available;
