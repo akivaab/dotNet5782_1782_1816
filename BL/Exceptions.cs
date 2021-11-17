@@ -5,6 +5,10 @@ namespace IBL
 {
     namespace BO
     {
+        public class IllegalArgumentException : Exception
+        {
+            public IllegalArgumentException() : base() { }
+        }
         public class NonUniqueIdException : Exception
         {
             public NonUniqueIdException() : base() { }
@@ -20,6 +24,18 @@ namespace IBL
         public class UnableToReleaseException : Exception
         {
             public UnableToReleaseException() : base() { }
+        }
+        public class UnableToAssignException : Exception
+        {
+            public UnableToAssignException() : base() { }
+        }
+        public class UnableToCollectException : Exception
+        {
+            public UnableToCollectException() : base() { }
+        }
+        public class UnableToDeliverException : Exception
+        {
+            public UnableToDeliverException() : base() { }
         }
     }
 }

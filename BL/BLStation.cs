@@ -7,8 +7,19 @@ namespace IBL
     {
         public Station AddStation(int stationID, int name, Location location, int numAvailableChargingSlots)
         {
+            try
+            {
+                DalObject.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
+            }
+            catch (IDAL.DO.IllegalArgumentException)
+            {
+                throw new IllegalArgumentException();
+            }
+            catch (IDAL.DO.NonUniqueIdException)
+            {
+                throw new NonUniqueIdException();
+            }
             Station station = new(stationID, name, location, numAvailableChargingSlots, new List<DroneCharging>());
-            DalObject.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
             return station;
         }
         public void UpdateStation(int stationID, int name = -1, int totalChargingSlots = -1)
@@ -20,6 +31,7 @@ namespace IBL
                 throw new UndefinedObjectException();
             }
             IDAL.DO.Station dalStation = dalStationList[stationIndex];
+
             dalStationList.RemoveAt(stationIndex);
             if (name != -1)
             {
@@ -34,20 +46,28 @@ namespace IBL
         }
         public Station DisplayStation(int stationID)
         {
-            IDAL.DO.Station dalStation = DalObject.DisplayStation(stationID);
-            Location stationLocation = new Location(dalStation.Latitude, dalStation.Longitude);
-
-            //find drones at this station
-            List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location == stationLocation);
-
-            //initialize DroneCharging entities
-            List<DroneCharging> dronesCharging = new();
-            foreach (DroneToList drone in dronesAtStation)
+            try
             {
-                dronesCharging.Add(new DroneCharging(drone.ID, drone.Battery));
-            }
+                IDAL.DO.Station dalStation = DalObject.DisplayStation(stationID);
 
-            return new Station(dalStation.ID, dalStation.Name, stationLocation, dalStation.AvailableChargeSlots, dronesCharging);
+                Location stationLocation = new Location(dalStation.Latitude, dalStation.Longitude);
+
+                //find drones at this station
+                List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location == stationLocation);
+
+                //initialize DroneCharging entities
+                List<DroneCharging> dronesCharging = new();
+                foreach (DroneToList drone in dronesAtStation)
+                {
+                    dronesCharging.Add(new DroneCharging(drone.ID, drone.Battery));
+                }
+
+                return new Station(dalStation.ID, dalStation.Name, stationLocation, dalStation.AvailableChargeSlots, dronesCharging);
+            }
+            catch (IDAL.DO.UndefinedObjectException)
+            {
+                throw new UndefinedObjectException();
+            }
         }
         public List<StationToList> DisplayAllStations()
         {
