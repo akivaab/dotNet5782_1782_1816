@@ -157,5 +157,28 @@ namespace IBL
                 .ThenBy(p => getDistance(drone.Location, getCustomerLocation(p.SenderID)));
             return bestPackages[0].ID;
         }
+
+        /// <summary>
+        /// Finds the status of a package (in terms of created, assigned, collected, delivered).
+        /// </summary>
+        /// <param name="dalPackage"></param>
+        /// <returns>The status of the package</returns>
+        private Enums.PackageStatus getPackageStatus(IDAL.DO.Package dalPackage)
+        {
+            Enums.PackageStatus status = Enums.PackageStatus.created;
+            if (dalPackage.Delivered != DateTime.MinValue)
+            {
+                status = Enums.PackageStatus.delivered;
+            }
+            else if (dalPackage.Collected != DateTime.MinValue)
+            {
+                status = Enums.PackageStatus.collected;
+            }
+            else if (dalPackage.Assigned != DateTime.MinValue)
+            {
+                status = Enums.PackageStatus.assigned;
+            }
+            return status;
+        }
     }
 }

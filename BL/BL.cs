@@ -288,7 +288,7 @@ namespace IBL
             
             return new Station(dalStation.ID, dalStation.Name, stationLocation, dalStation.AvailableChargeSlots, dronesCharging);
         }
-        public Drone DisplayDrone(int droneID) //WORK IN PROGRESS
+        public Drone DisplayDrone(int droneID) //what if no package is assigned?
         {
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
@@ -298,7 +298,8 @@ namespace IBL
             DroneToList droneToList = Drones[droneIndex];
 
             IDAL.DO.Package dalPackage = DalObject.DisplayPackage(droneToList.PackageID);
-            bool status = dalPackage.Collected != DateTime.MinValue ? true : false;
+            bool status = dalPackage.Collected != DateTime.MinValue && dalPackage.Delivered == DateTime.MinValue ? true : false;
+            
             IDAL.DO.Customer sender = DalObject.DisplayCustomer(dalPackage.SenderID);
             IDAL.DO.Customer receiver = DalObject.DisplayCustomer(dalPackage.ReceiverID);
             CustomerForPackage packageSender = new(sender.ID, sender.Name);
@@ -312,11 +313,41 @@ namespace IBL
         }
         public Customer DisplayCustomer(int customerID)
         {
-            throw new NotImplementedException();
+            IDAL.DO.Customer dalCustomer = DalObject.DisplayCustomer(customerID);
+            List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
+            List<IDAL.DO.Package> dalPackagesToSend = dalPackages.FindAll(p => p.SenderID == customerID);
+            List<IDAL.DO.Package> dalPackagesToReceive = dalPackages.FindAll(p => p.ReceiverID == customerID);
+            List<PackageForCustomer> packagesToSend = new();
+            List<PackageForCustomer> packagesToReceive = new();
+            foreach (IDAL.DO.Package dalPackage in dalPackagesToSend)
+            {
+                IDAL.DO.Customer receiver = DalObject.DisplayCustomer(dalPackage.ReceiverID);
+                CustomerForPackage receiverForPackage = new(receiver.ID, receiver.Name);
+                packagesToSend.Add(new PackageForCustomer(dalPackage.ID, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, getPackageStatus(dalPackage), receiverForPackage));
+            }
+            foreach (IDAL.DO.Package dalPackage in dalPackagesToReceive)
+            {
+                IDAL.DO.Customer sender = DalObject.DisplayCustomer(dalPackage.SenderID);
+                CustomerForPackage senderForPackage = new(sender.ID, sender.Name);
+                packagesToReceive.Add(new PackageForCustomer(dalPackage.ID, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, getPackageStatus(dalPackage), senderForPackage));
+            }
+            Customer customer = new(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, new Location(dalCustomer.Latitude, dalCustomer.Longitude), packagesToSend, packagesToReceive);
+            return customer;
         }
         public Package DisplayPackage(int packageID)
         {
-            throw new NotImplementedException();
+            IDAL.DO.Package dalPackage = DalObject.DisplayPackage(packageID);
+
+            IDAL.DO.Customer dalPackageSender = DalObject.DisplayCustomer(dalPackage.SenderID);
+            IDAL.DO.Customer dalPackageReceiver = DalObject.DisplayCustomer(dalPackage.ReceiverID);
+            CustomerForPackage senderForPackage = new(dalPackageSender.ID, dalPackageSender.Name);
+            CustomerForPackage receiverForPackage = new(dalPackageReceiver.ID, dalPackageReceiver.Name);
+
+            int droneIndex = Drones.FindIndex(d => d.ID == dalPackage.DroneID);
+            DroneDelivering droneDelivering = droneIndex != -1 ? new(Drones[droneIndex].ID, Drones[droneIndex].Battery, Drones[droneIndex].Location) : null;
+
+            Package package = new(dalPackage.ID, senderForPackage, receiverForPackage, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, droneDelivering, dalPackage.Requested, dalPackage.Assigned, dalPackage.Collected, dalPackage.Delivered);
+            return package;
         }
         public List<StationToList> DisplayAllStations()
         {
@@ -361,20 +392,7 @@ namespace IBL
             {
                 string senderName = DalObject.DisplayCustomer(dalPackage.SenderID).Name;
                 string receiverName = DalObject.DisplayCustomer(dalPackage.ReceiverID).Name;
-                Enums.PackageStatus status = Enums.PackageStatus.created;
-                if (dalPackage.Delivered != DateTime.MinValue)
-                {
-                    status = Enums.PackageStatus.delivered;
-                }
-                else if (dalPackage.Collected != DateTime.MinValue)
-                {
-                    status = Enums.PackageStatus.collected;
-                }
-                else if (dalPackage.Assigned != DateTime.MinValue)
-                {
-                    status = Enums.PackageStatus.assigned;
-                }
-                packageToLists.Add(new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, status));
+                packageToLists.Add(new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, getPackageStatus(dalPackage)));
             }
             return packageToLists;
         }
