@@ -14,6 +14,7 @@ namespace IBL
         {
             DalObject = new DalObject.DalObject();
             double[] powerConsumption = DalObject.DronePowerConsumption();
+            PowerConsumption = new double[4];
             Array.Copy(powerConsumption, PowerConsumption, 4);
             ChargeRatePerHour = powerConsumption[4];
 

@@ -166,29 +166,56 @@ namespace ConsoleUI_BL
                         int stationID, stationName, numChargingSlots;
                         Console.WriteLine("Input station ID: ");
                         int.TryParse(Console.ReadLine(), out stationID);
-                        Console.WriteLine("Input station name (optional): ");
-                        var readName = Console.ReadLine();
-                        Console.WriteLine("Input number of charging slots: (optional): ");
+                        Console.WriteLine("Input station name (optional - press enter to skip): ");
+                        var readStationName = Console.ReadLine();
+                        Console.WriteLine("Input number of charging slots: (optional - press enter to skip): ");
                         var readNumChargeSlots = Console.ReadLine();
-                        if (String.IsNullOrWhiteSpace(readNumChargeSlots))
+                        if (!string.IsNullOrWhiteSpace(readStationName) && !string.IsNullOrWhiteSpace(readNumChargeSlots))
                         {
-                            int.TryParse(readName, out stationName);
+                            int.TryParse(readStationName, out stationName);
+                            int.TryParse(readNumChargeSlots, out numChargingSlots);
+                            bl.UpdateStation(stationID, stationName, numChargingSlots);
+                        }
+                        else if (!string.IsNullOrWhiteSpace(readStationName))
+                        {
+                            int.TryParse(readStationName, out stationName);
                             bl.UpdateStation(stationID, stationName);
                         }
-                        if (String.IsNullOrWhiteSpace(readName))
+                        else if (!string.IsNullOrWhiteSpace(readNumChargeSlots))
                         {
                             int.TryParse(readNumChargeSlots, out numChargingSlots);
                             bl.UpdateStation(stationID, -1, numChargingSlots);
                         }
-
+                        else
+                        {
+                            Console.WriteLine("You did not enter any information to update.");
+                        }
                         break;
                     case 3:
                         int customerID;
                         string customerName, phone;
                         Console.WriteLine("Input customer ID: ");
                         int.TryParse(Console.ReadLine(), out customerID);
-
-                        bl.UpdateCustomer(customerID);
+                        Console.WriteLine("Input customer name (optional - press enter to skip): ");
+                        customerName = Console.ReadLine();
+                        Console.WriteLine("Input customer phone number: (optional - press enter to skip): ");
+                        phone = Console.ReadLine();
+                        if (!string.IsNullOrWhiteSpace(customerName) && !string.IsNullOrWhiteSpace(phone))
+                        {
+                            bl.UpdateCustomer(customerID, customerName, phone);
+                        }
+                        else if (!string.IsNullOrWhiteSpace(customerName))
+                        {
+                            bl.UpdateCustomer(customerID, customerName);
+                        }
+                        else if (!string.IsNullOrWhiteSpace(phone))
+                        {
+                            bl.UpdateCustomer(customerID, "", phone);
+                        }
+                        else
+                        {
+                            Console.WriteLine("You did not enter any information to update.");
+                        }
                         break;
                     case 4:
                         int droneToChargeID;
