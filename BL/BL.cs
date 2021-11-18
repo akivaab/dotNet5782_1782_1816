@@ -12,6 +12,7 @@ namespace IBL
         public double ChargeRatePerHour;
         public BL()
         {
+            Drones = new();
             DalObject = new DalObject.DalObject();
             double[] powerConsumption = DalObject.DronePowerConsumption();
             PowerConsumption = new double[4];

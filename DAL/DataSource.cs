@@ -15,11 +15,11 @@ namespace DalObject
         internal class Config
         {
             internal static int PackageID = 1;
-            internal static double Free = 2.0;
-            internal static double LightWeight = 5.0;
-            internal static double MidWeight = 10.0;
-            internal static double HeavyWeight = 15.0;
-            internal static double ChargingRate = 25.0;
+            internal static double Free = 0.01;
+            internal static double LightWeight = 0.05;
+            internal static double MidWeight = 0.1;
+            internal static double HeavyWeight = 0.15;
+            internal static double ChargingRate = 20.0;
         }
 
         /// <summary>
@@ -37,10 +37,10 @@ namespace DalObject
                 station.ID = Stations.Count + 1;
                 station.Name = (Stations.Count + 1) * 32;
                 station.AvailableChargeSlots = 5;
-                // get a random double between 0-90, then randomly multiply by +/- 1 
-                station.Latitude = (random.NextDouble() * 90) * (random.Next(0, 2) * 2 - 1);
-                // longitude is always a positive double between 0-180
-                station.Longitude = random.NextDouble() * 180;
+                // get a random double between 0-1, then randomly multiply by +/- 1 (limited coordinate field)
+                station.Latitude = (random.NextDouble() * 1) * (random.Next(0, 2) * 2 - 1);
+                // longitude is always a positive double between 0-2 (limited coordinate field)
+                station.Longitude = random.NextDouble() * 2;
                 Stations.Add(station);
             }
 
@@ -50,7 +50,7 @@ namespace DalObject
                 Drone drone = new();
                 drone.ID = Drones.Count + 1;
                 drone.Model = $"MX{random.Next(1, 6)}";
-                drone.MaxWeight = (Enums.WeightCategories)random.Next(0, 3);
+                drone.MaxWeight = (Enums.WeightCategories)random.Next(1, 4);
                 Drones.Add(drone);
             }
 
@@ -61,10 +61,10 @@ namespace DalObject
                 customer.ID = Customers.Count + 100000;
                 customer.Name = randomNames[Customers.Count];
                 customer.Phone = random.Next(100000000, 1000000000).ToString();
-                // get a random double between 0-90, then randomly multiply by +/- 1 
-                customer.Latitude = (random.NextDouble() * 90) * (random.Next(0, 2) * 2 - 1);
-                // longitude is always a positive double between 0-180
-                customer.Longitude = random.NextDouble() * 180;
+                // get a random double between 0-1, then randomly multiply by +/- 1 (limited coordinate field)
+                customer.Latitude = (random.NextDouble() * 1) * (random.Next(0, 2) * 2 - 1);
+                // longitude is always a positive double between 0-2 (limited coordinate field)
+                customer.Longitude = random.NextDouble() * 2;
                 Customers.Add(customer);
             }
 
@@ -76,10 +76,13 @@ namespace DalObject
                 // Choose ID from a random customer based on the size of our Customers array
                 package.SenderID = Customers[random.Next(0, randomCustomers)].ID;
                 package.ReceiverID = Customers[random.Next(0, randomCustomers)].ID;
-                package.Weight = (Enums.WeightCategories)random.Next(0, 3);
+                package.Weight = (Enums.WeightCategories)random.Next(1, 4);
                 package.Priority = (Enums.Priorities)random.Next(0, 3);
-                package.DroneID = 0;
                 package.Requested = DateTime.Now;
+                package.Assigned = random.Next(2) == 0 ? DateTime.Now : DateTime.MinValue;
+                package.Collected = package.Assigned != DateTime.MinValue && random.Next(2) == 0 ? DateTime.Now : DateTime.MinValue;
+                package.Delivered = package.Collected != DateTime.MinValue && random.Next(2) == 0 ? DateTime.Now : DateTime.MinValue;
+                package.DroneID = package.Assigned != DateTime.MinValue ? Drones[random.Next(Drones.Count)].ID : 0;
                 Packages.Add(package);
                 Config.PackageID++;
             }

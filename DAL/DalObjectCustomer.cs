@@ -7,7 +7,7 @@ namespace DalObject
     {
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {
-            if (latitude < -90 || latitude > 90 || longitude < 0 || longitude > 180)
+            if (latitude < -1 || latitude > 1 || longitude < 0 || longitude > 2) //limited coordinate field
             {
                 throw new IllegalArgumentException();
             }
