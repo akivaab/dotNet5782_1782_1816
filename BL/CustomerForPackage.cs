@@ -14,7 +14,7 @@ namespace IBL
             }
             public override string ToString()
             {
-                return $"Package Customer: {ID}, {Name}";
+                return $"Package Customer: ID: {ID}, Name: {Name}";
             }
         }
     }

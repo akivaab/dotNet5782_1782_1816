@@ -22,7 +22,7 @@ namespace IBL
 
             public override string ToString()
             {
-                return $"Package ID: {ID}, weight: {Weight}, priority: {Priority}, status: {Status}. Transaction with {OtherParty}.";
+                return $"Package ID: {ID}, Weight: {Weight}, Priority: {Priority}, Status: {Status}. Transaction with {OtherParty}.";
             }
         }
     }

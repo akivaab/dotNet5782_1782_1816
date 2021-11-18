@@ -20,7 +20,7 @@ namespace IBL
             {
                 return $"Station ID: {ID}, Name: {Name}\n" +
                         $"Number of charging slots available: {NumAvailableChargeSlots}\n" +
-                        $"Number of charging slota occupied: {NumOccupiedChargeSlots}";
+                        $"Number of charging slots occupied: {NumOccupiedChargeSlots}";
             }
         }
     }

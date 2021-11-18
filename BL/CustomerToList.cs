@@ -26,7 +26,7 @@ namespace IBL
             {
                 return $"Customer ID: {ID}, Name: {Name}, Phone Number: {Phone}\n" +
                     $"Number of packages sent that were delivered: {NumDeliveredPackagesSent}\n" +
-                    $"Number of package sent not yet delivered: {NumUndeliveredPackagesSent}\n" +
+                    $"Number of packages sent not yet delivered: {NumUndeliveredPackagesSent}\n" +
                     $"Number of packages received: {NumPackagesReceived}\n" +
                     $"Number of packages expecting to receive: {NumPackagesExpected}";
             }

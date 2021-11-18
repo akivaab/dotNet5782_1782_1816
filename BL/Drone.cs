@@ -29,8 +29,8 @@ namespace IBL
             }
             public override string ToString()
             {
-                return $"Drone ID: {ID}, Model: {Model}, Max. Weight: {MaxWeight}, Status: {Status}, Location {Location}\n" +
-                    $"Current transferring package {PackageInTransfer}";
+                return $"Drone ID: {ID}, Model: {Model}, Max. Weight: {MaxWeight}, Status: {Status}, Location: {Location}\n" +
+                    $"Currently transferring package: {PackageInTransfer}";
             }
         }
     }
