@@ -22,7 +22,7 @@ namespace IBL
             public override string ToString()
             {
                 return $"Station ID: {ID}, Name: {Name}, Location {Location}, Available Charging Slots: {AvailableChargeSlots}\n" +
-                    $"Charging Drones: {DronesCharging}";
+                    $"Charging Drones: {string.Join(";", DronesCharging)}";
             }
         }
     }

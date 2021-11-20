@@ -74,12 +74,15 @@ namespace IBL
                     droneToList.Status = Enums.DroneStatus.maintenance;
 
                     //get random station as drone location
-                    List<IDAL.DO.Station> dataLayerStations = new(DalObject.DisplayStationsList());
-                    int randStation = random.Next(dataLayerStations.Count);
-                    droneToList.Location = new(dataLayerStations[randStation].Latitude, dataLayerStations[randStation].Longitude);
+                    List<IDAL.DO.Station> dalStations = new(DalObject.DisplayStationsList());
+                    int randStation = random.Next(dalStations.Count);
+                    droneToList.Location = new(dalStations[randStation].Latitude, dalStations[randStation].Longitude);
                     
                     //get random battery level 0%-20%
                     droneToList.Battery = random.Next(21);
+
+                    //create appropriate DroneCharge entity in data layer
+                    DalObject.ChargeDrone(drone.ID, dalStations[randStation].ID);
                 }
                 else if (randInt == 2)
                 {

@@ -25,8 +25,8 @@ namespace IBL
             public override string ToString()
             {
                 return $"Customer ID: {ID}, Name: {Name}, Phone Number: {Phone}, Location: {Location}\n" +
-                    $"Sending Packages: {PackagesToSend}\n" +
-                    $"Receiving Packages: {PackagesToReceive}";
+                    $"Sending Packages: {string.Join(";", PackagesToSend)}\n" +
+                    $"Receiving Packages: {string.Join(";", PackagesToReceive)}";
             }
         }
     }

@@ -101,7 +101,7 @@ namespace IBL
             try 
             { 
                 List<IDAL.DO.Station> dalStationList = new List<IDAL.DO.Station>(DalObject.DisplayStationsList());
-                IDAL.DO.Station dalStation = dalStationList.Find(s => new Location(s.Latitude, s.Longitude) == Drones[droneIndex].Location);
+                IDAL.DO.Station dalStation = dalStationList.Find(s => s.Latitude == Drones[droneIndex].Location.Latitude && s.Longitude == Drones[droneIndex].Location.Longitude);
                 DalObject.ReleaseDroneFromCharging(droneID, dalStation.ID);
 
                 Drones[droneIndex].Battery = ChargeRatePerHour * chargingTime;
@@ -124,7 +124,7 @@ namespace IBL
             try
             {
                 PackageInTransfer packageInTransfer;
-                if (droneToList.PackageID != -1) //this drone is assigned to a package
+                if (droneToList.PackageID != -1 && droneToList.Status == Enums.DroneStatus.delivery) //this drone is delivering a package
                 {
                     IDAL.DO.Package dalPackage = DalObject.DisplayPackage(droneToList.PackageID);
 

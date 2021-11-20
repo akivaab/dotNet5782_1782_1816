@@ -52,6 +52,7 @@ namespace IBL
         {
             double min = double.MaxValue;
             Location closestStationLocation = new();
+
             foreach (IDAL.DO.Station station in stations)
             {
                 Location stationLocation = new(station.Latitude, station.Longitude);
@@ -62,6 +63,7 @@ namespace IBL
                     min = distance;
                 }
             }
+
             return closestStationLocation;
         }
 
@@ -74,6 +76,7 @@ namespace IBL
         {
             List<IDAL.DO.Station> availableStations = new(DalObject.DisplayFreeStationsList());
             List<IDAL.DO.Station> reachableStations = new();
+
             foreach (IDAL.DO.Station station in availableStations)
             {
                 Location stationLocation = new(station.Latitude, station.Longitude);
@@ -83,6 +86,7 @@ namespace IBL
                     reachableStations.Add(station);
                 }
             }
+
             return reachableStations;
         }
 
@@ -112,6 +116,7 @@ namespace IBL
             Location senderLocation = new Location(sender.Latitude, sender.Longitude);
             Location receiverLocation = new Location(receiver.Latitude, receiver.Longitude);
 
+            //distance needed to deliver is from the drone's current location to the sender, to the receiver, to the nearest station
             double distanceToDeliver = getDistance(droneLocation, senderLocation);
             distanceToDeliver += getDistance(senderLocation, receiverLocation);
             distanceToDeliver += getDistance(receiverLocation, getClosestStation(receiverLocation));
@@ -127,9 +132,13 @@ namespace IBL
         /// <returns>Random customer that received a package</returns>
         private IDAL.DO.Customer randomPackageReceiver(List<IDAL.DO.Package> dalPackages)
         {
+            //get the packages already delivered
             List<IDAL.DO.Package> deliveredPackages = dalPackages.FindAll(package => package.Delivered != DateTime.MinValue);
+            
+            //randomly choose the ID of the receiver of a package
             Random random = new Random();
             int receiverID = deliveredPackages[random.Next(deliveredPackages.Count)].ReceiverID;
+            
             return DalObject.DisplayCustomer(receiverID);
         }
 
@@ -143,15 +152,16 @@ namespace IBL
         {
             List<IDAL.DO.Package> bestPackages = new(dalPackages);
 
-            //remove packages to heavy for drone to lift
-            bestPackages.RemoveAll(p => p.Weight.CompareTo(drone.MaxWeight) > 0);
+            //remove packages too heavy for drone to lift
+            bestPackages.RemoveAll(p => p.Weight.CompareTo((IDAL.DO.Enums.WeightCategories)drone.MaxWeight) > 0);
             
             //remove packages whose delivery will consume more battery than the drone has
             bestPackages.RemoveAll(p =>
             {
                 Location senderLocation = getCustomerLocation(p.SenderID);
                 Location receiverLocation = getCustomerLocation(p.ReceiverID);
-               
+
+                //distance needed to deliver is from the drone's current location to the sender, to the receiver, to the nearest station
                 double requiredDistance = getDistance(drone.Location, senderLocation);
                 requiredDistance += getDistance(senderLocation, receiverLocation);
                 requiredDistance += getDistance(receiverLocation, getClosestStation(receiverLocation));
@@ -160,9 +170,12 @@ namespace IBL
                 return requiredBattery > drone.Battery;
             });
 
+            //order packages by priority, then weight, then distance
             bestPackages = (List<IDAL.DO.Package>)bestPackages.OrderByDescending(p => p.Priority)
                 .ThenByDescending(p => p.Weight)
-                .ThenBy(p => getDistance(drone.Location, getCustomerLocation(p.SenderID)));
+                .ThenBy(p => getDistance(drone.Location, getCustomerLocation(p.SenderID)))
+                .ToList();
+            
             return bestPackages[0].ID;
         }
 
