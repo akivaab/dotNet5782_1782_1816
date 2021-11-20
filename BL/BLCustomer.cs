@@ -25,24 +25,21 @@ namespace IBL
         }
         public void UpdateCustomer(int customerID, string name = "", string phone = "")
         {
-            List<IDAL.DO.Customer> dalCustomerList = (List<IDAL.DO.Customer>)DalObject.DisplayCustomersList();
-            int customerIndex = dalCustomerList.FindIndex(c => c.ID == customerID);
-            if (customerIndex == -1)
+            try
+            {
+                if (name != "")
+                {
+                    DalObject.UpdateCustomerName(customerID, name);
+                }
+                if (phone != "")
+                {
+                    DalObject.UpdateCustomerPhone(customerID, phone);
+                }
+            }
+            catch (IDAL.DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
-            IDAL.DO.Customer customer = dalCustomerList[customerIndex];
-            
-            dalCustomerList.RemoveAt(customerIndex);
-            if (name != "")
-            {
-                customer.Name = name;
-            }
-            if (phone != "")
-            {
-                customer.Phone = phone;
-            }
-            dalCustomerList.Insert(customerIndex, customer);
         }
         public Customer DisplayCustomer(int customerID)
         {

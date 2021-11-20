@@ -32,6 +32,32 @@ namespace DalObject
             DataSource.Stations.Add(station);
         }
 
+        public void UpdateStationName(int stationID, int name)
+        {
+            int stationIndex = DataSource.Stations.FindIndex(s => s.ID == stationID);
+            if (stationIndex == -1)
+            {
+                throw new UndefinedObjectException();
+            }
+
+            Station station = DataSource.Stations[stationIndex];
+            station.Name = name;
+            DataSource.Stations[stationIndex] = station;
+        }
+
+        public void UpdateStationChargeSlots(int stationID, int availableChargingSlots)
+        {
+            int stationIndex = DataSource.Stations.FindIndex(s => s.ID == stationID);
+            if (stationIndex == -1)
+            {
+                throw new UndefinedObjectException();
+            }
+
+            Station station = DataSource.Stations[stationIndex];
+            station.AvailableChargeSlots = availableChargingSlots;
+            DataSource.Stations[stationIndex] = station;
+        }
+
         public Station DisplayStation(int stationID)
         {
             int stationIndex = DataSource.Stations.FindIndex(station => station.ID == stationID);
@@ -44,15 +70,12 @@ namespace DalObject
 
         public IEnumerable<Station> DisplayStationsList()
         {
-            /*
             List<Station> stations = new();
             for (int i = 0; i < DataSource.Stations.Count; i++)
             {
                 stations.Add(DataSource.Stations[i]);
             }
             return stations;
-            */
-            return DataSource.Stations;
         }
 
         public IEnumerable<Station> DisplayFreeStationsList()

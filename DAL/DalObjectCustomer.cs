@@ -24,6 +24,34 @@ namespace DalObject
             DataSource.Customers.Add(customer);
         }
 
+        public void UpdateCustomerName(int customerID, string name)
+        {
+            int customerIndex = DataSource.Customers.FindIndex(customer => customer.ID == customerID);
+            
+            if (customerIndex == -1)
+            {
+                throw new UndefinedObjectException();
+            }
+            
+            Customer customer = DataSource.Customers[customerIndex];
+            customer.Name = name;
+            DataSource.Customers[customerIndex] = customer;
+        }
+
+        public void UpdateCustomerPhone(int customerID, string phone)
+        {
+            int customerIndex = DataSource.Customers.FindIndex(customer => customer.ID == customerID);
+            
+            if (customerIndex == -1)
+            {
+                throw new UndefinedObjectException();
+            }
+            
+            Customer customer = DataSource.Customers[customerIndex];
+            customer.Phone = phone;
+            DataSource.Customers[customerIndex] = customer;
+        }
+
         public Customer DisplayCustomer(int customerID)
         {
             int customerIndex = DataSource.Customers.FindIndex(customer => customer.ID == customerID);
@@ -36,15 +64,12 @@ namespace DalObject
 
         public IEnumerable<Customer> DisplayCustomersList()
         {
-            /*
             List<Customer> customers = new();
             for (int i = 0; i < DataSource.Customers.Count; i++)
             {
                 customers.Add(DataSource.Customers[i]);
             }
             return customers;
-            */
-            return DataSource.Customers;
         }
     }
 }

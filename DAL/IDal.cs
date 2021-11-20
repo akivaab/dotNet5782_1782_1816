@@ -88,6 +88,47 @@ namespace IDAL
         public void ReleaseDroneFromCharging(int droneID, int stationID);
 
         /// <summary>
+        /// Update the model of the drone
+        /// </summary>
+        /// <param name="droneID">drone ID</param>
+        /// <param name="model">drone model</param>
+        public void UpdateDroneModel(int droneID, string model);
+
+        /// <summary>
+        /// Update the name of the customer
+        /// </summary>
+        /// <param name="customerID">customer ID</param>
+        /// <param name="name">customer name</param>
+        public void UpdateCustomerName(int customerID, string name);
+
+        /// <summary>
+        /// Update the phone number of the customer
+        /// </summary>
+        /// <param name="customerID">customer ID</param>
+        /// <param name="phone">customer phone number</param>
+        public void UpdateCustomerPhone(int customerID, string phone);
+
+        /// <summary>
+        /// Update the name of the station
+        /// </summary>
+        /// <param name="stationID">station ID</param>
+        /// <param name="name">station name</param>
+        public void UpdateStationName(int stationID, int name);
+
+        /// <summary>
+        /// Update the number of availbale charging slots at the station
+        /// </summary>
+        /// <param name="stationID">station ID</param>
+        /// <param name="availableChargingSlots">number of available charging slots at the station</param>
+        public void UpdateStationChargeSlots(int stationID, int availableChargingSlots);
+
+        /// <summary>
+        /// Remove a package from the list
+        /// </summary>
+        /// <param name="packageID">package ID</param>
+        public void RemovePackage(int packageID)
+
+        /// <summary>
         /// Display a specific station to the user
         /// </summary>
         /// <param name="stationID">Station ID</param>

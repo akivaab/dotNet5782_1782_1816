@@ -207,7 +207,7 @@ namespace IBL
         /// </summary>
         private void DataCleanup()
         {
-            List<IDAL.DO.Package> dalPackages = (List<IDAL.DO.Package>)DalObject.DisplayPackagesList();
+            List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
             
             //iterate through the packages in reverse to avoid skipping any
             for (int i = dalPackages.Count - 1; i >= 0; i--)
@@ -215,7 +215,7 @@ namespace IBL
                 //remove packages whose sender is the receiver
                 if (dalPackages[i].SenderID == dalPackages[i].ReceiverID)
                 {
-                    dalPackages.RemoveAt(i);
+                    DalObject.RemovePackage(dalPackages[i].ID);
                 }
                 //if this package was assigned to a drone
                 else if (dalPackages[i].DroneID != 0)
@@ -223,7 +223,7 @@ namespace IBL
                     //remove packages whose weight is greater than the drone assigned to it can handle
                     if (dalPackages[i].Weight > DalObject.DisplayDrone(dalPackages[i].DroneID).MaxWeight)
                     {
-                        dalPackages.RemoveAt(i);
+                        DalObject.RemovePackage(dalPackages[i].ID);
                     }
                     //remove undelivered packages that were assigned to a drone already assigned to a different undelivered package
                     else if (dalPackages[i].Delivered == DateTime.MinValue)
@@ -232,7 +232,7 @@ namespace IBL
                         {
                             if (dalPackages[i].DroneID == dalPackages[j].DroneID && dalPackages[j].Delivered == DateTime.MinValue)
                             {
-                                dalPackages.RemoveAt(i);
+                                DalObject.RemovePackage(dalPackages[i].ID);
                                 break;
                             }
                         }

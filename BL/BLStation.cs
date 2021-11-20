@@ -24,25 +24,24 @@ namespace IBL
         }
         public void UpdateStation(int stationID, int name = -1, int totalChargingSlots = -1)
         {
-            List<IDAL.DO.Station> dalStationList = (List<IDAL.DO.Station>)DalObject.DisplayStationsList();
-            int stationIndex = dalStationList.FindIndex(s => s.ID == stationID);
-            if (stationIndex == -1)
+            try
+            {
+                if (name != -1)
+                {
+                    DalObject.UpdateStationName(stationID, name);
+                }
+                if (totalChargingSlots != -1)
+                {
+                    IDAL.DO.Station dalStation = DalObject.DisplayStation(stationID);
+                    List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location.Latitude == dalStation.Latitude && d.Location.Longitude == dalStation.Longitude);
+                    int availableChargeSlots = totalChargingSlots - dronesAtStation.Count;
+                    DalObject.UpdateStationChargeSlots(stationID, availableChargeSlots);
+                }
+            }
+            catch (IDAL.DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
-            IDAL.DO.Station dalStation = dalStationList[stationIndex];
-
-            dalStationList.RemoveAt(stationIndex);
-            if (name != -1)
-            {
-                dalStation.Name = name;
-            }
-            if (totalChargingSlots != -1)
-            {
-                List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location == new Location(dalStation.Latitude, dalStation.Longitude));
-                dalStation.AvailableChargeSlots = totalChargingSlots - dronesAtStation.Count;
-            }
-            dalStationList.Insert(stationIndex, dalStation);
         }
         public Station DisplayStation(int stationID)
         {

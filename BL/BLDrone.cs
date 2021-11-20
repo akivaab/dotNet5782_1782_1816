@@ -39,20 +39,14 @@ namespace IBL
         }
         public void UpdateDroneModel(int droneID, string model)
         {
-            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
-            List<IDAL.DO.Drone> dalDroneList = (List<IDAL.DO.Drone>)DalObject.DisplayDronesList();
-            int dalDroneIndex = dalDroneList.FindIndex(d => d.ID == droneID);
-            if (droneIndex == -1 || dalDroneIndex == -1)
+            try
+            {
+                DalObject.UpdateDroneModel(droneID, model);
+            }
+            catch (IDAL.DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
-
-            Drones[droneIndex].Model = model;
-            
-            IDAL.DO.Drone droneToModify = dalDroneList[dalDroneIndex];
-            dalDroneList.RemoveAt(droneIndex);
-            droneToModify.Model = model;
-            dalDroneList.Insert(droneIndex, droneToModify);
         }
         public void SendDroneToCharge(int droneID)
         {
@@ -100,7 +94,7 @@ namespace IBL
 
             try 
             { 
-                List<IDAL.DO.Station> dalStationList = new List<IDAL.DO.Station>(DalObject.DisplayStationsList());
+                List<IDAL.DO.Station> dalStationList = new(DalObject.DisplayStationsList());
                 IDAL.DO.Station dalStation = dalStationList.Find(s => s.Latitude == Drones[droneIndex].Location.Latitude && s.Longitude == Drones[droneIndex].Location.Longitude);
                 DalObject.ReleaseDroneFromCharging(droneID, dalStation.ID);
 

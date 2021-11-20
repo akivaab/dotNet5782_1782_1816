@@ -50,6 +50,20 @@ namespace DalObject
             DataSource.DroneCharges.Remove(DataSource.DroneCharges[droneChargeIndex]);
         }
 
+        public void UpdateDroneModel(int droneID, string model)
+        {
+            int droneIndex = DataSource.Drones.FindIndex(d => d.ID == droneID);
+
+            if (droneIndex == -1)
+            {
+                throw new UndefinedObjectException();
+            }
+
+            Drone drone = DataSource.Drones[droneIndex];
+            drone.Model = model;
+            DataSource.Drones[droneIndex] = drone;
+        }
+
         public Drone DisplayDrone(int droneID)
         {
             int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
@@ -62,15 +76,12 @@ namespace DalObject
 
         public IEnumerable<Drone> DisplayDronesList()
         {
-            /*
             List<Drone> drones = new();
             for (int i = 0; i < DataSource.Drones.Count; i++)
             {
                 drones.Add(DataSource.Drones[i]);
             }
             return drones;
-            */
-            return DataSource.Drones;
         }
 
         public double[] DronePowerConsumption()
