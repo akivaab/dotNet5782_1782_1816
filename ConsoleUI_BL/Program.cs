@@ -65,9 +65,9 @@ namespace ConsoleUI_BL
                         int.TryParse(Console.ReadLine(), out stationName);
                         Console.Write("Input number of free charge slots: ");
                         int.TryParse(Console.ReadLine(), out numChargeSlots);
-                        Console.Write("Input location latitude: ");
+                        Console.Write("Input location latitude (limit from -1 to 1): ");
                         double.TryParse(Console.ReadLine(), out stationLatitude);
-                        Console.Write("Input location longitude: ");
+                        Console.Write("Input location longitude (limit from 0 to 2): ");
                         double.TryParse(Console.ReadLine(), out stationLongitude);
                         Location stationLocation = new(stationLatitude, stationLongitude);
                         bl.AddStation(stationID, stationName, stationLocation, numChargeSlots);
@@ -96,9 +96,9 @@ namespace ConsoleUI_BL
                         customerName = Console.ReadLine();
                         Console.Write("Input phone number: ");
                         phone = Console.ReadLine();
-                        Console.Write("Input location latitude: ");
+                        Console.Write("Input location latitude (limit from -1 to 1): ");
                         double.TryParse(Console.ReadLine(), out customerLatitude);
-                        Console.Write("Input location longitude: ");
+                        Console.Write("Input location longitude (limit from 0 to 2): ");
                         double.TryParse(Console.ReadLine(), out customerLongitude);
                         Location customerLocation = new(customerLatitude, customerLongitude);
                         bl.AddCustomer(customerID, customerName, phone, customerLocation);
