@@ -39,6 +39,15 @@ namespace IBL
         }
         public void UpdateDroneModel(int droneID, string model)
         {
+            //update in the list of DroneToLists
+            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
+            if (droneIndex == -1)
+            {
+                throw new UndefinedObjectException();
+            }
+            Drones[droneIndex].Model = model;
+
+            //update in the data layer
             try
             {
                 DalObject.UpdateDroneModel(droneID, model);
@@ -66,7 +75,7 @@ namespace IBL
             { 
                 Location closestStationLocation = getClosestStation(Drones[droneIndex].Location, reachableStations);
                 List<IDAL.DO.Station> dalStations = new(DalObject.DisplayStationsList());
-                IDAL.DO.Station dalStation = dalStations.Find(s => new Location(s.Latitude, s.Longitude) == closestStationLocation);
+                IDAL.DO.Station dalStation = dalStations.Find(s => s.Latitude == closestStationLocation.Latitude && s.Longitude == closestStationLocation.Longitude);
                 DalObject.ChargeDrone(droneID, dalStation.ID);
 
                 Drones[droneIndex].Battery -= PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(Drones[droneIndex].Location, closestStationLocation);

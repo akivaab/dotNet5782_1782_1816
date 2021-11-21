@@ -203,7 +203,7 @@ namespace IBL
         }
 
         /// <summary>
-        /// Remove all packages generated in the data layer whose attributes dictate that it should not exist.
+        /// Remove all packages generated in the data layer whose own attributes dictate that it cannot exist.
         /// </summary>
         private void DataCleanup()
         {
@@ -230,7 +230,7 @@ namespace IBL
                     {
                         for (int j = i - 1; j >= 0; j--)
                         {
-                            if (dalPackages[i].DroneID == dalPackages[j].DroneID && dalPackages[j].Delivered == DateTime.MinValue)
+                            if (dalPackages[j].Delivered == DateTime.MinValue && dalPackages[i].DroneID == dalPackages[j].DroneID)
                             {
                                 DalObject.RemovePackage(dalPackages[i].ID);
                                 break;

@@ -33,6 +33,7 @@ namespace IBL
                 throw new UndefinedObjectException();
             }
 
+            //if the drone is not in a state to be assigned
             if (Drones[droneIndex].Status != Enums.DroneStatus.available)
             {
                 throw new UnableToAssignException();
@@ -60,12 +61,15 @@ namespace IBL
                 throw new UndefinedObjectException();
             }
 
+            //if the drone isn't assigned a package
             if (Drones[droneIndex].PackageID == -1)
             {
                 throw new UnableToCollectException();
             }
             
             IDAL.DO.Package dalPackage = DalObject.DisplayPackage(Drones[droneIndex].PackageID);
+            
+            //if the package isn't in a state to be collected
             if (dalPackage.Assigned == DateTime.MinValue || dalPackage.Collected != DateTime.MinValue)
             {
                 throw new UnableToCollectException();
@@ -92,12 +96,15 @@ namespace IBL
                 throw new UndefinedObjectException();
             }
 
+            //if this drone isn't assigned a package
             if (Drones[droneIndex].PackageID == -1)
             {
                 throw new UnableToDeliverException();
             }
             
             IDAL.DO.Package dalPackage = DalObject.DisplayPackage(Drones[droneIndex].PackageID);
+            
+            //if this package isn't in a state to be delivered
             if (dalPackage.Collected == DateTime.MinValue || dalPackage.Delivered != DateTime.MinValue)
             {
                 throw new UnableToDeliverException();

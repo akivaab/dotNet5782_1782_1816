@@ -126,7 +126,7 @@ namespace IDAL
         /// Remove a package from the list
         /// </summary>
         /// <param name="packageID">package ID</param>
-        public void RemovePackage(int packageID)
+        public void RemovePackage(int packageID);
 
         /// <summary>
         /// Display a specific station to the user

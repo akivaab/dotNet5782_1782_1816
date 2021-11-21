@@ -33,7 +33,10 @@ namespace IBL
                 if (totalChargingSlots != -1)
                 {
                     IDAL.DO.Station dalStation = DalObject.DisplayStation(stationID);
+
+                    //find the amount of drones in this station
                     List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location.Latitude == dalStation.Latitude && d.Location.Longitude == dalStation.Longitude);
+                    
                     int availableChargeSlots = totalChargingSlots - dronesAtStation.Count;
                     DalObject.UpdateStationChargeSlots(stationID, availableChargeSlots);
                 }
@@ -52,7 +55,7 @@ namespace IBL
                 Location stationLocation = new Location(dalStation.Latitude, dalStation.Longitude);
 
                 //find drones at this station
-                List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location == stationLocation);
+                List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude);
 
                 //initialize DroneCharging entities
                 List<DroneCharging> dronesCharging = new();
@@ -72,24 +75,28 @@ namespace IBL
         {
             List<IDAL.DO.Station> dalStations = new(DalObject.DisplayStationsList());
             List<StationToList> stationToLists = new();
+
             foreach (IDAL.DO.Station dalStation in dalStations)
             {
                 Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
-                List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location == stationLocation);
+                List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude);
                 stationToLists.Add(new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count));
             }
+
             return stationToLists;
         }
         public List<StationToList> DisplayFreeStations()
         {
             List<IDAL.DO.Station> dalStations = new(DalObject.DisplayFreeStationsList());
             List<StationToList> stationToLists = new();
+            
             foreach (IDAL.DO.Station dalStation in dalStations)
             {
                 Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
-                List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location == stationLocation);
+                List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude);
                 stationToLists.Add(new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count));
             }
+            
             return stationToLists;
         }
     }
