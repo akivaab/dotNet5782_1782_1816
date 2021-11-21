@@ -79,10 +79,20 @@ namespace DalObject
                 package.Weight = (Enums.WeightCategories)random.Next(1, 4);
                 package.Priority = (Enums.Priorities)random.Next(0, 3);
                 package.Requested = DateTime.Now;
-                package.Assigned = random.Next(2) == 0 ? DateTime.Now : DateTime.MinValue;
-                package.Collected = package.Assigned != DateTime.MinValue && random.Next(2) == 0 ? DateTime.Now : DateTime.MinValue;
-                package.Delivered = package.Collected != DateTime.MinValue && random.Next(2) == 0 ? DateTime.Now : DateTime.MinValue;
-                package.DroneID = package.Assigned != DateTime.MinValue ? Drones[random.Next(Drones.Count)].ID : 0;
+
+                List<DateTime> dateTimes = new() { DateTime.Now, DateTime.MinValue };
+                List<int> droneIDs = new();
+                droneIDs.Add(0);
+                foreach (Drone drone in Drones)
+                {
+                    droneIDs.Add(drone.ID);
+                }
+
+                package.Assigned = dateTimes[random.Next(2)];
+                package.Collected = dateTimes[random.Next(2)];
+                package.Delivered = dateTimes[random.Next(2)];
+                package.DroneID = droneIDs[random.Next(Drones.Count)];
+
                 Packages.Add(package);
                 Config.PackageID++;
             }

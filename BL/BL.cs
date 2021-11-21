@@ -21,7 +21,7 @@ namespace IBL
             ChargeRatePerHour = powerConsumption[4];
 
             //remove problematic entities from the data layer
-            DataCleanup();
+            dataCleanup();
             
             List<IDAL.DO.Drone> dalDrones = new(DalObject.DisplayDronesList());
             List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());

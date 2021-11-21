@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using IDAL.DO;
 
 namespace IDAL
@@ -127,6 +128,12 @@ namespace IDAL
         /// </summary>
         /// <param name="packageID">package ID</param>
         public void RemovePackage(int packageID);
+
+        /// <summary>
+        /// Modify the assignment, collection, and delivery times of a package
+        /// </summary>
+        /// <param name="packageID">package ID</param>
+        public void ModifyPackageStatus(int packageID, DateTime assigned, DateTime collected, DateTime delivered);
 
         /// <summary>
         /// Display a specific station to the user

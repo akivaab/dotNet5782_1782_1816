@@ -97,9 +97,16 @@ namespace IBL
         /// <returns>Location of a customer</returns>
         private Location getCustomerLocation(int customerID)
         {
-            IDAL.DO.Customer dalCustomer = DalObject.DisplayCustomer(customerID);
-            Location customerLocation = new(dalCustomer.Latitude, dalCustomer.Longitude);
-            return customerLocation;
+            try
+            {
+                IDAL.DO.Customer dalCustomer = DalObject.DisplayCustomer(customerID);
+                Location customerLocation = new(dalCustomer.Latitude, dalCustomer.Longitude);
+                return customerLocation;
+            }
+            catch (IDAL.DO.UndefinedObjectException)
+            {
+                throw new UndefinedObjectException();
+            }
         }
 
         /// <summary>
@@ -111,18 +118,25 @@ namespace IBL
         /// <returns>A random double representing battery level</returns>
         private double randomBatteryPower(Location droneLocation, IDAL.DO.Package package, double powerConsumed)
         {
-            IDAL.DO.Customer sender = DalObject.DisplayCustomer(package.SenderID);
-            IDAL.DO.Customer receiver = DalObject.DisplayCustomer(package.ReceiverID);
-            Location senderLocation = new Location(sender.Latitude, sender.Longitude);
-            Location receiverLocation = new Location(receiver.Latitude, receiver.Longitude);
+            try
+            {
+                IDAL.DO.Customer sender = DalObject.DisplayCustomer(package.SenderID);
+                IDAL.DO.Customer receiver = DalObject.DisplayCustomer(package.ReceiverID);
+                Location senderLocation = new Location(sender.Latitude, sender.Longitude);
+                Location receiverLocation = new Location(receiver.Latitude, receiver.Longitude);
 
-            //distance needed to deliver is from the drone's current location to the sender, to the receiver, to the nearest station
-            double distanceToDeliver = getDistance(droneLocation, senderLocation);
-            distanceToDeliver += getDistance(senderLocation, receiverLocation);
-            distanceToDeliver += getDistance(receiverLocation, getClosestStation(receiverLocation));
-            
-            Random random = new Random();
-            return random.Next((int)Math.Ceiling(distanceToDeliver * powerConsumed), 101);
+                //distance needed to deliver is from the drone's current location to the sender, to the receiver, to the nearest station
+                double distanceToDeliver = getDistance(droneLocation, senderLocation);
+                distanceToDeliver += getDistance(senderLocation, receiverLocation);
+                distanceToDeliver += getDistance(receiverLocation, getClosestStation(receiverLocation));
+
+                Random random = new Random();
+                return random.Next((int)Math.Ceiling(distanceToDeliver * powerConsumed), 101);
+            }
+            catch (IDAL.DO.UndefinedObjectException)
+            {
+                throw new UndefinedObjectException();
+            }
         }
 
         /// <summary>
@@ -132,14 +146,21 @@ namespace IBL
         /// <returns>Random customer that received a package</returns>
         private IDAL.DO.Customer randomPackageReceiver(List<IDAL.DO.Package> dalPackages)
         {
-            //get the packages already delivered
-            List<IDAL.DO.Package> deliveredPackages = dalPackages.FindAll(package => package.Delivered != DateTime.MinValue);
-            
-            //randomly choose the ID of the receiver of a package
-            Random random = new Random();
-            int receiverID = deliveredPackages[random.Next(deliveredPackages.Count)].ReceiverID;
-            
-            return DalObject.DisplayCustomer(receiverID);
+            try
+            {
+                //get the packages already delivered
+                List<IDAL.DO.Package> deliveredPackages = dalPackages.FindAll(package => package.Delivered != DateTime.MinValue);
+
+                //randomly choose the ID of the receiver of a package
+                Random random = new Random();
+                int receiverID = deliveredPackages[random.Next(deliveredPackages.Count)].ReceiverID;
+
+                return DalObject.DisplayCustomer(receiverID);
+            }
+            catch (IDAL.DO.UndefinedObjectException)
+            {
+                throw new UndefinedObjectException();
+            }
         }
 
         /// <summary>
@@ -203,41 +224,99 @@ namespace IBL
         }
 
         /// <summary>
+        /// Clean up the information randomly generated in the data layer so it makes sense.
+        /// </summary>
+        private void dataCleanup()
+        {
+            fixPackageStatusTimes();
+            removeProblematicPackages();
+        }
+
+        /// <summary>
+        /// Modify the information randomly generated in the data layer for the assignment, collection, and delivery times for packages so they make sense.
+        /// </summary>
+        private void fixPackageStatusTimes()
+        {
+            try
+            {
+                List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
+
+                for (int i = 0; i < dalPackages.Count; i++)
+                {
+                    //if no drone is assigned
+                    if (dalPackages[i].DroneID == 0)
+                    {
+                        DalObject.ModifyPackageStatus(dalPackages[i].ID, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue);
+                    }
+                    else
+                    {
+                        //if the package was delivered
+                        if (dalPackages[i].Delivered != DateTime.MinValue)
+                        {
+                            DalObject.ModifyPackageStatus(dalPackages[i].ID, DateTime.Now, DateTime.Now, DateTime.Now);
+                        }
+                        //if the package wasn't delivered but was collected
+                        else if (dalPackages[i].Collected != DateTime.MinValue)
+                        {
+                            DalObject.ModifyPackageStatus(dalPackages[i].ID, DateTime.Now, DateTime.Now, DateTime.MinValue);
+                        }
+                        //if the package wasn't collected but was assigned
+                        else if (dalPackages[i].Assigned != DateTime.MinValue)
+                        {
+                            DalObject.ModifyPackageStatus(dalPackages[i].ID, DateTime.Now, DateTime.MinValue, DateTime.MinValue);
+                        }
+                    }
+                }
+            }
+            catch (IDAL.DO.UndefinedObjectException)
+            {
+                throw new UndefinedObjectException();
+            }
+        }
+
+        /// <summary>
         /// Remove all packages generated in the data layer whose own attributes dictate that it cannot exist.
         /// </summary>
-        private void DataCleanup()
+        private void removeProblematicPackages()
         {
-            List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
-            
-            //iterate through the packages in reverse to avoid skipping any
-            for (int i = dalPackages.Count - 1; i >= 0; i--)
+            try
             {
-                //remove packages whose sender is the receiver
-                if (dalPackages[i].SenderID == dalPackages[i].ReceiverID)
+                List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
+
+                //iterate through the packages in reverse to avoid skipping any
+                for (int i = dalPackages.Count - 1; i >= 0; i--)
                 {
-                    DalObject.RemovePackage(dalPackages[i].ID);
-                }
-                //if this package was assigned to a drone
-                else if (dalPackages[i].DroneID != 0)
-                {
-                    //remove packages whose weight is greater than the drone assigned to it can handle
-                    if (dalPackages[i].Weight > DalObject.DisplayDrone(dalPackages[i].DroneID).MaxWeight)
+                    //remove packages whose sender is the receiver
+                    if (dalPackages[i].SenderID == dalPackages[i].ReceiverID)
                     {
                         DalObject.RemovePackage(dalPackages[i].ID);
                     }
-                    //remove undelivered packages that were assigned to a drone already assigned to a different undelivered package
-                    else if (dalPackages[i].Delivered == DateTime.MinValue)
+                    //if this package was assigned to a drone
+                    else if (dalPackages[i].DroneID != 0)
                     {
-                        for (int j = i - 1; j >= 0; j--)
+                        //remove packages whose weight is greater than the drone assigned to it can handle
+                        if (dalPackages[i].Weight > DalObject.DisplayDrone(dalPackages[i].DroneID).MaxWeight)
                         {
-                            if (dalPackages[j].Delivered == DateTime.MinValue && dalPackages[i].DroneID == dalPackages[j].DroneID)
+                            DalObject.RemovePackage(dalPackages[i].ID);
+                        }
+                        //remove undelivered packages that were assigned to a drone already assigned to a different undelivered package
+                        else if (dalPackages[i].Delivered == DateTime.MinValue)
+                        {
+                            for (int j = i - 1; j >= 0; j--)
                             {
-                                DalObject.RemovePackage(dalPackages[i].ID);
-                                break;
+                                if (dalPackages[j].Delivered == DateTime.MinValue && dalPackages[i].DroneID == dalPackages[j].DroneID)
+                                {
+                                    DalObject.RemovePackage(dalPackages[i].ID);
+                                    break;
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch (IDAL.DO.UndefinedObjectException)
+            {
+                throw new UndefinedObjectException();
             }
         }
     }

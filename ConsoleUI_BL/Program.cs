@@ -7,39 +7,46 @@ namespace ConsoleUI_BL
     {
         static void Main(string[] args)
         {
-            IBL.IBL bl = new IBL.BL();
-            int option;
-            do
+            try
             {
-                Console.WriteLine("Main Menu:");
-                Console.WriteLine("1. Adding options");
-                Console.WriteLine("2. Updating options");
-                Console.WriteLine("3. Display options");
-                Console.WriteLine("4. List Display options");
-                Console.WriteLine("5. Exit");
-                Console.Write("Choose an option: ");
-                int.TryParse(Console.ReadLine(), out option);
-                switch (option)
+                IBL.IBL bl = new IBL.BL();
+                int option;
+                do
                 {
-                    case 1:
-                        AddingOptions(bl);
-                        break;
-                    case 2:
-                        UpdatingOptions(bl);
-                        break;
-                    case 3:
-                        DisplayingOptions(bl);
-                        break;
-                    case 4:
-                        ListDisplayingOptions(bl);
-                        break;
-                    case 5:
-                        Console.WriteLine("Bye");
-                        break;
-                    default:
-                        break;
-                }
-            } while (option != 5);
+                    Console.WriteLine("Main Menu:");
+                    Console.WriteLine("1. Adding options");
+                    Console.WriteLine("2. Updating options");
+                    Console.WriteLine("3. Display options");
+                    Console.WriteLine("4. List Display options");
+                    Console.WriteLine("5. Exit");
+                    Console.Write("Choose an option: ");
+                    int.TryParse(Console.ReadLine(), out option);
+                    switch (option)
+                    {
+                        case 1:
+                            AddingOptions(bl);
+                            break;
+                        case 2:
+                            UpdatingOptions(bl);
+                            break;
+                        case 3:
+                            DisplayingOptions(bl);
+                            break;
+                        case 4:
+                            ListDisplayingOptions(bl);
+                            break;
+                        case 5:
+                            Console.WriteLine("Bye");
+                            break;
+                        default:
+                            break;
+                    }
+                } while (option != 5);
+            }
+            catch (UndefinedObjectException e)
+            {
+                Console.WriteLine($"{e}:\nInitialization failed. Try restarting the program.");
+            }
         }
 
         public static void AddingOptions(IBL.IBL bl)

@@ -81,6 +81,21 @@ namespace DalObject
             DataSource.Packages.RemoveAt(packageIndex);
         }
 
+        public void ModifyPackageStatus(int packageID, DateTime assigned, DateTime collected, DateTime delivered)
+        {
+            int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
+            if (packageIndex == -1)
+            {
+                throw new UndefinedObjectException();
+            }
+
+            Package package = DataSource.Packages[packageIndex];
+            package.Assigned = assigned;
+            package.Collected = collected;
+            package.Delivered = delivered;
+            DataSource.Packages[packageIndex] = package;
+        }
+
         public Package DisplayPackage(int packageID)
         {
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
