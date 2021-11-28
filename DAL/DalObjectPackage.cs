@@ -109,24 +109,24 @@ namespace DalObject
         public IEnumerable<Package> DisplayPackagesList()
         {
             List<Package> packages = new();
-            for (int i = 0; i < DataSource.Packages.Count; i++)
+            foreach (Package package in DataSource.Packages)
             {
-                packages.Add(DataSource.Packages[i]);
+                packages.Add(package);
             }
             return packages;
         }
-
-        public IEnumerable<Package> DisplayUnassignedPackagesList()
+            
+        public IEnumerable<Package> FindPackages(Predicate<Package> predicate)
         {
             List<Package> packages = new();
-            for (int i = 0; i < DataSource.Packages.Count; i++)
+            foreach (Package package in DataSource.Packages)
             {
-                if (DataSource.Packages[i].DroneID == null)
+                if (predicate(package) == true)
                 {
-                    packages.Add(DataSource.Packages[i]);
+                    packages.Add(package);
                 }
             }
             return packages;
-        }        
+        }
     }
 }

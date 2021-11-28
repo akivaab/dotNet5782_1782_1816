@@ -188,16 +188,18 @@ namespace IDAL
         public IEnumerable<Package> DisplayPackagesList();
 
         /// <summary>
-        /// Display all packages not assigned to a drone
+        /// Display all packages according to a given predicate
         /// </summary>
+        /// <param name="predicate">predicate</param>
         /// <returns>List of all appropriate packages</returns>
-        public IEnumerable<Package> DisplayUnassignedPackagesList();
+        public IEnumerable<Package> FindPackages(Predicate<Package> predicate);
 
         /// <summary>
-        /// Display all stations with available charge slots
+        /// Display all stations according to a given predicate
         /// </summary>
+        /// <param name="predicate">predicate</param>
         /// <returns>List of all appropriate stations</returns>
-        public IEnumerable<Station> DisplayFreeStationsList();
+        public IEnumerable<Station> FindStations(Predicate<Station> predicate);
 
         /// <summary>
         /// Represents the statistics of a drone's power consumption 

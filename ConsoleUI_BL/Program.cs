@@ -374,13 +374,13 @@ namespace ConsoleUI_BL
                     }
                     break;
                 case 5:
-                    foreach (PackageToList package in bl.DisplayAllUnassignedPackages())
+                    foreach (PackageToList package in bl.FindPackages(p => p.DroneID == null))
                     {
                         Console.WriteLine(package);
                     }
                     break;
                 case 6:
-                    foreach (StationToList station in bl.DisplayFreeStations())
+                    foreach (StationToList station in bl.FindStations(s => s.AvailableChargeSlots > 0))
                     {
                         Console.WriteLine(station);
                     }

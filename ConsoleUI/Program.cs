@@ -283,13 +283,13 @@ namespace ConsoleUI
                     }
                     break;
                 case 5:
-                    foreach (Package package in dal.DisplayUnassignedPackagesList())
+                    foreach (Package package in dal.FindPackages(p => p.DroneID == null))
                     {
                         Console.WriteLine(package);
                     }
                     break;
                 case 6:
-                    foreach (Station station in dal.DisplayFreeStationsList())
+                    foreach (Station station in dal.FindStations(s => s.AvailableChargeSlots > 0))
                     {
                         Console.WriteLine(station);
                     }

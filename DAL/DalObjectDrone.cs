@@ -77,9 +77,9 @@ namespace DalObject
         public IEnumerable<Drone> DisplayDronesList()
         {
             List<Drone> drones = new();
-            for (int i = 0; i < DataSource.Drones.Count; i++)
+            foreach (Drone drone in DataSource.Drones)
             {
-                drones.Add(DataSource.Drones[i]);
+                drones.Add(drone);
             }
             return drones;
         }

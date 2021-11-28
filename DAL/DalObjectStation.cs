@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using IDAL.DO;
 
 namespace DalObject
@@ -71,21 +72,21 @@ namespace DalObject
         public IEnumerable<Station> DisplayStationsList()
         {
             List<Station> stations = new();
-            for (int i = 0; i < DataSource.Stations.Count; i++)
+            foreach (Station station in DataSource.Stations)
             {
-                stations.Add(DataSource.Stations[i]);
+                stations.Add(station);
             }
             return stations;
         }
 
-        public IEnumerable<Station> DisplayFreeStationsList()
+        public IEnumerable<Station> FindStations(Predicate<Station> predicate)
         {
             List<Station> stations = new();
-            for (int i = 0; i < DataSource.Stations.Count; i++)
+            foreach (Station station in DataSource.Stations)
             {
-                if (DataSource.Stations[i].AvailableChargeSlots > 0)
+                if (predicate(station) == true)
                 {
-                    stations.Add(DataSource.Stations[i]);
+                    stations.Add(station);
                 }
             }
             return stations;

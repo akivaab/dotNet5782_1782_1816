@@ -65,9 +65,9 @@ namespace DalObject
         public IEnumerable<Customer> DisplayCustomersList()
         {
             List<Customer> customers = new();
-            for (int i = 0; i < DataSource.Customers.Count; i++)
+            foreach (Customer customer in DataSource.Customers)
             {
-                customers.Add(DataSource.Customers[i]);
+                customers.Add(customer);
             }
             return customers;
         }

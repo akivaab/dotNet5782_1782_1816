@@ -28,7 +28,7 @@ namespace IBL
             public override string ToString()
             {
                 return $"Drone ID: {ID}, Model: {Model}, Weight: {MaxWeight}, Status: {Status}, Location {Location}\n" +
-                    $"Assigned to deliver Package {PackageID}";
+                    (PackageID != null ? $"Assigned to deliver Package {PackageID}" : "Not assigned any package");
             }
         }
     }

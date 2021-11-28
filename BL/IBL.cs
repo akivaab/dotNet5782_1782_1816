@@ -154,15 +154,17 @@ namespace IBL
         public List<PackageToList> DisplayAllPackages();
 
         /// <summary>
-        /// Display a list of all the packages that have not yet been assigned to a drone.
+        /// Display a list of all the packages according to a certain predicate.
         /// </summary>
+        /// <param name="predicate"></param>
         /// <returns>List of PackageToList entities</returns>
-        public List<PackageToList> DisplayAllUnassignedPackages();
+        public List<PackageToList> FindPackages(Predicate<IDAL.DO.Package> predicate);
 
         /// <summary>
-        /// Display a list of all stations that have available charging slots.
+        /// Display a list of all stations according to a certain predicate.
         /// </summary>
+        /// <param name="predicate"></param>
         /// <returns>List of StationToList entities</returns>
-        public List<StationToList> DisplayFreeStations();
+        public List<StationToList> FindStations(Predicate<IDAL.DO.Station> predicate);
     }
 }

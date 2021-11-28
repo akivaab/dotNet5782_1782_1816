@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using IBL.BO;
 
 namespace IBL
@@ -85,9 +86,9 @@ namespace IBL
 
             return stationToLists;
         }
-        public List<StationToList> DisplayFreeStations()
+        public List<StationToList> FindStations(Predicate<IDAL.DO.Station> predicate)
         {
-            List<IDAL.DO.Station> dalStations = new(DalObject.DisplayFreeStationsList());
+            List<IDAL.DO.Station> dalStations = new(DalObject.FindStations(predicate));
             List<StationToList> stationToLists = new();
             
             foreach (IDAL.DO.Station dalStation in dalStations)

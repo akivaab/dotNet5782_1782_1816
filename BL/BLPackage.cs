@@ -41,7 +41,7 @@ namespace IBL
 
             try
             {
-                List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayUnassignedPackagesList());
+                List<IDAL.DO.Package> dalPackages = new(DalObject.FindPackages(p => p.DroneID == null));
                 int bestPackageID = findBestPackage(dalPackages, Drones[droneIndex]);
                 DalObject.AssignPackage(bestPackageID, droneID);
 
@@ -165,11 +165,11 @@ namespace IBL
                 throw new UndefinedObjectException();
             }
         }
-        public List<PackageToList> DisplayAllUnassignedPackages()
+        public List<PackageToList> FindPackages(Predicate<IDAL.DO.Package> predicate)
         {
             try
             {
-                List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayUnassignedPackagesList());
+                List<IDAL.DO.Package> dalPackages = new(DalObject.FindPackages(predicate));
                 List<PackageToList> packageToLists = new();
                 foreach (IDAL.DO.Package dalPackage in dalPackages)
                 {
