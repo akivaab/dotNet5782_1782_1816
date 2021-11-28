@@ -80,9 +80,9 @@ namespace DalObject
                 package.Priority = (Enums.Priorities)random.Next(0, 3);
                 package.Requested = DateTime.Now;
 
-                List<DateTime> dateTimes = new() { DateTime.Now, DateTime.MinValue };
-                List<int> droneIDs = new();
-                droneIDs.Add(0);
+                List<DateTime?> dateTimes = new() { DateTime.Now, null };
+                List<int?> droneIDs = new();
+                droneIDs.Add(null);
                 foreach (Drone drone in Drones)
                 {
                     droneIDs.Add(drone.ID);

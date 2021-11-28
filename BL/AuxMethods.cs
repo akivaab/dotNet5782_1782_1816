@@ -1,7 +1,7 @@
-﻿using System;
+﻿using IBL.BO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using IBL.BO;
 
 namespace IBL
 {
@@ -149,7 +149,7 @@ namespace IBL
             try
             {
                 //get the packages already delivered
-                List<IDAL.DO.Package> deliveredPackages = dalPackages.FindAll(package => package.Delivered != DateTime.MinValue);
+                List<IDAL.DO.Package> deliveredPackages = dalPackages.FindAll(package => package.Delivered != null);
 
                 //randomly choose the ID of the receiver of a package
                 Random random = new Random();
@@ -192,7 +192,7 @@ namespace IBL
             });
 
             //order packages by priority, then weight, then distance
-            bestPackages = (List<IDAL.DO.Package>)bestPackages.OrderByDescending(p => p.Priority)
+            bestPackages = bestPackages.OrderByDescending(p => p.Priority)
                 .ThenByDescending(p => p.Weight)
                 .ThenBy(p => getDistance(drone.Location, getCustomerLocation(p.SenderID)))
                 .ToList();
@@ -208,15 +208,15 @@ namespace IBL
         private Enums.PackageStatus getPackageStatus(IDAL.DO.Package dalPackage)
         {
             Enums.PackageStatus status = Enums.PackageStatus.created;
-            if (dalPackage.Delivered != DateTime.MinValue)
+            if (dalPackage.Delivered != null)
             {
                 status = Enums.PackageStatus.delivered;
             }
-            else if (dalPackage.Collected != DateTime.MinValue)
+            else if (dalPackage.Collected != null)
             {
                 status = Enums.PackageStatus.collected;
             }
-            else if (dalPackage.Assigned != DateTime.MinValue)
+            else if (dalPackage.Assigned != null)
             {
                 status = Enums.PackageStatus.assigned;
             }
@@ -244,26 +244,26 @@ namespace IBL
                 for (int i = 0; i < dalPackages.Count; i++)
                 {
                     //if no drone is assigned
-                    if (dalPackages[i].DroneID == 0)
+                    if (dalPackages[i].DroneID == null)
                     {
-                        DalObject.ModifyPackageStatus(dalPackages[i].ID, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue);
+                        DalObject.ModifyPackageStatus(dalPackages[i].ID, null, null, null);
                     }
                     else
                     {
                         //if the package was delivered
-                        if (dalPackages[i].Delivered != DateTime.MinValue)
+                        if (dalPackages[i].Delivered != null)
                         {
                             DalObject.ModifyPackageStatus(dalPackages[i].ID, DateTime.Now, DateTime.Now, DateTime.Now);
                         }
                         //if the package wasn't delivered but was collected
-                        else if (dalPackages[i].Collected != DateTime.MinValue)
+                        else if (dalPackages[i].Collected != null)
                         {
-                            DalObject.ModifyPackageStatus(dalPackages[i].ID, DateTime.Now, DateTime.Now, DateTime.MinValue);
+                            DalObject.ModifyPackageStatus(dalPackages[i].ID, DateTime.Now, DateTime.Now, null);
                         }
                         //if the package wasn't collected but was assigned
-                        else if (dalPackages[i].Assigned != DateTime.MinValue)
+                        else if (dalPackages[i].Assigned != null)
                         {
-                            DalObject.ModifyPackageStatus(dalPackages[i].ID, DateTime.Now, DateTime.MinValue, DateTime.MinValue);
+                            DalObject.ModifyPackageStatus(dalPackages[i].ID, DateTime.Now, null, null);
                         }
                     }
                 }
@@ -292,19 +292,19 @@ namespace IBL
                         DalObject.RemovePackage(dalPackages[i].ID);
                     }
                     //if this package was assigned to a drone
-                    else if (dalPackages[i].DroneID != 0)
+                    else if (dalPackages[i].DroneID != null)
                     {
                         //remove packages whose weight is greater than the drone assigned to it can handle
-                        if (dalPackages[i].Weight > DalObject.DisplayDrone(dalPackages[i].DroneID).MaxWeight)
+                        if (dalPackages[i].Weight > DalObject.DisplayDrone((int)dalPackages[i].DroneID).MaxWeight)
                         {
                             DalObject.RemovePackage(dalPackages[i].ID);
                         }
                         //remove undelivered packages that were assigned to a drone already assigned to a different undelivered package
-                        else if (dalPackages[i].Delivered == DateTime.MinValue)
+                        else if (dalPackages[i].Delivered == null)
                         {
                             for (int j = i - 1; j >= 0; j--)
                             {
-                                if (dalPackages[j].Delivered == DateTime.MinValue && dalPackages[i].DroneID == dalPackages[j].DroneID)
+                                if (dalPackages[j].Delivered == null && dalPackages[i].DroneID == dalPackages[j].DroneID)
                                 {
                                     DalObject.RemovePackage(dalPackages[i].ID);
                                     break;

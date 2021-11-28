@@ -17,7 +17,7 @@ namespace IBL
                 CustomerForPackage packageSender = new(sender.ID, sender.Name);
                 CustomerForPackage packageReceiver = new(receiver.ID, receiver.Name);
 
-                Package package = new(packageID, packageSender, packageReceiver, weight, priority, null, DateTime.Now, DateTime.MinValue, DateTime.MinValue, DateTime.MinValue);
+                Package package = new(packageID, packageSender, packageReceiver, weight, priority, null, DateTime.Now, null, null, null);
                 return package;
             }
             catch (IDAL.DO.UndefinedObjectException)
@@ -62,15 +62,15 @@ namespace IBL
             }
 
             //if the drone isn't assigned a package
-            if (Drones[droneIndex].PackageID == -1)
+            if (Drones[droneIndex].PackageID == null)
             {
                 throw new UnableToCollectException();
             }
             
-            IDAL.DO.Package dalPackage = DalObject.DisplayPackage(Drones[droneIndex].PackageID);
+            IDAL.DO.Package dalPackage = DalObject.DisplayPackage((int)Drones[droneIndex].PackageID);
             
             //if the package isn't in a state to be collected
-            if (dalPackage.Assigned == DateTime.MinValue || dalPackage.Collected != DateTime.MinValue)
+            if (dalPackage.Assigned == null || dalPackage.Collected != null)
             {
                 throw new UnableToCollectException();
             }
@@ -80,7 +80,7 @@ namespace IBL
                 DalObject.CollectPackage(dalPackage.ID, droneID);
 
                 Location senderLocation = getCustomerLocation(dalPackage.SenderID);
-                Drones[droneIndex].Battery -= PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(Drones[droneIndex].Location, senderLocation);
+                Drones[droneIndex].Battery = Math.Max(Drones[droneIndex].Battery - (PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(Drones[droneIndex].Location, senderLocation)), 0);
                 Drones[droneIndex].Location = senderLocation;
             }
             catch (IDAL.DO.UndefinedObjectException)
@@ -97,15 +97,15 @@ namespace IBL
             }
 
             //if this drone isn't assigned a package
-            if (Drones[droneIndex].PackageID == -1)
+            if (Drones[droneIndex].PackageID == null)
             {
                 throw new UnableToDeliverException();
             }
             
-            IDAL.DO.Package dalPackage = DalObject.DisplayPackage(Drones[droneIndex].PackageID);
+            IDAL.DO.Package dalPackage = DalObject.DisplayPackage((int)Drones[droneIndex].PackageID);
             
             //if this package isn't in a state to be delivered
-            if (dalPackage.Collected == DateTime.MinValue || dalPackage.Delivered != DateTime.MinValue)
+            if (dalPackage.Collected == null || dalPackage.Delivered != null)
             {
                 throw new UnableToDeliverException();
             }
@@ -115,7 +115,7 @@ namespace IBL
                 DalObject.DeliverPackage(dalPackage.ID, droneID);
 
                 Location receiverLocation = getCustomerLocation(dalPackage.ReceiverID);
-                Drones[droneIndex].Battery -= PowerConsumption[(int)dalPackage.Weight] * getDistance(Drones[droneIndex].Location, receiverLocation);
+                Drones[droneIndex].Battery = Math.Max(Drones[droneIndex].Battery - (PowerConsumption[(int)dalPackage.Weight] * getDistance(Drones[droneIndex].Location, receiverLocation)), 0);
                 Drones[droneIndex].Location = receiverLocation;
                 Drones[droneIndex].Status = Enums.DroneStatus.available;
             }

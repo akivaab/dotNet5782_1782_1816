@@ -78,7 +78,7 @@ namespace IBL
                 IDAL.DO.Station dalStation = dalStations.Find(s => s.Latitude == closestStationLocation.Latitude && s.Longitude == closestStationLocation.Longitude);
                 DalObject.ChargeDrone(droneID, dalStation.ID);
 
-                Drones[droneIndex].Battery -= PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(Drones[droneIndex].Location, closestStationLocation);
+                Drones[droneIndex].Battery = Math.Max(Drones[droneIndex].Battery - (PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(Drones[droneIndex].Location, closestStationLocation)), 0);
                 Drones[droneIndex].Location = closestStationLocation;
                 Drones[droneIndex].Status = Enums.DroneStatus.maintenance;
             }
@@ -87,7 +87,7 @@ namespace IBL
                 throw new UndefinedObjectException();
             }
         }
-        public void ReleaseFromCharge(int droneID, double chargingTime)
+        public void ReleaseFromCharge(int droneID, double chargingTimeInHours)
         {
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
@@ -107,7 +107,7 @@ namespace IBL
                 IDAL.DO.Station dalStation = dalStationList.Find(s => s.Latitude == Drones[droneIndex].Location.Latitude && s.Longitude == Drones[droneIndex].Location.Longitude);
                 DalObject.ReleaseDroneFromCharging(droneID, dalStation.ID);
 
-                Drones[droneIndex].Battery = ChargeRatePerHour * chargingTime;
+                Drones[droneIndex].Battery = Math.Min(ChargeRatePerHour * chargingTimeInHours, 100);
                 Drones[droneIndex].Status = Enums.DroneStatus.available;
             }
             catch (IDAL.DO.UndefinedObjectException)
@@ -127,9 +127,9 @@ namespace IBL
             try
             {
                 PackageInTransfer packageInTransfer;
-                if (droneToList.PackageID != -1 && droneToList.Status == Enums.DroneStatus.delivery) //this drone is delivering a package
+                if (droneToList.PackageID != null && droneToList.Status == Enums.DroneStatus.delivery) //this drone is delivering a package
                 {
-                    IDAL.DO.Package dalPackage = DalObject.DisplayPackage(droneToList.PackageID);
+                    IDAL.DO.Package dalPackage = DalObject.DisplayPackage((int)droneToList.PackageID);
 
                     IDAL.DO.Customer sender = DalObject.DisplayCustomer(dalPackage.SenderID);
                     IDAL.DO.Customer receiver = DalObject.DisplayCustomer(dalPackage.ReceiverID);
@@ -140,7 +140,7 @@ namespace IBL
                     Location collectLocation = new(sender.Latitude, sender.Longitude);
                     Location deliveryLocation = new(receiver.Latitude, receiver.Longitude);
 
-                    bool status = dalPackage.Collected != DateTime.MinValue && dalPackage.Delivered == DateTime.MinValue ? true : false;
+                    bool status = dalPackage.Collected != null && dalPackage.Delivered == null ? true : false;
                     packageInTransfer = new(dalPackage.ID, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, status, packageSender, packageReceiver, collectLocation, deliveryLocation, getDistance(collectLocation, deliveryLocation));
                 }
                 else

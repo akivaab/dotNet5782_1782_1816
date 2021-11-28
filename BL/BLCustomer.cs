@@ -86,10 +86,10 @@ namespace IBL
                 
             foreach (IDAL.DO.Customer dalCustomer in dalCustomers)
             {
-                int numDeliveredPackagesSent = dalPackages.FindAll(p => p.SenderID == dalCustomer.ID && p.Delivered != DateTime.MinValue).Count;
-                int numUndeliveredPackagesSent = dalPackages.FindAll(p => p.SenderID == dalCustomer.ID && p.Delivered == DateTime.MinValue).Count;
-                int numPackagesReceived = dalPackages.FindAll(p => p.ReceiverID == dalCustomer.ID && p.Delivered != DateTime.MinValue).Count;
-                int numPackagesExpected = dalPackages.FindAll(p => p.ReceiverID == dalCustomer.ID && p.Delivered == DateTime.MinValue).Count;
+                int numDeliveredPackagesSent = dalPackages.FindAll(p => p.SenderID == dalCustomer.ID && p.Delivered != null).Count;
+                int numUndeliveredPackagesSent = dalPackages.FindAll(p => p.SenderID == dalCustomer.ID && p.Delivered == null).Count;
+                int numPackagesReceived = dalPackages.FindAll(p => p.ReceiverID == dalCustomer.ID && p.Delivered != null).Count;
+                int numPackagesExpected = dalPackages.FindAll(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null).Count;
                 customerToLists.Add(new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected));
             }
             return customerToLists;

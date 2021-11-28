@@ -6,11 +6,11 @@ namespace DalObject
 {
     public partial class DalObject : IDAL.IDal
     {
-        public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int droneID = 0)
+        public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int? droneID = null)
         {
             if (DataSource.Customers.FindIndex(customer => customer.ID == senderID) == -1 ||
                 DataSource.Customers.FindIndex(customer => customer.ID == receiverID) == -1 ||
-                (droneID != 0 && DataSource.Drones.FindIndex(drone => drone.ID == droneID) == -1))
+                (droneID != null && DataSource.Drones.FindIndex(drone => drone.ID == droneID) == -1))
             {
                 throw new UndefinedObjectException();
             }
@@ -22,9 +22,9 @@ namespace DalObject
             package.Priority = priority;
             package.DroneID = droneID;
             package.Requested = DateTime.Now;
-            package.Assigned = DateTime.MinValue;
-            package.Collected = DateTime.MinValue;
-            package.Delivered = DateTime.MinValue;
+            package.Assigned = null;
+            package.Collected = null;
+            package.Delivered = null;
             DataSource.Config.PackageID++;
             DataSource.Packages.Add(package);
             return DataSource.Config.PackageID;
@@ -81,7 +81,7 @@ namespace DalObject
             DataSource.Packages.RemoveAt(packageIndex);
         }
 
-        public void ModifyPackageStatus(int packageID, DateTime assigned, DateTime collected, DateTime delivered)
+        public void ModifyPackageStatus(int packageID, DateTime? assigned, DateTime? collected, DateTime? delivered)
         {
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
             if (packageIndex == -1)
@@ -121,7 +121,7 @@ namespace DalObject
             List<Package> packages = new();
             for (int i = 0; i < DataSource.Packages.Count; i++)
             {
-                if (DataSource.Packages[i].DroneID == 0)
+                if (DataSource.Packages[i].DroneID == null)
                 {
                     packages.Add(DataSource.Packages[i]);
                 }

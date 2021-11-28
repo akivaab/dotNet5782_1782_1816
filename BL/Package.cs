@@ -12,11 +12,11 @@ namespace IBL
             public Enums.WeightCategories Weight { get; set; }
             public Enums.Priorities Priority { get; set; }
             public DroneDelivering DroneDelivering { get; set; }
-            public DateTime RequestTime { get; set; }
-            public DateTime AssigningTime { get; set; }
-            public DateTime CollectingTime { get; set; }
-            public DateTime DeliveringTime { get; set; }
-            public Package(int id, CustomerForPackage sender, CustomerForPackage receiver, Enums.WeightCategories weight, Enums.Priorities priority, DroneDelivering droneDelivering, DateTime requestTime, DateTime assigningTime, DateTime collectingTime, DateTime deliveringTime)
+            public DateTime? RequestTime { get; set; }
+            public DateTime? AssigningTime { get; set; }
+            public DateTime? CollectingTime { get; set; }
+            public DateTime? DeliveringTime { get; set; }
+            public Package(int id, CustomerForPackage sender, CustomerForPackage receiver, Enums.WeightCategories weight, Enums.Priorities priority, DroneDelivering droneDelivering, DateTime? requestTime, DateTime? assigningTime, DateTime? collectingTime, DateTime? deliveringTime)
             {
                 ID = id;
                 Sender = sender;

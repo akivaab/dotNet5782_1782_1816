@@ -46,7 +46,7 @@ namespace IDAL
         /// <param name="priority">Priority of package delivery</param>
         /// <param name="droneID">ID of drone delivering package</param>
         /// <returns>automatic package ID, or -1 if adding a package failed</returns>
-        public int AddPackage(int senderID, int receiverID, IDAL.DO.Enums.WeightCategories weight, IDAL.DO.Enums.Priorities priority, int droneID = 0);
+        public int AddPackage(int senderID, int receiverID, IDAL.DO.Enums.WeightCategories weight, IDAL.DO.Enums.Priorities priority, int? droneID = null);
 
         /// <summary>
         /// Assign a package to a drone to deliver
@@ -133,7 +133,7 @@ namespace IDAL
         /// Modify the assignment, collection, and delivery times of a package
         /// </summary>
         /// <param name="packageID">package ID</param>
-        public void ModifyPackageStatus(int packageID, DateTime assigned, DateTime collected, DateTime delivered);
+        public void ModifyPackageStatus(int packageID, DateTime? assigned, DateTime? collected, DateTime? delivered);
 
         /// <summary>
         /// Display a specific station to the user

@@ -80,8 +80,8 @@ namespace IBL
         /// Release a drone from charging after some period of time.
         /// </summary>
         /// <param name="droneID"></param>
-        /// <param name="chargingTime">amount of time the drone was charging for</param>
-        public void ReleaseFromCharge(int droneID, double chargingTime);
+        /// <param name="chargingTimeInHours">amount of time the drone was charging for in hours</param>
+        public void ReleaseFromCharge(int droneID, double chargingTimeInHours);
 
         /// <summary>
         /// Assign a package to a drone.

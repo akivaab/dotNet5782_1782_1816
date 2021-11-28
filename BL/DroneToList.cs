@@ -11,8 +11,8 @@ namespace IBL
             public double Battery { get; set; }
             public Enums.DroneStatus Status { get; set; }
             public Location Location { get; set; }
-            public int PackageID { get; set; }
-            public DroneToList(int id, string model, Enums.WeightCategories maxWeight, double battery, Enums.DroneStatus status, Location location, int packageID)
+            public int? PackageID { get; set; }
+            public DroneToList(int id, string model, Enums.WeightCategories maxWeight, double battery, Enums.DroneStatus status, Location location, int? packageID)
             {
                 ID = id;
                 Model = model;

@@ -29,7 +29,7 @@ namespace IBL
             foreach (IDAL.DO.Package package in dalPackages)
             {
                 //if package is undelivered but there is a drone assigned
-                if (package.Delivered == DateTime.MinValue && package.DroneID != 0) 
+                if (package.Delivered == null && package.DroneID != null) 
                 {
                     IDAL.DO.Drone drone = dalDrones.Find(drone => drone.ID == package.DroneID);
                     dalDrones.Remove(drone);
@@ -37,13 +37,13 @@ namespace IBL
                     Location droneLocation = new();
 
                     //if package assigned but not collected
-                    if (package.Assigned != DateTime.MinValue && package.Collected == DateTime.MinValue) 
+                    if (package.Assigned != null && package.Collected == null) 
                     {
                         //set station closest to sender as drone location
                         droneLocation = getClosestStation(getCustomerLocation(package.SenderID)); 
                     }
                     //if package is collected
-                    else if (package.Collected != DateTime.MinValue) 
+                    else if (package.Collected != null) 
                     {
                         //set sender location as drone location
                         droneLocation = getCustomerLocation(package.SenderID);
@@ -97,7 +97,7 @@ namespace IBL
                 }
 
                 //no package assigned
-                droneToList.PackageID = -1; 
+                droneToList.PackageID = null; 
 
                 Drones.Add(droneToList);
             }

@@ -12,7 +12,6 @@ namespace IDAL
         {
             public NonUniqueIdException() : base() {}
         }
-
         public class UndefinedObjectException : Exception
         {
             public UndefinedObjectException() : base() {}
