@@ -38,7 +38,7 @@ namespace IBL
         /// <returns>Location of the closest station</returns>
         private Location getClosestStation(Location location)
         {
-            List<IDAL.DO.Station> dalStations = new(DalObject.DisplayStationsList());
+            List<IDAL.DO.Station> dalStations = (List<IDAL.DO.Station>)DalObject.DisplayStationsList();
             return getClosestStation(location, dalStations);
         }
 
@@ -74,7 +74,7 @@ namespace IBL
         /// <returns>List of reachable stations</returns>
         private List<IDAL.DO.Station> getReachableStations(DroneToList drone)
         {
-            List<IDAL.DO.Station> availableStations = new(DalObject.FindStations(s => s.AvailableChargeSlots > 0));
+            List<IDAL.DO.Station> availableStations = (List<IDAL.DO.Station>)DalObject.FindStations(s => s.AvailableChargeSlots > 0);
             List<IDAL.DO.Station> reachableStations = new();
 
             foreach (IDAL.DO.Station station in availableStations)
@@ -122,8 +122,8 @@ namespace IBL
             {
                 IDAL.DO.Customer sender = DalObject.DisplayCustomer(package.SenderID);
                 IDAL.DO.Customer receiver = DalObject.DisplayCustomer(package.ReceiverID);
-                Location senderLocation = new Location(sender.Latitude, sender.Longitude);
-                Location receiverLocation = new Location(receiver.Latitude, receiver.Longitude);
+                Location senderLocation = new(sender.Latitude, sender.Longitude);
+                Location receiverLocation = new(receiver.Latitude, receiver.Longitude);
 
                 //distance needed to deliver is from the drone's current location to the sender, to the receiver, to the nearest station
                 double distanceToDeliver = getDistance(droneLocation, senderLocation);
@@ -142,14 +142,13 @@ namespace IBL
         /// <summary>
         /// Gets a random customer that already received a package.
         /// </summary>
-        /// <param name="dalPackages"></param>
         /// <returns>Random customer that received a package</returns>
-        private IDAL.DO.Customer randomPackageReceiver(List<IDAL.DO.Package> dalPackages)
+        private IDAL.DO.Customer randomPackageReceiver()
         {
             try
             {
                 //get the packages already delivered
-                List<IDAL.DO.Package> deliveredPackages = dalPackages.FindAll(package => package.Delivered != null);
+                List<IDAL.DO.Package> deliveredPackages = (List<IDAL.DO.Package>)DalObject.FindPackages(package => package.Delivered != null);
 
                 //randomly choose the ID of the receiver of a package
                 Random random = new Random();
@@ -239,7 +238,7 @@ namespace IBL
         {
             try
             {
-                List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
+                List<IDAL.DO.Package> dalPackages = (List<IDAL.DO.Package>)DalObject.DisplayPackagesList();
 
                 for (int i = 0; i < dalPackages.Count; i++)
                 {
@@ -281,7 +280,7 @@ namespace IBL
         {
             try
             {
-                List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
+                List<IDAL.DO.Package> dalPackages = (List<IDAL.DO.Package>)DalObject.DisplayPackagesList();
 
                 //iterate through the packages in reverse to avoid skipping any
                 for (int i = dalPackages.Count - 1; i >= 0; i--)

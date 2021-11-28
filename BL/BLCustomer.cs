@@ -48,9 +48,8 @@ namespace IBL
                 IDAL.DO.Customer dalCustomer = DalObject.DisplayCustomer(customerID);
 
                 //create two lists of PackageForCustomers
-                List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
-                List<IDAL.DO.Package> dalPackagesToSend = dalPackages.FindAll(p => p.SenderID == customerID);
-                List<IDAL.DO.Package> dalPackagesToReceive = dalPackages.FindAll(p => p.ReceiverID == customerID);
+                List<IDAL.DO.Package> dalPackagesToSend = (List<IDAL.DO.Package>)DalObject.FindPackages(p => p.SenderID == customerID);
+                List<IDAL.DO.Package> dalPackagesToReceive = (List<IDAL.DO.Package>)DalObject.FindPackages(p => p.ReceiverID == customerID);
 
                 //create list of PackageForCustomers this customer is sending
                 List<PackageForCustomer> packagesToSend = new();
@@ -81,15 +80,14 @@ namespace IBL
         public List<CustomerToList> DisplayAllCustomers()
         {
             List<IDAL.DO.Customer> dalCustomers = new(DalObject.DisplayCustomersList());
-            List<IDAL.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
             List<CustomerToList> customerToLists = new();
                 
             foreach (IDAL.DO.Customer dalCustomer in dalCustomers)
             {
-                int numDeliveredPackagesSent = dalPackages.FindAll(p => p.SenderID == dalCustomer.ID && p.Delivered != null).Count;
-                int numUndeliveredPackagesSent = dalPackages.FindAll(p => p.SenderID == dalCustomer.ID && p.Delivered == null).Count;
-                int numPackagesReceived = dalPackages.FindAll(p => p.ReceiverID == dalCustomer.ID && p.Delivered != null).Count;
-                int numPackagesExpected = dalPackages.FindAll(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null).Count;
+                int numDeliveredPackagesSent = ((List<IDAL.DO.Package>)DalObject.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered != null)).Count;
+                int numUndeliveredPackagesSent = ((List<IDAL.DO.Package>)DalObject.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered == null)).Count;
+                int numPackagesReceived = ((List<IDAL.DO.Package>)DalObject.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered != null)).Count;
+                int numPackagesExpected = ((List<IDAL.DO.Package>)DalObject.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null)).Count;
                 customerToLists.Add(new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected));
             }
             return customerToLists;

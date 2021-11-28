@@ -53,7 +53,7 @@ namespace IBL
             {
                 IDAL.DO.Station dalStation = DalObject.DisplayStation(stationID);
 
-                Location stationLocation = new Location(dalStation.Latitude, dalStation.Longitude);
+                Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
 
                 //find drones at this station
                 List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude);
@@ -74,7 +74,7 @@ namespace IBL
         }
         public List<StationToList> DisplayAllStations()
         {
-            List<IDAL.DO.Station> dalStations = new(DalObject.DisplayStationsList());
+            List<IDAL.DO.Station> dalStations = (List<IDAL.DO.Station>)DalObject.DisplayStationsList();
             List<StationToList> stationToLists = new();
 
             foreach (IDAL.DO.Station dalStation in dalStations)
@@ -88,7 +88,7 @@ namespace IBL
         }
         public List<StationToList> FindStations(Predicate<IDAL.DO.Station> predicate)
         {
-            List<IDAL.DO.Station> dalStations = new(DalObject.FindStations(predicate));
+            List<IDAL.DO.Station> dalStations = (List<IDAL.DO.Station>)DalObject.FindStations(predicate);
             List<StationToList> stationToLists = new();
             
             foreach (IDAL.DO.Station dalStation in dalStations)

@@ -41,7 +41,7 @@ namespace IBL
 
             try
             {
-                List<IDAL.DO.Package> dalPackages = new(DalObject.FindPackages(p => p.DroneID == null));
+                List<IDAL.DO.Package> dalPackages = (List<IDAL.DO.Package>)DalObject.FindPackages(p => p.DroneID == null);
                 int bestPackageID = findBestPackage(dalPackages, Drones[droneIndex]);
                 DalObject.AssignPackage(bestPackageID, droneID);
 

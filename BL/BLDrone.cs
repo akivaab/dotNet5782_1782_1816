@@ -103,9 +103,8 @@ namespace IBL
 
             try 
             { 
-                List<IDAL.DO.Station> dalStationList = new(DalObject.DisplayStationsList());
-                IDAL.DO.Station dalStation = dalStationList.Find(s => s.Latitude == Drones[droneIndex].Location.Latitude && s.Longitude == Drones[droneIndex].Location.Longitude);
-                DalObject.ReleaseDroneFromCharging(droneID, dalStation.ID);
+                List<IDAL.DO.Station> dalStations = (List<IDAL.DO.Station>)DalObject.FindStations(s => s.Latitude == Drones[droneIndex].Location.Latitude && s.Longitude == Drones[droneIndex].Location.Longitude);
+                DalObject.ReleaseDroneFromCharging(droneID, dalStations[0].ID);
 
                 Drones[droneIndex].Battery = Math.Min(ChargeRatePerHour * chargingTimeInHours, 100);
                 Drones[droneIndex].Status = Enums.DroneStatus.available;
