@@ -159,5 +159,18 @@ namespace IBL
         {
             return Drones;
         }
+
+        public List<DroneToList> FindDrones(Predicate<DroneToList> predicate)
+        {
+            List<DroneToList> filteredDroneToLists = new();
+            foreach (DroneToList drone in Drones)
+            {
+                if (predicate(drone) == true)
+                {
+                    filteredDroneToLists.Add(drone);
+                }
+            }
+            return filteredDroneToLists;
+        }
     }
 }

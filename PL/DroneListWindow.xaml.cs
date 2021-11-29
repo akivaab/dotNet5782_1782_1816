@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using IBL.BO;
 
 namespace PL
 {
@@ -19,9 +20,50 @@ namespace PL
     /// </summary>
     public partial class DroneListWindow : Window
     {
-        public DroneListWindow()
+        private IBL.IBL bl;
+        public DroneListWindow(IBL.IBL bl)
         {
             InitializeComponent();
+            this.bl = bl;
+            DroneListView.ItemsSource = bl.DisplayAllDrones();
+            StatusSelector.ItemsSource = Enum.GetValues(typeof(Enums.DroneStatus));
+            MaxWeightSelector.ItemsSource = Enum.GetValues(typeof(Enums.WeightCategories));
+        }
+
+        private void StatusSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (StatusSelector.SelectedItem)
+            {
+                case Enums.DroneStatus.available:
+                    DroneListView.ItemsSource = bl.FindDrones(d => d.Status == Enums.DroneStatus.available);
+                    break;
+                case Enums.DroneStatus.delivery:
+                    DroneListView.ItemsSource = bl.FindDrones(d => d.Status == Enums.DroneStatus.delivery);
+                    break;
+                case Enums.DroneStatus.maintenance:
+                    DroneListView.ItemsSource = bl.FindDrones(d => d.Status == Enums.DroneStatus.maintenance);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void MaxWeightSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (MaxWeightSelector.SelectedItem)
+            {
+                case Enums.WeightCategories.light:
+                    DroneListView.ItemsSource = bl.FindDrones(d => d.MaxWeight == Enums.WeightCategories.light);
+                    break;
+                case Enums.WeightCategories.medium:
+                    DroneListView.ItemsSource = bl.FindDrones(d => d.MaxWeight == Enums.WeightCategories.medium);
+                    break;
+                case Enums.WeightCategories.heavy:
+                    DroneListView.ItemsSource = bl.FindDrones(d => d.MaxWeight == Enums.WeightCategories.heavy);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

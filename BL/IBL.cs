@@ -166,5 +166,12 @@ namespace IBL
         /// <param name="predicate"></param>
         /// <returns>List of StationToList entities</returns>
         public List<StationToList> FindStations(Predicate<IDAL.DO.Station> predicate);
+
+        /// <summary>
+        /// Display a list of all drones according to a certain predicate.
+        /// </summary>
+        /// <param name="predicate"></param>
+        /// <returns></returns>
+        public List<DroneToList> FindDrones(Predicate<DroneToList> predicate);
     }
 }
