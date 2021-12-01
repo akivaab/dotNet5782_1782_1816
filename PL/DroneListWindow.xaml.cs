@@ -25,9 +25,13 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
+
             DroneListView.ItemsSource = bl.DisplayAllDrones();
             StatusSelector.ItemsSource = Enum.GetValues(typeof(Enums.DroneStatus));
-            MaxWeightSelector.ItemsSource = Enum.GetValues(typeof(Enums.WeightCategories));
+
+            List<Enums.WeightCategories> weights = new((Enums.WeightCategories[])Enum.GetValues(typeof(Enums.WeightCategories)));
+            weights.Remove(Enums.WeightCategories.free);
+            MaxWeightSelector.ItemsSource = weights;
         }
 
         private void StatusSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -19,9 +19,9 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions >
-            <TextBox Grid.Column="0" HorizontalAlignment="Center" Text="Status:" TextWrapping="Wrap" VerticalAlignment="Center" Width="180" Height="50" FontSize="36" TextAlignment="Right"/>
+            <Label Grid.Column="0" Content="Status:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
             <ComboBox Grid.Column="1" Name="StatusSelector" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" SelectionChanged="StatusSelector_SelectionChanged"/>
-            <TextBox Grid.Column="2" HorizontalAlignment="Center" Text="Max. Weight:" TextWrapping="Wrap" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" TextAlignment="Right"/>
+            <Label Grid.Column="2" Content="Max. Weight:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
             <ComboBox Grid.Column="3" Name="MaxWeightSelector" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" SelectionChanged="MaxWeightSelector_SelectionChanged"/>
         </Grid>
         <ListView x:Name="DroneListView" Grid.Row="1">

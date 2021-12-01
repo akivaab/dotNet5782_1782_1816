@@ -28,7 +28,7 @@ namespace PL
             bl = new BL();
         }
 
-        private void showDroneListButton_Click(object sender, RoutedEventArgs e)
+        private void ShowDroneListButton_Click(object sender, RoutedEventArgs e)
         {
             new DroneListWindow(bl).Show();
         }
