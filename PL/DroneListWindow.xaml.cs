@@ -69,5 +69,19 @@ namespace PL
                     break;
             }
         }
+
+        private void AddDroneButton_Click(object sender, RoutedEventArgs e)
+        {
+            new DroneWindow(bl).Show();
+        }
+
+        private void DroneListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            DroneToList drone = ((FrameworkElement)e.OriginalSource).DataContext as DroneToList;
+            if (drone != null)
+            {
+                new DroneWindow(bl, drone).Show();
+            }
+        }
     }
 }
