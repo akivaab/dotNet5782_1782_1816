@@ -27,7 +27,7 @@ namespace IBL
             }
             public override string ToString()
             {
-                return $"Drone ID: {ID}, Model: {Model}, Weight: {MaxWeight}, Status: {Status}, Location {Location}\n" +
+                return $"Drone ID: {ID}, Model: {Model}, Weight: {MaxWeight}, Battery: {Battery}%, Status: {Status}, Location {Location}\n" +
                     (PackageID != null ? $"Assigned to deliver Package {PackageID}" : "Not assigned any package");
             }
         }
