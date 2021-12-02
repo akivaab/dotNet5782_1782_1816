@@ -7,6 +7,39 @@
         mc:Ignorable="d"
         Title="DroneWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid x:Name="Add">
+            <Label Content="Drone ID:" HorizontalAlignment="Left" Margin="184,125,0,0" VerticalAlignment="Top"/>
+            <Label Content="Model:" HorizontalAlignment="Left" Margin="186,168,0,0" VerticalAlignment="Top"/>
+            <Label Content="Max. Weight:" HorizontalAlignment="Left" Margin="175,210,0,0" VerticalAlignment="Top"/>
+            <Label Content="Station ID:" HorizontalAlignment="Left" Margin="182,249,0,0" VerticalAlignment="Top"/>
+            <TextBox Name="Add_DroneID" HorizontalAlignment="Left" Margin="321,125,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <TextBox Name="Add_Model" HorizontalAlignment="Left" Margin="321,176,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <ComboBox Name="Add_MaxWeight" HorizontalAlignment="Left" Margin="321,212,0,0" VerticalAlignment="Top" Width="120"/>
+            <ComboBox Name="Add_StationID" HorizontalAlignment="Left" Margin="321,245,0,0" VerticalAlignment="Top" Width="120"/>
+            <Button Name="AddButton" Content="Add" HorizontalAlignment="Left" Margin="346,331,0,0" VerticalAlignment="Top" Click="AddButton_Click"/>
+            <Button Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="441,331,0,0" VerticalAlignment="Top" Click="CloseButton_Click"/>
+        </Grid>
+        <Grid x:Name="Actions">
+            <Label Content="Drone ID:" HorizontalAlignment="Left" Margin="146,71,0,0" VerticalAlignment="Top"/>
+            <Label Content="Model:" HorizontalAlignment="Left" Margin="146,91,0,0" VerticalAlignment="Top"/>
+            <Label Content="Max. Weight::" HorizontalAlignment="Left" Margin="146,111,0,0" VerticalAlignment="Top"/>
+            <Label Content="Battery:" HorizontalAlignment="Left" Margin="146,131,0,0" VerticalAlignment="Top"/>
+            <Label Content="Status:" HorizontalAlignment="Left" Margin="146,151,0,0" VerticalAlignment="Top"/>
+            <Label Content="Package in Transfer:" HorizontalAlignment="Left" Margin="146,171,0,0" VerticalAlignment="Top"/>
+            <Label Content="Location:" HorizontalAlignment="Left" Margin="146,231,0,0" VerticalAlignment="Top"/>
+
+            <Label x:Name="Actions_DroneID" HorizontalAlignment="Left" Margin="270,71,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="Actions_Model" HorizontalAlignment="Left" Margin="270,91,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="Actions_MaxWeight" HorizontalAlignment="Left" Margin="270,111,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="Actions_Battery" HorizontalAlignment="Left" Margin="270,131,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="Actions_Status" HorizontalAlignment="Left" Margin="270,151,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="Actions_PackageInTransfer" HorizontalAlignment="Left" Margin="270,171,0,0" VerticalAlignment="Top"/>
+            <Label x:Name="Actions_Location" HorizontalAlignment="Left" Margin="270,231,0,0" VerticalAlignment="Top"/>
+            
+            <Button Name="CloseButton" Content="Close" HorizontalAlignment="Left" Margin="146,307,0,0" VerticalAlignment="Top" Click="CloseButton_Click"/>
+            <Button Name="UpdateButton" Content="Update" HorizontalAlignment="Left" Margin="260,307,0,0" VerticalAlignment="Top" Click="UpdateButton_Click"/>
+            <Button Name="ChargeButton" Content="Charge" HorizontalAlignment="Left" Margin="362,317,0,0" VerticalAlignment="Top" Click="ChargeButton_Click"/>
+            <Button Name="DeliverButton" Content="Deliver" HorizontalAlignment="Left" Margin="488,307,0,0" VerticalAlignment="Top" Click="DeliverButton_Click"/>
+        </Grid>
     </Grid>
 </Window>

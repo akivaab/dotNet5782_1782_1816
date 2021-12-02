@@ -83,5 +83,10 @@ namespace PL
                 new DroneWindow(bl, drone).Show();
             }
         }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
