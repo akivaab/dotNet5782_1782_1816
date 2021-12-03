@@ -29,8 +29,9 @@ namespace IBL
             public override string ToString()
             {
                 return $"Package ID: {ID}, Weight: {Weight}, Priority: {Priority}\n" +
-                    $"Package in transfer: {Status}\n" +
-                    $"Collect from {Sender} at {CollectLocation}, Deliver to {Receiver} at {DeliveryLocation}, distance: {DeliveryDistance}";
+                    $"Package in transfer: {Status}, Distance to deliver: {DeliveryDistance} km\n" +
+                    $"  Collect from {Sender} at {CollectLocation}\n" + 
+                    $"  Deliver to {Receiver} at {DeliveryLocation}";
             }
         }
     }

@@ -56,7 +56,7 @@ namespace PL
             this.Actions_DroneID.Content = drone.ID;
             this.Actions_Model.Text = drone.Model;
             this.Actions_MaxWeight.Content = drone.MaxWeight;
-            this.Actions_Battery.Content = drone.Battery;
+            this.Actions_Battery.Content = Math.Floor(drone.Battery) + "%";
             this.Actions_Status.Content = drone.Status;
             this.Actions_PackageInTransfer.Content = drone.PackageInTransfer;
             this.Actions_Location.Content = drone.Location;
@@ -93,6 +93,10 @@ namespace PL
                 catch (UndefinedObjectException)
                 {
                     MessageBox.Show("No station with this ID exists.");
+                }
+                catch(UnableToChargeException)
+                {
+                    MessageBox.Show("This station has no charge slots available.");
                 }
             }
             else
@@ -132,7 +136,7 @@ namespace PL
                 else if ((Enums.DroneStatus)Actions_Status.Content == Enums.DroneStatus.maintenance)
                 {
                     //what about charging time?
-                    bl.ReleaseFromCharge(drone.ID, 3);
+                    bl.ReleaseFromCharge(drone.ID, 1.5);
                     MessageBox.Show("Drone successfully released from station.");
                 }
                 else

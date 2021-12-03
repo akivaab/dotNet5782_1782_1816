@@ -5,41 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="DroneWindow" Height="450" Width="800">
+        Title="DroneWindow" Height="450" Width="1000">
     <Grid>
         <Grid x:Name="Add">
-            <Label Content="Drone ID:" HorizontalAlignment="Left" Margin="184,125,0,0" VerticalAlignment="Top"/>
-            <Label Content="Model:" HorizontalAlignment="Left" Margin="186,168,0,0" VerticalAlignment="Top"/>
-            <Label Content="Max. Weight:" HorizontalAlignment="Left" Margin="175,210,0,0" VerticalAlignment="Top"/>
-            <Label Content="Station ID:" HorizontalAlignment="Left" Margin="182,249,0,0" VerticalAlignment="Top"/>
-            <TextBox Name="Add_DroneID" HorizontalAlignment="Left" Margin="321,125,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-            <TextBox Name="Add_Model" HorizontalAlignment="Left" Margin="321,176,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-            <ComboBox Name="Add_MaxWeight" HorizontalAlignment="Left" Margin="321,212,0,0" VerticalAlignment="Top" Width="120"/>
-            <ComboBox Name="Add_StationID" HorizontalAlignment="Left" Margin="321,245,0,0" VerticalAlignment="Top" Width="120"/>
-            <Button Name="AddButton" Content="Add" HorizontalAlignment="Left" Margin="346,331,0,0" VerticalAlignment="Top" Click="AddButton_Click"/>
-            <Button Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="441,331,0,0" VerticalAlignment="Top" Click="CloseButton_Click"/>
+            <Label Content="Drone ID:" HorizontalAlignment="Center" Margin="0,80,150,0" VerticalAlignment="Top" FontSize="16"/>
+            <Label Content="Model:" HorizontalAlignment="Center" Margin="0,130,150,0" VerticalAlignment="Top" FontSize="16"/>
+            <Label Content="Max. Weight:" HorizontalAlignment="Center" Margin="0,180,150,0" VerticalAlignment="Top" FontSize="16"/>
+            <Label Content="Station ID:" HorizontalAlignment="Center" Margin="0,230,150,0" VerticalAlignment="Top" FontSize="16"/>
+
+            <TextBox Name="Add_DroneID" HorizontalAlignment="Center" Margin="150,80,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="30" FontSize="16"/>
+            <TextBox Name="Add_Model" HorizontalAlignment="Center" Margin="150,130,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="30" FontSize="16"/>
+            <ComboBox Name="Add_MaxWeight" HorizontalAlignment="Center" Margin="150,180,0,0" VerticalAlignment="Top" Width="120" Height="30" FontSize="16"/>
+            <ComboBox Name="Add_StationID" HorizontalAlignment="Center" Margin="150,230,0,0" VerticalAlignment="Top" Width="120" Height="30" FontSize="16"/>
+            
+            <Button Name="AddButton" Content="Add" HorizontalAlignment="Center" Margin="0,0,0,90" VerticalAlignment="Bottom" Width="75" FontSize="16" Click="AddButton_Click"/>
+            <Button Name="CancelButton" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,30,20" VerticalAlignment="Bottom" Width="75" FontSize="16" Click="CloseButton_Click"/>
         </Grid>
         <Grid x:Name="Actions">
-            <Label Content="Drone ID:" HorizontalAlignment="Left" Margin="146,71,0,0" VerticalAlignment="Top"/>
-            <Label Content="Model:" HorizontalAlignment="Left" Margin="146,91,0,0" VerticalAlignment="Top"/>
-            <Label Content="Max. Weight::" HorizontalAlignment="Left" Margin="146,111,0,0" VerticalAlignment="Top"/>
-            <Label Content="Battery:" HorizontalAlignment="Left" Margin="146,131,0,0" VerticalAlignment="Top"/>
-            <Label Content="Status:" HorizontalAlignment="Left" Margin="146,151,0,0" VerticalAlignment="Top"/>
-            <Label Content="Package in Transfer:" HorizontalAlignment="Left" Margin="146,171,0,0" VerticalAlignment="Top"/>
-            <Label Content="Location:" HorizontalAlignment="Left" Margin="146,231,0,0" VerticalAlignment="Top"/>
+            <Label Content="Drone ID:" HorizontalAlignment="Left" Margin="150,70,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label Content="Model:" HorizontalAlignment="Left" Margin="150,100,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label Content="Max. Weight:" HorizontalAlignment="Left" Margin="150,130,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label Content="Battery:" HorizontalAlignment="Left" Margin="150,160,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label Content="Status:" HorizontalAlignment="Left" Margin="150,190,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label Content="Package in Transfer:" HorizontalAlignment="Left" Margin="150,220,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label Content="Location:" HorizontalAlignment="Left" Margin="150,300,0,0" VerticalAlignment="Top" FontSize="14"/>
 
-            <Label x:Name="Actions_DroneID" HorizontalAlignment="Left" Margin="270,71,0,0" VerticalAlignment="Top"/>
-            <TextBox x:Name="Actions_Model" HorizontalAlignment="Left" Margin="270,91,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="Actions_MaxWeight" HorizontalAlignment="Left" Margin="270,111,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="Actions_Battery" HorizontalAlignment="Left" Margin="270,131,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="Actions_Status" HorizontalAlignment="Left" Margin="270,151,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="Actions_PackageInTransfer" HorizontalAlignment="Left" Margin="270,171,0,0" VerticalAlignment="Top"/>
-            <Label x:Name="Actions_Location" HorizontalAlignment="Left" Margin="270,231,0,0" VerticalAlignment="Top"/>
-            
-            <Button Name="CloseButton" Content="Close" HorizontalAlignment="Left" Margin="146,307,0,0" VerticalAlignment="Top" Click="CloseButton_Click"/>
-            <Button Name="UpdateButton" Content="Update" HorizontalAlignment="Left" Margin="260,307,0,0" VerticalAlignment="Top" Click="UpdateButton_Click"/>
-            <Button Name="ChargeButton" Content="Charge" HorizontalAlignment="Left" Margin="362,317,0,0" VerticalAlignment="Top" Click="ChargeButton_Click"/>
-            <Button Name="DeliverButton" Content="Deliver" HorizontalAlignment="Left" Margin="488,307,0,0" VerticalAlignment="Top" Click="DeliverButton_Click"/>
+            <Label x:Name="Actions_DroneID" HorizontalAlignment="Left" Margin="325,70,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <TextBox x:Name="Actions_Model" HorizontalAlignment="Left" Margin="325,100,0,0" VerticalAlignment="Top" Width="100" FontSize="14" Height="28"/>
+            <Label x:Name="Actions_MaxWeight" HorizontalAlignment="Left" Margin="325,130,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label x:Name="Actions_Battery" HorizontalAlignment="Left" Margin="325,160,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label x:Name="Actions_Status" HorizontalAlignment="Left" Margin="325,190,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label x:Name="Actions_PackageInTransfer" HorizontalAlignment="Left" Margin="325,220,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label x:Name="Actions_Location" HorizontalAlignment="Left" Margin="325,300,0,0" VerticalAlignment="Top" FontSize="14"/>
+
+            <Button Name="CloseButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,30,20" VerticalAlignment="Bottom" FontSize="16" Width="75" Click="CloseButton_Click"/>
+            <Button Name="UpdateButton" Content="Update" HorizontalAlignment="Right" Margin="0,0,330,20" VerticalAlignment="Bottom" FontSize="16" Width="75" Click="UpdateButton_Click"/>
+            <Button Name="ChargeButton" Content="Charge" HorizontalAlignment="Right" Margin="0,0,230,20" VerticalAlignment="Bottom" FontSize="16" Width="75" Click="ChargeButton_Click"/>
+            <Button Name="DeliverButton" Content="Deliver" HorizontalAlignment="Right" Margin="0,0,130,20" VerticalAlignment="Bottom" FontSize="16" Width="75" Click="DeliverButton_Click"/>
         </Grid>
     </Grid>
 </Window>

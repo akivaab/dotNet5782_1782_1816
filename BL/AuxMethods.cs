@@ -68,7 +68,7 @@ namespace IBL
         }
 
         /// <summary>
-        /// Gets a list of stations that a drone carrying no weight is capable of reaching before running out of battery. 
+        /// Gets a list of available stations that a drone carrying no weight is capable of reaching before running out of battery. 
         /// </summary>
         /// <param name="drone"></param>
         /// <returns>List of reachable stations</returns>

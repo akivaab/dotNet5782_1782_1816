@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace IBL
 {
     namespace BO
@@ -27,7 +28,7 @@ namespace IBL
             }
             public override string ToString()
             {
-                return $"Drone ID: {ID}, Model: {Model}, Weight: {MaxWeight}, Battery: {Battery}%, Status: {Status}, Location {Location}\n" +
+                return $"Drone ID: {ID}, Model: {Model}, Max. Weight: {MaxWeight}, Battery: {Math.Floor(Battery)}%, Status: {Status}, Location {Location}\n" +
                     (PackageID != null ? $"Assigned to deliver Package {PackageID}" : "Not assigned any package");
             }
         }

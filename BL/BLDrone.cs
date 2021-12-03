@@ -17,13 +17,19 @@ namespace IBL
             {
                 //these statements may throw exceptions:
                 IDAL.DO.Station dalStation = DalObject.DisplayStation(stationID);
+                if (dalStation.AvailableChargeSlots <= 0)
+                {
+                    throw new UnableToChargeException();
+                }
+
                 DalObject.AddDrone(droneID, model, (IDAL.DO.Enums.WeightCategories)maxWeight);
-               
+                DalObject.ChargeDrone(droneID, stationID);  //the drone starts out charging in a station
+
                 //add to Drones, the list of DroneToList entities
                 Location droneLocation = new Location(dalStation.Latitude, dalStation.Longitude);
                 Random random = new Random();
                 double battery = random.Next(20, 41);
-                Drones.Add(new DroneToList(droneID, model, maxWeight, battery, Enums.DroneStatus.maintenance, droneLocation, -1));
+                Drones.Add(new DroneToList(droneID, model, maxWeight, battery, Enums.DroneStatus.maintenance, droneLocation, null));
                 
                 Drone drone = new(droneID, model, maxWeight, battery, Enums.DroneStatus.maintenance, null, droneLocation);
                 return drone;
