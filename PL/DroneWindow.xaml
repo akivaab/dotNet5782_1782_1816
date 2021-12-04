@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="DroneWindow" Height="450" Width="1000">
+        Title="Company Drones" Height="450" Width="1000">
     <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black" Offset="0"/>
+                <GradientStop Color="#FF4EC9C9" Offset="0.12"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid x:Name="Add">
             <Label Content="Drone ID:" HorizontalAlignment="Center" Margin="0,80,150,0" VerticalAlignment="Top" FontSize="16"/>
             <Label Content="Model:" HorizontalAlignment="Center" Margin="0,130,150,0" VerticalAlignment="Top" FontSize="16"/>
