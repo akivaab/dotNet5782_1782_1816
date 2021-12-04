@@ -64,20 +64,7 @@ namespace PL
             Actions.Visibility = Visibility.Visible;
 
             //load the drone information displayed in the window
-            LoadDroneData(drone.ID);
-        }
-
-        private void LoadDroneData(int droneID)
-        {
-            Drone drone = bl.DisplayDrone(droneID);
-
-            Actions_DroneID.Content = drone.ID;
-            Actions_Model.Text = drone.Model;
-            Actions_MaxWeight.Content = drone.MaxWeight;
-            Actions_Battery.Content = Math.Floor(drone.Battery) + "%";
-            Actions_Status.Content = drone.Status;
-            Actions_PackageInTransfer.Content = drone.PackageInTransfer;
-            Actions_Location.Content = drone.Location;
+            LoadDroneData();
         }
 
         /// <summary>
@@ -96,25 +83,8 @@ namespace PL
                 {
                     bl.AddDrone(id, Add_Model.Text, (Enums.WeightCategories)Add_MaxWeight.SelectedItem, (int)Add_StationID.SelectedItem);
                     MessageBox.Show("Drone successfully added.");
-
-                    //find the open DroneListWindow
-                    foreach (Window window in Application.Current.Windows)
-                    {
-                        if (window.GetType() == typeof(DroneListWindow))
-                        {
-                            DroneListWindow droneListWindow = (DroneListWindow)window;
-                            
-                            //remove droneListWindow's DroneListView filters to refresh, then reset the filters
-                            Enums.DroneStatus? statusFilter = (Enums.DroneStatus?)droneListWindow.StatusSelector.SelectedItem;
-                            Enums.WeightCategories? weightFilter = (Enums.WeightCategories?)droneListWindow.MaxWeightSelector.SelectedItem;
-                            
-                            droneListWindow.StatusSelector.SelectedItem = null;
-                            droneListWindow.MaxWeightSelector.SelectedItem = null;
-
-                            droneListWindow.StatusSelector.SelectedItem = statusFilter;
-                            droneListWindow.MaxWeightSelector.SelectedItem = weightFilter;
-                        }
-                    }
+                    
+                    RefreshDroneListWindowView();
 
                     Close();
                 }
@@ -148,7 +118,9 @@ namespace PL
             {
                 bl.UpdateDroneModel(drone.ID, Actions_Model.Text);
                 MessageBox.Show("Model name updated successfully.");
-                LoadDroneData(drone.ID);
+                
+                LoadDroneData();
+                RefreshDroneListWindowView();
             }
             else
             {
@@ -181,7 +153,8 @@ namespace PL
                     MessageBox.Show("Cannot charge while delivering.");
                 }
 
-                LoadDroneData(drone.ID);
+                LoadDroneData();
+                RefreshDroneListWindowView();
             }
             catch(UnableToChargeException)
             {
@@ -235,7 +208,8 @@ namespace PL
                     MessageBox.Show("Drone is unavailable for delivering.");
                 }
 
-                LoadDroneData(drone.ID);
+                LoadDroneData();
+                RefreshDroneListWindowView();
             }
             catch (UndefinedObjectException)
             {
@@ -252,6 +226,49 @@ namespace PL
             catch (UnableToDeliverException)
             {
                 MessageBox.Show("Drone cannot deliver package.");
+            }
+        }
+
+        /// <summary>
+        /// Load the data of the drone to be displayed in the window.
+        /// </summary>
+         private void LoadDroneData()
+        {
+            Drone droneEntity = bl.DisplayDrone(drone.ID);
+
+            Actions_DroneID.Content = droneEntity.ID;
+            Actions_Model.Text = droneEntity.Model;
+            Actions_MaxWeight.Content = droneEntity.MaxWeight;
+            Actions_Battery.Content = Math.Floor(droneEntity.Battery) + "%";
+            Actions_Status.Content = droneEntity.Status;
+            Actions_PackageInTransfer.Content = droneEntity.PackageInTransfer;
+            Actions_Location.Content = droneEntity.Location;
+        }
+
+        /// <summary>
+        /// Refresh the DroneListView of the parent DroneListWindow to reflect the updates.
+        /// </summary>
+        private static void RefreshDroneListWindowView()
+        {
+            //find the open DroneListWindow
+            foreach (Window window in Application.Current.Windows)
+            {
+                if (window.GetType() == typeof(DroneListWindow))
+                {
+                    DroneListWindow droneListWindow = (DroneListWindow)window;
+
+                    droneListWindow.DroneListView.Items.Refresh();
+
+                    //remove droneListWindow's DroneListView filters to refresh, then reset the filters
+                    Enums.DroneStatus? statusFilter = (Enums.DroneStatus?)droneListWindow.StatusSelector.SelectedItem;
+                    Enums.WeightCategories? weightFilter = (Enums.WeightCategories?)droneListWindow.MaxWeightSelector.SelectedItem;
+
+                    droneListWindow.StatusSelector.SelectedItem = null;
+                    droneListWindow.MaxWeightSelector.SelectedItem = null;
+
+                    droneListWindow.StatusSelector.SelectedItem = statusFilter;
+                    droneListWindow.MaxWeightSelector.SelectedItem = weightFilter;
+                }
             }
         }
 
