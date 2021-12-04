@@ -21,6 +21,11 @@ namespace PL
     public partial class DroneListWindow : Window
     {
         private IBL.IBL bl;
+
+        /// <summary>
+        /// DroneListWindow constructor, initializes ItemSources.
+        /// </summary>
+        /// <param name="bl">BL object</param>
         public DroneListWindow(IBL.IBL bl)
         {
             InitializeComponent();
@@ -29,54 +34,95 @@ namespace PL
             DroneListView.ItemsSource = bl.DisplayAllDrones();
             StatusSelector.ItemsSource = Enum.GetValues(typeof(Enums.DroneStatus));
 
+            //ensure MaxWeightSelector.ItemsSource does not include "free"
             List<Enums.WeightCategories> weights = new((Enums.WeightCategories[])Enum.GetValues(typeof(Enums.WeightCategories)));
             weights.Remove(Enums.WeightCategories.free);
             MaxWeightSelector.ItemsSource = weights;
         }
 
+        /// <summary>
+        /// Change the selected option of StatusSelector.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void StatusSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch (StatusSelector.SelectedItem)
-            {
-                case Enums.DroneStatus.available:
-                    DroneListView.ItemsSource = bl.FindDrones(d => d.Status == Enums.DroneStatus.available);
-                    break;
-                case Enums.DroneStatus.delivery:
-                    DroneListView.ItemsSource = bl.FindDrones(d => d.Status == Enums.DroneStatus.delivery);
-                    break;
-                case Enums.DroneStatus.maintenance:
-                    DroneListView.ItemsSource = bl.FindDrones(d => d.Status == Enums.DroneStatus.maintenance);
-                    break;
-                default:
-                    break;
-            }
+            Selector_SelectionChanged(sender, e);
         }
 
+        /// <summary>
+        /// Change the selected option of MaxWeightSelector.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MaxWeightSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            switch (MaxWeightSelector.SelectedItem)
+            Selector_SelectionChanged(sender, e);
+        }
+
+        /// <summary>
+        /// Filter the DroneViewList based on the selected options of both selectors.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Selector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (StatusSelector.SelectedItem == null && MaxWeightSelector.SelectedItem == null)
             {
-                case Enums.WeightCategories.light:
-                    DroneListView.ItemsSource = bl.FindDrones(d => d.MaxWeight == Enums.WeightCategories.light);
-                    break;
-                case Enums.WeightCategories.medium:
-                    DroneListView.ItemsSource = bl.FindDrones(d => d.MaxWeight == Enums.WeightCategories.medium);
-                    break;
-                case Enums.WeightCategories.heavy:
-                    DroneListView.ItemsSource = bl.FindDrones(d => d.MaxWeight == Enums.WeightCategories.heavy);
-                    break;
-                default:
-                    break;
+                DroneListView.ItemsSource = bl.DisplayAllDrones();
+            }
+            else if (StatusSelector.SelectedItem == null)
+            {
+                DroneListView.ItemsSource = bl.FindDrones(d => d.MaxWeight == (Enums.WeightCategories)MaxWeightSelector.SelectedItem);
+            }
+            else if (MaxWeightSelector.SelectedItem == null)
+            {
+                DroneListView.ItemsSource = bl.FindDrones(d => d.Status == (Enums.DroneStatus)StatusSelector.SelectedItem);
+            }
+            else
+            {
+                DroneListView.ItemsSource = bl.FindDrones(d => d.Status == (Enums.DroneStatus)StatusSelector.SelectedItem && d.MaxWeight == (Enums.WeightCategories)MaxWeightSelector.SelectedItem);
             }
         }
 
+        /// <summary>
+        /// Clear the filter of StatusSelector.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ClearStatusSelectorButton_Click(object sender, RoutedEventArgs e)
+        {
+            StatusSelector.SelectedItem = null;
+        }
+
+        /// <summary>
+        /// Clear the filter of MaxWeightSelector.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ClearMaxWeightSelectorButton_Click(object sender, RoutedEventArgs e)
+        {
+            MaxWeightSelector.SelectedItem = null;
+        }
+        
+        /// <summary>
+        /// Open a DroneWindow to add a drone to the system.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddDroneButton_Click(object sender, RoutedEventArgs e)
         {
             new DroneWindow(bl).Show();
         }
 
+        /// <summary>
+        /// Open a DroneWindow to perform actions with a drone double-clicked in DroneViewList.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DroneListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            //make sure that a drone was double-clicked (not just anywhere on the window)
             DroneToList drone = ((FrameworkElement)e.OriginalSource).DataContext as DroneToList;
             if (drone != null)
             {
@@ -84,6 +130,11 @@ namespace PL
             }
         }
 
+        /// <summary>
+        /// Close the window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             Close();

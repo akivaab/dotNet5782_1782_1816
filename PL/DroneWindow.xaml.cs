@@ -23,29 +23,47 @@ namespace PL
         private IBL.IBL bl;
         private DroneToList drone;
 
+        /// <summary>
+        /// DroneWindow constructor for adding a drone.
+        /// </summary>
+        /// <param name="bl">BL object</param>
         public DroneWindow(IBL.IBL bl)
         {
             InitializeComponent();
             this.bl = bl;
+
+            //make only the features needed for adding a drone visible in the window. 
             Add.Visibility = Visibility.Visible;
             Actions.Visibility = Visibility.Collapsed;
 
+            //remove "free" from the possible MaxWeights to choose from
             List<Enums.WeightCategories> weights = new((Enums.WeightCategories[])Enum.GetValues(typeof(Enums.WeightCategories)));
             weights.Remove(Enums.WeightCategories.free);
             Add_MaxWeight.ItemsSource = weights;
 
+            //initialize existing station IDs to choose from
             foreach (StationToList station in bl.DisplayAllStations())
             {
                 Add_StationID.Items.Add(station.ID);
             }
         }
+
+        /// <summary>
+        /// DroneWindow constructor for performing actions on a drone.
+        /// </summary>
+        /// <param name="bl">BL object</param>
+        /// <param name="drone">drone being updated/acted upon</param>
         public DroneWindow(IBL.IBL bl, DroneToList drone)
         {
             InitializeComponent();
             this.bl = bl;
             this.drone = drone;
+
+            //make only the features needed for adding a drone visible in the window. 
             Add.Visibility = Visibility.Collapsed;
             Actions.Visibility = Visibility.Visible;
+
+            //load the drone information displayed in the window
             LoadDroneData(drone.ID);
         }
 
@@ -53,15 +71,20 @@ namespace PL
         {
             Drone drone = bl.DisplayDrone(droneID);
 
-            this.Actions_DroneID.Content = drone.ID;
-            this.Actions_Model.Text = drone.Model;
-            this.Actions_MaxWeight.Content = drone.MaxWeight;
-            this.Actions_Battery.Content = Math.Floor(drone.Battery) + "%";
-            this.Actions_Status.Content = drone.Status;
-            this.Actions_PackageInTransfer.Content = drone.PackageInTransfer;
-            this.Actions_Location.Content = drone.Location;
+            Actions_DroneID.Content = drone.ID;
+            Actions_Model.Text = drone.Model;
+            Actions_MaxWeight.Content = drone.MaxWeight;
+            Actions_Battery.Content = Math.Floor(drone.Battery) + "%";
+            Actions_Status.Content = drone.Status;
+            Actions_PackageInTransfer.Content = drone.PackageInTransfer;
+            Actions_Location.Content = drone.Location;
         }
 
+        /// <summary>
+        /// Add a drone to the system.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             int id;
@@ -74,13 +97,22 @@ namespace PL
                     bl.AddDrone(id, Add_Model.Text, (Enums.WeightCategories)Add_MaxWeight.SelectedItem, (int)Add_StationID.SelectedItem);
                     MessageBox.Show("Drone successfully added.");
 
+                    //find the open DroneListWindow
                     foreach (Window window in Application.Current.Windows)
                     {
                         if (window.GetType() == typeof(DroneListWindow))
                         {
                             DroneListWindow droneListWindow = (DroneListWindow)window;
-                            //Enums.WeightCategories weightFilter = (Enums.WeightCategories)droneListWindow.MaxWeightSelector.SelectedItem;
-                            droneListWindow.DroneListView.Items.Refresh();
+                            
+                            //remove droneListWindow's DroneListView filters to refresh, then reset the filters
+                            Enums.DroneStatus? statusFilter = (Enums.DroneStatus?)droneListWindow.StatusSelector.SelectedItem;
+                            Enums.WeightCategories? weightFilter = (Enums.WeightCategories?)droneListWindow.MaxWeightSelector.SelectedItem;
+                            
+                            droneListWindow.StatusSelector.SelectedItem = null;
+                            droneListWindow.MaxWeightSelector.SelectedItem = null;
+
+                            droneListWindow.StatusSelector.SelectedItem = statusFilter;
+                            droneListWindow.MaxWeightSelector.SelectedItem = weightFilter;
                         }
                     }
 
@@ -105,11 +137,11 @@ namespace PL
             }
         }
 
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
+        /// <summary>
+        /// Update the drone's model.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
             if (Actions_Model.Text.Length > 0)
@@ -124,6 +156,11 @@ namespace PL
             }
         }
 
+        /// <summary>
+        /// Send the drone to, or release it from, a charging station.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChargeButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -160,6 +197,11 @@ namespace PL
             }
         }
 
+        /// <summary>
+        /// Depending on the drone's status, either assign it a package, instruct it to collect, or instruct it to deliver.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DeliverButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -172,6 +214,7 @@ namespace PL
                 else if ((Enums.DroneStatus)Actions_Status.Content == Enums.DroneStatus.delivery)
                 {
                     Package package = bl.DisplayPackage((int)drone.PackageID);
+                    
                     if (package.CollectingTime == null)
                     {
                         bl.CollectPackage(drone.ID);
@@ -189,7 +232,7 @@ namespace PL
                 }
                 else
                 {
-                    MessageBox.Show("Drone is unavailable.");
+                    MessageBox.Show("Drone is unavailable for delivering.");
                 }
 
                 LoadDroneData(drone.ID);
@@ -210,6 +253,16 @@ namespace PL
             {
                 MessageBox.Show("Drone cannot deliver package.");
             }
+        }
+
+        /// <summary>
+        /// Close the window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

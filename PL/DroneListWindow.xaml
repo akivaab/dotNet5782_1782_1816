@@ -33,5 +33,7 @@
         </ListView>
         <Button Name="AddDroneButton" Content="Add New Drone" HorizontalAlignment="Right" Margin="0,0,90,15" Grid.Row="1" VerticalAlignment="Bottom" Click="AddDroneButton_Click" Width="90" Height="20"/>
         <Button Name="CloseButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,20,15" Grid.Row="1" VerticalAlignment="Bottom" Click="CloseButton_Click" Width="55" Height="20"/>
+        <Button Name="ClearStatusSelectorButton" Content="Clear Status Filter" HorizontalAlignment="Left" Margin="20,0,0,15" Grid.Row="1" VerticalAlignment="Bottom" Click="ClearStatusSelectorButton_Click" Width="100" Height="20"/>
+        <Button Name="ClearMaxWeightSelectorButton" Content="Clear Max. Weight Filter" HorizontalAlignment="Left" Margin="135,0,0,15" Grid.Row="1" VerticalAlignment="Bottom" Click="ClearMaxWeightSelectorButton_Click" Width="140" Height="20"/>
     </Grid>
 </Window>
