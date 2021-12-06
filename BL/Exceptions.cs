@@ -9,6 +9,10 @@ namespace IBL
         {
             public IllegalArgumentException() : base() { }
         }
+        public class EmptyListException : Exception
+        {
+            public EmptyListException() : base() { }
+        }
         public class NonUniqueIdException : Exception
         {
             public NonUniqueIdException() : base() { }

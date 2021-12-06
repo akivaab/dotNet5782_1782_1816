@@ -50,6 +50,11 @@ namespace IBL
         /// <returns>Location of the closest station</returns>
         private Location getClosestStation(Location location, List<IDAL.DO.Station> stations)
         {
+            if (stations.Count == 0)
+            {
+                throw new EmptyListException();
+            }
+
             double min = double.MaxValue;
             Location closestStationLocation = new();
 
@@ -150,6 +155,11 @@ namespace IBL
                 //get the packages already delivered
                 List<IDAL.DO.Package> deliveredPackages = (List<IDAL.DO.Package>)DalObject.FindPackages(package => package.Delivered != null);
 
+                if (deliveredPackages.Count == 0)
+                {
+                    throw new EmptyListException();
+                }
+
                 //randomly choose the ID of the receiver of a package
                 Random random = new Random();
                 int receiverID = deliveredPackages[random.Next(deliveredPackages.Count)].ReceiverID;
@@ -189,6 +199,11 @@ namespace IBL
                 double requiredBattery = PowerConsumption[(int)p.Weight] * requiredDistance;
                 return requiredBattery > drone.Battery;
             });
+
+            if (bestPackages.Count == 0)
+            {
+                throw new EmptyListException();
+            }
 
             //order packages by priority, then weight, then distance
             bestPackages = bestPackages.OrderByDescending(p => p.Priority)

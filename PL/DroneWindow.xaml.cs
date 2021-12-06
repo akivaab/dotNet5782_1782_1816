@@ -156,15 +156,19 @@ namespace PL
                 LoadDroneData();
                 RefreshDroneListWindowView();
             }
-            catch(UnableToChargeException)
+            catch (UnableToChargeException)
             {
                 MessageBox.Show("Cannot charge this drone.");
             }
-            catch(UnableToReleaseException)
+            catch (UnableToReleaseException)
             {
                 MessageBox.Show("Cannot release this drone.");
             }
-            catch(UndefinedObjectException)
+            catch (UndefinedObjectException)
+            {
+                MessageBox.Show("An error occured when searching for a station.");
+            }
+            catch (EmptyListException)
             {
                 MessageBox.Show("An error occured when searching for a station.");
             }
@@ -226,6 +230,10 @@ namespace PL
             catch (UnableToDeliverException)
             {
                 MessageBox.Show("Drone cannot deliver package.");
+            }
+            catch (EmptyListException)
+            {
+                MessageBox.Show("There are no packages left to assign.");
             }
         }
 
