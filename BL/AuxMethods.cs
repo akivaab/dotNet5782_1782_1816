@@ -274,8 +274,8 @@ namespace IBL
                         {
                             DalObject.ModifyPackageStatus(dalPackages[i].ID, DateTime.Now, DateTime.Now, null);
                         }
-                        //if the package wasn't collected but was assigned
-                        else if (dalPackages[i].Assigned != null)
+                        //even if the package wasn't collected, it was assigned
+                        else
                         {
                             DalObject.ModifyPackageStatus(dalPackages[i].ID, DateTime.Now, null, null);
                         }

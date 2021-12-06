@@ -233,7 +233,7 @@ namespace PL
             }
             catch (EmptyListException)
             {
-                MessageBox.Show("There are no packages left to assign.");
+                MessageBox.Show("Drone is incapable of delivering any existing package (or no packages exist).");
             }
         }
 
