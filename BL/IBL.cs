@@ -173,5 +173,12 @@ namespace IBL
         /// <param name="predicate"></param>
         /// <returns></returns>
         public List<DroneToList> FindDrones(Predicate<DroneToList> predicate);
+
+        /// <summary>
+        /// Gets the time a drone began charging in a station.
+        /// </summary>
+        /// <param name="droneID"></param>
+        /// <returns>DateTime the drone began charging</returns>
+        public DateTime GetTimeChargeBegan(int droneID);
     }
 }

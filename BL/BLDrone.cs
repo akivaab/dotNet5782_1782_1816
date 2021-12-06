@@ -178,5 +178,17 @@ namespace IBL
             }
             return filteredDroneToLists;
         }
+
+        public DateTime GetTimeChargeBegan(int droneID)
+        {
+            try
+            {
+                return DalObject.GetTimeChargeBegan(droneID);
+            }
+            catch (IDAL.DO.UndefinedObjectException)
+            {
+                throw new UndefinedObjectException();
+            }
+        }
     }
 }

@@ -144,8 +144,8 @@ namespace PL
                 }
                 else if ((Enums.DroneStatus)Actions_Status.Content == Enums.DroneStatus.maintenance)
                 {
-                    //what about charging time?
-                    bl.ReleaseFromCharge(drone.ID, 1.5);
+                    DateTime beganCharging = bl.GetTimeChargeBegan(drone.ID);
+                    bl.ReleaseFromCharge(drone.ID, (DateTime.Now - beganCharging).TotalHours);
                     MessageBox.Show("Drone successfully released from station.");
                 }
                 else

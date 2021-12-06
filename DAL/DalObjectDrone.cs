@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using IDAL.DO;
 
 namespace DalObject
@@ -32,6 +33,7 @@ namespace DalObject
             DroneCharge droneCharge = new DroneCharge();
             droneCharge.DroneID = droneID;
             droneCharge.StationID = stationID;
+            droneCharge.BeganCharge = DateTime.Now;
             DataSource.DroneCharges.Add(droneCharge);
         }
 
@@ -93,6 +95,17 @@ namespace DalObject
             powerConsumptionValues[3] = DataSource.Config.HeavyWeight;
             powerConsumptionValues[4] = DataSource.Config.ChargingRate;
             return powerConsumptionValues;
+        }
+
+        public DateTime GetTimeChargeBegan(int droneID)
+        {
+            int droneChargeIndex = DataSource.DroneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID);
+            if (droneChargeIndex == -1)
+            {
+                throw new UndefinedObjectException();
+            }
+
+            return DataSource.DroneCharges[droneChargeIndex].BeganCharge;
         }
     }
 }

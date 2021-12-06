@@ -206,5 +206,12 @@ namespace IDAL
         /// </summary>
         /// <returns>array of doubles for how much power is consumed for different tasks</returns>
         public double[] DronePowerConsumption();
+
+        /// <summary>
+        /// Gets the time a drone began charging in a station
+        /// </summary>
+        /// <param name="droneID">Drone ID</param>
+        /// <returns>DateTime the drone began charging</returns>
+        public DateTime GetTimeChargeBegan(int droneID);
     }
 }
