@@ -23,6 +23,9 @@ namespace PL
         private IBL.IBL bl;
         private DroneToList drone;
 
+        //flag if Close or Cancel button is clicked 
+        private bool closeButtonClicked;
+
         /// <summary>
         /// DroneWindow constructor for adding a drone.
         /// </summary>
@@ -31,6 +34,7 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
+            closeButtonClicked = false;
 
             //make only the features needed for adding a drone visible in the window. 
             Add.Visibility = Visibility.Visible;
@@ -58,8 +62,9 @@ namespace PL
             InitializeComponent();
             this.bl = bl;
             this.drone = drone;
+            closeButtonClicked = false;
 
-            //make only the features needed for adding a drone visible in the window. 
+            //make only the features needed for perfroming actions on a drone visible in the window. 
             Add.Visibility = Visibility.Collapsed;
             Actions.Visibility = Visibility.Visible;
 
@@ -77,6 +82,7 @@ namespace PL
             int id;
             bool idIsInteger = int.TryParse(Add_DroneID.Text, out id);
 
+            //ascertain that proper data has been entered
             if (idIsInteger && id > 0 && Add_Model.Text.Length > 0 && Add_MaxWeight.SelectedItem != null && Add_StationID.SelectedItem != null)
             {
                 try
@@ -86,6 +92,8 @@ namespace PL
                     
                     RefreshDroneListWindowView();
 
+                    //even though no button was clicked, allow this window to close
+                    closeButtonClicked = true;
                     Close();
                 }
                 catch (NonUniqueIdException)
@@ -117,8 +125,9 @@ namespace PL
             if (Actions_Model.Text.Length > 0)
             {
                 bl.UpdateDroneModel(drone.ID, Actions_Model.Text);
-                MessageBox.Show("Model name updated successfully.");
+                MessageBox.Show("Model name successfully updated.");
                 
+                //reload this window and refresh the parent DroneListWindow
                 LoadDroneData();
                 RefreshDroneListWindowView();
             }
@@ -153,6 +162,7 @@ namespace PL
                     MessageBox.Show("Cannot charge while delivering.");
                 }
 
+                //reload this window and refresh the parent DroneListWindow
                 LoadDroneData();
                 RefreshDroneListWindowView();
             }
@@ -212,6 +222,7 @@ namespace PL
                     MessageBox.Show("Drone is unavailable for delivering.");
                 }
 
+                //reload this window and refresh the parent DroneListWindow
                 LoadDroneData();
                 RefreshDroneListWindowView();
             }
@@ -287,7 +298,22 @@ namespace PL
         /// <param name="e"></param>
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            closeButtonClicked = true;
             Close();
+        }
+
+        /// <summary>
+        /// Prevent the window from being closed by force via the X button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DroneWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!closeButtonClicked)
+            {
+                e.Cancel = true;
+                MessageBox.Show("Please use the " + (Add.Visibility == Visibility.Visible ? "Cancel" : "Close") + " button on the lower right.");
+            }
         }
     }
 }

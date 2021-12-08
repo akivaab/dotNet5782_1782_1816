@@ -21,6 +21,9 @@ namespace PL
     public partial class DroneListWindow : Window
     {
         private IBL.IBL bl;
+        
+        //flag if Close button is clicked 
+        private bool closeButtonClicked;
 
         /// <summary>
         /// DroneListWindow constructor, initializes ItemSources.
@@ -30,6 +33,7 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
+            closeButtonClicked = false;
 
             DroneListView.ItemsSource = bl.DisplayAllDrones();
             StatusSelector.ItemsSource = Enum.GetValues(typeof(Enums.DroneStatus));
@@ -137,7 +141,22 @@ namespace PL
         /// <param name="e"></param>
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
+            closeButtonClicked = true;
             Close();
+        }
+
+        /// <summary>
+        /// Prevent the window from being closed by force via the X button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void DroneListWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!closeButtonClicked)
+            {
+                e.Cancel = true;
+                MessageBox.Show("Please use the Close button on the lower right.");
+            }
         }
     }
 }
