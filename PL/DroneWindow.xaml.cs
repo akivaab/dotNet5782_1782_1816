@@ -96,7 +96,7 @@ namespace PL
                 {
                     MessageBox.Show("No station with this ID exists.");
                 }
-                catch(UnableToChargeException)
+                catch (UnableToChargeException)
                 {
                     MessageBox.Show("This station has no charge slots available.");
                 }
