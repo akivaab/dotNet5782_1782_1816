@@ -12,11 +12,11 @@ namespace IBL
             {
                 DalObject.AddCustomer(customerID, name, phone, location.Latitude, location.Longitude);
             }
-            catch (IDAL.DO.IllegalArgumentException)
+            catch (DalApi.DO.IllegalArgumentException)
             {
                 throw new IllegalArgumentException();
             }
-            catch (IDAL.DO.NonUniqueIdException)
+            catch (DalApi.DO.NonUniqueIdException)
             {
                 throw new NonUniqueIdException();
             }
@@ -36,7 +36,7 @@ namespace IBL
                     DalObject.UpdateCustomerPhone(customerID, phone);
                 }
             }
-            catch (IDAL.DO.UndefinedObjectException)
+            catch (DalApi.DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -45,26 +45,26 @@ namespace IBL
         {
             try
             {
-                IDAL.DO.Customer dalCustomer = DalObject.DisplayCustomer(customerID);
+                DalApi.DO.Customer dalCustomer = DalObject.DisplayCustomer(customerID);
 
                 //create two lists of PackageForCustomers
-                List<IDAL.DO.Package> dalPackagesToSend = (List<IDAL.DO.Package>)DalObject.FindPackages(p => p.SenderID == customerID);
-                List<IDAL.DO.Package> dalPackagesToReceive = (List<IDAL.DO.Package>)DalObject.FindPackages(p => p.ReceiverID == customerID);
+                List<DalApi.DO.Package> dalPackagesToSend = (List<DalApi.DO.Package>)DalObject.FindPackages(p => p.SenderID == customerID);
+                List<DalApi.DO.Package> dalPackagesToReceive = (List<DalApi.DO.Package>)DalObject.FindPackages(p => p.ReceiverID == customerID);
 
                 //create list of PackageForCustomers this customer is sending
                 List<PackageForCustomer> packagesToSend = new();
-                foreach (IDAL.DO.Package dalPackage in dalPackagesToSend)
+                foreach (DalApi.DO.Package dalPackage in dalPackagesToSend)
                 {
-                    IDAL.DO.Customer receiver = DalObject.DisplayCustomer(dalPackage.ReceiverID);
+                    DalApi.DO.Customer receiver = DalObject.DisplayCustomer(dalPackage.ReceiverID);
                     CustomerForPackage receiverForPackage = new(receiver.ID, receiver.Name);
                     packagesToSend.Add(new PackageForCustomer(dalPackage.ID, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, getPackageStatus(dalPackage), receiverForPackage));
                 }
 
                 //create list of PackageForCustomers this customer is receiving
                 List<PackageForCustomer> packagesToReceive = new();
-                foreach (IDAL.DO.Package dalPackage in dalPackagesToReceive)
+                foreach (DalApi.DO.Package dalPackage in dalPackagesToReceive)
                 {
-                    IDAL.DO.Customer sender = DalObject.DisplayCustomer(dalPackage.SenderID);
+                    DalApi.DO.Customer sender = DalObject.DisplayCustomer(dalPackage.SenderID);
                     CustomerForPackage senderForPackage = new(sender.ID, sender.Name);
                     packagesToReceive.Add(new PackageForCustomer(dalPackage.ID, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, getPackageStatus(dalPackage), senderForPackage));
                 }
@@ -72,22 +72,22 @@ namespace IBL
                 Customer customer = new(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, new Location(dalCustomer.Latitude, dalCustomer.Longitude), packagesToSend, packagesToReceive);
                 return customer;
             }
-            catch (IDAL.DO.UndefinedObjectException)
+            catch (DalApi.DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
         }
         public List<CustomerToList> DisplayAllCustomers()
         {
-            List<IDAL.DO.Customer> dalCustomers = new(DalObject.DisplayCustomersList());
+            List<DalApi.DO.Customer> dalCustomers = new(DalObject.DisplayCustomersList());
             List<CustomerToList> customerToLists = new();
                 
-            foreach (IDAL.DO.Customer dalCustomer in dalCustomers)
+            foreach (DalApi.DO.Customer dalCustomer in dalCustomers)
             {
-                int numDeliveredPackagesSent = ((List<IDAL.DO.Package>)DalObject.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered != null)).Count;
-                int numUndeliveredPackagesSent = ((List<IDAL.DO.Package>)DalObject.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered == null)).Count;
-                int numPackagesReceived = ((List<IDAL.DO.Package>)DalObject.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered != null)).Count;
-                int numPackagesExpected = ((List<IDAL.DO.Package>)DalObject.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null)).Count;
+                int numDeliveredPackagesSent = ((List<DalApi.DO.Package>)DalObject.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered != null)).Count;
+                int numUndeliveredPackagesSent = ((List<DalApi.DO.Package>)DalObject.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered == null)).Count;
+                int numPackagesReceived = ((List<DalApi.DO.Package>)DalObject.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered != null)).Count;
+                int numPackagesExpected = ((List<DalApi.DO.Package>)DalObject.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null)).Count;
                 customerToLists.Add(new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected));
             }
             return customerToLists;

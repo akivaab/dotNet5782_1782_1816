@@ -12,11 +12,11 @@ namespace IBL
             {
                 DalObject.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
             }
-            catch (IDAL.DO.IllegalArgumentException)
+            catch (DalApi.DO.IllegalArgumentException)
             {
                 throw new IllegalArgumentException();
             }
-            catch (IDAL.DO.NonUniqueIdException)
+            catch (DalApi.DO.NonUniqueIdException)
             {
                 throw new NonUniqueIdException();
             }
@@ -33,7 +33,7 @@ namespace IBL
                 }
                 if (totalChargingSlots != -1)
                 {
-                    IDAL.DO.Station dalStation = DalObject.DisplayStation(stationID);
+                    DalApi.DO.Station dalStation = DalObject.DisplayStation(stationID);
 
                     //find the amount of drones in this station
                     List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location.Latitude == dalStation.Latitude && d.Location.Longitude == dalStation.Longitude);
@@ -42,7 +42,7 @@ namespace IBL
                     DalObject.UpdateStationChargeSlots(stationID, availableChargeSlots);
                 }
             }
-            catch (IDAL.DO.UndefinedObjectException)
+            catch (DalApi.DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -51,7 +51,7 @@ namespace IBL
         {
             try
             {
-                IDAL.DO.Station dalStation = DalObject.DisplayStation(stationID);
+                DalApi.DO.Station dalStation = DalObject.DisplayStation(stationID);
 
                 Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
 
@@ -67,17 +67,17 @@ namespace IBL
 
                 return new Station(dalStation.ID, dalStation.Name, stationLocation, dalStation.AvailableChargeSlots, dronesCharging);
             }
-            catch (IDAL.DO.UndefinedObjectException)
+            catch (DalApi.DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
         }
         public List<StationToList> DisplayAllStations()
         {
-            List<IDAL.DO.Station> dalStations = (List<IDAL.DO.Station>)DalObject.DisplayStationsList();
+            List<DalApi.DO.Station> dalStations = (List<DalApi.DO.Station>)DalObject.DisplayStationsList();
             List<StationToList> stationToLists = new();
 
-            foreach (IDAL.DO.Station dalStation in dalStations)
+            foreach (DalApi.DO.Station dalStation in dalStations)
             {
                 Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
                 List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude);
@@ -86,12 +86,12 @@ namespace IBL
 
             return stationToLists;
         }
-        public List<StationToList> FindStations(Predicate<IDAL.DO.Station> predicate)
+        public List<StationToList> FindStations(Predicate<DalApi.DO.Station> predicate)
         {
-            List<IDAL.DO.Station> dalStations = (List<IDAL.DO.Station>)DalObject.FindStations(predicate);
+            List<DalApi.DO.Station> dalStations = (List<DalApi.DO.Station>)DalObject.FindStations(predicate);
             List<StationToList> stationToLists = new();
             
-            foreach (IDAL.DO.Station dalStation in dalStations)
+            foreach (DalApi.DO.Station dalStation in dalStations)
             {
                 Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
                 List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude);

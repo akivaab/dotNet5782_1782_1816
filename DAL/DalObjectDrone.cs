@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using IDAL.DO;
+using DO;
 
 namespace DalObject
 {
-    public partial class DalObject : IDAL.IDal
+    partial class DalObject : DalApi.IDal
     {
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
         {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using IDAL.DO;
+using DO;
 
 namespace DalObject
 {
-    public partial class DalObject : IDAL.IDal
+    partial class DalObject : DalApi.IDal
     {
         public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int? droneID = null)
         {

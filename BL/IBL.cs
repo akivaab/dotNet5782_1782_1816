@@ -158,14 +158,14 @@ namespace IBL
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns>List of PackageToList entities</returns>
-        public List<PackageToList> FindPackages(Predicate<IDAL.DO.Package> predicate);
+        public List<PackageToList> FindPackages(Predicate<DalApi.DO.Package> predicate);
 
         /// <summary>
         /// Display a list of all stations according to a certain predicate.
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns>List of StationToList entities</returns>
-        public List<StationToList> FindStations(Predicate<IDAL.DO.Station> predicate);
+        public List<StationToList> FindStations(Predicate<DalApi.DO.Station> predicate);
 
         /// <summary>
         /// Display a list of all drones according to a certain predicate.

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using IDAL.DO;
+using DO;
 
-namespace IDAL
+namespace DalApi
 {
     public interface IDal
     {
@@ -25,7 +25,7 @@ namespace IDAL
         /// <param name="maxWeight">Maximum weight the drone can handle</param>
         /// <param name="status">Drone status</param>
         /// <param name="batteryLevel">Drone battery level</param>
-        public void AddDrone(int id, string model, IDAL.DO.Enums.WeightCategories maxWeight);
+        public void AddDrone(int id, string model, DO.Enums.WeightCategories maxWeight);
 
         /// <summary> 
         /// Add a new customer to the customer array 
@@ -46,7 +46,7 @@ namespace IDAL
         /// <param name="priority">Priority of package delivery</param>
         /// <param name="droneID">ID of drone delivering package</param>
         /// <returns>automatic package ID, or -1 if adding a package failed</returns>
-        public int AddPackage(int senderID, int receiverID, IDAL.DO.Enums.WeightCategories weight, IDAL.DO.Enums.Priorities priority, int? droneID = null);
+        public int AddPackage(int senderID, int receiverID, DO.Enums.WeightCategories weight, DO.Enums.Priorities priority, int? droneID = null);
 
         /// <summary>
         /// Assign a package to a drone to deliver

@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using IDAL.DO;
+using DO;
 
 namespace DalObject
 {
-    public partial class DalObject : IDAL.IDal
+    sealed partial class DalObject : DalApi.IDal
     {
+        private static readonly Lazy<DalObject> lazyDalObject = new Lazy<DalObject>(() => new DalObject());
+
+        public static DalObject Instance { get { return lazyDalObject.Value; } }
         /// <summary>
         /// Constructor adds initial values to the entity arrays
         /// </summary>
-        public DalObject()
+        private DalObject()
         {
             DataSource.Initialize();
         }

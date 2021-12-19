@@ -1,20 +1,21 @@
 ﻿using System;
 
-namespace IDAL
+namespace DO
 {
-    namespace DO
+    public class IllegalArgumentException : Exception
     {
-        public class IllegalArgumentException : Exception
-        {
-            public IllegalArgumentException() : base() {}
-        }
-        public class NonUniqueIdException : Exception
-        {
-            public NonUniqueIdException() : base() {}
-        }
-        public class UndefinedObjectException : Exception
-        {
-            public UndefinedObjectException() : base() {}
-        }
+        public IllegalArgumentException() : base() {}
+    }
+    public class NonUniqueIdException : Exception
+    {
+        public NonUniqueIdException() : base() {}
+    }
+    public class UndefinedObjectException : Exception
+    {
+        public UndefinedObjectException() : base() {}
+    }
+    public class UndefinedStringException : Exception
+    {
+        public UndefinedStringException() : base() {}
     }
 }

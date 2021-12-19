@@ -38,7 +38,7 @@ namespace IBL
         /// <returns>Location of the closest station</returns>
         private Location getClosestStation(Location location)
         {
-            List<IDAL.DO.Station> dalStations = (List<IDAL.DO.Station>)DalObject.DisplayStationsList();
+            List<DalApi.DO.Station> dalStations = (List<DalApi.DO.Station>)DalObject.DisplayStationsList();
             return getClosestStation(location, dalStations);
         }
 
@@ -48,7 +48,7 @@ namespace IBL
         /// <param name="location"></param>
         /// <param name="stations"></param>
         /// <returns>Location of the closest station</returns>
-        private Location getClosestStation(Location location, List<IDAL.DO.Station> stations)
+        private Location getClosestStation(Location location, List<DalApi.DO.Station> stations)
         {
             if (stations.Count == 0)
             {
@@ -58,7 +58,7 @@ namespace IBL
             double min = double.MaxValue;
             Location closestStationLocation = new();
 
-            foreach (IDAL.DO.Station station in stations)
+            foreach (DalApi.DO.Station station in stations)
             {
                 Location stationLocation = new(station.Latitude, station.Longitude);
                 double distance = getDistance(location, stationLocation);
@@ -77,12 +77,12 @@ namespace IBL
         /// </summary>
         /// <param name="drone"></param>
         /// <returns>List of reachable stations</returns>
-        private List<IDAL.DO.Station> getReachableStations(DroneToList drone)
+        private List<DalApi.DO.Station> getReachableStations(DroneToList drone)
         {
-            List<IDAL.DO.Station> availableStations = (List<IDAL.DO.Station>)DalObject.FindStations(s => s.AvailableChargeSlots > 0);
-            List<IDAL.DO.Station> reachableStations = new();
+            List<DalApi.DO.Station> availableStations = (List<DalApi.DO.Station>)DalObject.FindStations(s => s.AvailableChargeSlots > 0);
+            List<DalApi.DO.Station> reachableStations = new();
 
-            foreach (IDAL.DO.Station station in availableStations)
+            foreach (DalApi.DO.Station station in availableStations)
             {
                 Location stationLocation = new(station.Latitude, station.Longitude);
                 double requiredBattery = PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(drone.Location, stationLocation);
@@ -104,11 +104,11 @@ namespace IBL
         {
             try
             {
-                IDAL.DO.Customer dalCustomer = DalObject.DisplayCustomer(customerID);
+                DalApi.DO.Customer dalCustomer = DalObject.DisplayCustomer(customerID);
                 Location customerLocation = new(dalCustomer.Latitude, dalCustomer.Longitude);
                 return customerLocation;
             }
-            catch (IDAL.DO.UndefinedObjectException)
+            catch (DalApi.DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -121,12 +121,12 @@ namespace IBL
         /// <param name="package"></param>
         /// <param name="powerConsumed"></param>
         /// <returns>A random double representing battery level</returns>
-        private double randomBatteryPower(Location droneLocation, IDAL.DO.Package package, double powerConsumed)
+        private double randomBatteryPower(Location droneLocation, DalApi.DO.Package package, double powerConsumed)
         {
             try
             {
-                IDAL.DO.Customer sender = DalObject.DisplayCustomer(package.SenderID);
-                IDAL.DO.Customer receiver = DalObject.DisplayCustomer(package.ReceiverID);
+                DalApi.DO.Customer sender = DalObject.DisplayCustomer(package.SenderID);
+                DalApi.DO.Customer receiver = DalObject.DisplayCustomer(package.ReceiverID);
                 Location senderLocation = new(sender.Latitude, sender.Longitude);
                 Location receiverLocation = new(receiver.Latitude, receiver.Longitude);
 
@@ -138,7 +138,7 @@ namespace IBL
                 Random random = new Random();
                 return random.Next((int)Math.Ceiling(distanceToDeliver * powerConsumed), 101);
             }
-            catch (IDAL.DO.UndefinedObjectException)
+            catch (DalApi.DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -148,12 +148,12 @@ namespace IBL
         /// Gets a random customer that already received a package.
         /// </summary>
         /// <returns>Random customer that received a package</returns>
-        private IDAL.DO.Customer randomPackageReceiver()
+        private DalApi.DO.Customer randomPackageReceiver()
         {
             try
             {
                 //get the packages already delivered
-                List<IDAL.DO.Package> deliveredPackages = (List<IDAL.DO.Package>)DalObject.FindPackages(package => package.Delivered != null);
+                List<DalApi.DO.Package> deliveredPackages = (List<DalApi.DO.Package>)DalObject.FindPackages(package => package.Delivered != null);
 
                 if (deliveredPackages.Count == 0)
                 {
@@ -166,7 +166,7 @@ namespace IBL
 
                 return DalObject.DisplayCustomer(receiverID);
             }
-            catch (IDAL.DO.UndefinedObjectException)
+            catch (DalApi.DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -178,12 +178,12 @@ namespace IBL
         /// <param name="dalPackages"></param>
         /// <param name="drone"></param>
         /// <returns>ID of the best package</returns>
-        private int findBestPackage(List<IDAL.DO.Package> dalPackages, DroneToList drone)
+        private int findBestPackage(List<DalApi.DO.Package> dalPackages, DroneToList drone)
         {
-            List<IDAL.DO.Package> bestPackages = new(dalPackages);
+            List<DalApi.DO.Package> bestPackages = new(dalPackages);
 
             //remove packages too heavy for drone to lift
-            bestPackages.RemoveAll(p => p.Weight.CompareTo((IDAL.DO.Enums.WeightCategories)drone.MaxWeight) > 0);
+            bestPackages.RemoveAll(p => p.Weight.CompareTo((DalApi.DO.Enums.WeightCategories)drone.MaxWeight) > 0);
             
             //remove packages whose delivery will consume more battery than the drone has
             bestPackages.RemoveAll(p =>
@@ -219,7 +219,7 @@ namespace IBL
         /// </summary>
         /// <param name="dalPackage"></param>
         /// <returns>The status of the package</returns>
-        private Enums.PackageStatus getPackageStatus(IDAL.DO.Package dalPackage)
+        private Enums.PackageStatus getPackageStatus(DalApi.DO.Package dalPackage)
         {
             Enums.PackageStatus status = Enums.PackageStatus.created;
             if (dalPackage.Delivered != null)
@@ -253,7 +253,7 @@ namespace IBL
         {
             try
             {
-                List<IDAL.DO.Package> dalPackages = (List<IDAL.DO.Package>)DalObject.DisplayPackagesList();
+                List<DalApi.DO.Package> dalPackages = (List<DalApi.DO.Package>)DalObject.DisplayPackagesList();
 
                 for (int i = 0; i < dalPackages.Count; i++)
                 {
@@ -282,7 +282,7 @@ namespace IBL
                     }
                 }
             }
-            catch (IDAL.DO.UndefinedObjectException)
+            catch (DalApi.DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -295,7 +295,7 @@ namespace IBL
         {
             try
             {
-                List<IDAL.DO.Package> dalPackages = (List<IDAL.DO.Package>)DalObject.DisplayPackagesList();
+                List<DalApi.DO.Package> dalPackages = (List<DalApi.DO.Package>)DalObject.DisplayPackagesList();
 
                 //iterate through the packages in reverse to avoid skipping any
                 for (int i = dalPackages.Count - 1; i >= 0; i--)
@@ -328,7 +328,7 @@ namespace IBL
                     }
                 }
             }
-            catch (IDAL.DO.UndefinedObjectException)
+            catch (DalApi.DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }

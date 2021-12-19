@@ -1,18 +1,15 @@
 ﻿
-namespace IDAL
+namespace DO
 {
-    namespace DO
+    public class Enums
     {
-        public class Enums
+        public enum WeightCategories
         {
-            public enum WeightCategories
-            {
-                free, light, medium, heavy
-            }
-            public enum Priorities
-            {
-                regular, fast, emergency
-            }
+            free, light, medium, heavy
+        }
+        public enum Priorities
+        {
+            regular, fast, emergency
         }
     }
 }

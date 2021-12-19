@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using IDAL.DO;
+using DO;
 
 namespace DalObject
 {
-    public partial class DalObject : IDAL.IDal
+    partial class DalObject : DalApi.IDal
     {
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {

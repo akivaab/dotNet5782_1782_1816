@@ -1,5 +1,5 @@
 ﻿using System;
-using IDAL.DO;
+using DalApi.DO;
 
 namespace ConsoleUI
 {
@@ -7,7 +7,7 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            IDAL.IDal dal = new DalObject.DalObject();
+            DalApi.IDal dal = new DalObject.DalObject();
             int option;
             do
             {
@@ -42,7 +42,7 @@ namespace ConsoleUI
             } while (option != 5);
         }
 
-        public static void AddingOptions(IDAL.IDal dal)
+        public static void AddingOptions(DalApi.IDal dal)
         {
             Console.WriteLine("Adding Options:");
             Console.WriteLine("1. Add new base station");
@@ -131,7 +131,7 @@ namespace ConsoleUI
             }
         }
 
-        public static void UpdatingOptions(IDAL.IDal dal)
+        public static void UpdatingOptions(DalApi.IDal dal)
         {
             Console.WriteLine("Updatinging Options:");
             Console.WriteLine("1. Assign package to drone");
@@ -196,7 +196,7 @@ namespace ConsoleUI
             }
         }
 
-        public static void DisplayingOptions(IDAL.IDal dal)
+        public static void DisplayingOptions(DalApi.IDal dal)
         {
             Console.WriteLine("Displaying Options:");
             Console.WriteLine("1. Display station");
@@ -244,7 +244,7 @@ namespace ConsoleUI
             }
         }
 
-        public static void ListDisplayingOptions(IDAL.IDal dal)
+        public static void ListDisplayingOptions(DalApi.IDal dal)
         {
             Console.WriteLine("List Displaying Options:");
             Console.WriteLine("1. Display all stations");
