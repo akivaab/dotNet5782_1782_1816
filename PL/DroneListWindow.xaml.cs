@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using IBL.BO;
+using BlApi.BO;
 
 namespace PL
 {
@@ -20,7 +20,7 @@ namespace PL
     /// </summary>
     public partial class DroneListWindow : Window
     {
-        private IBL.IBL bl;
+        private BlApi.IBL bl;
         
         //flag if Close button is clicked 
         private bool closeButtonClicked;
@@ -29,7 +29,7 @@ namespace PL
         /// DroneListWindow constructor, initializes ItemSources.
         /// </summary>
         /// <param name="bl">BL object</param>
-        public DroneListWindow(IBL.IBL bl)
+        public DroneListWindow(BlApi.IBL bl)
         {
             InitializeComponent();
             this.bl = bl;

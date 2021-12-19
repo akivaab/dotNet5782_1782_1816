@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using IBL.BO;
+using BO;
 
-namespace IBL
+namespace BL
 {
-    public partial class BL : IBL
+    partial class BL : BlApi.IBL
     {
         public Package AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority)
         {
             try
             {
-                DalApi.DO.Customer sender = DalObject.DisplayCustomer(senderID);
-                DalApi.DO.Customer receiver = DalObject.DisplayCustomer(receiverID);
-                int packageID = DalObject.AddPackage(senderID, receiverID, (DalApi.DO.Enums.WeightCategories)weight, (DalApi.DO.Enums.Priorities)priority);
+                DO.Customer sender = DalObject.DisplayCustomer(senderID);
+                DO.Customer receiver = DalObject.DisplayCustomer(receiverID);
+                int packageID = DalObject.AddPackage(senderID, receiverID, (DO.Enums.WeightCategories)weight, (DO.Enums.Priorities)priority);
 
                 CustomerForPackage packageSender = new(sender.ID, sender.Name);
                 CustomerForPackage packageReceiver = new(receiver.ID, receiver.Name);
@@ -20,7 +20,7 @@ namespace IBL
                 Package package = new(packageID, packageSender, packageReceiver, weight, priority, null, DateTime.Now, null, null, null);
                 return package;
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -41,14 +41,14 @@ namespace IBL
 
             try
             {
-                List<DalApi.DO.Package> dalPackages = (List<DalApi.DO.Package>)DalObject.FindPackages(p => p.DroneID == null);
+                List<DO.Package> dalPackages = (List<DO.Package>)DalObject.FindPackages(p => p.DroneID == null);
                 int bestPackageID = findBestPackage(dalPackages, Drones[droneIndex]);
                 DalObject.AssignPackage(bestPackageID, droneID);
 
                 Drones[droneIndex].Status = Enums.DroneStatus.delivery;
                 Drones[droneIndex].PackageID = bestPackageID;
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -67,7 +67,7 @@ namespace IBL
                 throw new UnableToCollectException();
             }
             
-            DalApi.DO.Package dalPackage = DalObject.DisplayPackage((int)Drones[droneIndex].PackageID);
+            DO.Package dalPackage = DalObject.DisplayPackage((int)Drones[droneIndex].PackageID);
             
             //if the package isn't in a state to be collected
             if (dalPackage.Assigned == null || dalPackage.Collected != null)
@@ -83,7 +83,7 @@ namespace IBL
                 Drones[droneIndex].Battery = Math.Max(Drones[droneIndex].Battery - (PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(Drones[droneIndex].Location, senderLocation)), 0);
                 Drones[droneIndex].Location = senderLocation;
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -102,7 +102,7 @@ namespace IBL
                 throw new UnableToDeliverException();
             }
             
-            DalApi.DO.Package dalPackage = DalObject.DisplayPackage((int)Drones[droneIndex].PackageID);
+            DO.Package dalPackage = DalObject.DisplayPackage((int)Drones[droneIndex].PackageID);
             
             //if this package isn't in a state to be delivered
             if (dalPackage.Collected == null || dalPackage.Delivered != null)
@@ -119,7 +119,7 @@ namespace IBL
                 Drones[droneIndex].Location = receiverLocation;
                 Drones[droneIndex].Status = Enums.DroneStatus.available;
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -128,10 +128,10 @@ namespace IBL
         {
             try
             {
-                DalApi.DO.Package dalPackage = DalObject.DisplayPackage(packageID);
+                DO.Package dalPackage = DalObject.DisplayPackage(packageID);
 
-                DalApi.DO.Customer dalPackageSender = DalObject.DisplayCustomer(dalPackage.SenderID);
-                DalApi.DO.Customer dalPackageReceiver = DalObject.DisplayCustomer(dalPackage.ReceiverID);
+                DO.Customer dalPackageSender = DalObject.DisplayCustomer(dalPackage.SenderID);
+                DO.Customer dalPackageReceiver = DalObject.DisplayCustomer(dalPackage.ReceiverID);
                 CustomerForPackage senderForPackage = new(dalPackageSender.ID, dalPackageSender.Name);
                 CustomerForPackage receiverForPackage = new(dalPackageReceiver.ID, dalPackageReceiver.Name);
 
@@ -141,7 +141,7 @@ namespace IBL
                 Package package = new(dalPackage.ID, senderForPackage, receiverForPackage, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, droneDelivering, dalPackage.Requested, dalPackage.Assigned, dalPackage.Collected, dalPackage.Delivered);
                 return package;
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -150,9 +150,9 @@ namespace IBL
         {
             try
             {
-                List<DalApi.DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
+                List<DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
                 List<PackageToList> packageToLists = new();
-                foreach (DalApi.DO.Package dalPackage in dalPackages)
+                foreach (DO.Package dalPackage in dalPackages)
                 {
                     string senderName = DalObject.DisplayCustomer(dalPackage.SenderID).Name;
                     string receiverName = DalObject.DisplayCustomer(dalPackage.ReceiverID).Name;
@@ -160,18 +160,18 @@ namespace IBL
                 }
                 return packageToLists;
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
         }
-        public List<PackageToList> FindPackages(Predicate<DalApi.DO.Package> predicate)
+        public List<PackageToList> FindPackages(Predicate<DO.Package> predicate)
         {
             try
             {
-                List<DalApi.DO.Package> dalPackages = new(DalObject.FindPackages(predicate));
+                List<DO.Package> dalPackages = new(DalObject.FindPackages(predicate));
                 List<PackageToList> packageToLists = new();
-                foreach (DalApi.DO.Package dalPackage in dalPackages)
+                foreach (DO.Package dalPackage in dalPackages)
                 {
                     string senderName = DalObject.DisplayCustomer(dalPackage.SenderID).Name;
                     string receiverName = DalObject.DisplayCustomer(dalPackage.ReceiverID).Name;
@@ -179,7 +179,7 @@ namespace IBL
                 }
                 return packageToLists;
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }

@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using IBL.BO;
+using BlApi.BO;
 
 namespace PL
 {
@@ -20,7 +20,7 @@ namespace PL
     /// </summary>
     public partial class DroneWindow : Window
     {
-        private IBL.IBL bl;
+        private BlApi.IBL bl;
         private DroneToList drone;
 
         //flag if Close or Cancel button is clicked 
@@ -30,7 +30,7 @@ namespace PL
         /// DroneWindow constructor for adding a drone.
         /// </summary>
         /// <param name="bl">BL object</param>
-        public DroneWindow(IBL.IBL bl)
+        public DroneWindow(BlApi.IBL bl)
         {
             InitializeComponent();
             this.bl = bl;
@@ -57,7 +57,7 @@ namespace PL
         /// </summary>
         /// <param name="bl">BL object</param>
         /// <param name="drone">drone being updated/acted upon</param>
-        public DroneWindow(IBL.IBL bl, DroneToList drone)
+        public DroneWindow(BlApi.IBL bl, DroneToList drone)
         {
             InitializeComponent();
             this.bl = bl;

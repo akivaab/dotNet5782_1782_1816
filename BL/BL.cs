@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using IBL.BO;
+using BO;
 
-namespace IBL
+namespace BL
 {
-    public partial class BL : IBL
+    sealed partial class BL : BlApi.IBL
     {
+        private static readonly Lazy<BL> lazyBl = new Lazy<BL>(() => new BL());
+        public static BL Instance { get { return lazyBl.Value; } }
         public List<DroneToList> Drones;
         public DalApi.IDal DalObject;
         public double[] PowerConsumption;
         public double ChargeRatePerHour;
-        public BL()
+        private BL()
         {
             //initialize fields
             Drones = new();
-            DalObject = new DalObject.DalObject();
+            DalObject = DalApi.DalFactory.GetDal("DalObject");
             double[] powerConsumption = DalObject.DronePowerConsumption();
             PowerConsumption = new double[4];
             Array.Copy(powerConsumption, PowerConsumption, 4);
@@ -23,14 +25,14 @@ namespace IBL
             //remove problematic entities from the data layer
             dataCleanup();
             
-            List<DalApi.DO.Drone> dalDrones = (List<DalApi.DO.Drone>)DalObject.DisplayDronesList();
+            List<DO.Drone> dalDrones = (List<DO.Drone>)DalObject.DisplayDronesList();
 
             //find all packages undelivered but with a drone assigned
-            List<DalApi.DO.Package> dalPackages = (List<DalApi.DO.Package>)DalObject.FindPackages(p => p.Delivered == null && p.DroneID != null);
+            List<DO.Package> dalPackages = (List<DO.Package>)DalObject.FindPackages(p => p.Delivered == null && p.DroneID != null);
             
-            foreach (DalApi.DO.Package package in dalPackages)
+            foreach (DO.Package package in dalPackages)
             {
-                DalApi.DO.Drone drone = dalDrones.Find(drone => drone.ID == package.DroneID);
+                DO.Drone drone = dalDrones.Find(drone => drone.ID == package.DroneID);
                 dalDrones.Remove(drone);
 
                 Location droneLocation = new();
@@ -58,7 +60,7 @@ namespace IBL
             Random random = new Random();
 
             //for remaining drones that are not delivering
-            foreach (DalApi.DO.Drone drone in dalDrones) 
+            foreach (DO.Drone drone in dalDrones) 
             {
                 DroneToList droneToList = new();
                 droneToList.ID = drone.ID;
@@ -72,7 +74,7 @@ namespace IBL
                     droneToList.Status = Enums.DroneStatus.maintenance;
 
                     //get random station as drone location
-                    List<DalApi.DO.Station> dalStations = (List<DalApi.DO.Station>)DalObject.DisplayStationsList();
+                    List<DO.Station> dalStations = (List<DO.Station>)DalObject.DisplayStationsList();
                     int randStation = random.Next(dalStations.Count);
                     droneToList.Location = new(dalStations[randStation].Latitude, dalStations[randStation].Longitude);
                     
@@ -87,7 +89,7 @@ namespace IBL
                     droneToList.Status = Enums.DroneStatus.available;
                     
                     //get random customer that received a package as drone location
-                    DalApi.DO.Customer customer = randomPackageReceiver();
+                    DO.Customer customer = randomPackageReceiver();
                     droneToList.Location = new(customer.Latitude, customer.Longitude);
                     
                     //get random battery level

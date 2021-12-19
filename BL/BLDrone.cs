@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using IBL.BO;
+using BO;
 
-namespace IBL
+namespace BL
 {
-    public partial class BL : IBL
+    partial class BL : BlApi.IBL
     {
         public Drone AddDrone(int droneID, string model, Enums.WeightCategories maxWeight, int stationID)
         {
@@ -16,13 +16,13 @@ namespace IBL
             try
             {
                 //these statements may throw exceptions:
-                DalApi.DO.Station dalStation = DalObject.DisplayStation(stationID);
+                DO.Station dalStation = DalObject.DisplayStation(stationID);
                 if (dalStation.AvailableChargeSlots <= 0)
                 {
                     throw new UnableToChargeException();
                 }
 
-                DalObject.AddDrone(droneID, model, (DalApi.DO.Enums.WeightCategories)maxWeight);
+                DalObject.AddDrone(droneID, model, (DO.Enums.WeightCategories)maxWeight);
                 DalObject.ChargeDrone(droneID, stationID);  //the drone starts out charging in a station
 
                 //add to Drones, the list of DroneToList entities
@@ -34,11 +34,11 @@ namespace IBL
                 Drone drone = new(droneID, model, maxWeight, battery, Enums.DroneStatus.maintenance, null, droneLocation);
                 return drone;
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
-            catch (DalApi.DO.NonUniqueIdException)
+            catch (DO.NonUniqueIdException)
             {
                 throw new NonUniqueIdException();
             }
@@ -58,7 +58,7 @@ namespace IBL
             {
                 DalObject.UpdateDroneModel(droneID, model);
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -71,7 +71,7 @@ namespace IBL
                 throw new UndefinedObjectException();
             }
 
-            List<DalApi.DO.Station> reachableStations = getReachableStations(Drones[droneIndex]);
+            List<DO.Station> reachableStations = getReachableStations(Drones[droneIndex]);
             if (Drones[droneIndex].Status != Enums.DroneStatus.available || reachableStations.Count == 0)
             {
                 throw new UnableToChargeException();
@@ -80,15 +80,15 @@ namespace IBL
             try 
             { 
                 Location closestStationLocation = getClosestStation(Drones[droneIndex].Location, reachableStations);
-                List<DalApi.DO.Station> dalStations = new(DalObject.DisplayStationsList());
-                DalApi.DO.Station dalStation = dalStations.Find(s => s.Latitude == closestStationLocation.Latitude && s.Longitude == closestStationLocation.Longitude);
+                List<DO.Station> dalStations = new(DalObject.DisplayStationsList());
+                DO.Station dalStation = dalStations.Find(s => s.Latitude == closestStationLocation.Latitude && s.Longitude == closestStationLocation.Longitude);
                 DalObject.ChargeDrone(droneID, dalStation.ID);
 
                 Drones[droneIndex].Battery = Math.Max(Drones[droneIndex].Battery - (PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(Drones[droneIndex].Location, closestStationLocation)), 0);
                 Drones[droneIndex].Location = closestStationLocation;
                 Drones[droneIndex].Status = Enums.DroneStatus.maintenance;
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -109,13 +109,13 @@ namespace IBL
 
             try 
             { 
-                List<DalApi.DO.Station> dalStations = (List<DalApi.DO.Station>)DalObject.FindStations(s => s.Latitude == Drones[droneIndex].Location.Latitude && s.Longitude == Drones[droneIndex].Location.Longitude);
+                List<DO.Station> dalStations = (List<DO.Station>)DalObject.FindStations(s => s.Latitude == Drones[droneIndex].Location.Latitude && s.Longitude == Drones[droneIndex].Location.Longitude);
                 DalObject.ReleaseDroneFromCharging(droneID, dalStations[0].ID);
 
                 Drones[droneIndex].Battery = Math.Min(Drones[droneIndex].Battery + (ChargeRatePerHour * chargingTimeInHours), 100);
                 Drones[droneIndex].Status = Enums.DroneStatus.available;
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -134,10 +134,10 @@ namespace IBL
                 PackageInTransfer packageInTransfer;
                 if (droneToList.PackageID != null && droneToList.Status == Enums.DroneStatus.delivery) //this drone is delivering a package
                 {
-                    DalApi.DO.Package dalPackage = DalObject.DisplayPackage((int)droneToList.PackageID);
+                    DO.Package dalPackage = DalObject.DisplayPackage((int)droneToList.PackageID);
 
-                    DalApi.DO.Customer sender = DalObject.DisplayCustomer(dalPackage.SenderID);
-                    DalApi.DO.Customer receiver = DalObject.DisplayCustomer(dalPackage.ReceiverID);
+                    DO.Customer sender = DalObject.DisplayCustomer(dalPackage.SenderID);
+                    DO.Customer receiver = DalObject.DisplayCustomer(dalPackage.ReceiverID);
                     
                     CustomerForPackage packageSender = new(sender.ID, sender.Name);
                     CustomerForPackage packageReceiver = new(receiver.ID, receiver.Name);
@@ -156,7 +156,7 @@ namespace IBL
                 Drone drone = new(droneToList.ID, droneToList.Model, droneToList.MaxWeight, droneToList.Battery, droneToList.Status, packageInTransfer, droneToList.Location);
                 return drone;
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -185,7 +185,7 @@ namespace IBL
             {
                 return DalObject.GetTimeChargeBegan(droneID);
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }

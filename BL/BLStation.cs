@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using IBL.BO;
+using BO;
 
-namespace IBL
+namespace BL
 {
-    public partial class BL : IBL
+    partial class BL : BlApi.IBL
     {
         public Station AddStation(int stationID, int name, Location location, int numAvailableChargingSlots)
         {
@@ -12,11 +12,11 @@ namespace IBL
             {
                 DalObject.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
             }
-            catch (DalApi.DO.IllegalArgumentException)
+            catch (DO.IllegalArgumentException)
             {
                 throw new IllegalArgumentException();
             }
-            catch (DalApi.DO.NonUniqueIdException)
+            catch (DO.NonUniqueIdException)
             {
                 throw new NonUniqueIdException();
             }
@@ -33,7 +33,7 @@ namespace IBL
                 }
                 if (totalChargingSlots != -1)
                 {
-                    DalApi.DO.Station dalStation = DalObject.DisplayStation(stationID);
+                    DO.Station dalStation = DalObject.DisplayStation(stationID);
 
                     //find the amount of drones in this station
                     List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location.Latitude == dalStation.Latitude && d.Location.Longitude == dalStation.Longitude);
@@ -42,7 +42,7 @@ namespace IBL
                     DalObject.UpdateStationChargeSlots(stationID, availableChargeSlots);
                 }
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
@@ -51,7 +51,7 @@ namespace IBL
         {
             try
             {
-                DalApi.DO.Station dalStation = DalObject.DisplayStation(stationID);
+                DO.Station dalStation = DalObject.DisplayStation(stationID);
 
                 Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
 
@@ -67,17 +67,17 @@ namespace IBL
 
                 return new Station(dalStation.ID, dalStation.Name, stationLocation, dalStation.AvailableChargeSlots, dronesCharging);
             }
-            catch (DalApi.DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException)
             {
                 throw new UndefinedObjectException();
             }
         }
         public List<StationToList> DisplayAllStations()
         {
-            List<DalApi.DO.Station> dalStations = (List<DalApi.DO.Station>)DalObject.DisplayStationsList();
+            List<DO.Station> dalStations = (List<DO.Station>)DalObject.DisplayStationsList();
             List<StationToList> stationToLists = new();
 
-            foreach (DalApi.DO.Station dalStation in dalStations)
+            foreach (DO.Station dalStation in dalStations)
             {
                 Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
                 List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude);
@@ -86,12 +86,12 @@ namespace IBL
 
             return stationToLists;
         }
-        public List<StationToList> FindStations(Predicate<DalApi.DO.Station> predicate)
+        public List<StationToList> FindStations(Predicate<DO.Station> predicate)
         {
-            List<DalApi.DO.Station> dalStations = (List<DalApi.DO.Station>)DalObject.FindStations(predicate);
+            List<DO.Station> dalStations = (List<DO.Station>)DalObject.FindStations(predicate);
             List<StationToList> stationToLists = new();
             
-            foreach (DalApi.DO.Station dalStation in dalStations)
+            foreach (DO.Station dalStation in dalStations)
             {
                 Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
                 List<DroneToList> dronesAtStation = Drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude);

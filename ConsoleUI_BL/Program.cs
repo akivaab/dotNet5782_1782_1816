@@ -1,5 +1,5 @@
 ﻿using System;
-using IBL.BO;
+using BlApi.BO;
 
 namespace ConsoleUI_BL
 {
@@ -9,7 +9,7 @@ namespace ConsoleUI_BL
         {
             try
             {
-                IBL.IBL bl = new IBL.BL();
+                BlApi.IBL bl = new BlApi.BL();
                 int option;
                 do
                 {
@@ -49,7 +49,7 @@ namespace ConsoleUI_BL
             }
         }
 
-        public static void AddingOptions(IBL.IBL bl)
+        public static void AddingOptions(BlApi.IBL bl)
         {
             Console.WriteLine("Adding Options:");
             Console.WriteLine("1. Add new base station");
@@ -142,7 +142,7 @@ namespace ConsoleUI_BL
             }
         }
 
-        public static void UpdatingOptions(IBL.IBL bl)
+        public static void UpdatingOptions(BlApi.IBL bl)
         {
             Console.WriteLine("Updatinging Options:");
             Console.WriteLine("1. Update drone model");
@@ -287,7 +287,7 @@ namespace ConsoleUI_BL
             }
         }
 
-        public static void DisplayingOptions(IBL.IBL bl)
+        public static void DisplayingOptions(BlApi.IBL bl)
         {
             Console.WriteLine("Displaying Options:");
             Console.WriteLine("1. Display station");
@@ -335,7 +335,7 @@ namespace ConsoleUI_BL
             }
         }
 
-        public static void ListDisplayingOptions(IBL.IBL bl)
+        public static void ListDisplayingOptions(BlApi.IBL bl)
         {
             Console.WriteLine("List Displaying Options:");
             Console.WriteLine("1. Display all stations");
