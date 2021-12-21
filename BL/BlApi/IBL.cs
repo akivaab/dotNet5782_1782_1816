@@ -132,46 +132,46 @@ namespace BlApi
         /// Display a list of all the stations in the system.
         /// </summary>
         /// <returns>List of StationToList entities</returns>
-        public List<StationToList> DisplayAllStations();
+        public IEnumerable<StationToList> DisplayAllStations();
 
         /// <summary>
         /// Display a list of all the drones in the system.
         /// </summary>
         /// <returns>List of DroneToList entities</returns>
-        public List<DroneToList> DisplayAllDrones();
+        public IEnumerable<DroneToList> DisplayAllDrones();
 
         /// <summary>
         /// Display a list of all the customers in the system.
         /// </summary>
         /// <returns>List of CustomerToList entities</returns>
-        public List<CustomerToList> DisplayAllCustomers();
+        public IEnumerable<CustomerToList> DisplayAllCustomers();
 
         /// <summary>
         /// Display a list of all the packages in the system.
         /// </summary>
         /// <returns>List of PackageToList entities</returns>
-        public List<PackageToList> DisplayAllPackages();
+        public IEnumerable<PackageToList> DisplayAllPackages();
 
         /// <summary>
         /// Display a list of all the packages according to a certain predicate.
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns>List of PackageToList entities</returns>
-        public List<PackageToList> FindPackages(Predicate<DO.Package> predicate);
+        public IEnumerable<PackageToList> FindPackages(Predicate<DO.Package> predicate);
 
         /// <summary>
         /// Display a list of all stations according to a certain predicate.
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns>List of StationToList entities</returns>
-        public List<StationToList> FindStations(Predicate<DO.Station> predicate);
+        public IEnumerable<StationToList> FindStations(Predicate<DO.Station> predicate);
 
         /// <summary>
         /// Display a list of all drones according to a certain predicate.
         /// </summary>
         /// <param name="predicate"></param>
         /// <returns></returns>
-        public List<DroneToList> FindDrones(Predicate<DroneToList> predicate);
+        public IEnumerable<DroneToList> FindDrones(Predicate<DroneToList> predicate);
 
         /// <summary>
         /// Gets the time a drone began charging in a station.

@@ -10,9 +10,7 @@ namespace BO
             Latitude = latitude;
             Longitude = longitude;
         }
-        public Location()
-        {
-        }
+        public Location() { }
         public override string ToString()
         {
             return $"{Latitude}, {Longitude}";

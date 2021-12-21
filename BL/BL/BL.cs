@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BO;
 
 namespace BL
@@ -8,16 +9,16 @@ namespace BL
     {
         private static readonly Lazy<BL> lazyBl = new Lazy<BL>(() => new BL());
         public static BL Instance { get { return lazyBl.Value; } }
-        public List<DroneToList> Drones;
-        public DalApi.IDal DalObject;
-        public double[] PowerConsumption;
-        public double ChargeRatePerHour;
+        private List<DroneToList> Drones;
+        private DalApi.IDal DalObject;
+        private double[] PowerConsumption;
+        private double ChargeRatePerHour;
         private BL()
         {
             //initialize fields
             Drones = new();
             DalObject = DalApi.DalFactory.GetDal("DalObject");
-            double[] powerConsumption = DalObject.DronePowerConsumption();
+            double[] powerConsumption = (double[])DalObject.DronePowerConsumption();
             PowerConsumption = new double[4];
             Array.Copy(powerConsumption, PowerConsumption, 4);
             ChargeRatePerHour = powerConsumption[4];

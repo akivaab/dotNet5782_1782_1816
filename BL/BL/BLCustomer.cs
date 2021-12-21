@@ -14,11 +14,11 @@ namespace BL
             }
             catch (DO.IllegalArgumentException e)
             {
-                throw new IllegalArgumentException(e.Message);
+                throw new IllegalArgumentException(e.Message, e);
             }
             catch (DO.NonUniqueIdException e)
             {
-                throw new NonUniqueIdException(e.Message);
+                throw new NonUniqueIdException(e.Message, e);
             }
             Customer customer = new(customerID, name, phone, location, new List<PackageForCustomer>(), new List<PackageForCustomer>());
             return customer;
@@ -38,7 +38,7 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
         public Customer DisplayCustomer(int customerID)
@@ -74,10 +74,10 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
-        public List<CustomerToList> DisplayAllCustomers()
+        public IEnumerable<CustomerToList> DisplayAllCustomers()
         {
             List<DO.Customer> dalCustomers = new(DalObject.DisplayCustomersList());
             List<CustomerToList> customerToLists = new();

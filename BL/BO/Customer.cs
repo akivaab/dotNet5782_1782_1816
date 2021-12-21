@@ -1,5 +1,4 @@
-﻿
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace BO
 {
@@ -9,9 +8,9 @@ namespace BO
         public string Name { get; set; }
         public string Phone { get; set; }
         public Location Location { get; set; }
-        public List<PackageForCustomer> PackagesToSend { get; set; }
-        public List<PackageForCustomer> PackagesToReceive { get; set; }
-        public Customer(int id, string name, string phone, Location location, List<PackageForCustomer> packagesToSend, List<PackageForCustomer> packagesToReceive)
+        public IEnumerable<PackageForCustomer> PackagesToSend { get; set; }
+        public IEnumerable<PackageForCustomer> PackagesToReceive { get; set; }
+        public Customer(int id, string name, string phone, Location location, IEnumerable<PackageForCustomer> packagesToSend, IEnumerable<PackageForCustomer> packagesToReceive)
         {
             ID = id;
             Name = name;

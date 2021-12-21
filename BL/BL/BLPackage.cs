@@ -22,7 +22,7 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
         public void AssignPackage(int droneID)
@@ -49,7 +49,7 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
         public void CollectPackage(int droneID)
@@ -82,7 +82,7 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
         public void DeliverPackage(int droneID)
@@ -118,7 +118,7 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
         public Package DisplayPackage(int packageID)
@@ -140,10 +140,10 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
-        public List<PackageToList> DisplayAllPackages()
+        public IEnumerable<PackageToList> DisplayAllPackages()
         {
             try
             {
@@ -159,10 +159,10 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
-        public List<PackageToList> FindPackages(Predicate<DO.Package> predicate)
+        public IEnumerable<PackageToList> FindPackages(Predicate<DO.Package> predicate)
         {
             try
             {
@@ -178,7 +178,7 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
     }

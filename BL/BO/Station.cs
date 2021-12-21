@@ -8,8 +8,8 @@ namespace BO
         public int Name { get; set; }
         public Location Location { get; set; }
         public int AvailableChargeSlots { get; set; }
-        public List<DroneCharging> DronesCharging { get; set; }
-        public Station(int id, int name, Location location, int chargeSlots, List<DroneCharging> dronesCharging)
+        public IEnumerable<DroneCharging> DronesCharging { get; set; }
+        public Station(int id, int name, Location location, int chargeSlots, IEnumerable<DroneCharging> dronesCharging)
         {
             ID = id;
             Name = name;

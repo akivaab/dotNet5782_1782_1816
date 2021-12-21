@@ -92,7 +92,7 @@ namespace DalObject
             return drones;
         }
 
-        public double[] DronePowerConsumption()
+        public IEnumerable<double> DronePowerConsumption()
         {
             double[] powerConsumptionValues = new double[5];
             powerConsumptionValues[0] = DataSource.Config.Free;

@@ -5,6 +5,7 @@ namespace BO
     public class IllegalArgumentException : Exception
     {
         public IllegalArgumentException(string s) : base(s) { }
+        public IllegalArgumentException(string s, DO.IllegalArgumentException e) : base(s, e) { }
     }
     public class EmptyListException : Exception
     {
@@ -13,10 +14,12 @@ namespace BO
     public class NonUniqueIdException : Exception
     {
         public NonUniqueIdException(string s) : base(s) { }
+        public NonUniqueIdException(string s, DO.NonUniqueIdException e) : base(s, e) { }
     }
     public class UndefinedObjectException : Exception
     {
         public UndefinedObjectException(string s) : base(s) { }
+        public UndefinedObjectException(string s, DO.UndefinedObjectException e) : base(s, e) { }
     }
     public class UnableToChargeException : Exception
     {

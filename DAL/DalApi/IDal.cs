@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using DO;
 
 namespace DalApi
 {
@@ -140,72 +139,72 @@ namespace DalApi
         /// </summary>
         /// <param name="stationID">Station ID</param>
         /// <returns>The station with this ID</returns>
-        public Station DisplayStation(int stationID);
+        public DO.Station DisplayStation(int stationID);
 
         /// <summary>
         /// Display a specific drone to the user
         /// </summary>
         /// <param name="droneID">Drone ID</param>
         /// <returns>The drone with this ID</returns>
-        public Drone DisplayDrone(int droneID);
+        public DO.Drone DisplayDrone(int droneID);
 
         /// <summary>
         /// Display a specific customer to the user
         /// </summary>
         /// <param name="customerID">Customer ID</param>
         /// <return>The customer with this ID</return>
-        public Customer DisplayCustomer(int customerID);
+        public DO.Customer DisplayCustomer(int customerID);
 
         /// <summary>
         /// Display a specific package to the user
         /// </summary>
         /// <param name="packageID">Package ID</param>
         /// <return>The package with this ID</return> 
-        public Package DisplayPackage(int packageID);
+        public DO.Package DisplayPackage(int packageID);
 
         /// <summary>
         /// Display all stations to the user
         /// </summary>
         /// <returns>List of all stations</returns>
-        public IEnumerable<Station> DisplayStationsList();
+        public IEnumerable<DO.Station> DisplayStationsList();
 
         /// <summary>
         /// Display all drones to the user
         /// </summary>
         /// <returns>List of all drones</returns>
-        public IEnumerable<Drone> DisplayDronesList();
+        public IEnumerable<DO.Drone> DisplayDronesList();
 
          /// <summary>
         /// Display all customers to the user
         /// </summary>
         /// <returns>List of all customers</returns>
-        public IEnumerable<Customer> DisplayCustomersList();
+        public IEnumerable<DO.Customer> DisplayCustomersList();
 
         /// <summary>
         /// Display all packages to the user 
         /// </summary>
         /// <returns>List of all packages</returns>
-        public IEnumerable<Package> DisplayPackagesList();
+        public IEnumerable<DO.Package> DisplayPackagesList();
 
         /// <summary>
         /// Display all packages according to a given predicate
         /// </summary>
         /// <param name="predicate">predicate</param>
         /// <returns>List of all appropriate packages</returns>
-        public IEnumerable<Package> FindPackages(Predicate<Package> predicate);
+        public IEnumerable<DO.Package> FindPackages(Predicate<DO.Package> predicate);
 
         /// <summary>
         /// Display all stations according to a given predicate
         /// </summary>
         /// <param name="predicate">predicate</param>
         /// <returns>List of all appropriate stations</returns>
-        public IEnumerable<Station> FindStations(Predicate<Station> predicate);
+        public IEnumerable<DO.Station> FindStations(Predicate<DO.Station> predicate);
 
         /// <summary>
         /// Represents the statistics of a drone's power consumption 
         /// </summary>
         /// <returns>array of doubles for how much power is consumed for different tasks</returns>
-        public double[] DronePowerConsumption();
+        public IEnumerable<double> DronePowerConsumption();
 
         /// <summary>
         /// Gets the time a drone began charging in a station

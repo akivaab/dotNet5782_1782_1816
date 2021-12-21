@@ -14,11 +14,11 @@ namespace BL
             }
             catch (DO.IllegalArgumentException e)
             {
-                throw new IllegalArgumentException(e.Message);
+                throw new IllegalArgumentException(e.Message, e);
             }
             catch (DO.NonUniqueIdException e)
             {
-                throw new NonUniqueIdException(e.Message);
+                throw new NonUniqueIdException(e.Message, e);
             }
             Station station = new(stationID, name, location, numAvailableChargingSlots, new List<DroneCharging>());
             return station;
@@ -44,7 +44,7 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
         public Station DisplayStation(int stationID)
@@ -69,10 +69,10 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
-        public List<StationToList> DisplayAllStations()
+        public IEnumerable<StationToList> DisplayAllStations()
         {
             List<DO.Station> dalStations = (List<DO.Station>)DalObject.DisplayStationsList();
             List<StationToList> stationToLists = new();
@@ -86,7 +86,7 @@ namespace BL
 
             return stationToLists;
         }
-        public List<StationToList> FindStations(Predicate<DO.Station> predicate)
+        public IEnumerable<StationToList> FindStations(Predicate<DO.Station> predicate)
         {
             List<DO.Station> dalStations = (List<DO.Station>)DalObject.FindStations(predicate);
             List<StationToList> stationToLists = new();

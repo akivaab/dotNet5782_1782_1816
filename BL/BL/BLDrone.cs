@@ -36,11 +36,11 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
             catch (DO.NonUniqueIdException e)
             {
-                throw new NonUniqueIdException(e.Message);
+                throw new NonUniqueIdException(e.Message, e);
             }
         }
         public void UpdateDroneModel(int droneID, string model)
@@ -60,7 +60,7 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
         public void SendDroneToCharge(int droneID)
@@ -95,7 +95,7 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
         public void ReleaseFromCharge(int droneID, double chargingTimeInHours)
@@ -122,7 +122,7 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
         public Drone DisplayDrone(int droneID)
@@ -163,15 +163,15 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
-        public List<DroneToList> DisplayAllDrones()
+        public IEnumerable<DroneToList> DisplayAllDrones()
         {
             return Drones;
         }
 
-        public List<DroneToList> FindDrones(Predicate<DroneToList> predicate)
+        public IEnumerable<DroneToList> FindDrones(Predicate<DroneToList> predicate)
         {
             List<DroneToList> filteredDroneToLists = new();
             foreach (DroneToList drone in Drones)
@@ -192,7 +192,7 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
             }
         }
     }

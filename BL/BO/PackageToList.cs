@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace BO
 {
     public class PackageToList
