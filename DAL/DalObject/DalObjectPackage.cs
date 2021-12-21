@@ -9,11 +9,15 @@ namespace DalObject
         public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int? droneID = null)
         {
             if (DataSource.Customers.FindIndex(customer => customer.ID == senderID) == -1 ||
-                DataSource.Customers.FindIndex(customer => customer.ID == receiverID) == -1 ||
-                (droneID != null && DataSource.Drones.FindIndex(drone => drone.ID == droneID) == -1))
+                DataSource.Customers.FindIndex(customer => customer.ID == receiverID) == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no customer with the given ID.");
             }
+            if (droneID != null && DataSource.Drones.FindIndex(drone => drone.ID == droneID) == -1)
+            {
+                throw new UndefinedObjectException("There is no drone with the given ID.");
+            }
+
             Package package = new();
             package.ID = DataSource.Config.PackageID;
             package.SenderID = senderID;
@@ -36,7 +40,7 @@ namespace DalObject
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
             if (droneIndex == -1 || packageIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no " + (droneIndex == -1 ? "drone" : "package") + " with the given ID.");
             }
             Package package = DataSource.Packages[packageIndex];
             package.DroneID = droneID;
@@ -50,7 +54,7 @@ namespace DalObject
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
             if (droneIndex == -1 || packageIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no " + (droneIndex == -1 ? "drone" : "package") + " with the given ID.");
             }
             Package package = DataSource.Packages[packageIndex];
             package.Collected = DateTime.Now;
@@ -63,7 +67,7 @@ namespace DalObject
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
             if (droneIndex == -1 || packageIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no " + (droneIndex == -1 ? "drone" : "package") + " with the given ID.");
             }
             Package package = DataSource.Packages[packageIndex];
             package.Delivered = DateTime.Now;
@@ -76,7 +80,7 @@ namespace DalObject
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
             if (packageIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no package with the given ID.");
             }
             DataSource.Packages.RemoveAt(packageIndex);
         }
@@ -86,7 +90,7 @@ namespace DalObject
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
             if (packageIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no package with the given ID.");
             }
 
             Package package = DataSource.Packages[packageIndex];
@@ -101,7 +105,7 @@ namespace DalObject
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
             if (packageIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no package with the given ID.");
             }
             return DataSource.Packages[packageIndex];
         }

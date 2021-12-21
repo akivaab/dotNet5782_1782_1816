@@ -12,13 +12,13 @@ namespace BL
             {
                 DalObject.AddCustomer(customerID, name, phone, location.Latitude, location.Longitude);
             }
-            catch (DO.IllegalArgumentException)
+            catch (DO.IllegalArgumentException e)
             {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(e.Message);
             }
-            catch (DO.NonUniqueIdException)
+            catch (DO.NonUniqueIdException e)
             {
-                throw new NonUniqueIdException();
+                throw new NonUniqueIdException(e.Message);
             }
             Customer customer = new(customerID, name, phone, location, new List<PackageForCustomer>(), new List<PackageForCustomer>());
             return customer;
@@ -36,9 +36,9 @@ namespace BL
                     DalObject.UpdateCustomerPhone(customerID, phone);
                 }
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public Customer DisplayCustomer(int customerID)
@@ -72,9 +72,9 @@ namespace BL
                 Customer customer = new(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, new Location(dalCustomer.Latitude, dalCustomer.Longitude), packagesToSend, packagesToReceive);
                 return customer;
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public List<CustomerToList> DisplayAllCustomers()

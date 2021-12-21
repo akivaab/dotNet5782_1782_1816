@@ -12,13 +12,13 @@ namespace BL
             {
                 DalObject.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
             }
-            catch (DO.IllegalArgumentException)
+            catch (DO.IllegalArgumentException e)
             {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(e.Message);
             }
-            catch (DO.NonUniqueIdException)
+            catch (DO.NonUniqueIdException e)
             {
-                throw new NonUniqueIdException();
+                throw new NonUniqueIdException(e.Message);
             }
             Station station = new(stationID, name, location, numAvailableChargingSlots, new List<DroneCharging>());
             return station;
@@ -42,9 +42,9 @@ namespace BL
                     DalObject.UpdateStationChargeSlots(stationID, availableChargeSlots);
                 }
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public Station DisplayStation(int stationID)
@@ -67,9 +67,9 @@ namespace BL
 
                 return new Station(dalStation.ID, dalStation.Name, stationLocation, dalStation.AvailableChargeSlots, dronesCharging);
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public List<StationToList> DisplayAllStations()

@@ -9,11 +9,11 @@ namespace DalObject
         {
             if (latitude < -1 || latitude > 1 || longitude < 0 || longitude > 2) //limited coordinate field
             {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("The given latitude and/or longitude is out of our coordinate field range.");
             }
             if (DataSource.Customers.FindIndex(customer => customer.ID == id) != -1)
             {
-                throw new NonUniqueIdException();
+                throw new NonUniqueIdException("The given customer ID is not unique.");
             }
             Customer customer = new();
             customer.ID = id;
@@ -30,7 +30,7 @@ namespace DalObject
             
             if (customerIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no customer with the given ID.");
             }
             
             Customer customer = DataSource.Customers[customerIndex];
@@ -44,7 +44,7 @@ namespace DalObject
             
             if (customerIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no customer with the given ID.");
             }
             
             Customer customer = DataSource.Customers[customerIndex];
@@ -55,10 +55,12 @@ namespace DalObject
         public Customer DisplayCustomer(int customerID)
         {
             int customerIndex = DataSource.Customers.FindIndex(customer => customer.ID == customerID);
+            
             if (customerIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no customer with the given ID.");
             }
+            
             return DataSource.Customers[customerIndex];
         }
 

@@ -96,22 +96,22 @@ namespace PL
                     closeButtonClicked = true;
                     Close();
                 }
-                catch (NonUniqueIdException)
+                catch (NonUniqueIdException ex)
                 {
-                    MessageBox.Show("This Drone ID already exists.");
+                    MessageBox.Show(ex.Message + "\nPlease enter a different ID.");
                 }
-                catch (UndefinedObjectException)
+                catch (UndefinedObjectException ex)
                 {
-                    MessageBox.Show("No station with this ID exists.");
+                    MessageBox.Show(ex.Message + "\nPlease try a different station.");
                 }
-                catch (UnableToChargeException)
+                catch (UnableToChargeException ex)
                 {
-                    MessageBox.Show("This station has no charge slots available.");
+                    MessageBox.Show(ex.Message + "\nPlease select a different station.");
                 }
             }
             else
             {
-                MessageBox.Show("Please enter valid information.");
+                MessageBox.Show("Some of the information supplied is invalid.\n(Is your Drone ID a number?)");
             }
         }
 
@@ -133,7 +133,7 @@ namespace PL
             }
             else
             {
-                MessageBox.Show("Enter valid model name.");
+                MessageBox.Show("The model name supplied is invalid.");
             }
         }
 
@@ -159,28 +159,28 @@ namespace PL
                 }
                 else
                 {
-                    MessageBox.Show("Cannot charge while delivering.");
+                    MessageBox.Show("The drone is currently delivering and cannot be sent to charge.");
                 }
 
                 //reload this window and refresh the parent DroneListWindow
                 LoadDroneData();
                 RefreshDroneListWindowView();
             }
-            catch (UnableToChargeException)
+            catch (UnableToChargeException ex)
             {
-                MessageBox.Show("Cannot charge this drone.");
+                MessageBox.Show(ex.Message + "\n(Is the drone available?)");
             }
-            catch (UnableToReleaseException)
+            catch (UnableToReleaseException ex)
             {
-                MessageBox.Show("Cannot release this drone.");
+                MessageBox.Show(ex.Message + "\n(Is the drone in maintenance?)");
             }
             catch (UndefinedObjectException)
             {
-                MessageBox.Show("An error occured when searching for a station.");
+                MessageBox.Show("An error has occured in the system. The relevant station does not exist.");
             }
             catch (EmptyListException)
             {
-                MessageBox.Show("An error occured when searching for a station.");
+                MessageBox.Show("An error has occured in the system. There are no stations.");
             }
         }
 
@@ -196,7 +196,7 @@ namespace PL
                 if ((Enums.DroneStatus)Actions_Status.Content == Enums.DroneStatus.available)
                 {
                     bl.AssignPackage(drone.ID);
-                    MessageBox.Show("Package assigned to drone.");
+                    MessageBox.Show("Package successfully assigned to drone.");
                 }
                 else if ((Enums.DroneStatus)Actions_Status.Content == Enums.DroneStatus.delivery)
                 {
@@ -205,21 +205,21 @@ namespace PL
                     if (package.CollectingTime == null)
                     {
                         bl.CollectPackage(drone.ID);
-                        MessageBox.Show("Package collected.");
+                        MessageBox.Show("Package successfully collected.");
                     }
                     else if (package.DeliveringTime == null)
                     {
                         bl.DeliverPackage(drone.ID);
-                        MessageBox.Show("Package delivered.");
+                        MessageBox.Show("Package successfully delivered.");
                     }
                     else
                     {
-                        MessageBox.Show("An error has occured. Contact support for help.");
+                        MessageBox.Show("An error has occured in the system. The drone has completed its delivery but is not considered available.");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Drone is unavailable for delivering.");
+                    MessageBox.Show("The drone is currently unavailable for delivering.\n(Is the drone available?)");
                 }
 
                 //reload this window and refresh the parent DroneListWindow
@@ -228,23 +228,23 @@ namespace PL
             }
             catch (UndefinedObjectException)
             {
-                MessageBox.Show("An error has occured.");
+                MessageBox.Show("An error has occured in the system. The drone no longer exists.");
             }
-            catch (UnableToAssignException)
+            catch (UnableToAssignException ex)
             {
-                MessageBox.Show("Drone cannot be assigned a package.");
+                MessageBox.Show(ex.Message + "\n(Is the drone available?)");
             }
-            catch (UnableToCollectException)
+            catch (UnableToCollectException ex)
             {
-                MessageBox.Show("Drone cannot collect package.");
+                MessageBox.Show(ex.Message + "\n(Is the drone delivering and not mid-transfer?)");
             }
-            catch (UnableToDeliverException)
+            catch (UnableToDeliverException ex)
             {
-                MessageBox.Show("Drone cannot deliver package.");
+                MessageBox.Show(ex.Message + "\n(Is the drone delivering and mid-transfer?)");
             }
-            catch (EmptyListException)
+            catch (EmptyListException ex)
             {
-                MessageBox.Show("Drone is incapable of delivering any existing package (or no packages exist).");
+                MessageBox.Show(ex.Message + "\nTry using a different drone.");
             }
         }
 

@@ -1,42 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace BO
 {
     public class IllegalArgumentException : Exception
     {
-        public IllegalArgumentException() : base() { }
+        public IllegalArgumentException(string s) : base(s) { }
     }
     public class EmptyListException : Exception
     {
-        public EmptyListException() : base() { }
+        public EmptyListException(string s) : base(s) { }
     }
     public class NonUniqueIdException : Exception
     {
-        public NonUniqueIdException() : base() { }
+        public NonUniqueIdException(string s) : base(s) { }
     }
     public class UndefinedObjectException : Exception
     {
-        public UndefinedObjectException() : base() { }
+        public UndefinedObjectException(string s) : base(s) { }
     }
     public class UnableToChargeException : Exception
     {
-        public UnableToChargeException() : base() { }
+        public UnableToChargeException(string s) : base(s) { }
     }
     public class UnableToReleaseException : Exception
     {
-        public UnableToReleaseException() : base() { }
+        public UnableToReleaseException(string s) : base(s) { }
     }
     public class UnableToAssignException : Exception
     {
-        public UnableToAssignException() : base() { }
+        public UnableToAssignException(string s) : base(s) { }
     }
     public class UnableToCollectException : Exception
     {
-        public UnableToCollectException() : base() { }
+        public UnableToCollectException(string s) : base(s) { }
     }
     public class UnableToDeliverException : Exception
     {
-        public UnableToDeliverException() : base() { }
+        public UnableToDeliverException(string s) : base(s) { }
     }
 }

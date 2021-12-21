@@ -20,9 +20,9 @@ namespace BL
                 Package package = new(packageID, packageSender, packageReceiver, weight, priority, null, DateTime.Now, null, null, null);
                 return package;
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public void AssignPackage(int droneID)
@@ -30,13 +30,12 @@ namespace BL
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no drone with the given ID.");
             }
 
-            //if the drone is not in a state to be assigned
             if (Drones[droneIndex].Status != Enums.DroneStatus.available)
             {
-                throw new UnableToAssignException();
+                throw new UnableToAssignException("The drone is not currently available and so cannot be assigned a package.");
             }
 
             try
@@ -48,9 +47,9 @@ namespace BL
                 Drones[droneIndex].Status = Enums.DroneStatus.delivery;
                 Drones[droneIndex].PackageID = bestPackageID;
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public void CollectPackage(int droneID)
@@ -58,21 +57,19 @@ namespace BL
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no drone with the given ID.");
             }
 
-            //if the drone isn't assigned a package
             if (Drones[droneIndex].PackageID == null)
             {
-                throw new UnableToCollectException();
+                throw new UnableToCollectException("The drone has not been assigned a package.");
             }
             
             DO.Package dalPackage = DalObject.DisplayPackage((int)Drones[droneIndex].PackageID);
             
-            //if the package isn't in a state to be collected
             if (dalPackage.Assigned == null || dalPackage.Collected != null)
             {
-                throw new UnableToCollectException();
+                throw new UnableToCollectException("The drone is currently unable to collect a package.");
             }
 
             try
@@ -83,9 +80,9 @@ namespace BL
                 Drones[droneIndex].Battery = Math.Max(Drones[droneIndex].Battery - (PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(Drones[droneIndex].Location, senderLocation)), 0);
                 Drones[droneIndex].Location = senderLocation;
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public void DeliverPackage(int droneID)
@@ -93,13 +90,13 @@ namespace BL
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no drone with the given ID.");
             }
 
             //if this drone isn't assigned a package
             if (Drones[droneIndex].PackageID == null)
             {
-                throw new UnableToDeliverException();
+                throw new UnableToDeliverException("The drone has not been assigned a package.");
             }
             
             DO.Package dalPackage = DalObject.DisplayPackage((int)Drones[droneIndex].PackageID);
@@ -107,7 +104,7 @@ namespace BL
             //if this package isn't in a state to be delivered
             if (dalPackage.Collected == null || dalPackage.Delivered != null)
             {
-                throw new UnableToDeliverException();
+                throw new UnableToDeliverException("The drone is currently unable to deliver a package.");
             }
 
             try
@@ -119,9 +116,9 @@ namespace BL
                 Drones[droneIndex].Location = receiverLocation;
                 Drones[droneIndex].Status = Enums.DroneStatus.available;
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public Package DisplayPackage(int packageID)
@@ -141,9 +138,9 @@ namespace BL
                 Package package = new(dalPackage.ID, senderForPackage, receiverForPackage, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, droneDelivering, dalPackage.Requested, dalPackage.Assigned, dalPackage.Collected, dalPackage.Delivered);
                 return package;
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public List<PackageToList> DisplayAllPackages()
@@ -160,9 +157,9 @@ namespace BL
                 }
                 return packageToLists;
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public List<PackageToList> FindPackages(Predicate<DO.Package> predicate)
@@ -179,9 +176,9 @@ namespace BL
                 }
                 return packageToLists;
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
     }

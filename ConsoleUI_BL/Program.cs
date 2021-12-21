@@ -45,7 +45,7 @@ namespace ConsoleUI_BL
             }
             catch (UndefinedObjectException e)
             {
-                Console.WriteLine($"{e}:\nInitialization failed. Try restarting the program.");
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -130,15 +130,15 @@ namespace ConsoleUI_BL
             }
             catch (IllegalArgumentException e)
             {
-                Console.WriteLine($"{e}:\nOne of the arguments you entered is illegal.");
+                Console.WriteLine(e.Message);
             }
             catch (NonUniqueIdException e)
             {
-                Console.WriteLine($"{e}:\nAn object of this type with this ID already exists.");
+                Console.WriteLine(e.Message);
             }
             catch (UndefinedObjectException e)
             {
-                Console.WriteLine($"{e}:\nAn object you referenced does not exist.");
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -263,27 +263,27 @@ namespace ConsoleUI_BL
             }
             catch (UndefinedObjectException e)
             {
-                Console.WriteLine($"{e}:\nThe object you wish to update is not defined.");
+                Console.WriteLine(e.Message);
             }
             catch (UnableToChargeException e)
             {
-                Console.WriteLine($"{e}:\nThe drone is unable to be sent to a station to charge.");
+                Console.WriteLine(e.Message);
             }
             catch (UnableToReleaseException e)
             {
-                Console.WriteLine($"{e}:\nThe drone is unable to be released from a charging slot.");
+                Console.WriteLine(e.Message);
             }
             catch (UnableToAssignException e)
             {
-                Console.WriteLine($"{e}:\nThis drone cannot be assigned a package.");
+                Console.WriteLine(e.Message);
             }
             catch (UnableToCollectException e)
             {
-                Console.WriteLine($"{e}:\nThis drone is unable to collect a package.");
+                Console.WriteLine(e.Message);
             }
             catch (UnableToDeliverException e)
             {
-                Console.WriteLine($"{e}:\nThis drone is unable to deliver a package.");
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -331,7 +331,7 @@ namespace ConsoleUI_BL
             }
             catch (UndefinedObjectException e)
             {
-                Console.WriteLine($"{e}:\nThe object you wish to display is not defined.");
+                Console.WriteLine(e.Message);
             }
         }
 

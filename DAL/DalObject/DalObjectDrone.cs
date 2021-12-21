@@ -10,7 +10,7 @@ namespace DalObject
         {
             if (DataSource.Drones.FindIndex(drone => drone.ID == id) != -1)
             {
-                throw new NonUniqueIdException();
+                throw new NonUniqueIdException("The given drone ID is not unique.");
             }
             Drone drone = new();
             drone.ID = id;
@@ -25,7 +25,7 @@ namespace DalObject
             int stationIndex = DataSource.Stations.FindIndex(station => station.ID == stationID);
             if (droneIndex == -1 || stationIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no " + (droneIndex == -1 ? "drone" : "station") + " with the given ID.");
             }
             Station station = DataSource.Stations[stationIndex];
             station.AvailableChargeSlots--;
@@ -42,10 +42,16 @@ namespace DalObject
             int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
             int stationIndex = DataSource.Stations.FindIndex(station => station.ID == stationID);
             int droneChargeIndex = DataSource.DroneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID);
-            if (droneIndex == -1 || stationIndex == -1 || droneChargeIndex == -1)
+            
+            if (droneIndex == -1 || stationIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no " + (droneIndex == -1 ? "drone" : "station") + " with the given ID.");
             }
+            if (droneChargeIndex == -1)
+            {
+                throw new UndefinedObjectException("The given drone is not charging in the given station.");
+            }
+
             Station station = DataSource.Stations[stationIndex];
             station.AvailableChargeSlots++;
             DataSource.Stations[stationIndex] = station;
@@ -58,7 +64,7 @@ namespace DalObject
 
             if (droneIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no drone with the given ID.");
             }
 
             Drone drone = DataSource.Drones[droneIndex];
@@ -71,7 +77,7 @@ namespace DalObject
             int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
             if (droneIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no drone with the given ID.");
             }
             return DataSource.Drones[droneIndex];
         }
@@ -102,7 +108,7 @@ namespace DalObject
             int droneChargeIndex = DataSource.DroneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID);
             if (droneChargeIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no drone with the given ID.");
             }
 
             return DataSource.DroneCharges[droneChargeIndex].BeganCharge;

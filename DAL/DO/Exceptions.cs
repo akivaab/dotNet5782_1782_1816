@@ -4,18 +4,18 @@ namespace DO
 {
     public class IllegalArgumentException : Exception
     {
-        public IllegalArgumentException() : base() {}
+        public IllegalArgumentException(string s) : base(s) { }
     }
     public class NonUniqueIdException : Exception
     {
-        public NonUniqueIdException() : base() {}
+        public NonUniqueIdException(string s) : base(s) { }
     }
     public class UndefinedObjectException : Exception
     {
-        public UndefinedObjectException() : base() {}
+        public UndefinedObjectException(string s) : base(s) { }
     }
     public class UndefinedStringException : Exception
     {
-        public UndefinedStringException() : base() {}
+        public UndefinedStringException(string s) : base(s) { }
     }
 }

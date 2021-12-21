@@ -10,7 +10,7 @@ namespace BL
         {
             if (Drones.FindIndex(d => d.ID == droneID) != -1)
             {
-                throw new NonUniqueIdException();
+                throw new NonUniqueIdException("The given drone ID is not unique.");
             }
 
             try
@@ -19,7 +19,7 @@ namespace BL
                 DO.Station dalStation = DalObject.DisplayStation(stationID);
                 if (dalStation.AvailableChargeSlots <= 0)
                 {
-                    throw new UnableToChargeException();
+                    throw new UnableToChargeException("There are no available charge slots for the drone in the given station.");
                 }
 
                 DalObject.AddDrone(droneID, model, (DO.Enums.WeightCategories)maxWeight);
@@ -34,13 +34,13 @@ namespace BL
                 Drone drone = new(droneID, model, maxWeight, battery, Enums.DroneStatus.maintenance, null, droneLocation);
                 return drone;
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
-            catch (DO.NonUniqueIdException)
+            catch (DO.NonUniqueIdException e)
             {
-                throw new NonUniqueIdException();
+                throw new NonUniqueIdException(e.Message);
             }
         }
         public void UpdateDroneModel(int droneID, string model)
@@ -49,7 +49,7 @@ namespace BL
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no drone with the given ID.");
             }
             Drones[droneIndex].Model = model;
 
@@ -58,9 +58,9 @@ namespace BL
             {
                 DalObject.UpdateDroneModel(droneID, model);
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public void SendDroneToCharge(int droneID)
@@ -68,13 +68,18 @@ namespace BL
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no drone with the given ID.");
+            }
+
+            if (Drones[droneIndex].Status != Enums.DroneStatus.available)
+            {
+                throw new UnableToChargeException("The drone cannot currently be sent to charge.");
             }
 
             List<DO.Station> reachableStations = getReachableStations(Drones[droneIndex]);
-            if (Drones[droneIndex].Status != Enums.DroneStatus.available || reachableStations.Count == 0)
+            if (reachableStations.Count == 0)
             {
-                throw new UnableToChargeException();
+                throw new UnableToChargeException("The drone does not have enough battery to reach a station.");
             }
 
             try 
@@ -88,9 +93,9 @@ namespace BL
                 Drones[droneIndex].Location = closestStationLocation;
                 Drones[droneIndex].Status = Enums.DroneStatus.maintenance;
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public void ReleaseFromCharge(int droneID, double chargingTimeInHours)
@@ -98,13 +103,13 @@ namespace BL
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no drone with the given ID.");
             }
 
             //check drone status
             if (Drones[droneIndex].Status != Enums.DroneStatus.maintenance)
             {
-                throw new UnableToReleaseException();
+                throw new UnableToReleaseException("The drone is not currently charging and so cannot be released.");
             }
 
             try 
@@ -115,9 +120,9 @@ namespace BL
                 Drones[droneIndex].Battery = Math.Min(Drones[droneIndex].Battery + (ChargeRatePerHour * chargingTimeInHours), 100);
                 Drones[droneIndex].Status = Enums.DroneStatus.available;
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public Drone DisplayDrone(int droneID)
@@ -125,7 +130,7 @@ namespace BL
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException("There is no drone with the given ID.");
             }
             DroneToList droneToList = Drones[droneIndex];
 
@@ -156,9 +161,9 @@ namespace BL
                 Drone drone = new(droneToList.ID, droneToList.Model, droneToList.MaxWeight, droneToList.Battery, droneToList.Status, packageInTransfer, droneToList.Location);
                 return drone;
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
         public List<DroneToList> DisplayAllDrones()
@@ -185,9 +190,9 @@ namespace BL
             {
                 return DalObject.GetTimeChargeBegan(droneID);
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
     }

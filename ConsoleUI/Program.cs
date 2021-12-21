@@ -119,15 +119,15 @@ namespace ConsoleUI
             }
             catch (IllegalArgumentException e)
             {
-                Console.WriteLine($"{e}:\nOne of the arguments you entered is illegal.");
+                Console.WriteLine(e.Message);
             }
             catch (NonUniqueIdException e)
             {
-                Console.WriteLine($"{e}:\nAn object of this type with this ID already exists.");
+                Console.WriteLine(e.Message);
             }
             catch (UndefinedObjectException e)
             {
-                Console.WriteLine($"{e}:\nAn object you referenced does not exist.");
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -192,7 +192,7 @@ namespace ConsoleUI
             }
             catch (UndefinedObjectException e)
             {
-                Console.WriteLine($"{e}:\nThe object you wish to update is not defined.");
+                Console.WriteLine(e.Message);
             }
         }
 
@@ -240,7 +240,7 @@ namespace ConsoleUI
             }
             catch (UndefinedObjectException e)
             {
-                Console.WriteLine($"{e}:\nThe object you wish to display is not defined.");
+                Console.WriteLine(e.Message);
             }
         }
 

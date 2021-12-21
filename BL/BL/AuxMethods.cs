@@ -52,7 +52,7 @@ namespace BL
         {
             if (stations.Count == 0)
             {
-                throw new EmptyListException();
+                throw new EmptyListException("The function recieved an empty list.");
             }
 
             double min = double.MaxValue;
@@ -108,9 +108,9 @@ namespace BL
                 Location customerLocation = new(dalCustomer.Latitude, dalCustomer.Longitude);
                 return customerLocation;
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
 
@@ -138,9 +138,9 @@ namespace BL
                 Random random = new Random();
                 return random.Next((int)Math.Ceiling(distanceToDeliver * powerConsumed), 101);
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
 
@@ -157,7 +157,7 @@ namespace BL
 
                 if (deliveredPackages.Count == 0)
                 {
-                    throw new EmptyListException();
+                    throw new EmptyListException("No customer has yet received a package.");
                 }
 
                 //randomly choose the ID of the receiver of a package
@@ -166,9 +166,9 @@ namespace BL
 
                 return DalObject.DisplayCustomer(receiverID);
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
 
@@ -202,7 +202,7 @@ namespace BL
 
             if (bestPackages.Count == 0)
             {
-                throw new EmptyListException();
+                throw new EmptyListException("There are currently no packages that this drone is capable of delivering.");
             }
 
             //order packages by priority, then weight, then distance
@@ -282,9 +282,9 @@ namespace BL
                     }
                 }
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
 
@@ -328,9 +328,9 @@ namespace BL
                     }
                 }
             }
-            catch (DO.UndefinedObjectException)
+            catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException();
+                throw new UndefinedObjectException(e.Message);
             }
         }
     }

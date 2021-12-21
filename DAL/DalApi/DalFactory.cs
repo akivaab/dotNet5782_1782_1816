@@ -17,7 +17,7 @@ namespace DalApi
                 //case "DalXml":
                 //    return DalXml.DalXml.Instance;
                 default:
-                    throw new DO.UndefinedStringException();
+                    throw new DO.UndefinedStringException("The given string does not match any instance.");
             }
         }
     }
