@@ -1,5 +1,5 @@
 ﻿using System;
-using DalApi.DO;
+using DO;
 
 namespace ConsoleUI
 {
@@ -7,7 +7,7 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            DalApi.IDal dal = new DalObject.DalObject();
+            DalApi.IDal dal = DalApi.DalFactory.GetDal("DalObject");
             int option;
             do
             {

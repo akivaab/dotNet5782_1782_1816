@@ -4,19 +4,8 @@ using DO;
 
 namespace DalObject
 {
-    sealed partial class DalObject : DalApi.IDal
+    partial class DalObject : DalApi.IDal
     {
-        private static readonly Lazy<DalObject> lazyDalObject = new Lazy<DalObject>(() => new DalObject());
-
-        public static DalObject Instance { get { return lazyDalObject.Value; } }
-        /// <summary>
-        /// Constructor adds initial values to the entity arrays
-        /// </summary>
-        private DalObject()
-        {
-            DataSource.Initialize();
-        }
-
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
         {
             if (latitude < -1 || latitude > 1 || longitude < 0 || longitude > 2) //limited coordinate field

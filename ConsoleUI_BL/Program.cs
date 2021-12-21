@@ -1,5 +1,5 @@
 ﻿using System;
-using BlApi.BO;
+using BO;
 
 namespace ConsoleUI_BL
 {
@@ -9,7 +9,7 @@ namespace ConsoleUI_BL
         {
             try
             {
-                BlApi.IBL bl = new BlApi.BL();
+                BlApi.IBL bl = BlApi.BlFactory.GetBl();
                 int option;
                 do
                 {
