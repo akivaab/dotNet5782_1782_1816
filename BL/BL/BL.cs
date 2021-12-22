@@ -8,7 +8,7 @@ namespace BL
     sealed partial class BL : BlApi.IBL
     {
         private static readonly Lazy<BL> lazyBl = new Lazy<BL>(() => new BL());
-        public static BL Instance { get { return lazyBl.Value; } }
+        internal static BL Instance { get { return lazyBl.Value; } }
         private List<DroneToList> Drones;
         private DalApi.IDal DalObject;
         private double[] PowerConsumption;

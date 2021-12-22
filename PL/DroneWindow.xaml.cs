@@ -111,7 +111,8 @@ namespace PL
             }
             else
             {
-                MessageBox.Show("Some of the information supplied is invalid.\n(Is your Drone ID a number?)");
+                MessageBox.Show("Some of the information supplied is invalid. Please enter other information." +
+                    (idIsInteger ? "" : "\n(Is your Drone ID a number?)"));
             }
         }
 
