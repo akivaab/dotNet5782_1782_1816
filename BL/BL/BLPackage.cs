@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BO;
 
 namespace BL
@@ -40,7 +41,7 @@ namespace BL
 
             try
             {
-                List<DO.Package> dalPackages = (List<DO.Package>)DalObject.FindPackages(p => p.DroneID == null);
+                IEnumerable<DO.Package> dalPackages = DalObject.FindPackages(p => p.DroneID == null);
                 int bestPackageID = findBestPackage(dalPackages, Drones[droneIndex]);
                 DalObject.AssignPackage(bestPackageID, droneID);
 
@@ -52,6 +53,7 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+
         public void CollectPackage(int droneID)
         {
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
@@ -147,14 +149,11 @@ namespace BL
         {
             try
             {
-                List<DO.Package> dalPackages = new(DalObject.DisplayPackagesList());
-                List<PackageToList> packageToLists = new();
-                foreach (DO.Package dalPackage in dalPackages)
-                {
-                    string senderName = DalObject.DisplayCustomer(dalPackage.SenderID).Name;
-                    string receiverName = DalObject.DisplayCustomer(dalPackage.ReceiverID).Name;
-                    packageToLists.Add(new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, getPackageStatus(dalPackage)));
-                }
+                IEnumerable<DO.Package> dalPackages = DalObject.DisplayPackagesList();
+                IEnumerable<PackageToList> packageToLists = from DO.Package dalPackage in dalPackages
+                                                            let senderName = DalObject.DisplayCustomer(dalPackage.SenderID).Name
+                                                            let receiverName = DalObject.DisplayCustomer(dalPackage.ReceiverID).Name
+                                                            select new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, getPackageStatus(dalPackage));
                 return packageToLists;
             }
             catch (DO.UndefinedObjectException e)
@@ -162,18 +161,16 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+
         public IEnumerable<PackageToList> FindPackages(Predicate<DO.Package> predicate)
         {
             try
             {
-                List<DO.Package> dalPackages = new(DalObject.FindPackages(predicate));
-                List<PackageToList> packageToLists = new();
-                foreach (DO.Package dalPackage in dalPackages)
-                {
-                    string senderName = DalObject.DisplayCustomer(dalPackage.SenderID).Name;
-                    string receiverName = DalObject.DisplayCustomer(dalPackage.ReceiverID).Name;
-                    packageToLists.Add(new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, Enums.PackageStatus.created));
-                }
+                IEnumerable<DO.Package> dalPackages = DalObject.FindPackages(predicate);
+                IEnumerable<PackageToList> packageToLists = from DO.Package dalPackage in dalPackages
+                                                            let senderName = DalObject.DisplayCustomer(dalPackage.SenderID).Name
+                                                            let receiverName = DalObject.DisplayCustomer(dalPackage.ReceiverID).Name
+                                                            select new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, Enums.PackageStatus.created);
                 return packageToLists;
             }
             catch (DO.UndefinedObjectException e)

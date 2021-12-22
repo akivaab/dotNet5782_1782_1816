@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using DO;
 
 namespace DalObject
@@ -66,12 +67,8 @@ namespace DalObject
 
         public IEnumerable<Customer> DisplayCustomersList()
         {
-            List<Customer> customers = new();
-            foreach (Customer customer in DataSource.Customers)
-            {
-                customers.Add(customer);
-            }
-            return customers;
+            return from customer in DataSource.Customers
+                   select customer;
         }
     }
 }

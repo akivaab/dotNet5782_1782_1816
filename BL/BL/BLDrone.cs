@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BO;
 
 namespace BL
@@ -76,8 +77,8 @@ namespace BL
                 throw new UnableToChargeException("The drone cannot currently be sent to charge.");
             }
 
-            List<DO.Station> reachableStations = getReachableStations(Drones[droneIndex]);
-            if (reachableStations.Count == 0)
+            IEnumerable<DO.Station> reachableStations = getReachableStations(Drones[droneIndex]);
+            if (reachableStations.Count() == 0)
             {
                 throw new UnableToChargeException("The drone does not have enough battery to reach a station.");
             }
@@ -85,8 +86,9 @@ namespace BL
             try 
             { 
                 Location closestStationLocation = getClosestStation(Drones[droneIndex].Location, reachableStations);
-                List<DO.Station> dalStations = new(DalObject.DisplayStationsList());
-                DO.Station dalStation = dalStations.Find(s => s.Latitude == closestStationLocation.Latitude && s.Longitude == closestStationLocation.Longitude);
+                IEnumerable<DO.Station> dalStations = DalObject.DisplayStationsList();
+                DO.Station dalStation = dalStations.Where(s => s.Latitude == closestStationLocation.Latitude && s.Longitude == closestStationLocation.Longitude).First();
+                
                 DalObject.ChargeDrone(droneID, dalStation.ID);
 
                 Drones[droneIndex].Battery = Math.Max(Drones[droneIndex].Battery - (PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(Drones[droneIndex].Location, closestStationLocation)), 0);
@@ -114,8 +116,8 @@ namespace BL
 
             try 
             { 
-                List<DO.Station> dalStations = (List<DO.Station>)DalObject.FindStations(s => s.Latitude == Drones[droneIndex].Location.Latitude && s.Longitude == Drones[droneIndex].Location.Longitude);
-                DalObject.ReleaseDroneFromCharging(droneID, dalStations[0].ID);
+                IEnumerable<DO.Station> dalStations = DalObject.FindStations(s => s.Latitude == Drones[droneIndex].Location.Latitude && s.Longitude == Drones[droneIndex].Location.Longitude);
+                DalObject.ReleaseDroneFromCharging(droneID, dalStations.First().ID);
 
                 Drones[droneIndex].Battery = Math.Min(Drones[droneIndex].Battery + (ChargeRatePerHour * chargingTimeInHours), 100);
                 Drones[droneIndex].Status = Enums.DroneStatus.available;
@@ -173,15 +175,9 @@ namespace BL
 
         public IEnumerable<DroneToList> FindDrones(Predicate<DroneToList> predicate)
         {
-            List<DroneToList> filteredDroneToLists = new();
-            foreach (DroneToList drone in Drones)
-            {
-                if (predicate(drone) == true)
-                {
-                    filteredDroneToLists.Add(drone);
-                }
-            }
-            return filteredDroneToLists;
+            return from DroneToList drone in Drones
+                   where predicate(drone)
+                   select drone;
         }
 
         public DateTime GetTimeChargeBegan(int droneID)

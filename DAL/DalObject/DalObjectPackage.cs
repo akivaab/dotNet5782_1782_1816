@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DO;
 
 namespace DalObject
@@ -38,10 +39,12 @@ namespace DalObject
         {
             int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
+            
             if (droneIndex == -1 || packageIndex == -1)
             {
                 throw new UndefinedObjectException("There is no " + (droneIndex == -1 ? "drone" : "package") + " with the given ID.");
             }
+            
             Package package = DataSource.Packages[packageIndex];
             package.DroneID = droneID;
             package.Assigned = DateTime.Now;
@@ -52,10 +55,12 @@ namespace DalObject
         {
             int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
+            
             if (droneIndex == -1 || packageIndex == -1)
             {
                 throw new UndefinedObjectException("There is no " + (droneIndex == -1 ? "drone" : "package") + " with the given ID.");
             }
+            
             Package package = DataSource.Packages[packageIndex];
             package.Collected = DateTime.Now;
             DataSource.Packages[packageIndex] = package;
@@ -65,10 +70,12 @@ namespace DalObject
         {
             int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
+            
             if (droneIndex == -1 || packageIndex == -1)
             {
                 throw new UndefinedObjectException("There is no " + (droneIndex == -1 ? "drone" : "package") + " with the given ID.");
             }
+            
             Package package = DataSource.Packages[packageIndex];
             package.Delivered = DateTime.Now;
             package.DroneID = 0;
@@ -78,16 +85,19 @@ namespace DalObject
         public void RemovePackage(int packageID)
         {
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
+            
             if (packageIndex == -1)
             {
                 throw new UndefinedObjectException("There is no package with the given ID.");
             }
+            
             DataSource.Packages.RemoveAt(packageIndex);
         }
 
         public void ModifyPackageStatus(int packageID, DateTime? assigned, DateTime? collected, DateTime? delivered)
         {
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
+            
             if (packageIndex == -1)
             {
                 throw new UndefinedObjectException("There is no package with the given ID.");
@@ -103,34 +113,26 @@ namespace DalObject
         public Package DisplayPackage(int packageID)
         {
             int packageIndex = DataSource.Packages.FindIndex(package => package.ID == packageID);
+            
             if (packageIndex == -1)
             {
                 throw new UndefinedObjectException("There is no package with the given ID.");
             }
+            
             return DataSource.Packages[packageIndex];
         }
 
         public IEnumerable<Package> DisplayPackagesList()
         {
-            List<Package> packages = new();
-            foreach (Package package in DataSource.Packages)
-            {
-                packages.Add(package);
-            }
-            return packages;
+            return from package in DataSource.Packages
+                   select package;
         }
             
         public IEnumerable<Package> FindPackages(Predicate<Package> predicate)
         {
-            List<Package> packages = new();
-            foreach (Package package in DataSource.Packages)
-            {
-                if (predicate(package) == true)
-                {
-                    packages.Add(package);
-                }
-            }
-            return packages;
+            return from package in DataSource.Packages
+                   where predicate(package)
+                   select package;
         }
     }
 }

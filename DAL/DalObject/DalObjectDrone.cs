@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DO;
 
 namespace DalObject
@@ -12,6 +13,7 @@ namespace DalObject
             {
                 throw new NonUniqueIdException("The given drone ID is not unique.");
             }
+            
             Drone drone = new();
             drone.ID = id;
             drone.Model = model;
@@ -23,10 +25,12 @@ namespace DalObject
         {
             int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
             int stationIndex = DataSource.Stations.FindIndex(station => station.ID == stationID);
+            
             if (droneIndex == -1 || stationIndex == -1)
             {
                 throw new UndefinedObjectException("There is no " + (droneIndex == -1 ? "drone" : "station") + " with the given ID.");
             }
+
             Station station = DataSource.Stations[stationIndex];
             station.AvailableChargeSlots--;
             DataSource.Stations[stationIndex] = station;
@@ -75,21 +79,19 @@ namespace DalObject
         public Drone DisplayDrone(int droneID)
         {
             int droneIndex = DataSource.Drones.FindIndex(drone => drone.ID == droneID);
+            
             if (droneIndex == -1)
             {
                 throw new UndefinedObjectException("There is no drone with the given ID.");
             }
+            
             return DataSource.Drones[droneIndex];
         }
 
         public IEnumerable<Drone> DisplayDronesList()
         {
-            List<Drone> drones = new();
-            foreach (Drone drone in DataSource.Drones)
-            {
-                drones.Add(drone);
-            }
-            return drones;
+            return from drone in DataSource.Drones
+                   select drone;
         }
 
         public IEnumerable<double> DronePowerConsumption()
@@ -106,6 +108,7 @@ namespace DalObject
         public DateTime GetTimeChargeBegan(int droneID)
         {
             int droneChargeIndex = DataSource.DroneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID);
+            
             if (droneChargeIndex == -1)
             {
                 throw new UndefinedObjectException("There is no drone with the given ID.");

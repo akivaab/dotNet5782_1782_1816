@@ -26,10 +26,10 @@ namespace BL
             //remove problematic entities from the data layer
             dataCleanup();
             
-            List<DO.Drone> dalDrones = (List<DO.Drone>)DalObject.DisplayDronesList();
+            List<DO.Drone> dalDrones = DalObject.DisplayDronesList().ToList();
 
             //find all packages undelivered but with a drone assigned
-            List<DO.Package> dalPackages = (List<DO.Package>)DalObject.FindPackages(p => p.Delivered == null && p.DroneID != null);
+            List<DO.Package> dalPackages = DalObject.FindPackages(p => p.Delivered == null && p.DroneID != null).ToList();
             
             foreach (DO.Package package in dalPackages)
             {
@@ -75,7 +75,7 @@ namespace BL
                     droneToList.Status = Enums.DroneStatus.maintenance;
 
                     //get random station as drone location
-                    List<DO.Station> dalStations = (List<DO.Station>)DalObject.DisplayStationsList();
+                    List<DO.Station> dalStations = DalObject.DisplayStationsList().ToList();
                     int randStation = random.Next(dalStations.Count);
                     droneToList.Location = new(dalStations[randStation].Latitude, dalStations[randStation].Longitude);
                     

@@ -4,7 +4,7 @@ using DO;
 
 namespace DalObject
 {
-    public class DataSource
+    class DataSource
     {
         internal static List<Station> Stations = new();
         internal static List<Drone> Drones = new();
