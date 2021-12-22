@@ -4,6 +4,9 @@ using BO;
 
 namespace BL
 {
+    /// <summary>
+    /// Customer-related functionality of the Business Layer.
+    /// </summary>
     partial class BL : BlApi.IBL
     {
         public Customer AddCustomer(int customerID, string name, string phone, Location location)
@@ -23,6 +26,7 @@ namespace BL
             Customer customer = new(customerID, name, phone, location, new List<PackageForCustomer>(), new List<PackageForCustomer>());
             return customer;
         }
+
         public void UpdateCustomer(int customerID, string name = "", string phone = "")
         {
             try

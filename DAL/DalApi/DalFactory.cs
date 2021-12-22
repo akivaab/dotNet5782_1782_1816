@@ -13,7 +13,7 @@ namespace DalApi
             switch (instance)
             {
                 case "DalObject":
-                    return DalObject.DalObject.Instance;
+                    return DalObject.DalObject.instance;
                 //case "DalXml":
                 //    return DalXml.DalXml.Instance;
                 default:

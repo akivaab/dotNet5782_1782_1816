@@ -5,6 +5,9 @@ using BO;
 
 namespace BL
 {
+    /// <summary>
+    /// Station-related functionality of the Business Layer.
+    /// </summary>
     partial class BL : BlApi.IBL
     {
         public Station AddStation(int stationID, int name, Location location, int numAvailableChargingSlots)
@@ -24,6 +27,7 @@ namespace BL
             Station station = new(stationID, name, location, numAvailableChargingSlots, new List<DroneCharging>());
             return station;
         }
+        
         public void UpdateStation(int stationID, int name = -1, int totalChargingSlots = -1)
         {
             try
@@ -48,6 +52,7 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+        
         public Station DisplayStation(int stationID)
         {
             try
@@ -70,6 +75,7 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+        
         public IEnumerable<StationToList> DisplayAllStations()
         {
             IEnumerable<DO.Station> dalStations = DalObject.DisplayStationsList();
@@ -79,6 +85,7 @@ namespace BL
                                                         select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count);
             return stationToLists;
         }
+        
         public IEnumerable<StationToList> FindStations(Predicate<DO.Station> predicate)
         {
             IEnumerable<DO.Station> dalStations = DalObject.FindStations(predicate);

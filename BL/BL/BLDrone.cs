@@ -5,6 +5,9 @@ using BO;
 
 namespace BL
 {
+    /// <summary>
+    /// Drone-related functionality of the Business Layer.
+    /// </summary>
     partial class BL : BlApi.IBL
     {
         public Drone AddDrone(int droneID, string model, Enums.WeightCategories maxWeight, int stationID)
@@ -44,6 +47,7 @@ namespace BL
                 throw new NonUniqueIdException(e.Message, e);
             }
         }
+
         public void UpdateDroneModel(int droneID, string model)
         {
             //update in the list of DroneToLists
@@ -64,6 +68,7 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+        
         public void SendDroneToCharge(int droneID)
         {
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
@@ -100,6 +105,7 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+        
         public void ReleaseFromCharge(int droneID, double chargingTimeInHours)
         {
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
@@ -127,6 +133,7 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+        
         public Drone DisplayDrone(int droneID)
         {
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
@@ -168,6 +175,7 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+        
         public IEnumerable<DroneToList> DisplayAllDrones()
         {
             return Drones;

@@ -5,14 +5,44 @@ using BO;
 
 namespace BL
 {
+    /// <summary>
+    /// Initialization and Singleton implementation of the Business Layer.
+    /// </summary>
     sealed partial class BL : BlApi.IBL
     {
+        /// <summary>
+        /// Lazy and implicitly thread-safe initialization of a BL object.
+        /// </summary>
         private static readonly Lazy<BL> lazyBl = new Lazy<BL>(() => new BL());
-        internal static BL Instance { get { return lazyBl.Value; } }
+        
+        /// <summary>
+        /// Instance of the BL object that is first instantiated when the getter is called.
+        /// </summary>
+        internal static BL instance { get { return lazyBl.Value; } }
+        
+        /// <summary>
+        /// List of DroneToList entities.
+        /// </summary>
         private List<DroneToList> Drones;
+        
+        /// <summary>
+        /// Instance of the DalObject class.
+        /// </summary>
         private DalApi.IDal DalObject;
+        
+        /// <summary>
+        /// Array of the values related to the battery usage of drones while carrying packages of varying weights.
+        /// </summary>
         private double[] PowerConsumption;
+        
+        /// <summary>
+        /// The amount a drone battery charges per hour.
+        /// </summary>
         private double ChargeRatePerHour;
+
+        /// <summary>
+        /// Connstructor of BL class, private to maintain Singleton design pattern.
+        /// </summary>
         private BL()
         {
             //initialize fields

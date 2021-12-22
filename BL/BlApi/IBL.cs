@@ -4,180 +4,183 @@ using BO;
 
 namespace BlApi
 {
+    /// <summary>
+    /// Interface for the BL class, containing all functions the PL could call.
+    /// </summary>
     public interface IBL
     {
         /// <summary>
         /// Add a station to the system.
         /// </summary>
-        /// <param name="stationID"></param>
-        /// <param name="name"></param>
-        /// <param name="location"></param>
-        /// <param name="numAvailableChargingSlots"></param>
-        /// <returns>The newly added station</returns>
+        /// <param name="stationID">The ID of the station being added.</param>
+        /// <param name="name">The name of the station being added.</param>
+        /// <param name="location">The location of the station being added.</param>
+        /// <param name="numAvailableChargingSlots">The number of available charging slots in the station being added.</param>
+        /// <returns>The newly added station.</returns>
         public Station AddStation(int stationID, int name, Location location, int numAvailableChargingSlots);
         
         /// <summary>
         /// Add a drone to the system.
         /// </summary>
-        /// <param name="droneID"></param>
-        /// <param name="model"></param>
-        /// <param name="maxWeight">maximum weight this drone can lift</param>
-        /// <param name="stationID">the station in which the drone is first charged</param>
-        /// <returns>The newly added drone</returns>
+        /// <param name="droneID">The ID of the drone being added.</param>
+        /// <param name="model">The model of the drone being added.</param>
+        /// <param name="maxWeight">The maximum weight the drone being added can lift.</param>
+        /// <param name="stationID">The station in which the drone being added is first charged.</param>
+        /// <returns>The newly added drone.</returns>
         public Drone AddDrone(int droneID, string model, Enums.WeightCategories maxWeight, int stationID);
         
         /// <summary>
         /// Add a customer to the system. 
         /// </summary>
-        /// <param name="customerID"></param>
-        /// <param name="name"></param>
-        /// <param name="phone"></param>
-        /// <param name="location"></param>
-        /// <returns>The newly added customer</returns>
+        /// <param name="customerID">The ID of the customer being added.</param>
+        /// <param name="name">The name of the customer being added.</param>
+        /// <param name="phone">The phone number of the customer being added.</param>
+        /// <param name="location">The location of the customer being added.</param>
+        /// <returns>The newly added customer.</returns>
         public Customer AddCustomer(int customerID, string name, string phone, Location location);
 
         /// <summary>
         /// Add a package to the system.
         /// </summary>
-        /// <param name="senderID"></param>
-        /// <param name="receiverID"></param>
-        /// <param name="weight"></param>
-        /// <param name="priority"></param>
-        /// <returns>The newly added package</returns>
+        /// <param name="senderID">The ID of the customer sending the package being added.</param>
+        /// <param name="receiverID">The ID of the customer receiving the package being added.</param>
+        /// <param name="weight">The weight of the package being added.</param>
+        /// <param name="priority">The prioroty of the package being added.</param>
+        /// <returns>The newly added package.</returns>
         public Package AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority);
 
         /// <summary>
         /// Update the model of a drone.
         /// </summary>
-        /// <param name="droneID"></param>
-        /// <param name="model"></param>
+        /// <param name="droneID">The ID drone of the drone being updated.</param>
+        /// <param name="model">The updated model of the drone.</param>
         public void UpdateDroneModel(int droneID, string model);
 
         /// <summary>
         /// Update a station's information.
         /// </summary>
-        /// <param name="stationID"></param>
-        /// <param name="name"></param>
-        /// <param name="numChargingSlots">total number of charging slots</param>
+        /// <param name="stationID">The ID of the station being updated.</param>
+        /// <param name="name">The updated name of the station.</param>
+        /// <param name="numChargingSlots">The updated total number of charging slots in the station.</param>
         public void UpdateStation(int stationID, int name = -1, int numChargingSlots = -1);
 
         /// <summary>
         /// Update a customer's information.
         /// </summary>
-        /// <param name="customerID"></param>
-        /// <param name="name"></param>
-        /// <param name="phone"></param>
+        /// <param name="customerID">The ID of the customer being updated.</param>
+        /// <param name="name">The updated name of the customer.</param>
+        /// <param name="phone">The updated phone number of the customer.</param>
         public void UpdateCustomer(int customerID, string name = "", string phone= "");
 
         /// <summary>
         /// Send a drone to a station to charge.
         /// </summary>
-        /// <param name="droneID"></param>
+        /// <param name="droneID">The ID of the drone being sent to charge.</param>
         public void SendDroneToCharge(int droneID);
 
         /// <summary>
         /// Release a drone from charging after some period of time.
         /// </summary>
-        /// <param name="droneID"></param>
-        /// <param name="chargingTimeInHours">amount of time the drone was charging for in hours</param>
+        /// <param name="droneID">The ID of the drone being released.</param>
+        /// <param name="chargingTimeInHours">The amount of time the drone was charging for in hours.</param>
         public void ReleaseFromCharge(int droneID, double chargingTimeInHours);
 
         /// <summary>
         /// Assign a package to a drone.
         /// </summary>
-        /// <param name="droneID"></param>
+        /// <param name="droneID">The ID of the drone being assigned a package.</param>
         public void AssignPackage(int droneID);
 
         /// <summary>
         /// Have a drone collect the package assigned to it.
         /// </summary>
-        /// <param name="droneID"></param>
+        /// <param name="droneID">The ID of the drone being sent to collect its package.</param>
         public void CollectPackage(int droneID);
 
         /// <summary>
         /// Have a drone deliver the package it collected.
         /// </summary>
-        /// <param name="droneID"></param>
+        /// <param name="droneID">The ID of the drone being sent to deliver its package.</param>
         public void DeliverPackage(int droneID);
 
         /// <summary>
-        /// Finds a station by it's ID.
+        /// Find a station by its ID.
         /// </summary>
-        /// <param name="stationID"></param>
-        /// <returns>The corresponding station</returns>
+        /// <param name="stationID">The ID of the station to be found.</param>
+        /// <returns>The corresponding station.</returns>
         public Station DisplayStation(int stationID);
 
         /// <summary>
-        /// Finds a station by it's ID.
+        /// Find a station by it's ID.
         /// </summary>
-        /// <param name="droneID"></param>
-        /// <returns>The corresponding drone</returns>
+        /// <param name="droneID">The ID of the drone to be found.</param>
+        /// <returns>The corresponding drone.</returns>
         public Drone DisplayDrone(int droneID);
 
         /// <summary>
-        /// Finds a customer by it's ID.
+        /// Find a customer by it's ID.
         /// </summary>
-        /// <param name="customerID"></param>
-        /// <returns>The corresponding customer</returns>
+        /// <param name="customerID">The ID of the customer to be found.</param>
+        /// <returns>The corresponding customer.</returns>
         public Customer DisplayCustomer(int customerID);
 
         /// <summary>
-        /// Finds a package by it's ID.
+        /// Find a package by it's ID.
         /// </summary>
-        /// <param name="packageID"></param>
-        /// <returns>The corresponding package</returns>
+        /// <param name="packageID">The ID of the package to be found.</param>
+        /// <returns>The corresponding package.</returns>
         public Package DisplayPackage(int packageID);
 
         /// <summary>
-        /// Display a list of all the stations in the system.
+        /// Get a collection of all the stations in the system.
         /// </summary>
-        /// <returns>List of StationToList entities</returns>
+        /// <returns>A collection of StationToList entities.</returns>
         public IEnumerable<StationToList> DisplayAllStations();
 
         /// <summary>
-        /// Display a list of all the drones in the system.
+        /// Get a collection of all the drones in the system.
         /// </summary>
-        /// <returns>List of DroneToList entities</returns>
+        /// <returns>A collection of DroneToList entities.</returns>
         public IEnumerable<DroneToList> DisplayAllDrones();
 
         /// <summary>
-        /// Display a list of all the customers in the system.
+        /// Get a collection of all the customers in the system.
         /// </summary>
-        /// <returns>List of CustomerToList entities</returns>
+        /// <returns>A collection of CustomerToList entities.</returns>
         public IEnumerable<CustomerToList> DisplayAllCustomers();
 
         /// <summary>
-        /// Display a list of all the packages in the system.
+        /// Get a collection of all the packages in the system.
         /// </summary>
-        /// <returns>List of PackageToList entities</returns>
+        /// <returns>A collection of PackageToList entities.</returns>
         public IEnumerable<PackageToList> DisplayAllPackages();
 
         /// <summary>
-        /// Display a list of all the packages according to a certain predicate.
+        /// Get a collection of all the packages according to a certain predicate.
         /// </summary>
-        /// <param name="predicate"></param>
-        /// <returns>List of PackageToList entities</returns>
+        /// <param name="predicate">The predicate used to filter the packages.</param>
+        /// <returns>A collection of PackageToList entities.</returns>
         public IEnumerable<PackageToList> FindPackages(Predicate<DO.Package> predicate);
 
         /// <summary>
-        /// Display a list of all stations according to a certain predicate.
+        /// Get a collection of all stations according to a certain predicate.
         /// </summary>
-        /// <param name="predicate"></param>
-        /// <returns>List of StationToList entities</returns>
+        /// <param name="predicate">The predicate used to filter the stations.</param>
+        /// <returns>A collection of StationToList entities</returns>
         public IEnumerable<StationToList> FindStations(Predicate<DO.Station> predicate);
 
         /// <summary>
-        /// Display a list of all drones according to a certain predicate.
+        /// Get a collection of all drones according to a certain predicate.
         /// </summary>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
+        /// <param name="predicate">The predicate used to filter the drones.</param>
+        /// <returns>A collection of DroneToList entities.</returns>
         public IEnumerable<DroneToList> FindDrones(Predicate<DroneToList> predicate);
 
         /// <summary>
-        /// Gets the time a drone began charging in a station.
+        /// Get the time a drone began charging in a station.
         /// </summary>
-        /// <param name="droneID"></param>
-        /// <returns>DateTime the drone began charging</returns>
+        /// <param name="droneID">The ID of the drone.</param>
+        /// <returns>The DateTime the drone began charging.</returns>
         public DateTime GetTimeChargeBegan(int droneID);
     }
 }

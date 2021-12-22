@@ -6,7 +6,7 @@ namespace DalObject
     {
         private static readonly Lazy<DalObject> lazyDalObject = new Lazy<DalObject>(() => new DalObject());
 
-        internal static DalObject Instance { get { return lazyDalObject.Value; } }
+        internal static DalObject instance { get { return lazyDalObject.Value; } }
 
         /// <summary>
         /// Constructor adds initial values to the entity arrays

@@ -5,6 +5,9 @@ using BO;
 
 namespace BL
 {
+    /// <summary>
+    /// Package-related functionality of the Business Layer.
+    /// </summary>
     partial class BL : BlApi.IBL
     {
         public Package AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority)
@@ -26,6 +29,7 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+        
         public void AssignPackage(int droneID)
         {
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
@@ -87,6 +91,7 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+        
         public void DeliverPackage(int droneID)
         {
             int droneIndex = Drones.FindIndex(d => d.ID == droneID);
@@ -123,6 +128,7 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+        
         public Package DisplayPackage(int packageID)
         {
             try
@@ -145,6 +151,7 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+        
         public IEnumerable<PackageToList> DisplayAllPackages()
         {
             try

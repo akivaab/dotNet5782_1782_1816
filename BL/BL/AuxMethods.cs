@@ -5,14 +5,17 @@ using BO;
 
 namespace BL
 {
+    /// <summary>
+    /// Auxiliary methods of the Business Layer.
+    /// </summary>
     public partial class BL
     {
         /// <summary>
         /// Calculates the distance in kilometers between two locations.
         /// </summary>
-        /// <param name="location1"></param>
-        /// <param name="location2"></param>
-        /// <returns>The distance in kilometers between locations</returns>
+        /// <param name="location1">The first location.</param>
+        /// <param name="location2">The second location.</param>
+        /// <returns>The distance between the locations.</returns>
         private double getDistance(Location location1, Location location2)
         {
             double lat1 = location1.Latitude;
@@ -32,10 +35,10 @@ namespace BL
         }
 
         /// <summary>
-        /// Find station closest to some location.
+        /// Find the station closest to some location.
         /// </summary>
-        /// <param name="location"></param>
-        /// <returns>Location of the closest station</returns>
+        /// <param name="location">The location for which the method finds the nearest station.</param>
+        /// <returns>The location of the station closest to the location given.</returns>
         private Location getClosestStation(Location location)
         {
             IEnumerable<DO.Station> dalStations = DalObject.DisplayStationsList();
@@ -45,9 +48,9 @@ namespace BL
         /// <summary>
         /// Of the stations provided, find the station closest to some location.
         /// </summary>
-        /// <param name="location"></param>
-        /// <param name="stations"></param>
-        /// <returns>Location of the closest station</returns>
+        /// <param name="location">The location for which the method finds the nearest station.</param>
+        /// <param name="stations">The collection of stations considered by the method.</param>
+        /// <returns>The location of the closest station to the location given.</returns>
         private Location getClosestStation(Location location, IEnumerable<DO.Station> stations)
         {
             if (stations.Count() == 0)
@@ -65,10 +68,10 @@ namespace BL
         }
 
         /// <summary>
-        /// Gets a list of available stations that a drone carrying no weight is capable of reaching before running out of battery. 
+        /// Get a collection of available stations that a drone carrying no weight is capable of reaching before running out of battery. 
         /// </summary>
-        /// <param name="drone"></param>
-        /// <returns>List of reachable stations</returns>
+        /// <param name="drone">A drone not carrying any package.</param>
+        /// <returns>A collection of stations that the drone is capable of reaching.</returns>
         private IEnumerable<DO.Station> getReachableStations(DroneToList drone)
         {
             IEnumerable<DO.Station> availableStations = DalObject.FindStations(s => s.AvailableChargeSlots > 0);
@@ -84,8 +87,8 @@ namespace BL
         /// <summary>
         /// Find the location of a customer.
         /// </summary>
-        /// <param name="customerID"></param>
-        /// <returns>Location of a customer</returns>
+        /// <param name="customerID">ID of the customer.</param>
+        /// <returns>The location of the customer.</returns>
         private Location getCustomerLocation(int customerID)
         {
             try
@@ -101,12 +104,12 @@ namespace BL
         }
 
         /// <summary>
-        /// Return a random battery level between the amount necessary to deliver and return to a station and 100.
+        /// Return a random battery level between the amount a drone needs to deliver a package and return to a station, and 100.
         /// </summary>
-        /// <param name="droneLocation"></param>
-        /// <param name="package"></param>
-        /// <param name="powerConsumed"></param>
-        /// <returns>A random double representing battery level</returns>
+        /// <param name="droneLocation">The current location of the drone.</param>
+        /// <param name="package">The package being delivered.</param>
+        /// <param name="powerConsumed">The amount of battery required for the drone to carry the package one kilometer.</param>
+        /// <returns>A random double representing the battery level.</returns>
         private double randomBatteryPower(Location droneLocation, DO.Package package, double powerConsumed)
         {
             try
@@ -131,9 +134,9 @@ namespace BL
         }
 
         /// <summary>
-        /// Gets a random customer that already received a package.
+        /// Get a random customer that already received a package.
         /// </summary>
-        /// <returns>Random customer that received a package</returns>
+        /// <returns>A random customer that received a package.</returns>
         private DO.Customer randomPackageReceiver()
         {
             try
@@ -159,11 +162,11 @@ namespace BL
         }
 
         /// <summary>
-        /// Finds the best package based on priority, weight, and distance.
+        /// Find the best package based on priority, weight, and distance.
         /// </summary>
-        /// <param name="dalPackages"></param>
-        /// <param name="drone"></param>
-        /// <returns>ID of the best package</returns>
+        /// <param name="dalPackages">A collection of packages to choose from.</param>
+        /// <param name="drone">The drone delivering the package to be chosen.</param>
+        /// <returns>The ID of the best package.</returns>
         private int findBestPackage(IEnumerable<DO.Package> dalPackages, DroneToList drone)
         {
             List<DO.Package> bestPackages = new(dalPackages);
@@ -201,10 +204,10 @@ namespace BL
         }
 
         /// <summary>
-        /// Finds the status of a package (in terms of created, assigned, collected, delivered).
+        /// Find the status of a package (in terms of created, assigned, collected, delivered).
         /// </summary>
-        /// <param name="dalPackage"></param>
-        /// <returns>The status of the package</returns>
+        /// <param name="dalPackage">The package whose status is being determined.</param>
+        /// <returns>The status of the given package.</returns>
         private Enums.PackageStatus getPackageStatus(DO.Package dalPackage)
         {
             Enums.PackageStatus status = Enums.PackageStatus.created;
@@ -224,7 +227,7 @@ namespace BL
         }
 
         /// <summary>
-        /// Clean up the information randomly generated in the data layer so it makes sense.
+        /// Clean up the information randomly generated in the data layer so it all makes sense.
         /// </summary>
         private void dataCleanup()
         {
