@@ -83,7 +83,7 @@ namespace BL
                 dalObject.CollectPackage(dalPackage.ID, droneID);
 
                 Location senderLocation = getCustomerLocation(dalPackage.SenderID);
-                drones[droneIndex].Battery = Math.Max(drones[droneIndex].Battery - (PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(drones[droneIndex].Location, senderLocation)), 0);
+                drones[droneIndex].Battery = Math.Max(drones[droneIndex].Battery - (powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(drones[droneIndex].Location, senderLocation)), 0);
                 drones[droneIndex].Location = senderLocation;
             }
             catch (DO.UndefinedObjectException e)
@@ -119,7 +119,7 @@ namespace BL
                 dalObject.DeliverPackage(dalPackage.ID, droneID);
 
                 Location receiverLocation = getCustomerLocation(dalPackage.ReceiverID);
-                drones[droneIndex].Battery = Math.Max(drones[droneIndex].Battery - (PowerConsumption[(int)dalPackage.Weight] * getDistance(drones[droneIndex].Location, receiverLocation)), 0);
+                drones[droneIndex].Battery = Math.Max(drones[droneIndex].Battery - (powerConsumption.ElementAt((int)dalPackage.Weight) * getDistance(drones[droneIndex].Location, receiverLocation)), 0);
                 drones[droneIndex].Location = receiverLocation;
                 drones[droneIndex].Status = Enums.DroneStatus.available;
                 drones[droneIndex].PackageID = null;

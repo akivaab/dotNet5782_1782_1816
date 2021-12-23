@@ -30,7 +30,7 @@ namespace BL
                 dalObject.ChargeDrone(droneID, stationID);  //the drone starts out charging in a station
 
                 //add to drones, the list of DroneToList entities
-                Location droneLocation = new Location(dalStation.Latitude, dalStation.Longitude);
+                Location droneLocation = new(dalStation.Latitude, dalStation.Longitude);
                 Random random = new Random();
                 double battery = random.Next(20, 41);
                 drones.Add(new DroneToList(droneID, model, maxWeight, battery, Enums.DroneStatus.maintenance, droneLocation, null));
@@ -96,7 +96,7 @@ namespace BL
                 
                 dalObject.ChargeDrone(droneID, dalStation.ID);
 
-                drones[droneIndex].Battery = Math.Max(drones[droneIndex].Battery - (PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(drones[droneIndex].Location, closestStationLocation)), 0);
+                drones[droneIndex].Battery = Math.Max(drones[droneIndex].Battery - (powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(drones[droneIndex].Location, closestStationLocation)), 0);
                 drones[droneIndex].Location = closestStationLocation;
                 drones[droneIndex].Status = Enums.DroneStatus.maintenance;
             }

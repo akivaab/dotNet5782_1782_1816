@@ -78,7 +78,7 @@ namespace BL
             
             IEnumerable<DO.Station> reachableStations = from DO.Station station in availableStations
                                                         let stationLocation = new Location(station.Latitude, station.Longitude)
-                                                        let requiredBattery = PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(drone.Location, stationLocation)
+                                                        let requiredBattery = powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(drone.Location, stationLocation)
                                                         where requiredBattery <= drone.Battery
                                                         select station;
             return reachableStations;
@@ -169,27 +169,23 @@ namespace BL
         /// <returns>The ID of the best package.</returns>
         private int findBestPackage(IEnumerable<DO.Package> dalPackages, DroneToList drone)
         {
-            List<DO.Package> bestPackages = new(dalPackages);
+            IEnumerable<DO.Package> bestPackages = dalPackages;
 
             //remove packages too heavy for drone to lift
-            bestPackages.RemoveAll(p => p.Weight.CompareTo((DO.Enums.WeightCategories)drone.MaxWeight) > 0);
-            
+            bestPackages = from package in bestPackages
+                           where package.Weight.CompareTo((DO.Enums.WeightCategories)drone.MaxWeight) <= 0
+                           select package;
+
             //remove packages whose delivery will consume more battery than the drone has
-            bestPackages.RemoveAll(p =>
-            {
-                Location senderLocation = getCustomerLocation(p.SenderID);
-                Location receiverLocation = getCustomerLocation(p.ReceiverID);
+            bestPackages = from package in bestPackages
+                           let senderLocation = getCustomerLocation(package.SenderID)
+                           let receiverLocation = getCustomerLocation(package.ReceiverID)
+                           let requiredDistance = getDistance(drone.Location, senderLocation) + getDistance(senderLocation, receiverLocation) + getDistance(receiverLocation, getClosestStation(receiverLocation))
+                           let requiredBattery = powerConsumption.ElementAt((int)package.Weight) * requiredDistance
+                           where requiredBattery <= drone.Battery
+                           select package;
 
-                //distance needed to deliver is from the drone's current location to the sender, to the receiver, to the nearest station
-                double requiredDistance = getDistance(drone.Location, senderLocation);
-                requiredDistance += getDistance(senderLocation, receiverLocation);
-                requiredDistance += getDistance(receiverLocation, getClosestStation(receiverLocation));
-                
-                double requiredBattery = PowerConsumption[(int)p.Weight] * requiredDistance;
-                return requiredBattery > drone.Battery;
-            });
-
-            if (bestPackages.Count == 0)
+            if (bestPackages.Count() == 0)
             {
                 throw new EmptyListException("There are currently no packages that this drone is capable of delivering.");
             }
@@ -197,10 +193,9 @@ namespace BL
             //order packages by priority, then weight, then distance
             bestPackages = bestPackages.OrderByDescending(p => p.Priority)
                 .ThenByDescending(p => p.Weight)
-                .ThenBy(p => getDistance(drone.Location, getCustomerLocation(p.SenderID)))
-                .ToList();
+                .ThenBy(p => getDistance(drone.Location, getCustomerLocation(p.SenderID)));
             
-            return bestPackages[0].ID;
+            return bestPackages.First().ID;
         }
 
         /// <summary>

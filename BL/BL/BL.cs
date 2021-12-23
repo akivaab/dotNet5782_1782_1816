@@ -31,9 +31,9 @@ namespace BL
         private DalApi.IDal dalObject;
         
         /// <summary>
-        /// Array of the values related to the battery usage of drones while carrying packages of varying weights.
+        /// Collection of the values related to the battery usage of drones while carrying packages of varying weights.
         /// </summary>
-        private double[] PowerConsumption;
+        private IEnumerable<double> powerConsumption;
         
         /// <summary>
         /// The amount a drone battery charges per hour.
@@ -48,10 +48,8 @@ namespace BL
             //initialize fields
             drones = new();
             dalObject = DalApi.DalFactory.GetDal("DalObject");
-            double[] powerConsumption = (double[])dalObject.DronePowerConsumption();
-            PowerConsumption = new double[4];
-            Array.Copy(powerConsumption, PowerConsumption, 4);
-            chargeRatePerHour = powerConsumption[4];
+            powerConsumption = dalObject.DronePowerConsumption().Take(4);
+            chargeRatePerHour = dalObject.DronePowerConsumption().Last();
 
             //remove problematic entities from the data layer
             dataCleanup();
@@ -82,7 +80,7 @@ namespace BL
                 }
 
                 //get random battery level
-                double battery = randomBatteryPower(droneLocation, package, powerConsumption[(int)package.Weight]);
+                double battery = randomBatteryPower(droneLocation, package, powerConsumption.ElementAt((int)package.Weight));
                     
                 DroneToList droneToList = new(drone.ID, drone.Model, (Enums.WeightCategories)drone.MaxWeight, battery, Enums.DroneStatus.delivery, droneLocation, package.ID);
                 drones.Add(droneToList);
@@ -124,7 +122,7 @@ namespace BL
                     droneToList.Location = new(customer.Latitude, customer.Longitude);
                     
                     //get random battery level
-                    droneToList.Battery = random.Next((int)Math.Ceiling(powerConsumption[(int)Enums.WeightCategories.free] * getDistance(droneToList.Location, getClosestStation(droneToList.Location))), 101);
+                    droneToList.Battery = random.Next((int)Math.Ceiling(powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(droneToList.Location, getClosestStation(droneToList.Location))), 101);
                 }
 
                 //no package assigned
