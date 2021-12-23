@@ -3,6 +3,9 @@ using DO;
 
 namespace ConsoleUI
 {
+    /// <summary>
+    /// Console program to test system from the data layer.
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
@@ -42,6 +45,10 @@ namespace ConsoleUI
             } while (option != 5);
         }
 
+        /// <summary>
+        /// All the options of adding entities to the system.
+        /// </summary>
+        /// <param name="dal">A DalObject instance.</param>
         public static void AddingOptions(DalApi.IDal dal)
         {
             Console.WriteLine("Adding Options:");
@@ -131,6 +138,10 @@ namespace ConsoleUI
             }
         }
 
+        /// <summary>
+        /// All the options of updating the entities of the system.
+        /// </summary>
+        /// <param name="dal">A DalObject instance.</param>
         public static void UpdatingOptions(DalApi.IDal dal)
         {
             Console.WriteLine("Updatinging Options:");
@@ -196,6 +207,10 @@ namespace ConsoleUI
             }
         }
 
+        /// <summary>
+        /// All the options of displaying an entity of the system.
+        /// </summary>
+        /// <param name="dal">A DalObject instance.</param>
         public static void DisplayingOptions(DalApi.IDal dal)
         {
             Console.WriteLine("Displaying Options:");
@@ -214,25 +229,25 @@ namespace ConsoleUI
                         int stationID;
                         Console.Write("Input Station ID: ");
                         int.TryParse(Console.ReadLine(), out stationID);
-                        Console.WriteLine(dal.DisplayStation(stationID));
+                        Console.WriteLine(dal.GetStation(stationID));
                         break;
                     case 2:
                         int droneID;
                         Console.Write("Input Drone ID: ");
                         int.TryParse(Console.ReadLine(), out droneID);
-                        Console.WriteLine(dal.DisplayDrone(droneID));
+                        Console.WriteLine(dal.GetDrone(droneID));
                         break;
                     case 3:
                         int customerID;
                         Console.Write("Input Customer ID: ");
                         int.TryParse(Console.ReadLine(), out customerID);
-                        Console.WriteLine(dal.DisplayCustomer(customerID));
+                        Console.WriteLine(dal.GetCustomer(customerID));
                         break;
                     case 4:
                         int packageID;
                         Console.Write("Input Package ID: ");
                         int.TryParse(Console.ReadLine(), out packageID);
-                        Console.WriteLine(dal.DisplayPackage(packageID));
+                        Console.WriteLine(dal.GetPackage(packageID));
                         break;
                     default:
                         break;
@@ -244,6 +259,10 @@ namespace ConsoleUI
             }
         }
 
+        /// <summary>
+        /// All the options of displaying a list of entities of the system.
+        /// </summary>
+        /// <param name="dal">A DalObject instance.</param>
         public static void ListDisplayingOptions(DalApi.IDal dal)
         {
             Console.WriteLine("List Displaying Options:");
@@ -259,25 +278,25 @@ namespace ConsoleUI
             switch (listDisplayingOption)
             {
                 case 1:
-                    foreach (Station station in dal.DisplayStationsList())
+                    foreach (Station station in dal.GetStationsList())
                     {
                         Console.WriteLine(station);
                     }
                     break;
                 case 2:
-                    foreach (Drone drone in dal.DisplayDronesList())
+                    foreach (Drone drone in dal.GetDronesList())
                     {
                         Console.WriteLine(drone);
                     }
                     break;
                 case 3:
-                    foreach (Customer customer in dal.DisplayCustomersList())
+                    foreach (Customer customer in dal.GetCustomersList())
                     {
                         Console.WriteLine(customer);
                     }
                     break;
                 case 4:
-                    foreach (Package package in dal.DisplayPackagesList())
+                    foreach (Package package in dal.GetPackagesList())
                     {
                         Console.WriteLine(package);
                     }

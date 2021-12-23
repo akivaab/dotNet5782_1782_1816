@@ -4,6 +4,9 @@ using DO;
 
 namespace DalObject
 {
+    /// <summary>
+    /// Customer-related functionality of the Data Layer.
+    /// </summary>
     partial class DalObject : DalApi.IDal
     {
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
@@ -12,7 +15,7 @@ namespace DalObject
             {
                 throw new IllegalArgumentException("The given latitude and/or longitude is out of our coordinate field range.");
             }
-            if (DataSource.Customers.FindIndex(customer => customer.ID == id) != -1)
+            if (DataSource.customers.FindIndex(customer => customer.ID == id) != -1)
             {
                 throw new NonUniqueIdException("The given customer ID is not unique.");
             }
@@ -22,52 +25,52 @@ namespace DalObject
             customer.Phone = phone;
             customer.Latitude = latitude;
             customer.Longitude = longitude;
-            DataSource.Customers.Add(customer);
+            DataSource.customers.Add(customer);
         }
 
         public void UpdateCustomerName(int customerID, string name)
         {
-            int customerIndex = DataSource.Customers.FindIndex(customer => customer.ID == customerID);
+            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID);
             
             if (customerIndex == -1)
             {
                 throw new UndefinedObjectException("There is no customer with the given ID.");
             }
             
-            Customer customer = DataSource.Customers[customerIndex];
+            Customer customer = DataSource.customers[customerIndex];
             customer.Name = name;
-            DataSource.Customers[customerIndex] = customer;
+            DataSource.customers[customerIndex] = customer;
         }
 
         public void UpdateCustomerPhone(int customerID, string phone)
         {
-            int customerIndex = DataSource.Customers.FindIndex(customer => customer.ID == customerID);
+            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID);
             
             if (customerIndex == -1)
             {
                 throw new UndefinedObjectException("There is no customer with the given ID.");
             }
             
-            Customer customer = DataSource.Customers[customerIndex];
+            Customer customer = DataSource.customers[customerIndex];
             customer.Phone = phone;
-            DataSource.Customers[customerIndex] = customer;
+            DataSource.customers[customerIndex] = customer;
         }
 
-        public Customer DisplayCustomer(int customerID)
+        public Customer GetCustomer(int customerID)
         {
-            int customerIndex = DataSource.Customers.FindIndex(customer => customer.ID == customerID);
+            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID);
             
             if (customerIndex == -1)
             {
                 throw new UndefinedObjectException("There is no customer with the given ID.");
             }
             
-            return DataSource.Customers[customerIndex];
+            return DataSource.customers[customerIndex];
         }
 
-        public IEnumerable<Customer> DisplayCustomersList()
+        public IEnumerable<Customer> GetCustomersList()
         {
-            return from customer in DataSource.Customers
+            return from customer in DataSource.customers
                    select customer;
         }
     }

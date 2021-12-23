@@ -20,6 +20,9 @@ namespace PL
     /// </summary>
     public partial class DroneListWindow : Window
     {
+        /// <summary>
+        /// Instance of the BL.
+        /// </summary>
         private BlApi.IBL bl;
         
         //flag if Close button is clicked 
@@ -28,7 +31,7 @@ namespace PL
         /// <summary>
         /// DroneListWindow constructor, initializes ItemSources.
         /// </summary>
-        /// <param name="bl">BL object</param>
+        /// <param name="bl">A BL object.</param>
         public DroneListWindow(BlApi.IBL bl)
         {
             InitializeComponent();

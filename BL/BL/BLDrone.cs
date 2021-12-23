@@ -12,7 +12,7 @@ namespace BL
     {
         public Drone AddDrone(int droneID, string model, Enums.WeightCategories maxWeight, int stationID)
         {
-            if (Drones.FindIndex(d => d.ID == droneID) != -1)
+            if (drones.FindIndex(d => d.ID == droneID) != -1)
             {
                 throw new NonUniqueIdException("The given drone ID is not unique.");
             }
@@ -20,20 +20,20 @@ namespace BL
             try
             {
                 //these statements may throw exceptions:
-                DO.Station dalStation = DalObject.DisplayStation(stationID);
+                DO.Station dalStation = dalObject.GetStation(stationID);
                 if (dalStation.AvailableChargeSlots <= 0)
                 {
                     throw new UnableToChargeException("There are no available charge slots for the drone in the given station.");
                 }
 
-                DalObject.AddDrone(droneID, model, (DO.Enums.WeightCategories)maxWeight);
-                DalObject.ChargeDrone(droneID, stationID);  //the drone starts out charging in a station
+                dalObject.AddDrone(droneID, model, (DO.Enums.WeightCategories)maxWeight);
+                dalObject.ChargeDrone(droneID, stationID);  //the drone starts out charging in a station
 
-                //add to Drones, the list of DroneToList entities
+                //add to drones, the list of DroneToList entities
                 Location droneLocation = new Location(dalStation.Latitude, dalStation.Longitude);
                 Random random = new Random();
                 double battery = random.Next(20, 41);
-                Drones.Add(new DroneToList(droneID, model, maxWeight, battery, Enums.DroneStatus.maintenance, droneLocation, null));
+                drones.Add(new DroneToList(droneID, model, maxWeight, battery, Enums.DroneStatus.maintenance, droneLocation, null));
                 
                 Drone drone = new(droneID, model, maxWeight, battery, Enums.DroneStatus.maintenance, null, droneLocation);
                 return drone;
@@ -51,17 +51,17 @@ namespace BL
         public void UpdateDroneModel(int droneID, string model)
         {
             //update in the list of DroneToLists
-            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
                 throw new UndefinedObjectException("There is no drone with the given ID.");
             }
-            Drones[droneIndex].Model = model;
+            drones[droneIndex].Model = model;
 
             //update in the data layer
             try
             {
-                DalObject.UpdateDroneModel(droneID, model);
+                dalObject.UpdateDroneModel(droneID, model);
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -71,18 +71,18 @@ namespace BL
         
         public void SendDroneToCharge(int droneID)
         {
-            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
                 throw new UndefinedObjectException("There is no drone with the given ID.");
             }
 
-            if (Drones[droneIndex].Status != Enums.DroneStatus.available)
+            if (drones[droneIndex].Status != Enums.DroneStatus.available)
             {
                 throw new UnableToChargeException("The drone cannot currently be sent to charge.");
             }
 
-            IEnumerable<DO.Station> reachableStations = getReachableStations(Drones[droneIndex]);
+            IEnumerable<DO.Station> reachableStations = getReachableStations(drones[droneIndex]);
             if (reachableStations.Count() == 0)
             {
                 throw new UnableToChargeException("The drone does not have enough battery to reach a station.");
@@ -90,15 +90,15 @@ namespace BL
 
             try 
             { 
-                Location closestStationLocation = getClosestStation(Drones[droneIndex].Location, reachableStations);
-                IEnumerable<DO.Station> dalStations = DalObject.DisplayStationsList();
+                Location closestStationLocation = getClosestStation(drones[droneIndex].Location, reachableStations);
+                IEnumerable<DO.Station> dalStations = dalObject.GetStationsList();
                 DO.Station dalStation = dalStations.Where(s => s.Latitude == closestStationLocation.Latitude && s.Longitude == closestStationLocation.Longitude).First();
                 
-                DalObject.ChargeDrone(droneID, dalStation.ID);
+                dalObject.ChargeDrone(droneID, dalStation.ID);
 
-                Drones[droneIndex].Battery = Math.Max(Drones[droneIndex].Battery - (PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(Drones[droneIndex].Location, closestStationLocation)), 0);
-                Drones[droneIndex].Location = closestStationLocation;
-                Drones[droneIndex].Status = Enums.DroneStatus.maintenance;
+                drones[droneIndex].Battery = Math.Max(drones[droneIndex].Battery - (PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(drones[droneIndex].Location, closestStationLocation)), 0);
+                drones[droneIndex].Location = closestStationLocation;
+                drones[droneIndex].Status = Enums.DroneStatus.maintenance;
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -108,25 +108,25 @@ namespace BL
         
         public void ReleaseFromCharge(int droneID, double chargingTimeInHours)
         {
-            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
                 throw new UndefinedObjectException("There is no drone with the given ID.");
             }
 
             //check drone status
-            if (Drones[droneIndex].Status != Enums.DroneStatus.maintenance)
+            if (drones[droneIndex].Status != Enums.DroneStatus.maintenance)
             {
                 throw new UnableToReleaseException("The drone is not currently charging and so cannot be released.");
             }
 
             try 
             { 
-                IEnumerable<DO.Station> dalStations = DalObject.FindStations(s => s.Latitude == Drones[droneIndex].Location.Latitude && s.Longitude == Drones[droneIndex].Location.Longitude);
-                DalObject.ReleaseDroneFromCharging(droneID, dalStations.First().ID);
+                IEnumerable<DO.Station> dalStations = dalObject.FindStations(s => s.Latitude == drones[droneIndex].Location.Latitude && s.Longitude == drones[droneIndex].Location.Longitude);
+                dalObject.ReleaseDroneFromCharging(droneID, dalStations.First().ID);
 
-                Drones[droneIndex].Battery = Math.Min(Drones[droneIndex].Battery + (ChargeRatePerHour * chargingTimeInHours), 100);
-                Drones[droneIndex].Status = Enums.DroneStatus.available;
+                drones[droneIndex].Battery = Math.Min(drones[droneIndex].Battery + (chargeRatePerHour * chargingTimeInHours), 100);
+                drones[droneIndex].Status = Enums.DroneStatus.available;
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -136,22 +136,22 @@ namespace BL
         
         public Drone DisplayDrone(int droneID)
         {
-            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
                 throw new UndefinedObjectException("There is no drone with the given ID.");
             }
-            DroneToList droneToList = Drones[droneIndex];
+            DroneToList droneToList = drones[droneIndex];
 
             try
             {
                 PackageInTransfer packageInTransfer;
                 if (droneToList.PackageID != null && droneToList.Status == Enums.DroneStatus.delivery) //this drone is delivering a package
                 {
-                    DO.Package dalPackage = DalObject.DisplayPackage((int)droneToList.PackageID);
+                    DO.Package dalPackage = dalObject.GetPackage((int)droneToList.PackageID);
 
-                    DO.Customer sender = DalObject.DisplayCustomer(dalPackage.SenderID);
-                    DO.Customer receiver = DalObject.DisplayCustomer(dalPackage.ReceiverID);
+                    DO.Customer sender = dalObject.GetCustomer(dalPackage.SenderID);
+                    DO.Customer receiver = dalObject.GetCustomer(dalPackage.ReceiverID);
                     
                     CustomerForPackage packageSender = new(sender.ID, sender.Name);
                     CustomerForPackage packageReceiver = new(receiver.ID, receiver.Name);
@@ -178,12 +178,12 @@ namespace BL
         
         public IEnumerable<DroneToList> DisplayAllDrones()
         {
-            return Drones;
+            return drones;
         }
 
         public IEnumerable<DroneToList> FindDrones(Predicate<DroneToList> predicate)
         {
-            return from DroneToList drone in Drones
+            return from DroneToList drone in drones
                    where predicate(drone)
                    select drone;
         }
@@ -192,7 +192,7 @@ namespace BL
         {
             try
             {
-                return DalObject.GetTimeChargeBegan(droneID);
+                return dalObject.GetTimeChargeBegan(droneID);
             }
             catch (DO.UndefinedObjectException e)
             {

@@ -20,13 +20,25 @@ namespace PL
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Instance of the BL.
+        /// </summary>
         BlApi.IBL bl;
+
+        /// <summary>
+        /// MainWindow constructor that gets a BL instance.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
             bl = BlApi.BlFactory.GetBl();
         }
 
+        /// <summary>
+        /// Show the DroneListWindow.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ShowDroneListButton_Click(object sender, RoutedEventArgs e)
         {
             new DroneListWindow(bl).Show();

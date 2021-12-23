@@ -23,12 +23,12 @@ namespace BL
         /// <summary>
         /// List of DroneToList entities.
         /// </summary>
-        private List<DroneToList> Drones;
+        private List<DroneToList> drones;
         
         /// <summary>
         /// Instance of the DalObject class.
         /// </summary>
-        private DalApi.IDal DalObject;
+        private DalApi.IDal dalObject;
         
         /// <summary>
         /// Array of the values related to the battery usage of drones while carrying packages of varying weights.
@@ -38,28 +38,28 @@ namespace BL
         /// <summary>
         /// The amount a drone battery charges per hour.
         /// </summary>
-        private double ChargeRatePerHour;
+        private double chargeRatePerHour;
 
         /// <summary>
-        /// Connstructor of BL class, private to maintain Singleton design pattern.
+        /// Constructor of BL class, private to maintain Singleton design pattern.
         /// </summary>
         private BL()
         {
             //initialize fields
-            Drones = new();
-            DalObject = DalApi.DalFactory.GetDal("DalObject");
-            double[] powerConsumption = (double[])DalObject.DronePowerConsumption();
+            drones = new();
+            dalObject = DalApi.DalFactory.GetDal("DalObject");
+            double[] powerConsumption = (double[])dalObject.DronePowerConsumption();
             PowerConsumption = new double[4];
             Array.Copy(powerConsumption, PowerConsumption, 4);
-            ChargeRatePerHour = powerConsumption[4];
+            chargeRatePerHour = powerConsumption[4];
 
             //remove problematic entities from the data layer
             dataCleanup();
             
-            List<DO.Drone> dalDrones = DalObject.DisplayDronesList().ToList();
+            List<DO.Drone> dalDrones = dalObject.GetDronesList().ToList();
 
             //find all packages undelivered but with a drone assigned
-            List<DO.Package> dalPackages = DalObject.FindPackages(p => p.Delivered == null && p.DroneID != null).ToList();
+            List<DO.Package> dalPackages = dalObject.FindPackages(p => p.Delivered == null && p.DroneID != null).ToList();
             
             foreach (DO.Package package in dalPackages)
             {
@@ -85,7 +85,7 @@ namespace BL
                 double battery = randomBatteryPower(droneLocation, package, powerConsumption[(int)package.Weight]);
                     
                 DroneToList droneToList = new(drone.ID, drone.Model, (Enums.WeightCategories)drone.MaxWeight, battery, Enums.DroneStatus.delivery, droneLocation, package.ID);
-                Drones.Add(droneToList);
+                drones.Add(droneToList);
             }
 
             Random random = new Random();
@@ -105,7 +105,7 @@ namespace BL
                     droneToList.Status = Enums.DroneStatus.maintenance;
 
                     //get random station as drone location
-                    List<DO.Station> dalStations = DalObject.DisplayStationsList().ToList();
+                    List<DO.Station> dalStations = dalObject.GetStationsList().ToList();
                     int randStation = random.Next(dalStations.Count);
                     droneToList.Location = new(dalStations[randStation].Latitude, dalStations[randStation].Longitude);
                     
@@ -113,7 +113,7 @@ namespace BL
                     droneToList.Battery = random.Next(21);
 
                     //create appropriate DroneCharge entity in data layer
-                    DalObject.ChargeDrone(drone.ID, dalStations[randStation].ID);
+                    dalObject.ChargeDrone(drone.ID, dalStations[randStation].ID);
                 }
                 else if (randInt == 2)
                 {
@@ -130,7 +130,7 @@ namespace BL
                 //no package assigned
                 droneToList.PackageID = null; 
 
-                Drones.Add(droneToList);
+                drones.Add(droneToList);
             }
         }
     }

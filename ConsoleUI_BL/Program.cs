@@ -3,6 +3,9 @@ using BO;
 
 namespace ConsoleUI_BL
 {
+    /// <summary>
+    /// Console program to test system from the business layer.
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
@@ -49,6 +52,10 @@ namespace ConsoleUI_BL
             }
         }
 
+        /// <summary>
+        /// All the options of adding entities to the system.
+        /// </summary>
+        /// <param name="bl">A BL instance.</param>
         public static void AddingOptions(BlApi.IBL bl)
         {
             Console.WriteLine("Adding Options:");
@@ -142,6 +149,10 @@ namespace ConsoleUI_BL
             }
         }
 
+        /// <summary>
+        /// All the options of updating the entities of the system.
+        /// </summary>
+        /// <param name="bl">A BL instance.</param>
         public static void UpdatingOptions(BlApi.IBL bl)
         {
             Console.WriteLine("Updatinging Options:");
@@ -287,6 +298,10 @@ namespace ConsoleUI_BL
             }
         }
 
+        /// <summary>
+        /// All the options of displaying the entities of the system.
+        /// </summary>
+        /// <param name="bl">A BL instance.</param>
         public static void DisplayingOptions(BlApi.IBL bl)
         {
             Console.WriteLine("Displaying Options:");
@@ -335,6 +350,10 @@ namespace ConsoleUI_BL
             }
         }
 
+        /// <summary>
+        /// All the options of displaying a list of the entities of the system.
+        /// </summary>
+        /// <param name="bl">A BL instance.</param>
         public static void ListDisplayingOptions(BlApi.IBL bl)
         {
             Console.WriteLine("List Displaying Options:");

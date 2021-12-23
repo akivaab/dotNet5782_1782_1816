@@ -6,8 +6,16 @@ using System.Threading.Tasks;
 
 namespace DalApi
 {
+    /// <summary>
+    /// Factory to instantiate an IDal-implementing object.
+    /// </summary>
     public static class DalFactory
     {
+        /// <summary>
+        /// Get a IDal-implementing object.
+        /// </summary>
+        /// <param name="instance">string representing which instantiation to choose.</param>
+        /// <returns>An IDal object.</returns>
         public static IDal GetDal(string instance)
         {
             switch (instance)
@@ -17,7 +25,7 @@ namespace DalApi
                 //case "DalXml":
                 //    return DalXml.DalXml.Instance;
                 default:
-                    throw new DO.UndefinedStringException("The given string does not match any instance.");
+                    throw new DO.IllegalArgumentException("The given string does not match any instance.");
             }
         }
     }

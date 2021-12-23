@@ -20,7 +20,14 @@ namespace PL
     /// </summary>
     public partial class DroneWindow : Window
     {
+        /// <summary>
+        /// Instance of the BL.
+        /// </summary>
         private BlApi.IBL bl;
+
+        /// <summary>
+        /// The drone we enabling the user to update.
+        /// </summary>
         private DroneToList drone;
 
         //flag if Close or Cancel button is clicked 
@@ -29,7 +36,7 @@ namespace PL
         /// <summary>
         /// DroneWindow constructor for adding a drone.
         /// </summary>
-        /// <param name="bl">BL object</param>
+        /// <param name="bl">A BL object.</param>
         public DroneWindow(BlApi.IBL bl)
         {
             InitializeComponent();
@@ -55,8 +62,8 @@ namespace PL
         /// <summary>
         /// DroneWindow constructor for performing actions on a drone.
         /// </summary>
-        /// <param name="bl">BL object</param>
-        /// <param name="drone">drone being updated/acted upon</param>
+        /// <param name="bl">A BL object.</param>
+        /// <param name="drone">The drone being updated/acted upon.</param>
         public DroneWindow(BlApi.IBL bl, DroneToList drone)
         {
             InitializeComponent();
@@ -117,7 +124,7 @@ namespace PL
         }
 
         /// <summary>
-        /// Update the drone's model.
+        /// Update the drone model.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

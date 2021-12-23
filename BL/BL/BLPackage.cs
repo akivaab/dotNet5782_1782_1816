@@ -14,9 +14,9 @@ namespace BL
         {
             try
             {
-                DO.Customer sender = DalObject.DisplayCustomer(senderID);
-                DO.Customer receiver = DalObject.DisplayCustomer(receiverID);
-                int packageID = DalObject.AddPackage(senderID, receiverID, (DO.Enums.WeightCategories)weight, (DO.Enums.Priorities)priority);
+                DO.Customer sender = dalObject.GetCustomer(senderID);
+                DO.Customer receiver = dalObject.GetCustomer(receiverID);
+                int packageID = dalObject.AddPackage(senderID, receiverID, (DO.Enums.WeightCategories)weight, (DO.Enums.Priorities)priority);
 
                 CustomerForPackage packageSender = new(sender.ID, sender.Name);
                 CustomerForPackage packageReceiver = new(receiver.ID, receiver.Name);
@@ -32,25 +32,25 @@ namespace BL
         
         public void AssignPackage(int droneID)
         {
-            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
                 throw new UndefinedObjectException("There is no drone with the given ID.");
             }
 
-            if (Drones[droneIndex].Status != Enums.DroneStatus.available)
+            if (drones[droneIndex].Status != Enums.DroneStatus.available)
             {
                 throw new UnableToAssignException("The drone is not currently available and so cannot be assigned a package.");
             }
 
             try
             {
-                IEnumerable<DO.Package> dalPackages = DalObject.FindPackages(p => p.DroneID == null);
-                int bestPackageID = findBestPackage(dalPackages, Drones[droneIndex]);
-                DalObject.AssignPackage(bestPackageID, droneID);
+                IEnumerable<DO.Package> dalPackages = dalObject.FindPackages(p => p.DroneID == null);
+                int bestPackageID = findBestPackage(dalPackages, drones[droneIndex]);
+                dalObject.AssignPackage(bestPackageID, droneID);
 
-                Drones[droneIndex].Status = Enums.DroneStatus.delivery;
-                Drones[droneIndex].PackageID = bestPackageID;
+                drones[droneIndex].Status = Enums.DroneStatus.delivery;
+                drones[droneIndex].PackageID = bestPackageID;
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -60,18 +60,18 @@ namespace BL
 
         public void CollectPackage(int droneID)
         {
-            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
                 throw new UndefinedObjectException("There is no drone with the given ID.");
             }
 
-            if (Drones[droneIndex].PackageID == null)
+            if (drones[droneIndex].PackageID == null)
             {
                 throw new UnableToCollectException("The drone has not been assigned a package.");
             }
             
-            DO.Package dalPackage = DalObject.DisplayPackage((int)Drones[droneIndex].PackageID);
+            DO.Package dalPackage = dalObject.GetPackage((int)drones[droneIndex].PackageID);
             
             if (dalPackage.Assigned == null || dalPackage.Collected != null)
             {
@@ -80,11 +80,11 @@ namespace BL
 
             try
             {
-                DalObject.CollectPackage(dalPackage.ID, droneID);
+                dalObject.CollectPackage(dalPackage.ID, droneID);
 
                 Location senderLocation = getCustomerLocation(dalPackage.SenderID);
-                Drones[droneIndex].Battery = Math.Max(Drones[droneIndex].Battery - (PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(Drones[droneIndex].Location, senderLocation)), 0);
-                Drones[droneIndex].Location = senderLocation;
+                drones[droneIndex].Battery = Math.Max(drones[droneIndex].Battery - (PowerConsumption[(int)Enums.WeightCategories.free] * getDistance(drones[droneIndex].Location, senderLocation)), 0);
+                drones[droneIndex].Location = senderLocation;
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -94,19 +94,19 @@ namespace BL
         
         public void DeliverPackage(int droneID)
         {
-            int droneIndex = Drones.FindIndex(d => d.ID == droneID);
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
                 throw new UndefinedObjectException("There is no drone with the given ID.");
             }
 
             //if this drone isn't assigned a package
-            if (Drones[droneIndex].PackageID == null)
+            if (drones[droneIndex].PackageID == null)
             {
                 throw new UnableToDeliverException("The drone has not been assigned a package.");
             }
             
-            DO.Package dalPackage = DalObject.DisplayPackage((int)Drones[droneIndex].PackageID);
+            DO.Package dalPackage = dalObject.GetPackage((int)drones[droneIndex].PackageID);
             
             //if this package isn't in a state to be delivered
             if (dalPackage.Collected == null || dalPackage.Delivered != null)
@@ -116,12 +116,13 @@ namespace BL
 
             try
             {
-                DalObject.DeliverPackage(dalPackage.ID, droneID);
+                dalObject.DeliverPackage(dalPackage.ID, droneID);
 
                 Location receiverLocation = getCustomerLocation(dalPackage.ReceiverID);
-                Drones[droneIndex].Battery = Math.Max(Drones[droneIndex].Battery - (PowerConsumption[(int)dalPackage.Weight] * getDistance(Drones[droneIndex].Location, receiverLocation)), 0);
-                Drones[droneIndex].Location = receiverLocation;
-                Drones[droneIndex].Status = Enums.DroneStatus.available;
+                drones[droneIndex].Battery = Math.Max(drones[droneIndex].Battery - (PowerConsumption[(int)dalPackage.Weight] * getDistance(drones[droneIndex].Location, receiverLocation)), 0);
+                drones[droneIndex].Location = receiverLocation;
+                drones[droneIndex].Status = Enums.DroneStatus.available;
+                drones[droneIndex].PackageID = null;
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -133,15 +134,15 @@ namespace BL
         {
             try
             {
-                DO.Package dalPackage = DalObject.DisplayPackage(packageID);
+                DO.Package dalPackage = dalObject.GetPackage(packageID);
 
-                DO.Customer dalPackageSender = DalObject.DisplayCustomer(dalPackage.SenderID);
-                DO.Customer dalPackageReceiver = DalObject.DisplayCustomer(dalPackage.ReceiverID);
+                DO.Customer dalPackageSender = dalObject.GetCustomer(dalPackage.SenderID);
+                DO.Customer dalPackageReceiver = dalObject.GetCustomer(dalPackage.ReceiverID);
                 CustomerForPackage senderForPackage = new(dalPackageSender.ID, dalPackageSender.Name);
                 CustomerForPackage receiverForPackage = new(dalPackageReceiver.ID, dalPackageReceiver.Name);
 
-                int droneIndex = Drones.FindIndex(d => d.ID == dalPackage.DroneID);
-                DroneDelivering droneDelivering = droneIndex != -1 ? new(Drones[droneIndex].ID, Drones[droneIndex].Battery, Drones[droneIndex].Location) : null;
+                int droneIndex = drones.FindIndex(d => d.ID == dalPackage.DroneID);
+                DroneDelivering droneDelivering = droneIndex != -1 ? new(drones[droneIndex].ID, drones[droneIndex].Battery, drones[droneIndex].Location) : null;
 
                 Package package = new(dalPackage.ID, senderForPackage, receiverForPackage, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, droneDelivering, dalPackage.Requested, dalPackage.Assigned, dalPackage.Collected, dalPackage.Delivered);
                 return package;
@@ -156,10 +157,10 @@ namespace BL
         {
             try
             {
-                IEnumerable<DO.Package> dalPackages = DalObject.DisplayPackagesList();
+                IEnumerable<DO.Package> dalPackages = dalObject.GetPackagesList();
                 IEnumerable<PackageToList> packageToLists = from DO.Package dalPackage in dalPackages
-                                                            let senderName = DalObject.DisplayCustomer(dalPackage.SenderID).Name
-                                                            let receiverName = DalObject.DisplayCustomer(dalPackage.ReceiverID).Name
+                                                            let senderName = dalObject.GetCustomer(dalPackage.SenderID).Name
+                                                            let receiverName = dalObject.GetCustomer(dalPackage.ReceiverID).Name
                                                             select new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, getPackageStatus(dalPackage));
                 return packageToLists;
             }
@@ -173,10 +174,10 @@ namespace BL
         {
             try
             {
-                IEnumerable<DO.Package> dalPackages = DalObject.FindPackages(predicate);
+                IEnumerable<DO.Package> dalPackages = dalObject.FindPackages(predicate);
                 IEnumerable<PackageToList> packageToLists = from DO.Package dalPackage in dalPackages
-                                                            let senderName = DalObject.DisplayCustomer(dalPackage.SenderID).Name
-                                                            let receiverName = DalObject.DisplayCustomer(dalPackage.ReceiverID).Name
+                                                            let senderName = dalObject.GetCustomer(dalPackage.SenderID).Name
+                                                            let receiverName = dalObject.GetCustomer(dalPackage.ReceiverID).Name
                                                             select new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, Enums.PackageStatus.created);
                 return packageToLists;
             }
