@@ -55,23 +55,24 @@ namespace BL
         #region Update Methods
         public void UpdateDroneModel(int droneID, string model)
         {
-            //update in the list of DroneToLists
             int droneIndex = drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
                 throw new UndefinedObjectException("There is no drone with the given ID.");
             }
-            drones[droneIndex].Model = model;
 
-            //update in the data layer
             try
             {
+                //update in the data layer
                 dalObject.UpdateDroneModel(droneID, model);
             }
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
+
+            //update in the list of DroneToLists
+            drones[droneIndex].Model = model;
         }
         
         public void SendDroneToCharge(int droneID)

@@ -29,6 +29,11 @@ namespace DO
         public double Longitude { get; set; }
 
         /// <summary>
+        /// Represents if a station is currently active or not.
+        /// </summary>
+        public bool Active { get; set; }
+
+        /// <summary>
         /// Convert a Station entity to a string.
         /// </summary>
         /// <returns>String representation of a Station.</returns>

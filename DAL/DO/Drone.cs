@@ -22,6 +22,11 @@ namespace DO
         public Enums.WeightCategories MaxWeight { get; set; }
 
         /// <summary>
+        /// Represents if a drone is currently active or not.
+        /// </summary>
+        public bool Active { get; set; }
+
+        /// <summary>
         /// Convert a Drone entity to a string.
         /// </summary>
         /// <returns>String representation of a Drone.</returns>

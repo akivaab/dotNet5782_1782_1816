@@ -32,6 +32,11 @@ namespace DO
         public double Longitude { get; set; }
 
         /// <summary>
+        /// Represents if a customer is currently active or not.
+        /// </summary>
+        public bool Active { get; set; }
+
+        /// <summary>
         /// Convert a Customer entity to a string.
         /// </summary>
         /// <returns>String representation of a Customer.</returns>

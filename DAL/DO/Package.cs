@@ -58,6 +58,11 @@ namespace DO
         public DateTime? Delivered { get; set; }
 
         /// <summary>
+        /// Represents if a package is currently active or not.
+        /// </summary>
+        public bool Active { get; set; }
+
+        /// <summary>
         /// Convert a Package entity to a string.
         /// </summary>
         /// <returns>String representation of a Package.</returns>

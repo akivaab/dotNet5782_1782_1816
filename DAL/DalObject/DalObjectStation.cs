@@ -18,7 +18,9 @@ namespace DalObject
             {
                 throw new IllegalArgumentException("The given latitude and/or longitude is out of our coordinate field range.");
             }
-            if (DataSource.stations.FindIndex(station => station.ID == id) != -1)
+
+            int stationIndex = DataSource.stations.FindIndex(station => station.ID == id && station.Active);
+            if (stationIndex != -1 && DataSource.stations[stationIndex].Active)
             {
                 throw new NonUniqueIdException("The given station ID is not unique.");
             }
@@ -38,7 +40,7 @@ namespace DalObject
 
         public void UpdateStationName(int stationID, int name)
         {
-            int stationIndex = DataSource.stations.FindIndex(s => s.ID == stationID);
+            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
             
             if (stationIndex == -1)
             {
@@ -52,7 +54,7 @@ namespace DalObject
 
         public void UpdateStationChargeSlots(int stationID, int availableChargingSlots)
         {
-            int stationIndex = DataSource.stations.FindIndex(s => s.ID == stationID);
+            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
             
             if (stationIndex == -1)
             {
@@ -70,7 +72,7 @@ namespace DalObject
 
         public Station GetStation(int stationID)
         {
-            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID);
+            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
             
             if (stationIndex == -1)
             {
@@ -83,6 +85,7 @@ namespace DalObject
         public IEnumerable<Station> GetStationsList()
         {
             return from station in DataSource.stations
+                   where station.Active
                    select station;
         }
 
@@ -93,7 +96,7 @@ namespace DalObject
         public IEnumerable<Station> FindStations(Predicate<Station> predicate)
         {
             return from station in DataSource.stations
-                   where predicate(station)
+                   where predicate(station) && station.Active
                    select station;
         }
 

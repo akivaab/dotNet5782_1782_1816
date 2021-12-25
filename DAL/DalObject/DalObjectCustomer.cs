@@ -17,10 +17,13 @@ namespace DalObject
             {
                 throw new IllegalArgumentException("The given latitude and/or longitude is out of our coordinate field range.");
             }
-            if (DataSource.customers.FindIndex(customer => customer.ID == id) != -1)
+
+            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == id);
+            if (customerIndex != -1 && DataSource.customers[customerIndex].Active)
             {
                 throw new NonUniqueIdException("The given customer ID is not unique.");
             }
+
             Customer customer = new();
             customer.ID = id;
             customer.Name = name;
@@ -36,7 +39,7 @@ namespace DalObject
 
         public void UpdateCustomerName(int customerID, string name)
         {
-            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID);
+            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
             
             if (customerIndex == -1)
             {
@@ -50,7 +53,7 @@ namespace DalObject
 
         public void UpdateCustomerPhone(int customerID, string phone)
         {
-            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID);
+            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
             
             if (customerIndex == -1)
             {
@@ -68,7 +71,7 @@ namespace DalObject
 
         public Customer GetCustomer(int customerID)
         {
-            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID);
+            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
             
             if (customerIndex == -1)
             {
@@ -81,6 +84,7 @@ namespace DalObject
         public IEnumerable<Customer> GetCustomersList()
         {
             return from customer in DataSource.customers
+                   where customer.Active
                    select customer;
         }
 

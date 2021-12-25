@@ -14,7 +14,8 @@ namespace DalObject
 
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
         {
-            if (DataSource.drones.FindIndex(drone => drone.ID == id) != -1)
+            int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == id && drone.Active);
+            if (droneIndex != -1 && DataSource.drones[droneIndex].Active)
             {
                 throw new NonUniqueIdException("The given drone ID is not unique.");
             }
@@ -32,8 +33,8 @@ namespace DalObject
 
         public void ChargeDrone(int droneID, int stationID)
         {
-            int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID);
-            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID);
+            int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
+            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
             
             if (droneIndex == -1 || stationIndex == -1)
             {
@@ -52,8 +53,8 @@ namespace DalObject
 
         public void ReleaseDroneFromCharging(int droneID, int stationID)
         {
-            int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID);
-            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID);
+            int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
+            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
             int droneChargeIndex = DataSource.droneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID);
             
             if (droneIndex == -1 || stationIndex == -1)
@@ -73,7 +74,7 @@ namespace DalObject
 
         public void UpdateDroneModel(int droneID, string model)
         {
-            int droneIndex = DataSource.drones.FindIndex(d => d.ID == droneID);
+            int droneIndex = DataSource.drones.FindIndex(d => d.ID == droneID && d.Active);
 
             if (droneIndex == -1)
             {
@@ -91,7 +92,7 @@ namespace DalObject
 
         public Drone GetDrone(int droneID)
         {
-            int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID);
+            int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
             
             if (droneIndex == -1)
             {
@@ -116,6 +117,7 @@ namespace DalObject
         public IEnumerable<Drone> GetDronesList()
         {
             return from drone in DataSource.drones
+                   where drone.Active
                    select drone;
         }
 
