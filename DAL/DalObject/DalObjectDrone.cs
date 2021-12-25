@@ -24,6 +24,7 @@ namespace DalObject
             drone.ID = id;
             drone.Model = model;
             drone.MaxWeight = maxWeight;
+            drone.Active = true;
             DataSource.drones.Add(drone);
         }
 

@@ -31,6 +31,7 @@ namespace DalObject
             station.AvailableChargeSlots = numChargeSlots;
             station.Latitude = latitude;
             station.Longitude = longitude;
+            station.Active = true;
             DataSource.stations.Add(station);
         }
 

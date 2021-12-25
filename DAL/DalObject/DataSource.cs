@@ -71,6 +71,7 @@ namespace DalObject
                 station.Latitude = (random.NextDouble() * 1) * (random.Next(0, 2) * 2 - 1);
                 // longitude is always a positive double between 0-2 (limited coordinate field)
                 station.Longitude = random.NextDouble() * 2;
+                station.Active = true;
                 stations.Add(station);
             }
 
@@ -81,6 +82,7 @@ namespace DalObject
                 drone.ID = drones.Count + 1;
                 drone.Model = $"MX{random.Next(1, 6)}";
                 drone.MaxWeight = (Enums.WeightCategories)random.Next(1, 4);
+                drone.Active = true;
                 drones.Add(drone);
             }
 
@@ -95,6 +97,7 @@ namespace DalObject
                 customer.Latitude = (random.NextDouble() * 1) * (random.Next(0, 2) * 2 - 1);
                 // longitude is always a positive double between 0-2 (limited coordinate field)
                 customer.Longitude = random.NextDouble() * 2;
+                customer.Active = true;
                 customers.Add(customer);
             }
 
@@ -122,7 +125,8 @@ namespace DalObject
                 package.Collected = dateTimes[random.Next(2)];
                 package.Delivered = dateTimes[random.Next(2)];
                 package.DroneID = droneIDs[random.Next(drones.Count)];
-
+                
+                package.Active = true;
                 packages.Add(package);
                 Config.packageID++;
             }

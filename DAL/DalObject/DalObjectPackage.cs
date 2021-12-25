@@ -42,6 +42,7 @@ namespace DalObject
             package.Assigned = null;
             package.Collected = null;
             package.Delivered = null;
+            package.Active = true;
             DataSource.Config.packageID++;
             DataSource.packages.Add(package);
             return DataSource.Config.packageID;

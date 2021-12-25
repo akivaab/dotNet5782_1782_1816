@@ -30,6 +30,7 @@ namespace DalObject
             customer.Phone = phone;
             customer.Latitude = latitude;
             customer.Longitude = longitude;
+            customer.Active = true;
             DataSource.customers.Add(customer);
         }
 
