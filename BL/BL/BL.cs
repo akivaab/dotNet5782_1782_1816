@@ -10,6 +10,8 @@ namespace BL
     /// </summary>
     sealed partial class BL : BlApi.IBL
     {
+        #region Fields
+
         /// <summary>
         /// Lazy and implicitly thread-safe initialization of a BL object.
         /// </summary>
@@ -40,6 +42,10 @@ namespace BL
         /// </summary>
         private double chargeRatePerHour;
 
+        #endregion
+
+        #region Constructor
+
         /// <summary>
         /// Constructor of BL class, private to maintain Singleton design pattern.
         /// </summary>
@@ -55,6 +61,8 @@ namespace BL
             dataCleanup();
             
             List<DO.Drone> dalDrones = dalObject.GetDronesList().ToList();
+
+            #region Add assigned drones to BL Drone List
 
             //find all packages undelivered but with a drone assigned
             List<DO.Package> dalPackages = dalObject.FindPackages(p => p.Delivered == null && p.DroneID != null).ToList();
@@ -85,6 +93,10 @@ namespace BL
                 DroneToList droneToList = new(drone.ID, drone.Model, (Enums.WeightCategories)drone.MaxWeight, battery, Enums.DroneStatus.delivery, droneLocation, package.ID);
                 drones.Add(droneToList);
             }
+
+            #endregion
+
+            #region Add unassigned drones to BL Drone List
 
             Random random = new Random();
 
@@ -130,6 +142,10 @@ namespace BL
 
                 drones.Add(droneToList);
             }
+
+            #endregion
         }
+
+        #endregion
     }
 }

@@ -9,6 +9,8 @@ namespace BL
     /// </summary>
     partial class BL : BlApi.IBL
     {
+        #region Add Methods
+
         public Customer AddCustomer(int customerID, string name, string phone, Location location)
         {
             try
@@ -26,6 +28,10 @@ namespace BL
             Customer customer = new(customerID, name, phone, location, new List<PackageForCustomer>(), new List<PackageForCustomer>());
             return customer;
         }
+
+        #endregion
+
+        #region Update Methods
 
         public void UpdateCustomer(int customerID, string name = "", string phone = "")
         {
@@ -45,8 +51,12 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-        
-        public Customer DisplayCustomer(int customerID)
+
+        #endregion
+
+        #region Getter Methods
+
+        public Customer GetCustomer(int customerID)
         {
             try
             {
@@ -77,7 +87,7 @@ namespace BL
             }
         }
         
-        public IEnumerable<CustomerToList> DisplayAllCustomers()
+        public IEnumerable<CustomerToList> GetCustomersList()
         {
             IEnumerable<DO.Customer> dalCustomers = dalObject.GetCustomersList();
             IEnumerable<CustomerToList> customerToLists = from DO.Customer dalCustomer in dalCustomers
@@ -88,5 +98,7 @@ namespace BL
                                                           select new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected);
             return customerToLists;
         }
+
+        #endregion
     }
 }

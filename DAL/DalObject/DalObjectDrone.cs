@@ -10,6 +10,8 @@ namespace DalObject
     /// </summary>
     partial class DalObject : DalApi.IDal
     {
+        #region Add Methods
+
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
         {
             if (DataSource.drones.FindIndex(drone => drone.ID == id) != -1)
@@ -23,6 +25,10 @@ namespace DalObject
             drone.MaxWeight = maxWeight;
             DataSource.drones.Add(drone);
         }
+
+        #endregion
+
+        #region Update Methods
 
         public void ChargeDrone(int droneID, int stationID)
         {
@@ -79,6 +85,10 @@ namespace DalObject
             DataSource.drones[droneIndex] = drone;
         }
 
+        #endregion
+
+        #region Getter Methods
+
         public Drone GetDrone(int droneID)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID);
@@ -89,6 +99,18 @@ namespace DalObject
             }
             
             return DataSource.drones[droneIndex];
+        }
+
+        public DateTime GetTimeChargeBegan(int droneID)
+        {
+            int droneChargeIndex = DataSource.droneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID);
+
+            if (droneChargeIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no drone with the given ID.");
+            }
+
+            return DataSource.droneCharges[droneChargeIndex].BeganCharge;
         }
 
         public IEnumerable<Drone> GetDronesList()
@@ -108,16 +130,6 @@ namespace DalObject
             return powerConsumptionValues;
         }
 
-        public DateTime GetTimeChargeBegan(int droneID)
-        {
-            int droneChargeIndex = DataSource.droneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID);
-            
-            if (droneChargeIndex == -1)
-            {
-                throw new UndefinedObjectException("There is no drone with the given ID.");
-            }
-
-            return DataSource.droneCharges[droneChargeIndex].BeganCharge;
-        }
+        #endregion
     }
 }

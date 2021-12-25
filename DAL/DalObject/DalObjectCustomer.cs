@@ -9,6 +9,8 @@ namespace DalObject
     /// </summary>
     partial class DalObject : DalApi.IDal
     {
+        #region Add Methods
+
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {
             if (latitude < -1 || latitude > 1 || longitude < 0 || longitude > 2) //limited coordinate field
@@ -27,6 +29,10 @@ namespace DalObject
             customer.Longitude = longitude;
             DataSource.customers.Add(customer);
         }
+
+        #endregion
+
+        #region Update Methods
 
         public void UpdateCustomerName(int customerID, string name)
         {
@@ -56,6 +62,10 @@ namespace DalObject
             DataSource.customers[customerIndex] = customer;
         }
 
+        #endregion
+
+        #region Getter Methods
+
         public Customer GetCustomer(int customerID)
         {
             int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID);
@@ -73,5 +83,7 @@ namespace DalObject
             return from customer in DataSource.customers
                    select customer;
         }
+
+        #endregion
     }
 }

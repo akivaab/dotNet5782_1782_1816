@@ -10,6 +10,8 @@ namespace DalObject
     /// </summary>
     partial class DalObject : DalApi.IDal
     {
+        #region Add Methods
+
         public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int? droneID = null)
         {
             if (DataSource.customers.FindIndex(customer => customer.ID == senderID) == -1 ||
@@ -37,6 +39,10 @@ namespace DalObject
             DataSource.packages.Add(package);
             return DataSource.Config.packageID;
         }
+
+        #endregion
+
+        #region Update Methods
 
         public void AssignPackage(int packageID, int droneID)
         {
@@ -85,6 +91,26 @@ namespace DalObject
             DataSource.packages[packageIndex] = package;
         }
 
+        public void ModifyPackageStatus(int packageID, DateTime? assigned, DateTime? collected, DateTime? delivered)
+        {
+            int packageIndex = DataSource.packages.FindIndex(package => package.ID == packageID);
+
+            if (packageIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no package with the given ID.");
+            }
+
+            Package package = DataSource.packages[packageIndex];
+            package.Assigned = assigned;
+            package.Collected = collected;
+            package.Delivered = delivered;
+            DataSource.packages[packageIndex] = package;
+        }
+
+        #endregion
+
+        #region Delete Methods
+
         public void RemovePackage(int packageID)
         {
             int packageIndex = DataSource.packages.FindIndex(package => package.ID == packageID);
@@ -97,21 +123,9 @@ namespace DalObject
             DataSource.packages.RemoveAt(packageIndex);
         }
 
-        public void ModifyPackageStatus(int packageID, DateTime? assigned, DateTime? collected, DateTime? delivered)
-        {
-            int packageIndex = DataSource.packages.FindIndex(package => package.ID == packageID);
-            
-            if (packageIndex == -1)
-            {
-                throw new UndefinedObjectException("There is no package with the given ID.");
-            }
+        #endregion
 
-            Package package = DataSource.packages[packageIndex];
-            package.Assigned = assigned;
-            package.Collected = collected;
-            package.Delivered = delivered;
-            DataSource.packages[packageIndex] = package;
-        }
+        #region Getter Methods
 
         public Package GetPackage(int packageID)
         {
@@ -130,12 +144,18 @@ namespace DalObject
             return from package in DataSource.packages
                    select package;
         }
-            
+
+        #endregion
+
+        #region Find Methods
+
         public IEnumerable<Package> FindPackages(Predicate<Package> predicate)
         {
             return from package in DataSource.packages
                    where predicate(package)
                    select package;
         }
+
+        #endregion
     }
 }

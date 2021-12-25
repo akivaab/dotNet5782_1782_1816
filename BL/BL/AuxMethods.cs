@@ -10,6 +10,8 @@ namespace BL
     /// </summary>
     public partial class BL
     {
+        #region Generic Auxiliary Methods
+
         /// <summary>
         /// Calculates the distance in kilometers between two locations.
         /// </summary>
@@ -33,6 +35,40 @@ namespace BL
 
             return d;
         }
+
+        /// <summary>
+        /// Return a random battery level between the amount a drone needs to deliver a package and return to a station, and 100.
+        /// </summary>
+        /// <param name="droneLocation">The current location of the drone.</param>
+        /// <param name="package">The package being delivered.</param>
+        /// <param name="powerConsumed">The amount of battery required for the drone to carry the package one kilometer.</param>
+        /// <returns>A random double representing the battery level.</returns>
+        private double randomBatteryPower(Location droneLocation, DO.Package package, double powerConsumed)
+        {
+            try
+            {
+                DO.Customer sender = dalObject.GetCustomer(package.SenderID);
+                DO.Customer receiver = dalObject.GetCustomer(package.ReceiverID);
+                Location senderLocation = new(sender.Latitude, sender.Longitude);
+                Location receiverLocation = new(receiver.Latitude, receiver.Longitude);
+
+                //distance needed to deliver is from the drone's current location to the sender, to the receiver, to the nearest station
+                double distanceToDeliver = getDistance(droneLocation, senderLocation);
+                distanceToDeliver += getDistance(senderLocation, receiverLocation);
+                distanceToDeliver += getDistance(receiverLocation, getClosestStation(receiverLocation));
+
+                Random random = new Random();
+                return random.Next((int)Math.Ceiling(distanceToDeliver * powerConsumed), 101);
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message);
+            }
+        }
+        
+        #endregion
+
+        #region Auxiliary Station Methods
 
         /// <summary>
         /// Find the station closest to some location.
@@ -84,6 +120,10 @@ namespace BL
             return reachableStations;
         }
 
+        #endregion
+
+        #region Auxiliary Customer Methods
+
         /// <summary>
         /// Find the location of a customer.
         /// </summary>
@@ -96,36 +136,6 @@ namespace BL
                 DO.Customer dalCustomer = dalObject.GetCustomer(customerID);
                 Location customerLocation = new(dalCustomer.Latitude, dalCustomer.Longitude);
                 return customerLocation;
-            }
-            catch (DO.UndefinedObjectException e)
-            {
-                throw new UndefinedObjectException(e.Message);
-            }
-        }
-
-        /// <summary>
-        /// Return a random battery level between the amount a drone needs to deliver a package and return to a station, and 100.
-        /// </summary>
-        /// <param name="droneLocation">The current location of the drone.</param>
-        /// <param name="package">The package being delivered.</param>
-        /// <param name="powerConsumed">The amount of battery required for the drone to carry the package one kilometer.</param>
-        /// <returns>A random double representing the battery level.</returns>
-        private double randomBatteryPower(Location droneLocation, DO.Package package, double powerConsumed)
-        {
-            try
-            {
-                DO.Customer sender = dalObject.GetCustomer(package.SenderID);
-                DO.Customer receiver = dalObject.GetCustomer(package.ReceiverID);
-                Location senderLocation = new(sender.Latitude, sender.Longitude);
-                Location receiverLocation = new(receiver.Latitude, receiver.Longitude);
-
-                //distance needed to deliver is from the drone's current location to the sender, to the receiver, to the nearest station
-                double distanceToDeliver = getDistance(droneLocation, senderLocation);
-                distanceToDeliver += getDistance(senderLocation, receiverLocation);
-                distanceToDeliver += getDistance(receiverLocation, getClosestStation(receiverLocation));
-
-                Random random = new Random();
-                return random.Next((int)Math.Ceiling(distanceToDeliver * powerConsumed), 101);
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -160,6 +170,10 @@ namespace BL
                 throw new UndefinedObjectException(e.Message);
             }
         }
+
+        #endregion
+
+        #region Auxiliary Package Methods
 
         /// <summary>
         /// Find the best package based on priority, weight, and distance.
@@ -220,7 +234,11 @@ namespace BL
             }
             return status;
         }
+        
+        #endregion
 
+        #region Data Layer Cleanup Methods
+        
         /// <summary>
         /// Clean up the information randomly generated in the data layer so it all makes sense.
         /// </summary>
@@ -317,5 +335,7 @@ namespace BL
                 throw new UndefinedObjectException(e.Message);
             }
         }
+
+        #endregion
     }
 }

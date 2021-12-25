@@ -10,6 +10,8 @@ namespace BL
     /// </summary>
     partial class BL : BlApi.IBL
     {
+        #region Add Methods
+
         public Package AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority)
         {
             try
@@ -29,7 +31,11 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-        
+
+        #endregion
+
+        #region Update Methods
+
         public void AssignPackage(int droneID)
         {
             int droneIndex = drones.FindIndex(d => d.ID == droneID);
@@ -129,8 +135,11 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-        
-        public Package DisplayPackage(int packageID)
+
+        #endregion
+
+        #region Getter Methods
+        public Package GetPackage(int packageID)
         {
             try
             {
@@ -153,7 +162,7 @@ namespace BL
             }
         }
         
-        public IEnumerable<PackageToList> DisplayAllPackages()
+        public IEnumerable<PackageToList> GetPackagesList()
         {
             try
             {
@@ -169,6 +178,10 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+
+        #endregion
+
+        #region Find Methods
 
         public IEnumerable<PackageToList> FindPackages(Predicate<DO.Package> predicate)
         {
@@ -186,5 +199,7 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+
+        #endregion
     }
 }

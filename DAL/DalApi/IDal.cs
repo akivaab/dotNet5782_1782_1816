@@ -8,6 +8,8 @@ namespace DalApi
     /// </summary>
     public interface IDal
     {
+        #region Add Methods
+
         /// <summary>
         /// Add a new station to the system.
         /// </summary>
@@ -16,7 +18,7 @@ namespace DalApi
         /// <param name="numChargeSlots">The number of charging slots avaliable.</param>
         /// <param name="latitude">The station latitude coordinates.</param>
         /// <param name="longitude">The station longitude coordinates.</param>
-        
+
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude);
         
         /// <summary>
@@ -50,6 +52,10 @@ namespace DalApi
         /// <returns>automatic package ID, or -1 if adding a package failed</returns>
         public int AddPackage(int senderID, int receiverID, DO.Enums.WeightCategories weight, DO.Enums.Priorities priority, int? droneID = null);
 
+        #endregion
+
+        #region Update Methods
+
         /// <summary>
         /// Assign a package to a drone.
         /// </summary>
@@ -63,6 +69,15 @@ namespace DalApi
         /// <param name="packageID">The package ID.</param>
         /// <param name="droneID">The drone ID.</param>
         public void CollectPackage(int packageID, int droneID);
+
+        /// <summary>
+        /// Modify the assignment, collection, and delivery times of a package.
+        /// </summary>
+        /// <param name="packageID">The apckage ID.</param>
+        /// <param name="assigned">The new assignment time.</param>
+        /// <param name="collected">The new collection time.</param>
+        /// <param name="delivered">The new delivery time.</param>
+        public void ModifyPackageStatus(int packageID, DateTime? assigned, DateTime? collected, DateTime? delivered);
 
         /// <summary>
         /// Have a drone deliver a package.
@@ -120,20 +135,19 @@ namespace DalApi
         /// <param name="availableChargingSlots">The number of available charging slots at the station.</param>
         public void UpdateStationChargeSlots(int stationID, int availableChargingSlots);
 
+        #endregion
+
+        #region Delete Methods
+
         /// <summary>
         /// Remove a package from the system.
         /// </summary>
         /// <param name="packageID">The package ID.</param>
         public void RemovePackage(int packageID);
 
-        /// <summary>
-        /// Modify the assignment, collection, and delivery times of a package.
-        /// </summary>
-        /// <param name="packageID">The apckage ID.</param>
-        /// <param name="assigned">The new assignment time.</param>
-        /// <param name="collected">The new collection time.</param>
-        /// <param name="delivered">The new delivery time.</param>
-        public void ModifyPackageStatus(int packageID, DateTime? assigned, DateTime? collected, DateTime? delivered);
+        #endregion
+
+        #region Getter Methods - Single Entity
 
         /// <summary>
         /// Get a single station.
@@ -164,6 +178,17 @@ namespace DalApi
         public DO.Package GetPackage(int packageID);
 
         /// <summary>
+        /// Get the time a drone began charging in a station.
+        /// </summary>
+        /// <param name="droneID">The drone ID.</param>
+        /// <returns>DateTime the drone began charging.</returns>
+        public DateTime GetTimeChargeBegan(int droneID);
+
+        #endregion
+
+        #region Getter Methods - Entity Collection
+
+        /// <summary>
         /// Get all stations.
         /// </summary>
         /// <returns>List of all stations</returns>
@@ -188,6 +213,16 @@ namespace DalApi
         public IEnumerable<DO.Package> GetPackagesList();
 
         /// <summary>
+        /// Represents the statistics of a drone's power consumption.
+        /// </summary>
+        /// <returns>A collection of doubles for how much power is consumed for different tasks.</returns>
+        public IEnumerable<double> DronePowerConsumption();
+
+        #endregion
+
+        #region Find Methods
+
+        /// <summary>
         /// Find all packages according to a given predicate.
         /// </summary>
         /// <param name="predicate">Predicate used as a search parameter.</param>
@@ -201,17 +236,6 @@ namespace DalApi
         /// <returns>A collection of all appropriate stations.</returns>
         public IEnumerable<DO.Station> FindStations(Predicate<DO.Station> predicate);
 
-        /// <summary>
-        /// Represents the statistics of a drone's power consumption.
-        /// </summary>
-        /// <returns>A collection of doubles for how much power is consumed for different tasks.</returns>
-        public IEnumerable<double> DronePowerConsumption();
-
-        /// <summary>
-        /// Get the time a drone began charging in a station.
-        /// </summary>
-        /// <param name="droneID">The drone ID.</param>
-        /// <returns>DateTime the drone began charging.</returns>
-        public DateTime GetTimeChargeBegan(int droneID);
+        #endregion
     }
 }

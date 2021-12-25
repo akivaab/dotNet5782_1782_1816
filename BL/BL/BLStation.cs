@@ -10,6 +10,8 @@ namespace BL
     /// </summary>
     partial class BL : BlApi.IBL
     {
+        #region Add Methods
+
         public Station AddStation(int stationID, int name, Location location, int numAvailableChargingSlots)
         {
             try
@@ -27,7 +29,11 @@ namespace BL
             Station station = new(stationID, name, location, numAvailableChargingSlots, new List<DroneCharging>());
             return station;
         }
-        
+
+        #endregion
+
+        #region Update Methods
+
         public void UpdateStation(int stationID, int name = -1, int totalChargingSlots = -1)
         {
             try
@@ -52,8 +58,12 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+
+        #endregion
+
+        #region Getter Methods
         
-        public Station DisplayStation(int stationID)
+        public Station GetStation(int stationID)
         {
             try
             {
@@ -76,7 +86,7 @@ namespace BL
             }
         }
         
-        public IEnumerable<StationToList> DisplayAllStations()
+        public IEnumerable<StationToList> GetStationsList()
         {
             IEnumerable<DO.Station> dalStations = dalObject.GetStationsList();
             IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
@@ -85,7 +95,11 @@ namespace BL
                                                         select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count);
             return stationToLists;
         }
-        
+
+        #endregion
+
+        #region Find Methods
+
         public IEnumerable<StationToList> FindStations(Predicate<DO.Station> predicate)
         {
             IEnumerable<DO.Station> dalStations = dalObject.FindStations(predicate);
@@ -95,5 +109,7 @@ namespace BL
                                                         select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count);
             return stationToLists;
         }
+
+        #endregion
     }
 }

@@ -5,12 +5,14 @@ using DO;
 namespace DalObject
 {
     /// <summary>
-    /// Constitutes the storing location of the entities in the system.
+    /// Constitutes the storing location of the entities in the system, and their initialization.
     /// </summary>
     class DataSource
     {
+        #region Entity Storage
+
         /// <summary>
-        /// 
+        /// Lists storing the system entity information.
         /// </summary>
         internal static List<Station> stations = new();
         internal static List<Drone> drones = new();
@@ -18,15 +20,37 @@ namespace DalObject
         internal static List<Package> packages = new();
         internal static List<DroneCharge> droneCharges = new();
 
+        #endregion
+
+        #region Config Class
+
+        /// <summary>
+        /// Subclass maintaining values key to configuration of the system.
+        /// </summary>
         internal class Config
         {
+            /// <summary>
+            /// Running number giving each added package a new ID. 
+            /// </summary>
             internal static int packageID = 1;
+
+            /// <summary>
+            /// Variables representing how much power a drone uses per kilometer when carrying different weights.
+            /// </summary>
             internal static double free = 0.01;
             internal static double lightWeight = 0.05;
             internal static double midWeight = 0.1;
             internal static double heavyWeight = 0.15;
+
+            /// <summary>
+            /// Represents how much percent a drone charges per hour.
+            /// </summary>
             internal static double chargingRate = 20.0;
         }
+
+        #endregion
+
+        #region Data Initialization
 
         /// <summary>
         /// Initialize all entity listss with random variables.
@@ -103,5 +127,7 @@ namespace DalObject
                 Config.packageID++;
             }
         }
+
+        #endregion
     }
 }

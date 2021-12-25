@@ -10,6 +10,8 @@ namespace DalObject
     /// </summary>
     partial class DalObject : DalApi.IDal
     {
+        #region Add Methods
+
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
         {
             if (latitude < -1 || latitude > 1 || longitude < 0 || longitude > 2) //limited coordinate field
@@ -29,6 +31,10 @@ namespace DalObject
             station.Longitude = longitude;
             DataSource.stations.Add(station);
         }
+
+        #endregion
+
+        #region Update Methods
 
         public void UpdateStationName(int stationID, int name)
         {
@@ -58,6 +64,10 @@ namespace DalObject
             DataSource.stations[stationIndex] = station;
         }
 
+        #endregion
+
+        #region Getter Methods
+
         public Station GetStation(int stationID)
         {
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID);
@@ -76,11 +86,17 @@ namespace DalObject
                    select station;
         }
 
+        #endregion
+
+        #region Find Methods
+
         public IEnumerable<Station> FindStations(Predicate<Station> predicate)
         {
             return from station in DataSource.stations
                    where predicate(station)
                    select station;
         }
+
+        #endregion
     }
 }

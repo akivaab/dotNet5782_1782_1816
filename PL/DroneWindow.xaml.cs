@@ -53,7 +53,7 @@ namespace PL
             Add_MaxWeight.ItemsSource = weights;
 
             //initialize existing station IDs to choose from
-            foreach (StationToList station in bl.DisplayAllStations())
+            foreach (StationToList station in bl.GetStationsList())
             {
                 Add_StationID.Items.Add(station.ID);
             }
@@ -208,7 +208,7 @@ namespace PL
                 }
                 else if ((Enums.DroneStatus)Actions_Status.Content == Enums.DroneStatus.delivery)
                 {
-                    Package package = bl.DisplayPackage((int)drone.PackageID);
+                    Package package = bl.GetPackage((int)drone.PackageID);
                     
                     if (package.CollectingTime == null)
                     {
@@ -261,7 +261,7 @@ namespace PL
         /// </summary>
          private void LoadDroneData()
         {
-            Drone droneEntity = bl.DisplayDrone(drone.ID);
+            Drone droneEntity = bl.GetDrone(drone.ID);
 
             Actions_DroneID.Content = droneEntity.ID;
             Actions_Model.Text = droneEntity.Model;

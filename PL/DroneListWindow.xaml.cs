@@ -38,7 +38,7 @@ namespace PL
             this.bl = bl;
             closeButtonClicked = false;
 
-            DroneListView.ItemsSource = bl.DisplayAllDrones();
+            DroneListView.ItemsSource = bl.GetDronesList();
             StatusSelector.ItemsSource = Enum.GetValues(typeof(Enums.DroneStatus));
 
             //ensure MaxWeightSelector.ItemsSource does not include "free"
@@ -76,7 +76,7 @@ namespace PL
         {
             if (StatusSelector.SelectedItem == null && MaxWeightSelector.SelectedItem == null)
             {
-                DroneListView.ItemsSource = bl.DisplayAllDrones();
+                DroneListView.ItemsSource = bl.GetDronesList();
             }
             else if (StatusSelector.SelectedItem == null)
             {

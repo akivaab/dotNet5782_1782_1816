@@ -320,25 +320,25 @@ namespace ConsoleUI_BL
                         int stationID;
                         Console.Write("Input Station ID: ");
                         int.TryParse(Console.ReadLine(), out stationID);
-                        Console.WriteLine(bl.DisplayStation(stationID));
+                        Console.WriteLine(bl.GetStation(stationID));
                         break;
                     case 2:
                         int droneID;
                         Console.Write("Input Drone ID: ");
                         int.TryParse(Console.ReadLine(), out droneID);
-                        Console.WriteLine(bl.DisplayDrone(droneID));
+                        Console.WriteLine(bl.GetDrone(droneID));
                         break;
                     case 3:
                         int customerID;
                         Console.Write("Input Customer ID: ");
                         int.TryParse(Console.ReadLine(), out customerID);
-                        Console.WriteLine(bl.DisplayCustomer(customerID));
+                        Console.WriteLine(bl.GetCustomer(customerID));
                         break;
                     case 4:
                         int packageID;
                         Console.Write("Input Package ID: ");
                         int.TryParse(Console.ReadLine(), out packageID);
-                        Console.WriteLine(bl.DisplayPackage(packageID));
+                        Console.WriteLine(bl.GetPackage(packageID));
                         break;
                     default:
                         break;
@@ -369,25 +369,25 @@ namespace ConsoleUI_BL
             switch (listDisplayingOption)
             {
                 case 1:
-                    foreach (StationToList station in bl.DisplayAllStations())
+                    foreach (StationToList station in bl.GetStationsList())
                     {
                         Console.WriteLine(station);
                     }
                     break;
                 case 2:
-                    foreach (DroneToList drone in bl.DisplayAllDrones())
+                    foreach (DroneToList drone in bl.GetDronesList())
                     {
                         Console.WriteLine(drone);
                     }
                     break;
                 case 3:
-                    foreach (CustomerToList customer in bl.DisplayAllCustomers())
+                    foreach (CustomerToList customer in bl.GetCustomersList())
                     {
                         Console.WriteLine(customer);
                     }
                     break;
                 case 4:
-                    foreach (PackageToList package in bl.DisplayAllPackages())
+                    foreach (PackageToList package in bl.GetPackagesList())
                     {
                         Console.WriteLine(package);
                     }

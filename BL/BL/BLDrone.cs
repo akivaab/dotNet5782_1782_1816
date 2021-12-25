@@ -10,6 +10,8 @@ namespace BL
     /// </summary>
     partial class BL : BlApi.IBL
     {
+        #region Add Methods
+
         public Drone AddDrone(int droneID, string model, Enums.WeightCategories maxWeight, int stationID)
         {
             if (drones.FindIndex(d => d.ID == droneID) != -1)
@@ -48,6 +50,9 @@ namespace BL
             }
         }
 
+        #endregion
+
+        #region Update Methods
         public void UpdateDroneModel(int droneID, string model)
         {
             //update in the list of DroneToLists
@@ -133,8 +138,11 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-        
-        public Drone DisplayDrone(int droneID)
+
+        #endregion
+
+        #region Getter Methods
+        public Drone GetDrone(int droneID)
         {
             int droneIndex = drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
@@ -175,18 +183,6 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-        
-        public IEnumerable<DroneToList> DisplayAllDrones()
-        {
-            return drones;
-        }
-
-        public IEnumerable<DroneToList> FindDrones(Predicate<DroneToList> predicate)
-        {
-            return from DroneToList drone in drones
-                   where predicate(drone)
-                   select drone;
-        }
 
         public DateTime GetTimeChargeBegan(int droneID)
         {
@@ -199,5 +195,23 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
+
+        public IEnumerable<DroneToList> GetDronesList()
+        {
+            return drones;
+        }
+
+        #endregion
+
+        #region Find Methods
+
+        public IEnumerable<DroneToList> FindDrones(Predicate<DroneToList> predicate)
+        {
+            return from DroneToList drone in drones
+                   where predicate(drone)
+                   select drone;
+        }
+
+        #endregion
     }
 }

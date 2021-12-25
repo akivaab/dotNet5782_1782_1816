@@ -9,6 +9,8 @@ namespace BlApi
     /// </summary>
     public interface IBL
     {
+        #region Add Methods
+
         /// <summary>
         /// Add a station to the system.
         /// </summary>
@@ -48,6 +50,10 @@ namespace BlApi
         /// <param name="priority">The prioroty of the package being added.</param>
         /// <returns>The newly added package.</returns>
         public Package AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority);
+
+        #endregion
+
+        #region Update Methods
 
         /// <summary>
         /// Update the model of a drone.
@@ -103,57 +109,76 @@ namespace BlApi
         /// <param name="droneID">The ID of the drone being sent to deliver its package.</param>
         public void DeliverPackage(int droneID);
 
+        #endregion
+
+        #region Getter Methods - Single Entity
+
         /// <summary>
         /// Find a station by its ID.
         /// </summary>
         /// <param name="stationID">The ID of the station to be found.</param>
         /// <returns>The corresponding station.</returns>
-        public Station DisplayStation(int stationID);
+        public Station GetStation(int stationID);
 
         /// <summary>
         /// Find a station by it's ID.
         /// </summary>
         /// <param name="droneID">The ID of the drone to be found.</param>
         /// <returns>The corresponding drone.</returns>
-        public Drone DisplayDrone(int droneID);
+        public Drone GetDrone(int droneID);
 
         /// <summary>
         /// Find a customer by it's ID.
         /// </summary>
         /// <param name="customerID">The ID of the customer to be found.</param>
         /// <returns>The corresponding customer.</returns>
-        public Customer DisplayCustomer(int customerID);
+        public Customer GetCustomer(int customerID);
 
         /// <summary>
         /// Find a package by it's ID.
         /// </summary>
         /// <param name="packageID">The ID of the package to be found.</param>
         /// <returns>The corresponding package.</returns>
-        public Package DisplayPackage(int packageID);
+        public Package GetPackage(int packageID);
+
+        /// <summary>
+        /// Get the time a drone began charging in a station.
+        /// </summary>
+        /// <param name="droneID">The ID of the drone.</param>
+        /// <returns>The DateTime the drone began charging.</returns>
+        public DateTime GetTimeChargeBegan(int droneID);
+
+        #endregion
+
+        #region Getter Methods - Entity Collection
 
         /// <summary>
         /// Get a collection of all the stations in the system.
         /// </summary>
         /// <returns>A collection of StationToList entities.</returns>
-        public IEnumerable<StationToList> DisplayAllStations();
+        public IEnumerable<StationToList> GetStationsList();
 
         /// <summary>
         /// Get a collection of all the drones in the system.
         /// </summary>
         /// <returns>A collection of DroneToList entities.</returns>
-        public IEnumerable<DroneToList> DisplayAllDrones();
+        public IEnumerable<DroneToList> GetDronesList();
 
         /// <summary>
         /// Get a collection of all the customers in the system.
         /// </summary>
         /// <returns>A collection of CustomerToList entities.</returns>
-        public IEnumerable<CustomerToList> DisplayAllCustomers();
+        public IEnumerable<CustomerToList> GetCustomersList();
 
         /// <summary>
         /// Get a collection of all the packages in the system.
         /// </summary>
         /// <returns>A collection of PackageToList entities.</returns>
-        public IEnumerable<PackageToList> DisplayAllPackages();
+        public IEnumerable<PackageToList> GetPackagesList();
+
+        #endregion
+
+        #region Find Methods
 
         /// <summary>
         /// Get a collection of all the packages according to a certain predicate.
@@ -176,11 +201,6 @@ namespace BlApi
         /// <returns>A collection of DroneToList entities.</returns>
         public IEnumerable<DroneToList> FindDrones(Predicate<DroneToList> predicate);
 
-        /// <summary>
-        /// Get the time a drone began charging in a station.
-        /// </summary>
-        /// <param name="droneID">The ID of the drone.</param>
-        /// <returns>The DateTime the drone began charging.</returns>
-        public DateTime GetTimeChargeBegan(int droneID);
+        #endregion
     }
 }
