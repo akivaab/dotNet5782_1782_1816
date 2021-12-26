@@ -6,13 +6,43 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="Drone Delivery Service" Height="450" Width="800">
+    <Window.Resources>
+        <LinearGradientBrush x:Key="background" StartPoint="0.5,0" EndPoint="0.6,1" >
+            <GradientStop Color="DarkSlateGray" Offset="0"/>
+            <GradientStop Color="MediumTurquoise" Offset="0.5"/>
+            <GradientStop Color="Aquamarine" Offset="0.9"/>
+        </LinearGradientBrush>
+    </Window.Resources>
+
     <Grid>
-        <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="Black" Offset="0"/>
-                <GradientStop Color="#FF4EC9C9" Offset="0.507"/>
-            </LinearGradientBrush>
-        </Grid.Background>
-        <Button Content="Click to see the Drone List" HorizontalAlignment="Center" Margin="0,62,0,0" VerticalAlignment="Top" Height="57" Width="340" FontSize="20" Click="ShowDroneListButton_Click"/>
+        <TabControl x:Name="login" Background="{StaticResource background}">
+            <TabItem Header="Employee" Height="50"  Width="390" Background="Beige" FontSize="25">
+                <Grid>
+                    <Label Content="Enter Username:" Margin="135,87,0,0" HorizontalAlignment="Left" Width="420"/>
+                    <TextBox x:Name="employeeName" Width="220" Margin="335,92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    <Label Content="Enter Password:" Margin="135,148,0,0" HorizontalAlignment="Left" Width="420"/>
+                    <PasswordBox x:Name="employeePassword" Width="220" Margin="335,153,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                    <Button x:Name="employeeSignIn" Content="Sign in" Height="40" Width="114" Margin="0,232,0,0" Click="employeeSignIn_Click" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Customer" Height="50" Width="390" Background="Beige" FontSize="25" IsSelected="True">
+                <Grid>
+                    <Label Content="Enter Username:" Margin="135,87,0,0" HorizontalAlignment="Left" Width="420"/>
+                    <TextBox x:Name="customerName" Margin="335,92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="220"/>
+                    <Label Content="Enter Password:" Margin="135,148,0,0" HorizontalAlignment="Left" Width="420"/>
+                    <PasswordBox x:Name="customerPassword" Margin="335,153,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="220"/>
+                    <Button x:Name="customerSignIn" Content="Sign in" Height="40" Margin="0,232,0,0" Click="customerSignIn_Click" VerticalAlignment="Top" HorizontalAlignment="Center" Width="114"/>
+                    <Button x:Name="register" Content="Not registered? Click here!" Height="40" Margin="0,298,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="332" Click="register_Click"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <Grid Name="employeeView" Background="{StaticResource background}" Visibility="Collapsed">
+            <Button Content="Click to see the Drone List" HorizontalAlignment="Center" Margin="0,62,0,0" VerticalAlignment="Top" Height="57" Width="340" FontSize="20" Click="ShowDroneListButton_Click"/>
+        </Grid>
+
+        <Grid Name="customerView" Background="{StaticResource background}" Visibility="Collapsed">
+            <Label Content="Hey! This place is under construction! Go away!" Margin="135,148,0,0" HorizontalAlignment="Left"/>
+        </Grid>
     </Grid>
 </Window>

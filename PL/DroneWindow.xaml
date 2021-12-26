@@ -8,9 +8,10 @@
         Title="Drone Delivery Service" Height="450" Width="1000" Closing="DroneWindow_Closing">
     <Grid>
         <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="Black" Offset="0"/>
-                <GradientStop Color="#FF4EC9C9" Offset="0.12"/>
+            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                <GradientStop Color="DarkSlateGray" Offset="0"/>
+                <GradientStop Color="MediumTurquoise" Offset="0.12"/>
+                <GradientStop Color="Aquamarine" Offset="0.9"/>
             </LinearGradientBrush>
         </Grid.Background>
         <Grid x:Name="Add">

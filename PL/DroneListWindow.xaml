@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="Drone Delivery Service" Height="640" Width="800" Closing="DroneListWindow_Closing">
-    <Grid Name="MainGrid" Background="#FF4EC9C9">
+    <Grid Name="MainGrid" Background="MediumTurquoise">
         <Grid.RowDefinitions>
             <RowDefinition Height="50*"/>
             <RowDefinition Height="400*"/>
@@ -24,7 +24,7 @@
             <Label Grid.Column="2" Content="Max. Weight:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
             <ComboBox Grid.Column="3" Name="MaxWeightSelector" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="25" SelectionChanged="MaxWeightSelector_SelectionChanged"/>
         </Grid>
-        <ListView x:Name="DroneListView" Margin="0,69,0,50" Grid.RowSpan="2" MouseDoubleClick="DroneListView_MouseDoubleClick" Background="#FFFFC5E7">
+        <ListView x:Name="DroneListView" Margin="0,69,0,50" Grid.RowSpan="2" MouseDoubleClick="DroneListView_MouseDoubleClick" Background="Pink">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
