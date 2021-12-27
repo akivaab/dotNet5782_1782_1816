@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,8 +26,12 @@ namespace PL
         /// </summary>
         private BlApi.IBL bl;
         
-        //flag if Close button is clicked 
+        /// <summary>
+        /// Flag if the close button was clicked.
+        /// </summary>
         private bool closeButtonClicked;
+
+        private ObservableCollection<DroneToList> droneToListCollection;
 
         /// <summary>
         /// DroneListWindow constructor, initializes ItemSources.
@@ -38,33 +43,15 @@ namespace PL
             this.bl = bl;
             closeButtonClicked = false;
 
-            DroneListView.ItemsSource = bl.GetDronesList();
-            StatusSelector.ItemsSource = Enum.GetValues(typeof(Enums.DroneStatus));
+            droneToListCollection = new ObservableCollection<DroneToList>(bl.GetDronesList());
+            DataContext = droneToListCollection;
+            
+            statusSelector.ItemsSource = Enum.GetValues(typeof(Enums.DroneStatus));
 
             //ensure MaxWeightSelector.ItemsSource does not include "free"
             List<Enums.WeightCategories> weights = new((Enums.WeightCategories[])Enum.GetValues(typeof(Enums.WeightCategories)));
             weights.Remove(Enums.WeightCategories.free);
-            MaxWeightSelector.ItemsSource = weights;
-        }
-
-        /// <summary>
-        /// Change the selected option of StatusSelector.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void StatusSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Selector_SelectionChanged(sender, e);
-        }
-
-        /// <summary>
-        /// Change the selected option of MaxWeightSelector.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MaxWeightSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Selector_SelectionChanged(sender, e);
+            maxWeightSelector.ItemsSource = weights;
         }
 
         /// <summary>
@@ -72,23 +59,31 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Selector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void selector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (StatusSelector.SelectedItem == null && MaxWeightSelector.SelectedItem == null)
+            if (statusSelector.SelectedItem == null && maxWeightSelector.SelectedItem == null)
             {
-                DroneListView.ItemsSource = bl.GetDronesList();
+                //droneToListCollection.Clear();
+                //AddRange(droneToListCollection, bl.GetDronesList());
+                droneListView.ItemsSource = bl.GetDronesList();
             }
-            else if (StatusSelector.SelectedItem == null)
+            else if (statusSelector.SelectedItem == null)
             {
-                DroneListView.ItemsSource = bl.FindDrones(d => d.MaxWeight == (Enums.WeightCategories)MaxWeightSelector.SelectedItem);
+                //droneToListCollection.Clear();
+                //AddRange(droneToListCollection, bl.FindDrones(d => d.MaxWeight == (Enums.WeightCategories)maxWeightSelector.SelectedItem));
+                droneListView.ItemsSource = bl.FindDrones(d => d.MaxWeight == (Enums.WeightCategories)maxWeightSelector.SelectedItem);
             }
-            else if (MaxWeightSelector.SelectedItem == null)
+            else if (maxWeightSelector.SelectedItem == null)
             {
-                DroneListView.ItemsSource = bl.FindDrones(d => d.Status == (Enums.DroneStatus)StatusSelector.SelectedItem);
+                //droneToListCollection.Clear();
+                //AddRange(droneToListCollection, bl.FindDrones(d => d.Status == (Enums.DroneStatus)statusSelector.SelectedItem));
+                droneListView.ItemsSource = bl.FindDrones(d => d.Status == (Enums.DroneStatus)statusSelector.SelectedItem);
             }
             else
             {
-                DroneListView.ItemsSource = bl.FindDrones(d => d.Status == (Enums.DroneStatus)StatusSelector.SelectedItem && d.MaxWeight == (Enums.WeightCategories)MaxWeightSelector.SelectedItem);
+                //droneToListCollection.Clear();
+                //AddRange(droneToListCollection, bl.FindDrones(d => d.Status == (Enums.DroneStatus)statusSelector.SelectedItem && d.MaxWeight == (Enums.WeightCategories)maxWeightSelector.SelectedItem));
+                droneListView.ItemsSource = bl.FindDrones(d => d.Status == (Enums.DroneStatus)statusSelector.SelectedItem && d.MaxWeight == (Enums.WeightCategories)maxWeightSelector.SelectedItem);
             }
         }
 
@@ -97,9 +92,9 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ClearStatusSelectorButton_Click(object sender, RoutedEventArgs e)
+        private void clearStatusSelectorButton_Click(object sender, RoutedEventArgs e)
         {
-            StatusSelector.SelectedItem = null;
+            statusSelector.SelectedItem = null;
         }
 
         /// <summary>
@@ -107,9 +102,9 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ClearMaxWeightSelectorButton_Click(object sender, RoutedEventArgs e)
+        private void clearMaxWeightSelectorButton_Click(object sender, RoutedEventArgs e)
         {
-            MaxWeightSelector.SelectedItem = null;
+            maxWeightSelector.SelectedItem = null;
         }
         
         /// <summary>
@@ -117,7 +112,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AddDroneButton_Click(object sender, RoutedEventArgs e)
+        private void addDroneButton_Click(object sender, RoutedEventArgs e)
         {
             new DroneWindow(bl).Show();
         }
@@ -127,7 +122,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DroneListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void droneListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //make sure that a drone was double-clicked (not just anywhere on the window)
             DroneToList drone = ((FrameworkElement)e.OriginalSource).DataContext as DroneToList;
@@ -142,7 +137,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        private void closeButton_Click(object sender, RoutedEventArgs e)
         {
             closeButtonClicked = true;
             Close();
@@ -153,7 +148,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DroneListWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void droneListWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (!closeButtonClicked)
             {
@@ -161,5 +156,26 @@ namespace PL
                 MessageBox.Show("Please use the Close button on the lower right.");
             }
         }
+
+        private void groupByStatusCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription("Status");
+            view.GroupDescriptions.Add(groupDescription);
+        }
+
+        private void groupByStatusCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
+            view.GroupDescriptions.Clear();
+        }
+
+        //private void AddRange<T>(ObservableCollection<T> coll, IEnumerable<T> items)
+        //{
+        //    foreach (var item in items)
+        //    {
+        //        coll.Add(item);
+        //    }
+        //}
     }
 }

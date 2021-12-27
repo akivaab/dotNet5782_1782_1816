@@ -15,7 +15,7 @@
     </Window.Resources>
 
     <Grid>
-        <TabControl x:Name="login" Background="{StaticResource background}">
+        <!--<TabControl x:Name="login" Background="{StaticResource background}">
             <TabItem Header="Employee" Height="50"  Width="390" Background="Beige" FontSize="25">
                 <Grid>
                     <Label Content="Enter Username:" Margin="135,87,0,0" HorizontalAlignment="Left" Width="420"/>
@@ -35,13 +35,13 @@
                     <Button x:Name="register" Content="Not registered? Click here!" Height="40" Margin="0,298,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Width="332" Click="register_Click"/>
                 </Grid>
             </TabItem>
-        </TabControl>
+        </TabControl>-->
 
-        <Grid Name="employeeView" Background="{StaticResource background}" Visibility="Collapsed">
+        <Grid Name="employeeGrid" Background="{StaticResource background}" Visibility="Visible">
             <Button Content="Click to see the Drone List" HorizontalAlignment="Center" Margin="0,62,0,0" VerticalAlignment="Top" Height="57" Width="340" FontSize="20" Click="ShowDroneListButton_Click"/>
         </Grid>
 
-        <Grid Name="customerView" Background="{StaticResource background}" Visibility="Collapsed">
+        <Grid Name="customerGrid" Background="{StaticResource background}" Visibility="Collapsed">
             <Label Content="Hey! This place is under construction! Go away!" Margin="135,148,0,0" HorizontalAlignment="Left"/>
         </Grid>
     </Grid>

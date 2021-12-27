@@ -28,8 +28,7 @@ namespace PL
         /// <summary>
         /// Collection of usernames and passwords.
         /// </summary>
-        IEnumerable<string> usernames;
-        IEnumerable<string> passwords;
+        Dictionary<string, string> loginInfo;
 
         /// <summary>
         /// MainWindow constructor that gets a BL instance.
@@ -38,8 +37,7 @@ namespace PL
         {
             InitializeComponent();
             bl = BlApi.BlFactory.GetBl();
-            usernames = new List<string>();
-            passwords = new List<string>();
+            loginInfo = new();
         }
 
         /// <summary>
@@ -52,45 +50,45 @@ namespace PL
             new DroneListWindow(bl).Show();
         }
 
-        /// <summary>
-        /// Verify an employee signing in.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void employeeSignIn_Click(object sender, RoutedEventArgs e)
-        {
-            if (employeeName.Text == "WDGaster" && employeePassword.Password == "WingDings")
-            {
-                login.Visibility = Visibility.Collapsed;
-                employeeView.Visibility = Visibility.Visible;
-            }
-        }
+    //    /// <summary>
+    //    /// Verify an employee signing in.
+    //    /// </summary>
+    //    /// <param name="sender"></param>
+    //    /// <param name="e"></param>
+    //    private void employeeSignIn_Click(object sender, RoutedEventArgs e)
+    //    {
+    //        if (employeeName.Text == "WDGaster" && employeePassword.Password == "WingDings")
+    //        {
+    //            login.Visibility = Visibility.Collapsed;
+    //            employeeView.Visibility = Visibility.Visible;
+    //        }
+    //    }
 
-        /// <summary>
-        /// Verify a customer signing in.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void customerSignIn_Click(object sender, RoutedEventArgs e)
-        {
-            if (usernames.Contains(customerName.Text) && passwords.Contains(employeePassword.Password))
-            {
-                login.Visibility = Visibility.Collapsed;
-                customerView.Visibility = Visibility.Visible;
-            }
-        }
+    //    /// <summary>
+    //    /// Verify a customer signing in.
+    //    /// </summary>
+    //    /// <param name="sender"></param>
+    //    /// <param name="e"></param>
+    //    private void customerSignIn_Click(object sender, RoutedEventArgs e)
+    //    {
+    //        if (loginInfo.ContainsKey(customerName.Text) && loginInfo[customerName.Text] == employeePassword.Password)
+    //        {
+    //            login.Visibility = Visibility.Collapsed;
+    //            customerView.Visibility = Visibility.Visible;
+    //        }
+    //    }
 
-        /// <summary>
-        /// Register a new customer.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void register_Click(object sender, RoutedEventArgs e)
-        {
-            //TODO: open CustomerRegisterWindow to add new customer
+    //    /// <summary>
+    //    /// Register a new customer.
+    //    /// </summary>
+    //    /// <param name="sender"></param>
+    //    /// <param name="e"></param>
+    //    private void register_Click(object sender, RoutedEventArgs e)
+    //    {
+    //        //TODO: open CustomerRegisterWindow to add new customer
 
-            login.Visibility = Visibility.Collapsed;
-            customerView.Visibility = Visibility.Visible;
-        }
+    //        login.Visibility = Visibility.Collapsed;
+    //        customerView.Visibility = Visibility.Visible;
+    //    }
     }
 }

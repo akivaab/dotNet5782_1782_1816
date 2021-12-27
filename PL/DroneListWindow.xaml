@@ -5,35 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Drone Delivery Service" Height="640" Width="800" Closing="DroneListWindow_Closing">
+        Title="Drone Delivery Service" Height="640" Width="800" Closing="droneListWindow_Closing">
+
     <Grid Name="MainGrid" Background="MediumTurquoise">
         <Grid.RowDefinitions>
             <RowDefinition Height="50*"/>
             <RowDefinition Height="400*"/>
         </Grid.RowDefinitions>
-        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0"
-        VerticalAlignment="Stretch" Width="auto">
+        
+        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions >
-            <Label Grid.Column="0" Content="Status:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
-            <ComboBox Grid.Column="1" Name="StatusSelector" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="25" SelectionChanged="StatusSelector_SelectionChanged"/>
-            <Label Grid.Column="2" Content="Max. Weight:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
-            <ComboBox Grid.Column="3" Name="MaxWeightSelector" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="25" SelectionChanged="MaxWeightSelector_SelectionChanged"/>
+            <Label Grid.Column="0" Name="statusLabel" Content="Status:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
+            <ComboBox Grid.Column="1" Name="statusSelector" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="25" SelectionChanged="selector_SelectionChanged"/>
+            <Label Grid.Column="2" Name="maxWeightLabel" Content="Max. Weight:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
+            <ComboBox Grid.Column="3" Name="maxWeightSelector" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="25" SelectionChanged="selector_SelectionChanged"/>
         </Grid>
-        <ListView x:Name="DroneListView" Margin="0,69,0,50" Grid.RowSpan="2" MouseDoubleClick="DroneListView_MouseDoubleClick" Background="Pink">
+
+        <ListView x:Name="droneListView" ItemsSource="{Binding}" Margin="0,69,0,50" Grid.RowSpan="2" MouseDoubleClick="droneListView_MouseDoubleClick" Background="Pink">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
                 </GridView>
             </ListView.View>
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
         </ListView>
-        <Button Name="AddDroneButton" Content="Add New Drone" HorizontalAlignment="Right" Margin="0,0,90,15" Grid.Row="1" VerticalAlignment="Bottom" Click="AddDroneButton_Click" Width="90" Height="20"/>
-        <Button Name="CloseButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,20,15" Grid.Row="1" VerticalAlignment="Bottom" Click="CloseButton_Click" Width="55" Height="20"/>
-        <Button Name="ClearStatusSelectorButton" Content="Clear Status Filter" HorizontalAlignment="Left" Margin="20,0,0,15" Grid.Row="1" VerticalAlignment="Bottom" Click="ClearStatusSelectorButton_Click" Width="100" Height="20"/>
-        <Button Name="ClearMaxWeightSelectorButton" Content="Clear Max. Weight Filter" HorizontalAlignment="Left" Margin="135,0,0,15" Grid.Row="1" VerticalAlignment="Bottom" Click="ClearMaxWeightSelectorButton_Click" Width="140" Height="20"/>
+
+        <Button Name="addDroneButton" Content="Add New Drone" HorizontalAlignment="Right" Margin="0,0,90,15" Grid.Row="1" VerticalAlignment="Bottom" Click="addDroneButton_Click" Width="90" Height="20"/>
+        <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,20,15" Grid.Row="1" VerticalAlignment="Bottom" Click="closeButton_Click" Width="55" Height="20"/>
+        <Button Name="clearStatusSelectorButton" Content="Clear Status Filter" HorizontalAlignment="Left" Margin="20,0,0,15" Grid.Row="1" VerticalAlignment="Bottom" Click="clearStatusSelectorButton_Click" Width="100" Height="20"/>
+        <Button Name="clearMaxWeightSelectorButton" Content="Clear Max. Weight Filter" HorizontalAlignment="Left" Margin="135,0,0,15" Grid.Row="1" VerticalAlignment="Bottom" Click="clearMaxWeightSelectorButton_Click" Width="140" Height="20"/>
+        <CheckBox Name="groupByStatusCheckBox" Content="Group By Status" HorizontalAlignment="Left" Margin="288,0,0,15" Grid.Row="1" VerticalAlignment="Bottom" Checked="groupByStatusCheckBox_Checked" Unchecked="groupByStatusCheckBox_Unchecked"/>
     </Grid>
 </Window>
