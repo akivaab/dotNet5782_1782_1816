@@ -157,6 +157,11 @@ namespace PL
             }
         }
 
+        /// <summary>
+        /// Group the DroneListView by status.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void groupByStatusCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
@@ -164,6 +169,11 @@ namespace PL
             view.GroupDescriptions.Add(groupDescription);
         }
 
+        /// <summary>
+        /// Revert the DroneListView to its default state.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void groupByStatusCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);

@@ -6,7 +6,24 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="Drone Delivery Service" Height="640" Width="800" Closing="droneListWindow_Closing">
-
+    <Window.Resources>
+        <local:BoolInverter x:Key="boolInverter"/>
+        <Style x:Key="comboBoxStyle" TargetType="ComboBox">
+            <Setter Property="IsEnabled" Value="{Binding ElementName=groupByStatusCheckBox, Path=IsChecked, Converter={StaticResource boolInverter}}"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="180"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="FontSize" Value="25"/>
+        </Style>
+        <Style x:Key="clearButtonStyle" TargetType="Button">
+            <Setter Property="IsEnabled" Value="{Binding ElementName=groupByStatusCheckBox, Path=IsChecked, Converter={StaticResource boolInverter}}"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Grid.Row" Value="1"/>
+        </Style>
+    </Window.Resources>
+    
     <Grid Name="MainGrid" Background="MediumTurquoise">
         <Grid.RowDefinitions>
             <RowDefinition Height="50*"/>
@@ -21,9 +38,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions >
             <Label Grid.Column="0" Name="statusLabel" Content="Status:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
-            <ComboBox Grid.Column="1" Name="statusSelector" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="25" SelectionChanged="selector_SelectionChanged"/>
-            <Label Grid.Column="2" Name="maxWeightLabel" Content="Max. Weight:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
-            <ComboBox Grid.Column="3" Name="maxWeightSelector" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="25" SelectionChanged="selector_SelectionChanged"/>
+            <ComboBox Grid.Column="1" Name="statusSelector" Style="{StaticResource comboBoxStyle}" SelectionChanged="selector_SelectionChanged"/>
+                <Label Grid.Column="2" Name="maxWeightLabel" Content="Max. Weight:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
+            <ComboBox Grid.Column="3" Name="maxWeightSelector" Style="{StaticResource comboBoxStyle}" SelectionChanged="selector_SelectionChanged"/>
         </Grid>
 
         <ListView x:Name="droneListView" ItemsSource="{Binding}" Margin="0,69,0,50" Grid.RowSpan="2" MouseDoubleClick="droneListView_MouseDoubleClick" Background="Pink">
@@ -36,7 +53,7 @@
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
-                            <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"/>
+                            <TextBlock FontWeight="Bold" FontSize="16" Text="{Binding Name}"/>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                 </GroupStyle>
@@ -45,8 +62,9 @@
 
         <Button Name="addDroneButton" Content="Add New Drone" HorizontalAlignment="Right" Margin="0,0,90,15" Grid.Row="1" VerticalAlignment="Bottom" Click="addDroneButton_Click" Width="90" Height="20"/>
         <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,20,15" Grid.Row="1" VerticalAlignment="Bottom" Click="closeButton_Click" Width="55" Height="20"/>
-        <Button Name="clearStatusSelectorButton" Content="Clear Status Filter" HorizontalAlignment="Left" Margin="20,0,0,15" Grid.Row="1" VerticalAlignment="Bottom" Click="clearStatusSelectorButton_Click" Width="100" Height="20"/>
-        <Button Name="clearMaxWeightSelectorButton" Content="Clear Max. Weight Filter" HorizontalAlignment="Left" Margin="135,0,0,15" Grid.Row="1" VerticalAlignment="Bottom" Click="clearMaxWeightSelectorButton_Click" Width="140" Height="20"/>
+        <Button Name="clearStatusSelectorButton" Content="Clear Status Filter" Margin="20,0,0,15" Width="100" Height="20" Style="{StaticResource clearButtonStyle}" Click="clearStatusSelectorButton_Click"/>
+        <Button Name="clearMaxWeightSelectorButton" Content="Clear Max. Weight Filter" Margin="135,0,0,15" Width="140" Height="20" Style="{StaticResource clearButtonStyle}" Click="clearMaxWeightSelectorButton_Click"/>
         <CheckBox Name="groupByStatusCheckBox" Content="Group By Status" HorizontalAlignment="Left" Margin="288,0,0,15" Grid.Row="1" VerticalAlignment="Bottom" Checked="groupByStatusCheckBox_Checked" Unchecked="groupByStatusCheckBox_Unchecked"/>
+    
     </Grid>
 </Window>
