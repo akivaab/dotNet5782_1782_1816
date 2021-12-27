@@ -204,6 +204,30 @@ namespace BL
 
         #endregion
 
+        #region Remove Methods
+
+        public void RemoveDrone(int droneID)
+        {
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
+            if (droneIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no drone with the given ID.");
+            }
+
+            try
+            {
+                dalObject.RemoveDrone(droneID);
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message, e);
+            }
+
+            drones.RemoveAt(droneIndex);
+        }
+
+        #endregion
+
         #region Find Methods
 
         public IEnumerable<DroneToList> FindDrones(Predicate<DroneToList> predicate)

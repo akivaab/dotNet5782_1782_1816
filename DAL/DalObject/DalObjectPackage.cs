@@ -117,7 +117,7 @@ namespace DalObject
 
         #endregion
 
-        #region Delete Methods
+        #region Remove Methods
 
         public void RemovePackage(int packageID)
         {

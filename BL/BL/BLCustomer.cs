@@ -54,6 +54,22 @@ namespace BL
 
         #endregion
 
+        #region Remove Methods
+
+        public void RemoveCustomer(int customerID)
+        {
+            try
+            {
+                dalObject.RemoveCustomer(customerID);
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message, e);
+            }
+        }
+
+        #endregion
+
         #region Getter Methods
 
         public Customer GetCustomer(int customerID)

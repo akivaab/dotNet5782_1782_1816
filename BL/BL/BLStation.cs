@@ -98,6 +98,22 @@ namespace BL
 
         #endregion
 
+        #region Remove Methods
+
+        public void RemoveStation(int stationID)
+        {
+            try
+            {
+                dalObject.RemoveStation(stationID);
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message, e);
+            }
+        }
+
+        #endregion
+
         #region Find Methods
 
         public IEnumerable<StationToList> FindStations(Predicate<DO.Station> predicate)

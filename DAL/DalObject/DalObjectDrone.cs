@@ -89,6 +89,23 @@ namespace DalObject
 
         #endregion
 
+        #region Remove Methods
+
+        public void RemoveDrone(int droneID)
+        {
+            int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
+            if (droneIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no drone with the given ID");
+            }
+
+            Drone drone = DataSource.drones[droneIndex];
+            drone.Active = false;
+            DataSource.drones[droneIndex] = drone;
+        }
+
+        #endregion
+
         #region Getter Methods
 
         public Drone GetDrone(int droneID)

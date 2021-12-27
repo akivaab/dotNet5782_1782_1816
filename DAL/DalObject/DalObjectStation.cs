@@ -92,6 +92,23 @@ namespace DalObject
 
         #endregion
 
+        #region Remove Methods
+
+        public void RemoveStation(int stationID)
+        {
+            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
+            if (stationIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no station with the given ID");
+            }
+
+            Station station = DataSource.stations[stationIndex];
+            station.Active = false;
+            DataSource.stations[stationIndex] = station;
+        }
+
+        #endregion
+
         #region Find Methods
 
         public IEnumerable<Station> FindStations(Predicate<Station> predicate)

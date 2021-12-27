@@ -68,6 +68,23 @@ namespace DalObject
 
         #endregion
 
+        #region Remove Methods
+
+        public void RemoveCustomer(int customerID)
+        {
+            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
+            if (customerIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no customer with the given ID");
+            }
+
+            Customer customer = DataSource.customers[customerIndex];
+            customer.Active = false;
+            DataSource.customers[customerIndex] = customer;
+        }
+
+        #endregion
+
         #region Getter Methods
 
         public Customer GetCustomer(int customerID)

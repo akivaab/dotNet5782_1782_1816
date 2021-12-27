@@ -55,10 +55,8 @@ namespace PL
             add_MaxWeight.ItemsSource = weights;
 
             //initialize existing station IDs to choose from
-            foreach (StationToList station in bl.GetStationsList())
-            {
-                add_StationID.Items.Add(station.ID);
-            }
+            add_StationID.ItemsSource = from station in bl.GetStationsList()
+                                        select station.ID;
         }
 
         /// <summary>
@@ -260,9 +258,32 @@ namespace PL
         }
 
         /// <summary>
+        /// Remove the drone.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void removeButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                bl.RemoveDrone(drone.ID);
+            }
+            catch (UndefinedObjectException)
+            {
+                MessageBox.Show("Cannot delete.");
+            }
+
+            MessageBox.Show("Drone " + drone.ID + " deleted.");
+            //refreshDroneListWindowView();
+
+            closeButtonClicked = true;
+            Close();
+        }
+
+        /// <summary>
         /// Load the data of the drone to be displayed in the window.
         /// </summary>
-         private void loadDroneData()
+        private void loadDroneData()
         {
             Drone droneEntity = bl.GetDrone(drone.ID);
 
