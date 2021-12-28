@@ -6,14 +6,8 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="Drone Delivery Service" Height="450" Width="1000" Closing="droneWindow_Closing">
-    <Grid>
-        <Grid.Background>
-            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                <GradientStop Color="DarkSlateGray" Offset="0"/>
-                <GradientStop Color="MediumTurquoise" Offset="0.12"/>
-                <GradientStop Color="Aquamarine" Offset="0.9"/>
-            </LinearGradientBrush>
-        </Grid.Background>
+
+    <Grid Background="{StaticResource background}">
         <Grid x:Name="add">
             <Label Content="Drone ID:" HorizontalAlignment="Center" Margin="0,80,150,0" VerticalAlignment="Top" FontSize="16"/>
             <Label Content="Model:" HorizontalAlignment="Center" Margin="0,130,150,0" VerticalAlignment="Top" FontSize="16"/>

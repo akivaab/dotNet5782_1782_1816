@@ -12,6 +12,12 @@
             <GradientStop Color="MediumTurquoise" Offset="0.5"/>
             <GradientStop Color="Aquamarine" Offset="0.9"/>
         </LinearGradientBrush>
+        <Style x:Key="buttonStyle" TargetType="Button">
+            <Setter Property="Height" Value="85"/>
+            <Setter Property="Width" Value="244"/>
+            <Setter Property="FontSize" Value="35"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -38,7 +44,12 @@
         </TabControl>-->
 
         <Grid Name="employeeGrid" Background="{StaticResource background}" Visibility="Visible">
-            <Button Content="Click to see the Drone List" HorizontalAlignment="Center" Margin="0,62,0,0" VerticalAlignment="Top" Height="57" Width="340" FontSize="20" Click="ShowDroneListButton_Click"/>
+            <Image Source="Drone_Icon.jpg" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center" OpacityMask="{DynamicResource background}"/>
+            <!--<TextBlock Text="{Binding ElementName=employeeName, Path=Text}" VerticalAlignment="Top" Margin="100,10,100,0" Height="60" FontSize="30"/>-->
+            <Button Name="showDroneListButton" Content="Drones" HorizontalAlignment="Left" Margin="40,91,0,0" VerticalAlignment="Top" Style="{StaticResource buttonStyle}" Click="showDroneListButton_Click"/>
+            <Button Name="showStationListButton" Content="Stations" HorizontalAlignment="Left" Margin="40,0,0,108" VerticalAlignment="Bottom" Style="{StaticResource buttonStyle}" Click="showStationListButton_Click"/>
+            <Button Name="showCustomerListButton" Content="Customers" HorizontalAlignment="Right" Margin="0,91,40,0" VerticalAlignment="Top" Style="{StaticResource buttonStyle}" Click="showCustomerListButton_Click"/>
+            <Button Name="showPackageListButton" Content="Packages" HorizontalAlignment="Right" Margin="0,0,40,108" VerticalAlignment="Bottom" Style="{StaticResource buttonStyle}" Click="showPackageListButton_Click"/>
         </Grid>
 
         <Grid Name="customerGrid" Background="{StaticResource background}" Visibility="Collapsed">

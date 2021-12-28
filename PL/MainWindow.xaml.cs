@@ -45,50 +45,65 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ShowDroneListButton_Click(object sender, RoutedEventArgs e)
+        private void showDroneListButton_Click(object sender, RoutedEventArgs e)
         {
             new DroneListWindow(bl).Show();
         }
 
-    //    /// <summary>
-    //    /// Verify an employee signing in.
-    //    /// </summary>
-    //    /// <param name="sender"></param>
-    //    /// <param name="e"></param>
-    //    private void employeeSignIn_Click(object sender, RoutedEventArgs e)
-    //    {
-    //        if (employeeName.Text == "WDGaster" && employeePassword.Password == "WingDings")
-    //        {
-    //            login.Visibility = Visibility.Collapsed;
-    //            employeeView.Visibility = Visibility.Visible;
-    //        }
-    //    }
+        private void showStationListButton_Click(object sender, RoutedEventArgs e)
+        {
 
-    //    /// <summary>
-    //    /// Verify a customer signing in.
-    //    /// </summary>
-    //    /// <param name="sender"></param>
-    //    /// <param name="e"></param>
-    //    private void customerSignIn_Click(object sender, RoutedEventArgs e)
-    //    {
-    //        if (loginInfo.ContainsKey(customerName.Text) && loginInfo[customerName.Text] == employeePassword.Password)
-    //        {
-    //            login.Visibility = Visibility.Collapsed;
-    //            customerView.Visibility = Visibility.Visible;
-    //        }
-    //    }
+        }
 
-    //    /// <summary>
-    //    /// Register a new customer.
-    //    /// </summary>
-    //    /// <param name="sender"></param>
-    //    /// <param name="e"></param>
-    //    private void register_Click(object sender, RoutedEventArgs e)
-    //    {
-    //        //TODO: open CustomerRegisterWindow to add new customer
+        private void showCustomerListButton_Click(object sender, RoutedEventArgs e)
+        {
 
-    //        login.Visibility = Visibility.Collapsed;
-    //        customerView.Visibility = Visibility.Visible;
-    //    }
+        }
+
+        private void showPackageListButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        //    /// <summary>
+        //    /// Verify an employee signing in.
+        //    /// </summary>
+        //    /// <param name="sender"></param>
+        //    /// <param name="e"></param>
+        //    private void employeeSignIn_Click(object sender, RoutedEventArgs e)
+        //    {
+        //        if (employeeName.Text == "WDGaster" && employeePassword.Password == "WingDings")
+        //        {
+        //            login.Visibility = Visibility.Collapsed;
+        //            employeeView.Visibility = Visibility.Visible;
+        //        }
+        //    }
+
+        //    /// <summary>
+        //    /// Verify a customer signing in.
+        //    /// </summary>
+        //    /// <param name="sender"></param>
+        //    /// <param name="e"></param>
+        //    private void customerSignIn_Click(object sender, RoutedEventArgs e)
+        //    {
+        //        if (loginInfo.ContainsKey(customerName.Text) && loginInfo[customerName.Text] == employeePassword.Password)
+        //        {
+        //            login.Visibility = Visibility.Collapsed;
+        //            customerView.Visibility = Visibility.Visible;
+        //        }
+        //    }
+
+        //    /// <summary>
+        //    /// Register a new customer.
+        //    /// </summary>
+        //    /// <param name="sender"></param>
+        //    /// <param name="e"></param>
+        //    private void register_Click(object sender, RoutedEventArgs e)
+        //    {
+        //        //TODO: open CustomerRegisterWindow to add new customer
+
+        //        login.Visibility = Visibility.Collapsed;
+        //        customerView.Visibility = Visibility.Visible;
+        //    }
     }
 }

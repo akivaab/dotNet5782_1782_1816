@@ -133,12 +133,19 @@ namespace PL
         {
             if (actions_Model.Text.Length > 0)
             {
-                bl.UpdateDroneModel(drone.ID, actions_Model.Text);
-                MessageBox.Show("Model name successfully updated.");
-                
-                //reload this window and refresh the parent DroneListWindow
-                loadDroneData();
-                refreshDroneListWindowView();
+                try
+                {
+                    bl.UpdateDroneModel(drone.ID, actions_Model.Text);
+                    MessageBox.Show("Model name successfully updated.");
+
+                    //reload this window and refresh the parent DroneListWindow
+                    loadDroneData();
+                    refreshDroneListWindowView();
+                }
+                catch (UndefinedObjectException)
+                {
+                    MessageBox.Show("An error has occured in the system. The relevant station does not exist.");
+                }
             }
             else
             {
@@ -275,7 +282,7 @@ namespace PL
             }
             catch (UndefinedObjectException)
             {
-                MessageBox.Show("An error has occured in the system. The drone no longer exists.");
+                MessageBox.Show("An error has occured in the system. The drone already doesn't exist.");
             }
             catch (UnableToRemoveException ex)
             {
@@ -288,15 +295,22 @@ namespace PL
         /// </summary>
         private void loadDroneData()
         {
-            Drone droneEntity = bl.GetDrone(drone.ID);
+            try
+            {
+                Drone droneEntity = bl.GetDrone(drone.ID);
 
-            actions_DroneID.Content = droneEntity.ID;
-            actions_Model.Text = droneEntity.Model;
-            actions_MaxWeight.Content = droneEntity.MaxWeight;
-            actions_Battery.Content = Math.Floor(droneEntity.Battery) + "%";
-            actions_Status.Content = droneEntity.Status;
-            actions_PackageInTransfer.Content = droneEntity.PackageInTransfer;
-            actions_Location.Content = droneEntity.Location;
+                actions_DroneID.Content = droneEntity.ID;
+                actions_Model.Text = droneEntity.Model;
+                actions_MaxWeight.Content = droneEntity.MaxWeight;
+                actions_Battery.Content = Math.Floor(droneEntity.Battery) + "%";
+                actions_Status.Content = droneEntity.Status;
+                actions_PackageInTransfer.Content = droneEntity.PackageInTransfer;
+                actions_Location.Content = droneEntity.Location;
+            }
+            catch (UndefinedObjectException)
+            {
+                MessageBox.Show("An error has occured in the system. The drone no longer exists.");
+            }
         }
 
         /// <summary>
