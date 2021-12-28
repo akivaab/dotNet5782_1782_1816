@@ -64,7 +64,7 @@
         <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,20,15" Grid.Row="1" VerticalAlignment="Bottom" Click="closeButton_Click" Width="55" Height="20"/>
         <Button Name="clearStatusSelectorButton" Content="Clear Status Filter" Margin="20,0,0,15" Width="100" Height="20" Style="{StaticResource clearButtonStyle}" Click="clearStatusSelectorButton_Click"/>
         <Button Name="clearMaxWeightSelectorButton" Content="Clear Max. Weight Filter" Margin="135,0,0,15" Width="140" Height="20" Style="{StaticResource clearButtonStyle}" Click="clearMaxWeightSelectorButton_Click"/>
-        <CheckBox Name="groupByStatusCheckBox" Content="Group By Status" HorizontalAlignment="Left" Margin="288,0,0,15" Grid.Row="1" VerticalAlignment="Bottom" Checked="groupByStatusCheckBox_Checked" Unchecked="groupByStatusCheckBox_Unchecked"/>
+        <CheckBox Name="groupByStatusCheckBox" Content="Group By Status" HorizontalAlignment="Left" Margin="288,0,0,18" Grid.Row="1" VerticalAlignment="Bottom" Checked="groupByStatusCheckBox_Checked" Unchecked="groupByStatusCheckBox_Unchecked"/>
     
     </Grid>
 </Window>

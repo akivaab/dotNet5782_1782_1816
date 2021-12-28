@@ -52,7 +52,7 @@ namespace PL
 
         private void showStationListButton_Click(object sender, RoutedEventArgs e)
         {
-
+            new StationListWindow(bl).Show();
         }
 
         private void showCustomerListButton_Click(object sender, RoutedEventArgs e)
