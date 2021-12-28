@@ -61,8 +61,24 @@ namespace BL
 
         #endregion
 
+        #region Remove Methods
+
+        public void RemoveStation(int stationID)
+        {
+            try
+            {
+                dalObject.RemoveStation(stationID);
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message, e);
+            }
+        }
+
+        #endregion
+
         #region Getter Methods
-        
+
         public Station GetStation(int stationID)
         {
             try
@@ -94,22 +110,6 @@ namespace BL
                                                         let dronesAtStation = drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude)
                                                         select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count);
             return stationToLists;
-        }
-
-        #endregion
-
-        #region Remove Methods
-
-        public void RemoveStation(int stationID)
-        {
-            try
-            {
-                dalObject.RemoveStation(stationID);
-            }
-            catch (DO.UndefinedObjectException e)
-            {
-                throw new UndefinedObjectException(e.Message, e);
-            }
         }
 
         #endregion

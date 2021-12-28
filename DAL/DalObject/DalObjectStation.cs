@@ -69,6 +69,23 @@ namespace DalObject
 
         #endregion
 
+        #region Remove Methods
+
+        public void RemoveStation(int stationID)
+        {
+            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
+            if (stationIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no station with the given ID");
+            }
+
+            Station station = DataSource.stations[stationIndex];
+            station.Active = false;
+            DataSource.stations[stationIndex] = station;
+        }
+
+        #endregion
+
         #region Getter Methods
 
         public Station GetStation(int stationID)
@@ -88,23 +105,6 @@ namespace DalObject
             return from station in DataSource.stations
                    where station.Active
                    select station;
-        }
-
-        #endregion
-
-        #region Remove Methods
-
-        public void RemoveStation(int stationID)
-        {
-            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
-            if (stationIndex == -1)
-            {
-                throw new UndefinedObjectException("There is no station with the given ID");
-            }
-
-            Station station = DataSource.stations[stationIndex];
-            station.Active = false;
-            DataSource.stations[stationIndex] = station;
         }
 
         #endregion

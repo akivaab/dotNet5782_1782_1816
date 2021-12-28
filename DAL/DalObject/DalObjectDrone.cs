@@ -55,7 +55,7 @@ namespace DalObject
         public void ReleaseDroneFromCharging(int droneID, int stationID)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
-            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
+            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID);
             int droneChargeIndex = DataSource.droneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID);
             
             if (droneIndex == -1 || stationIndex == -1)
@@ -70,7 +70,10 @@ namespace DalObject
             Station station = DataSource.stations[stationIndex];
             station.AvailableChargeSlots++;
             DataSource.stations[stationIndex] = station;
-            DataSource.droneCharges.Remove(DataSource.droneCharges[droneChargeIndex]);
+
+            DroneCharge droneCharge = DataSource.droneCharges[droneChargeIndex];
+            droneCharge.Active = false;
+            DataSource.droneCharges[droneChargeIndex] = droneCharge;
         }
 
         public void UpdateDroneModel(int droneID, string model)

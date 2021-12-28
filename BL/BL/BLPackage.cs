@@ -129,6 +129,29 @@ namespace BL
                 drones[droneIndex].Location = receiverLocation;
                 drones[droneIndex].Status = Enums.DroneStatus.available;
                 drones[droneIndex].PackageID = null;
+
+                dalObject.RemovePackage(dalPackage.ID);
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message, e);
+            }
+        }
+
+        #endregion
+
+        #region Remove Methods
+        public void RemovePackage(int packageID)
+        {
+            try
+            {
+                DO.Package dalPackage = dalObject.GetPackage(packageID);
+                if (dalPackage.Assigned != null)
+                {
+                    throw new UnableToRemoveException("The package has already been assigned to a drone.");
+                }
+
+                dalObject.RemovePackage(packageID);
             }
             catch (DO.UndefinedObjectException e)
             {

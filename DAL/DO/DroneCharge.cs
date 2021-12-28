@@ -23,6 +23,11 @@ namespace DO
         public DateTime BeganCharge { get; set; }
 
         /// <summary>
+        /// Represents if a DroneCharge is currently active or not.
+        /// </summary>
+        public bool Active { get; set; }
+
+        /// <summary>
         /// Convert a DroneCharge entity to a string.
         /// </summary>
         /// <returns>String representation of a DroneCharge.</returns>

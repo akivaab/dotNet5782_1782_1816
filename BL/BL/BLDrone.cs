@@ -53,6 +53,7 @@ namespace BL
         #endregion
 
         #region Update Methods
+
         public void UpdateDroneModel(int droneID, string model)
         {
             int droneIndex = drones.FindIndex(d => d.ID == droneID);
@@ -142,6 +143,35 @@ namespace BL
 
         #endregion
 
+        #region Remove Methods
+
+        public void RemoveDrone(int droneID)
+        {
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
+            if (droneIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no drone with the given ID.");
+            }
+
+            if (drones[droneIndex].PackageID != null)
+            {
+                throw new UnableToRemoveException("The drone is currently delivering.");
+            }
+
+            try
+            {
+                dalObject.RemoveDrone(droneID);
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message, e);
+            }
+
+            drones.RemoveAt(droneIndex);
+        }
+
+        #endregion
+
         #region Getter Methods
         public Drone GetDrone(int droneID)
         {
@@ -200,30 +230,6 @@ namespace BL
         public IEnumerable<DroneToList> GetDronesList()
         {
             return drones;
-        }
-
-        #endregion
-
-        #region Remove Methods
-
-        public void RemoveDrone(int droneID)
-        {
-            int droneIndex = drones.FindIndex(d => d.ID == droneID);
-            if (droneIndex == -1)
-            {
-                throw new UndefinedObjectException("There is no drone with the given ID.");
-            }
-
-            try
-            {
-                dalObject.RemoveDrone(droneID);
-            }
-            catch (DO.UndefinedObjectException e)
-            {
-                throw new UndefinedObjectException(e.Message, e);
-            }
-
-            drones.RemoveAt(droneIndex);
         }
 
         #endregion

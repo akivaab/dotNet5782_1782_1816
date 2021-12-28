@@ -124,4 +124,16 @@ namespace BO
         /// <param name="s">A message describing the exception.</param>
         public UnableToDeliverException(string s) : base(s) { }
     }
+
+    /// <summary>
+    /// An exception thrown when an entity cannot be removed.
+    /// </summary>
+    public class UnableToRemoveException : Exception
+    {
+        /// <summary>
+        /// UnableToRemoveException constructor.
+        /// </summary>
+        /// <param name="s">A message describing the exception.</param>
+        public UnableToRemoveException(string s) : base(s) { }
+    }
 }

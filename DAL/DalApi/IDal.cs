@@ -137,12 +137,30 @@ namespace DalApi
 
         #endregion
 
-        #region Delete Methods
+        #region Remove Methods
+
+        /// <summary>
+        /// Remove a station from the system.
+        /// </summary>
+        /// <param name="stationID">The station ID.</param>
+        public void RemoveStation(int stationID);
+
+        /// <summary>
+        /// Remove a drone from the system.
+        /// </summary>
+        /// <param name="droneID">The drone ID.</param>
+        public void RemoveDrone(int droneID);
+
+        /// <summary>
+        /// Remove a customer from the system.
+        /// </summary>
+        /// <param name="customerID">The customer ID.</param>
+        public void RemoveCustomer(int customerID);
 
         /// <summary>
         /// Remove a package from the system.
         /// </summary>
-        /// <param name="packageID">The package ID.</param>
+        /// <param name="packageID"></param>
         public void RemovePackage(int packageID);
 
         #endregion
@@ -217,28 +235,6 @@ namespace DalApi
         /// </summary>
         /// <returns>A collection of doubles for how much power is consumed for different tasks.</returns>
         public IEnumerable<double> DronePowerConsumption();
-
-        #endregion
-
-        #region Remove Methods
-
-        /// <summary>
-        /// Remove a station from the system.
-        /// </summary>
-        /// <param name="stationID">The station ID.</param>
-        public void RemoveStation(int stationID);
-
-        /// <summary>
-        /// Remove a drone from the system.
-        /// </summary>
-        /// <param name="droneID">The drone ID.</param>
-        public void RemoveDrone(int droneID);
-
-        /// <summary>
-        /// Remove a customer from the system.
-        /// </summary>
-        /// <param name="customerID">The customer ID.</param>
-        public void RemoveCustomer(int customerID);
 
         #endregion
 

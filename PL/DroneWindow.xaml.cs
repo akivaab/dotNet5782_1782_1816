@@ -267,17 +267,20 @@ namespace PL
             try
             {
                 bl.RemoveDrone(drone.ID);
+                MessageBox.Show("Drone " + drone.ID + " deleted.");
+                refreshDroneListWindowView();
+
+                closeButtonClicked = true;
+                Close();
             }
             catch (UndefinedObjectException)
             {
-                MessageBox.Show("Cannot delete.");
+                MessageBox.Show("An error has occured in the system. The drone no longer exists.");
             }
-
-            MessageBox.Show("Drone " + drone.ID + " deleted.");
-            //refreshDroneListWindowView();
-
-            closeButtonClicked = true;
-            Close();
+            catch (UnableToRemoveException ex)
+            {
+                MessageBox.Show(ex.Message + "\nTry removing drone after the delivery is completed.");
+            }
         }
 
         /// <summary>

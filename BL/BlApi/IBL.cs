@@ -111,6 +111,34 @@ namespace BlApi
 
         #endregion
 
+        #region Remove Methods
+
+        /// <summary>
+        /// Remove a station from the system.
+        /// </summary>
+        /// <param name="stationID">The station ID.</param>
+        public void RemoveStation(int stationID);
+
+        /// <summary>
+        /// Remove a drone from the system.
+        /// </summary>
+        /// <param name="droneID">The drone ID.</param>
+        public void RemoveDrone(int droneID);
+
+        /// <summary>
+        /// Remove a customer from the system.
+        /// </summary>
+        /// <param name="customerID">The customer ID.</param>
+        public void RemoveCustomer(int customerID);
+
+        /// <summary>
+        /// Remove a package from the system.
+        /// </summary>
+        /// <param name="packageID">The package ID.</param>
+        public void RemovePackage(int packageID);
+
+        #endregion
+
         #region Getter Methods - Single Entity
 
         /// <summary>
@@ -175,28 +203,6 @@ namespace BlApi
         /// </summary>
         /// <returns>A collection of PackageToList entities.</returns>
         public IEnumerable<PackageToList> GetPackagesList();
-
-        #endregion
-
-        #region Remove Methods
-
-        /// <summary>
-        /// Remove a station from the system.
-        /// </summary>
-        /// <param name="stationID">The station ID.</param>
-        public void RemoveStation(int stationID);
-
-        /// <summary>
-        /// Remove a drone from the system.
-        /// </summary>
-        /// <param name="droneID">The drone ID.</param>
-        public void RemoveDrone(int droneID);
-
-        /// <summary>
-        /// Remove a customer from the system.
-        /// </summary>
-        /// <param name="customerID">The customer ID.</param>
-        public void RemoveCustomer(int customerID);
 
         #endregion
 
