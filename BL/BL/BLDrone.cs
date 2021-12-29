@@ -153,9 +153,14 @@ namespace BL
                 throw new UndefinedObjectException("There is no drone with the given ID.");
             }
 
-            if (drones[droneIndex].PackageID != null)
+            if (drones[droneIndex].Status == Enums.DroneStatus.delivery)
             {
                 throw new UnableToRemoveException("The drone is currently delivering.");
+            }
+
+            if (drones[droneIndex].Status == Enums.DroneStatus.maintenance)
+            {
+                throw new UnableToRemoveException("The drone is currently charging.");
             }
 
             try

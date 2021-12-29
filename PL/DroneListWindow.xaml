@@ -23,13 +23,13 @@
             <Setter Property="Grid.Row" Value="1"/>
         </Style>
     </Window.Resources>
-    
+
     <Grid Name="MainGrid" Background="MediumTurquoise">
         <Grid.RowDefinitions>
             <RowDefinition Height="50*"/>
             <RowDefinition Height="400*"/>
         </Grid.RowDefinitions>
-        
+
         <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -39,8 +39,9 @@
             </Grid.ColumnDefinitions >
             <Label Grid.Column="0" Name="statusLabel" Content="Status:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
             <ComboBox Grid.Column="1" Name="statusSelector" Style="{StaticResource comboBoxStyle}" SelectionChanged="selector_SelectionChanged"/>
-                <Label Grid.Column="2" Name="maxWeightLabel" Content="Max. Weight:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
+            <Label Grid.Column="2" Name="maxWeightLabel" Content="Max. Weight:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
             <ComboBox Grid.Column="3" Name="maxWeightSelector" Style="{StaticResource comboBoxStyle}" SelectionChanged="selector_SelectionChanged"/>
+            <Button Grid.Column="0" Name="refreshButton" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" FontWeight="Bold" Background="Fuchsia" Click="refreshButton_Click"/>
         </Grid>
 
         <ListView x:Name="droneListView" ItemsSource="{Binding}" Margin="0,69,0,50" Grid.RowSpan="2" MouseDoubleClick="droneListView_MouseDoubleClick" Background="Pink">
@@ -65,6 +66,6 @@
         <Button Name="clearStatusSelectorButton" Content="Clear Status Filter" Margin="20,0,0,15" Width="100" Height="20" Style="{StaticResource clearButtonStyle}" Click="clearStatusSelectorButton_Click"/>
         <Button Name="clearMaxWeightSelectorButton" Content="Clear Max. Weight Filter" Margin="135,0,0,15" Width="140" Height="20" Style="{StaticResource clearButtonStyle}" Click="clearMaxWeightSelectorButton_Click"/>
         <CheckBox Name="groupByStatusCheckBox" Content="Group By Status" HorizontalAlignment="Left" Margin="288,0,0,18" Grid.Row="1" VerticalAlignment="Bottom" Checked="groupByStatusCheckBox_Checked" Unchecked="groupByStatusCheckBox_Unchecked"/>
-    
+
     </Grid>
 </Window>

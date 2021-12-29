@@ -33,7 +33,7 @@ namespace PL
         /// <summary>
         /// Flag if the close button is clicked.
         /// </summary>
-        private bool closeButtonClicked;
+        private bool allowClose;
 
         /// <summary>
         /// DroneWindow constructor for adding a drone.
@@ -43,7 +43,7 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
-            closeButtonClicked = false;
+            allowClose = false;
 
             //make only the features needed for adding a drone visible in the window. 
             add.Visibility = Visibility.Visible;
@@ -69,7 +69,8 @@ namespace PL
             InitializeComponent();
             this.bl = bl;
             this.drone = drone;
-            closeButtonClicked = false;
+            allowClose = false;
+
             DataContext = drone;
 
             //make only the features needed for perfroming actions on a drone visible in the window. 
@@ -97,11 +98,8 @@ namespace PL
                 {
                     bl.AddDrone(id, add_Model.Text, (Enums.WeightCategories)add_MaxWeight.SelectedItem, (int)add_StationID.SelectedItem);
                     MessageBox.Show("Drone successfully added.");
-                    
-                    refreshDroneListWindowView();
 
-                    //even though no button was clicked, allow this window to close
-                    closeButtonClicked = true;
+                    allowClose = true;
                     Close();
                 }
                 catch (NonUniqueIdException ex)
@@ -138,9 +136,8 @@ namespace PL
                     bl.UpdateDroneModel(drone.ID, actions_Model.Text);
                     MessageBox.Show("Model name successfully updated.");
 
-                    //reload this window and refresh the parent DroneListWindow
+                    //reload this window
                     loadDroneData();
-                    refreshDroneListWindowView();
                 }
                 catch (UndefinedObjectException)
                 {
@@ -178,9 +175,8 @@ namespace PL
                     MessageBox.Show("The drone is currently delivering and cannot be sent to charge.");
                 }
 
-                //reload this window and refresh the parent DroneListWindow
+                //reload this window
                 loadDroneData();
-                refreshDroneListWindowView();
             }
             catch (UnableToChargeException ex)
             {
@@ -238,9 +234,8 @@ namespace PL
                     MessageBox.Show("The drone is currently unavailable for delivering.\n(Is the drone available?)");
                 }
 
-                //reload this window and refresh the parent DroneListWindow
+                //reload this window
                 loadDroneData();
-                refreshDroneListWindowView();
             }
             catch (UndefinedObjectException)
             {
@@ -275,9 +270,8 @@ namespace PL
             {
                 bl.RemoveDrone(drone.ID);
                 MessageBox.Show("Drone " + drone.ID + " deleted.");
-                refreshDroneListWindowView();
 
-                closeButtonClicked = true;
+                allowClose = true;
                 Close();
             }
             catch (UndefinedObjectException)
@@ -286,7 +280,7 @@ namespace PL
             }
             catch (UnableToRemoveException ex)
             {
-                MessageBox.Show(ex.Message + "\nTry removing drone after the delivery is completed.");
+                MessageBox.Show(ex.Message + "\nThe drone may be removed after this is completed.");
             }
         }
 
@@ -314,40 +308,13 @@ namespace PL
         }
 
         /// <summary>
-        /// Refresh the DroneListView of the parent DroneListWindow to reflect the updates.
-        /// </summary>
-        private static void refreshDroneListWindowView()
-        {
-            //find the open DroneListWindow
-            foreach (Window window in Application.Current.Windows)
-            {
-                if (window.GetType() == typeof(DroneListWindow))
-                {
-                    DroneListWindow droneListWindow = (DroneListWindow)window;
-
-                    droneListWindow.droneListView.Items.Refresh();
-
-                    //remove droneListWindow's DroneListView filters to refresh, then reset the filters
-                    Enums.DroneStatus? statusFilter = (Enums.DroneStatus?)droneListWindow.statusSelector.SelectedItem;
-                    Enums.WeightCategories? weightFilter = (Enums.WeightCategories?)droneListWindow.maxWeightSelector.SelectedItem;
-
-                    droneListWindow.statusSelector.SelectedItem = null;
-                    droneListWindow.maxWeightSelector.SelectedItem = null;
-
-                    droneListWindow.statusSelector.SelectedItem = statusFilter;
-                    droneListWindow.maxWeightSelector.SelectedItem = weightFilter;
-                }
-            }
-        }
-
-        /// <summary>
         /// Close the window.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void closeButton_Click(object sender, RoutedEventArgs e)
         {
-            closeButtonClicked = true;
+            allowClose = true;
             Close();
         }
 
@@ -358,7 +325,7 @@ namespace PL
         /// <param name="e"></param>
         private void droneWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (!closeButtonClicked)
+            if (!allowClose)
             {
                 e.Cancel = true;
                 MessageBox.Show("Please use the " + (add.Visibility == Visibility.Visible ? "Cancel" : "Close") + " button on the lower right.");
