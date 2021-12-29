@@ -120,7 +120,7 @@ namespace PL
         }
 
         /// <summary>
-        /// Open a DroneWindow to perform actions with a drone double-clicked in DroneViewList.
+        /// Open a DroneWindow to perform actions with a drone double-clicked in droneListView.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -160,7 +160,7 @@ namespace PL
         }
 
         /// <summary>
-        /// Group the DroneListView by status.
+        /// Group the drones in droneListView by status.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -172,7 +172,7 @@ namespace PL
         }
 
         /// <summary>
-        /// Revert the DroneListView to its default state.
+        /// Revert the droneListView to its default state.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

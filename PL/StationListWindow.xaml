@@ -8,7 +8,7 @@
         Title="StationListWindow" Height="450" Width="800" Closing="stationListWindow_Closing">
 
     <Grid Name="MainGrid" Background="MediumTurquoise">
-        <ListView x:Name="stationListView" ItemsSource="{Binding}" Margin="0,3,0,50" MouseDoubleClick="stationListView_MouseDoubleClick" Background="Pink">
+        <ListView x:Name="stationListView" ItemsSource="{Binding}" Margin="0,20,0,50" MouseDoubleClick="stationListView_MouseDoubleClick" Background="Pink">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
@@ -25,9 +25,9 @@
             </ListView.GroupStyle>
         </ListView>
 
+        <Button Name="refreshButton" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" FontWeight="Bold" Background="Fuchsia" Click="refreshButton_Click"/>
         <Button Name="addStationButton" Content="Add New Station" HorizontalAlignment="Right" Margin="0,0,90,15" VerticalAlignment="Bottom" Click="addStationButton_Click" Width="110" Height="20"/>
         <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,20,15" VerticalAlignment="Bottom" Click="closeButton_Click" Width="55" Height="20"/>
-        <CheckBox Name="groupByAvailabilityCheckBox" Content="Group By Availability" HorizontalAlignment="Left" Margin="15,0,0,15" VerticalAlignment="Bottom" Checked="groupByAvailabilityCheckBox_Checked" Unchecked="groupByCheckBox_Unchecked"/>
-        <CheckBox Name="groupByChargeSlotQuantityCheckBox" Content="Group By Charge Slot Quantity" HorizontalAlignment="Left" Margin="170,0,0,15" VerticalAlignment="Bottom" Checked="groupByChargeSlotQuantityCheckBox_Checked" Unchecked="groupByCheckBox_Unchecked"/>
+        <CheckBox Name="groupByChargeSlotQuantityCheckBox" Content="Group By Available Charge Slot Quantity" HorizontalAlignment="Left" Margin="15,0,0,15" VerticalAlignment="Bottom" Checked="groupByChargeSlotQuantityCheckBox_Checked" Unchecked="groupByChargeSlotsQuantityCheckBox_Unchecked"/>
     </Grid>
 </Window>

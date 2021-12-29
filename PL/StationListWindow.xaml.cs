@@ -28,16 +28,36 @@ namespace PL
         /// <summary>
         /// Flag if the close button was clicked.
         /// </summary>
-        private bool closeButtonClicked;
+        private bool allowClose;
+
+        /// <summary>
+        /// StationListWindow constructor.
+        /// </summary>
+        /// <param name="bl"></param>
         public StationListWindow(BlApi.IBL bl)
         {
             InitializeComponent();
             this.bl = bl;
-            closeButtonClicked = false;
+            allowClose = false;
 
             DataContext = new ObservableCollection<BO.StationToList>(bl.GetStationsList());
         }
 
+        /// <summary>
+        /// Open a StationWindow to add a station to the system.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void addStationButton_Click(object sender, RoutedEventArgs e)
+        {
+            new StationWindow(bl).Show();
+        }
+
+        /// <summary>
+        /// Open a StationWindow to perform actions with a drone double-clicked in stationListView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void stationListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             //make sure that a station was double-clicked (not just anywhere on the window)
@@ -48,24 +68,11 @@ namespace PL
             }
         }
 
-        private void addStationButton_Click(object sender, RoutedEventArgs e)
-        {
-            new StationWindow(bl).Show();
-        }
-
-        private void closeButton_Click(object sender, RoutedEventArgs e)
-        {
-            closeButtonClicked = true;
-            Close();
-        }
-
-        private void groupByAvailabilityCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(stationListView.ItemsSource);
-            PropertyGroupDescription groupDescription = new PropertyGroupDescription("NumAvailableChargeSlots == 0");
-            view.GroupDescriptions.Add(groupDescription);
-        }
-
+        /// <summary>
+        /// Group the stations in stationListView by number of available charging slots.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void groupByChargeSlotQuantityCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(stationListView.ItemsSource);
@@ -73,15 +80,46 @@ namespace PL
             view.GroupDescriptions.Add(groupDescription);
         }
 
-        private void groupByCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Revert the stationListView to its default state.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void groupByChargeSlotsQuantityCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(stationListView.ItemsSource);
             view.GroupDescriptions.Clear();
         }
 
+        /// <summary>
+        /// Refresh the stationListView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void refreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            stationListView.Items.Refresh();
+        }
+
+        /// <summary>
+        /// Close the window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void closeButton_Click(object sender, RoutedEventArgs e)
+        {
+            allowClose = true;
+            Close();
+        }
+
+        /// <summary>
+        /// Prevent the window from being closed by force via the X button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void stationListWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (!closeButtonClicked)
+            if (!allowClose)
             {
                 e.Cancel = true;
                 MessageBox.Show("Please use the Close button on the lower right.");
