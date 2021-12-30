@@ -11,6 +11,12 @@ namespace BO
         /// IllegalArgumentException constructor.
         /// </summary>
         /// <param name="s">A message describing the exception.</param>
+        public IllegalArgumentException(string s) : base(s) { }
+
+        /// <summary>
+        /// IllegalArgumentException constructor.
+        /// </summary>
+        /// <param name="s">A message describing the exception.</param>
         /// <param name="e">A matching exception thrown from the data layer.</param>
         public IllegalArgumentException(string s, DO.IllegalArgumentException e) : base(s, e) { }
     }

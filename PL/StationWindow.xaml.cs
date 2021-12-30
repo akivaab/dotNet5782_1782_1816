@@ -108,7 +108,7 @@ namespace PL
             bool isInteger1 = int.TryParse(actions_Name.Text, out name);
             bool isInteger2 = int.TryParse(actions_TotalChargeSlots.Text, out numTotalChargeSlots);
             
-            if (isInteger1 && isInteger2 && numTotalChargeSlots > 0)
+            if (isInteger1 && isInteger2)
             {
                 try
                 {
@@ -119,11 +119,15 @@ namespace PL
                 {
                     MessageBox.Show("Error: This station is not in the system.\nTry closing this window and refreshing the list.");
                 }
+                catch (BO.IllegalArgumentException ex)
+                {
+                    MessageBox.Show(ex.Message + "\nTry entering a larger number.");
+                }
             }
             else
             {
                 MessageBox.Show("Some of the information supplied is invalid. Please enter other information." +
-                    (isInteger1 || isInteger2 ? "" : "\n(Are the name, and number of charging slots all numbers?)"));
+                    "\n(Are the name, and number of charging slots all numbers?)");
             }
         }
 
@@ -154,13 +158,13 @@ namespace PL
                 actions_Location.Content = stationEntity.Location;
                 actions_AvailableChargeSlots.Content = stationEntity.AvailableChargeSlots;
 
-                string s = "";
+                string presentDrones = "";
                 foreach (BO.DroneCharging droneCharging in stationEntity.DronesCharging)
                 {
-                    s += droneCharging + "\n";
+                    presentDrones += droneCharging + "\n";
                 }
+                actions_DronesCharging.Content = presentDrones;
 
-                actions_DronesCharging.Content = s;
                 actions_TotalChargeSlots.Text = (station.NumAvailableChargeSlots + station.NumOccupiedChargeSlots).ToString();
             }
             catch (BO.UndefinedObjectException)

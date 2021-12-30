@@ -140,7 +140,7 @@ namespace PL
                 }
                 catch (BO.UndefinedObjectException)
                 {
-                    MessageBox.Show("An error has occured in the system. The relevant station does not exist.");
+                    MessageBox.Show("Error: The relevant station does not exist.");
                 }
             }
             else
@@ -187,11 +187,11 @@ namespace PL
             }
             catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("An error has occured in the system. The relevant station does not exist.");
+                MessageBox.Show("Error: The relevant station does not exist.");
             }
             catch (BO.EmptyListException)
             {
-                MessageBox.Show("An error has occured in the system. There are no stations.");
+                MessageBox.Show("Error: There are no stations.");
             }
         }
 
@@ -225,7 +225,7 @@ namespace PL
                     }
                     else
                     {
-                        MessageBox.Show("An error has occured in the system. The drone has completed its delivery but is not considered available.");
+                        MessageBox.Show("Error: The drone has completed its delivery but is not considered available.");
                     }
                 }
                 else
@@ -302,7 +302,7 @@ namespace PL
             }
             catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("An error has occured in the system. The drone no longer exists.");
+                MessageBox.Show("Error: This drone is not in the system.\nTry closing this window and refreshing the list.");
             }
         }
 

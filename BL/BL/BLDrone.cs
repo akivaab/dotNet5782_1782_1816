@@ -92,7 +92,7 @@ namespace BL
             IEnumerable<DO.Station> reachableStations = getReachableStations(drones[droneIndex]);
             if (reachableStations.Count() == 0)
             {
-                throw new UnableToChargeException("The drone does not have enough battery to reach a station.");
+                throw new UnableToChargeException("Either the drone does not have enough battery to reach a station, or all stations are occupied.");
             }
 
             try 

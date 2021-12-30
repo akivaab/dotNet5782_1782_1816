@@ -1,7 +1,7 @@
-﻿using System;
+﻿using BO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using BO;
 
 namespace BL
 {
@@ -47,9 +47,14 @@ namespace BL
                     DO.Station dalStation = dalObject.GetStation(stationID);
 
                     //find the amount of drones in this station
-                    IEnumerable<DroneToList> dronesAtStation = drones.FindAll(d => d.Location.Latitude == dalStation.Latitude && d.Location.Longitude == dalStation.Longitude);
+                    IEnumerable<DroneToList> dronesAtStation = drones.FindAll(d => d.Location.Latitude == dalStation.Latitude && d.Location.Longitude == dalStation.Longitude && d.Status == Enums.DroneStatus.maintenance);
                     
                     int availableChargeSlots = totalChargingSlots - dronesAtStation.Count();
+                    if (availableChargeSlots < 0)
+                    {
+                        throw new IllegalArgumentException("There cannot be less charging slots than drones charging.");
+                    }
+
                     dalObject.UpdateStationChargeSlots(stationID, availableChargeSlots);
                 }
             }
@@ -88,7 +93,7 @@ namespace BL
                 Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
 
                 //find drones at this station
-                IEnumerable<DroneToList> dronesAtStation = drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude);
+                IEnumerable<DroneToList> dronesAtStation = drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude && d.Status == Enums.DroneStatus.maintenance);
 
                 //initialize DroneCharging entities
                 IEnumerable<DroneCharging> dronesCharging = from DroneToList drone in dronesAtStation
@@ -107,7 +112,7 @@ namespace BL
             IEnumerable<DO.Station> dalStations = dalObject.GetStationsList();
             IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
                                                         let stationLocation = new Location(dalStation.Latitude, dalStation.Longitude)
-                                                        let dronesAtStation = drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude)
+                                                        let dronesAtStation = drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude && d.Status == Enums.DroneStatus.maintenance)
                                                         select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count);
             return stationToLists;
         }
@@ -121,7 +126,7 @@ namespace BL
             IEnumerable<DO.Station> dalStations = dalObject.FindStations(predicate);
             IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
                                                         let stationLocation = new Location(dalStation.Latitude, dalStation.Longitude)
-                                                        let dronesAtStation = drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude)
+                                                        let dronesAtStation = drones.FindAll(d => d.Location.Latitude == stationLocation.Latitude && d.Location.Longitude == stationLocation.Longitude && d.Status == Enums.DroneStatus.maintenance)
                                                         select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count);
             return stationToLists;
         }
