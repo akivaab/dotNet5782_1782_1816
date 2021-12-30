@@ -57,7 +57,7 @@ namespace PL
         }
 
         /// <summary>
-        /// Filter the DroneViewList based on the selected options of both selectors.
+        /// Filter the droneViewList based on the selected options of both selectors.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -65,32 +65,28 @@ namespace PL
         {
             if (statusSelector.SelectedItem == null && maxWeightSelector.SelectedItem == null)
             {
-                droneToListCollection.Clear();
-                AddRange(droneToListCollection, bl.GetDronesList());
-                //droneListView.ItemsSource = bl.GetDronesList();
+                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
+                view.Filter = (object o) => { return true; };
             }
             else if (statusSelector.SelectedItem == null)
             {
-                droneToListCollection.Clear();
-                AddRange(droneToListCollection, bl.FindDrones(d => d.MaxWeight == (BO.Enums.WeightCategories)maxWeightSelector.SelectedItem));
-                //droneListView.ItemsSource = bl.FindDrones(d => d.MaxWeight == (BO.Enums.WeightCategories)maxWeightSelector.SelectedItem);
+                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
+                view.Filter = (object drone) => { return (drone as BO.DroneToList).MaxWeight == (BO.Enums.WeightCategories)maxWeightSelector.SelectedItem; };
             }
             else if (maxWeightSelector.SelectedItem == null)
             {
-                droneToListCollection.Clear();
-                AddRange(droneToListCollection, bl.FindDrones(d => d.Status == (BO.Enums.DroneStatus)statusSelector.SelectedItem));
-                //droneListView.ItemsSource = bl.FindDrones(d => d.Status == (BO.Enums.DroneStatus)statusSelector.SelectedItem);
+                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
+                view.Filter = (object drone) => { return (drone as BO.DroneToList).Status == (BO.Enums.DroneStatus)statusSelector.SelectedItem; };
             }
             else
             {
-                droneToListCollection.Clear();
-                AddRange(droneToListCollection, bl.FindDrones(d => d.Status == (BO.Enums.DroneStatus)statusSelector.SelectedItem && d.MaxWeight == (BO.Enums.WeightCategories)maxWeightSelector.SelectedItem));
-                //droneListView.ItemsSource = bl.FindDrones(d => d.Status == (BO.Enums.DroneStatus)statusSelector.SelectedItem && d.MaxWeight == (BO.Enums.WeightCategories)maxWeightSelector.SelectedItem);
+                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
+                view.Filter = (object drone) => { return (drone as BO.DroneToList).MaxWeight == (BO.Enums.WeightCategories)maxWeightSelector.SelectedItem && (drone as BO.DroneToList).Status == (BO.Enums.DroneStatus)statusSelector.SelectedItem; };
             }
         }
 
         /// <summary>
-        /// Clear the filter of StatusSelector.
+        /// Clear the filter of statusSelector.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -100,7 +96,7 @@ namespace PL
         }
 
         /// <summary>
-        /// Clear the filter of MaxWeightSelector.
+        /// Clear the filter of maxWeightSelector.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -187,15 +183,19 @@ namespace PL
         /// </summary>
         private void refreshButton_Click(object sender, RoutedEventArgs e)
         {
-            droneListView.Items.Refresh();
-        }
+            bool? grouped = groupByStatusCheckBox.IsChecked;
+            BO.Enums.DroneStatus? droneStatus = (BO.Enums.DroneStatus?)statusSelector.SelectedItem;
+            BO.Enums.WeightCategories? weightCategories = (BO.Enums.WeightCategories?)maxWeightSelector.SelectedItem;
 
-        private void AddRange<T>(ObservableCollection<T> coll, IEnumerable<T> items)
-        {
-            foreach (var item in items)
+            droneToListCollection.Clear();
+            foreach (BO.DroneToList droneToList in bl.GetDronesList())
             {
-                coll.Add(item);
+                droneToListCollection.Add(droneToList);
             }
+
+            statusSelector.SelectedItem = droneStatus;
+            maxWeightSelector.SelectedItem = weightCategories;
+            groupByStatusCheckBox.IsChecked = grouped;
         }
     }
 }
