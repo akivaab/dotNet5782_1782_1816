@@ -40,7 +40,7 @@ namespace PL
             this.bl = bl;
             allowClose = false;
 
-            //make only the features needed for adding a drone visible in the window. 
+            //make only the features needed for adding a station visible in the window. 
             add.Visibility = Visibility.Visible;
             actions.Visibility = Visibility.Collapsed;
         }
@@ -49,13 +49,16 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
+            this.station = station;
             allowClose = false;
 
             DataContext = station;
 
-            //make only the features needed for perfroming actions on a drone visible in the window. 
+            //make only the features needed for perfroming actions on a station visible in the window. 
             add.Visibility = Visibility.Collapsed;
             actions.Visibility = Visibility.Visible;
+
+            loadStationData();
         }
 
         private void addButton_Click(object sender, RoutedEventArgs e)
@@ -103,11 +106,67 @@ namespace PL
             int name;
             int numTotalChargeSlots;
             bool isInteger1 = int.TryParse(actions_Name.Text, out name);
+            bool isInteger2 = int.TryParse(actions_TotalChargeSlots.Text, out numTotalChargeSlots);
+            
+            if (isInteger1 && isInteger2 && numTotalChargeSlots > 0)
+            {
+                try
+                {
+                    bl.UpdateStation(station.ID, name, numTotalChargeSlots);
+                    MessageBox.Show("Station successfully updated.");
+                }
+                catch (BO.UndefinedObjectException)
+                {
+                    MessageBox.Show("Error: This station is not in the system.\nTry closing this window and refreshing the list.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Some of the information supplied is invalid. Please enter other information." +
+                    (isInteger1 || isInteger2 ? "" : "\n(Are the name, and number of charging slots all numbers?)"));
+            }
         }
 
         private void removeButton_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                bl.RemoveStation(station.ID);
+                MessageBox.Show("Station " + station.ID + " deleted.");
 
+                allowClose = true;
+                Close();
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Error: This station is already removed from the system.\nTry closing this window and refreshing the list.");
+            }
+        }
+
+        private void loadStationData()
+        {
+            try
+            {
+                BO.Station stationEntity = bl.GetStation(station.ID);
+
+                actions_StationID.Content = stationEntity.ID;
+                actions_Name.Text = stationEntity.Name.ToString();
+                actions_Location.Content = stationEntity.Location;
+                actions_AvailableChargeSlots.Content = stationEntity.AvailableChargeSlots;
+
+                string s = "";
+                foreach (BO.DroneCharging droneCharging in stationEntity.DronesCharging)
+                {
+                    s += droneCharging + "\n";
+                }
+
+                actions_DronesCharging.Content = s;
+                actions_TotalChargeSlots.Text = (station.NumAvailableChargeSlots + station.NumOccupiedChargeSlots).ToString();
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Error: This station is not in the system.\nTry closing this window and refreshing the list.");
+            }
         }
 
         private void closeButton_Click(object sender, RoutedEventArgs e)

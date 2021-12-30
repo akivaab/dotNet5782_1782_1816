@@ -31,6 +31,11 @@ namespace PL
         private bool allowClose;
 
         /// <summary>
+        /// The stations being displayed.
+        /// </summary>
+        private ObservableCollection<BO.StationToList> stationToListCollection;
+
+        /// <summary>
         /// StationListWindow constructor.
         /// </summary>
         /// <param name="bl"></param>
@@ -39,8 +44,9 @@ namespace PL
             InitializeComponent();
             this.bl = bl;
             allowClose = false;
+            stationToListCollection = new ObservableCollection<BO.StationToList>(bl.GetStationsList());
 
-            DataContext = new ObservableCollection<BO.StationToList>(bl.GetStationsList());
+            DataContext = stationToListCollection;
         }
 
         /// <summary>
@@ -98,7 +104,11 @@ namespace PL
         /// <param name="e"></param>
         private void refreshButton_Click(object sender, RoutedEventArgs e)
         {
-            stationListView.Items.Refresh();
+            stationToListCollection.Clear();
+            foreach (BO.StationToList stationToList in bl.GetStationsList())
+            {
+                stationToListCollection.Add(stationToList);
+            }
         }
 
         /// <summary>

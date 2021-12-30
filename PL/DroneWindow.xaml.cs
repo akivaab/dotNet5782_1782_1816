@@ -11,7 +11,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using BO;
 
 namespace PL
 {
@@ -28,7 +27,7 @@ namespace PL
         /// <summary>
         /// The drone we enabling the user to update.
         /// </summary>
-        private DroneToList drone;
+        private BO.DroneToList drone;
 
         /// <summary>
         /// Flag if the close button is clicked.
@@ -50,8 +49,8 @@ namespace PL
             actions.Visibility = Visibility.Collapsed;
 
             //remove "free" from the possible MaxWeights to choose from
-            List<Enums.WeightCategories> weights = new((Enums.WeightCategories[])Enum.GetValues(typeof(Enums.WeightCategories)));
-            weights.Remove(Enums.WeightCategories.free);
+            List<BO.Enums.WeightCategories> weights = new((BO.Enums.WeightCategories[])Enum.GetValues(typeof(BO.Enums.WeightCategories)));
+            weights.Remove(BO.Enums.WeightCategories.free);
             add_MaxWeight.ItemsSource = weights;
 
             //initialize existing station IDs to choose from
@@ -64,7 +63,7 @@ namespace PL
         /// </summary>
         /// <param name="bl">A BL object.</param>
         /// <param name="drone">The drone being updated/acted upon.</param>
-        public DroneWindow(BlApi.IBL bl, DroneToList drone)
+        public DroneWindow(BlApi.IBL bl, BO.DroneToList drone)
         {
             InitializeComponent();
             this.bl = bl;
@@ -96,21 +95,21 @@ namespace PL
             {
                 try
                 {
-                    bl.AddDrone(id, add_Model.Text, (Enums.WeightCategories)add_MaxWeight.SelectedItem, (int)add_StationID.SelectedItem);
+                    bl.AddDrone(id, add_Model.Text, (BO.Enums.WeightCategories)add_MaxWeight.SelectedItem, (int)add_StationID.SelectedItem);
                     MessageBox.Show("Drone successfully added.");
 
                     allowClose = true;
                     Close();
                 }
-                catch (NonUniqueIdException ex)
+                catch (BO.NonUniqueIdException ex)
                 {
                     MessageBox.Show(ex.Message + "\nPlease enter a different ID.");
                 }
-                catch (UndefinedObjectException ex)
+                catch (BO.UndefinedObjectException ex)
                 {
                     MessageBox.Show(ex.Message + "\nPlease try a different station.");
                 }
-                catch (UnableToChargeException ex)
+                catch (BO.UnableToChargeException ex)
                 {
                     MessageBox.Show(ex.Message + "\nPlease select a different station.");
                 }
@@ -139,7 +138,7 @@ namespace PL
                     //reload this window
                     loadDroneData();
                 }
-                catch (UndefinedObjectException)
+                catch (BO.UndefinedObjectException)
                 {
                     MessageBox.Show("An error has occured in the system. The relevant station does not exist.");
                 }
@@ -159,12 +158,12 @@ namespace PL
         {
             try
             {
-                if ((Enums.DroneStatus)actions_Status.Content == Enums.DroneStatus.available)
+                if ((BO.Enums.DroneStatus)actions_Status.Content == BO.Enums.DroneStatus.available)
                 {
                     bl.SendDroneToCharge(drone.ID);
                     MessageBox.Show("Drone successfully sent to station to charge.");
                 }
-                else if ((Enums.DroneStatus)actions_Status.Content == Enums.DroneStatus.maintenance)
+                else if ((BO.Enums.DroneStatus)actions_Status.Content == BO.Enums.DroneStatus.maintenance)
                 {
                     DateTime beganCharging = bl.GetTimeChargeBegan(drone.ID);
                     bl.ReleaseFromCharge(drone.ID, (DateTime.Now - beganCharging).TotalHours);
@@ -178,19 +177,19 @@ namespace PL
                 //reload this window
                 loadDroneData();
             }
-            catch (UnableToChargeException ex)
+            catch (BO.UnableToChargeException ex)
             {
                 MessageBox.Show(ex.Message + "\n(Is the drone available?)");
             }
-            catch (UnableToReleaseException ex)
+            catch (BO.UnableToReleaseException ex)
             {
                 MessageBox.Show(ex.Message + "\n(Is the drone in maintenance?)");
             }
-            catch (UndefinedObjectException)
+            catch (BO.UndefinedObjectException)
             {
                 MessageBox.Show("An error has occured in the system. The relevant station does not exist.");
             }
-            catch (EmptyListException)
+            catch (BO.EmptyListException)
             {
                 MessageBox.Show("An error has occured in the system. There are no stations.");
             }
@@ -205,14 +204,14 @@ namespace PL
         {
             try
             {
-                if ((Enums.DroneStatus)actions_Status.Content == Enums.DroneStatus.available)
+                if ((BO.Enums.DroneStatus)actions_Status.Content == BO.Enums.DroneStatus.available)
                 {
                     bl.AssignPackage(drone.ID);
                     MessageBox.Show("Package successfully assigned to drone.");
                 }
-                else if ((Enums.DroneStatus)actions_Status.Content == Enums.DroneStatus.delivery)
+                else if ((BO.Enums.DroneStatus)actions_Status.Content == BO.Enums.DroneStatus.delivery)
                 {
-                    Package package = bl.GetPackage((int)drone.PackageID);
+                    BO.Package package = bl.GetPackage((int)drone.PackageID);
                     
                     if (package.CollectingTime == null)
                     {
@@ -237,23 +236,23 @@ namespace PL
                 //reload this window
                 loadDroneData();
             }
-            catch (UndefinedObjectException)
+            catch (BO.UndefinedObjectException)
             {
                 MessageBox.Show("An error has occured in the system. The drone no longer exists.");
             }
-            catch (UnableToAssignException ex)
+            catch (BO.UnableToAssignException ex)
             {
                 MessageBox.Show(ex.Message + "\n(Is the drone available?)");
             }
-            catch (UnableToCollectException ex)
+            catch (BO.UnableToCollectException ex)
             {
                 MessageBox.Show(ex.Message + "\n(Is the drone delivering and not mid-transfer?)");
             }
-            catch (UnableToDeliverException ex)
+            catch (BO.UnableToDeliverException ex)
             {
                 MessageBox.Show(ex.Message + "\n(Is the drone delivering and mid-transfer?)");
             }
-            catch (EmptyListException ex)
+            catch (BO.EmptyListException ex)
             {
                 MessageBox.Show(ex.Message + "\nTry using a different drone.");
             }
@@ -274,11 +273,11 @@ namespace PL
                 allowClose = true;
                 Close();
             }
-            catch (UndefinedObjectException)
+            catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("An error has occured in the system. The drone already doesn't exist.");
+                MessageBox.Show("Error: This drone is already removed from the system.\nTry closing this window and refreshing the list.");
             }
-            catch (UnableToRemoveException ex)
+            catch (BO.UnableToRemoveException ex)
             {
                 MessageBox.Show(ex.Message + "\nThe drone may be removed after this is completed.");
             }
@@ -291,7 +290,7 @@ namespace PL
         {
             try
             {
-                Drone droneEntity = bl.GetDrone(drone.ID);
+                BO.Drone droneEntity = bl.GetDrone(drone.ID);
 
                 actions_DroneID.Content = droneEntity.ID;
                 actions_Model.Text = droneEntity.Model;
@@ -301,7 +300,7 @@ namespace PL
                 actions_PackageInTransfer.Content = droneEntity.PackageInTransfer;
                 actions_Location.Content = droneEntity.Location;
             }
-            catch (UndefinedObjectException)
+            catch (BO.UndefinedObjectException)
             {
                 MessageBox.Show("An error has occured in the system. The drone no longer exists.");
             }
