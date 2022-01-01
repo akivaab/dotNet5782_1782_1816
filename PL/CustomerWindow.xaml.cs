@@ -151,7 +151,7 @@ namespace PL
         {
             try
             {
-                bl.RemoveStation(customer.ID);
+                bl.RemoveCustomer(customer.ID);
                 MessageBox.Show("Customer " + customer.ID + " deleted.");
 
                 allowClose = true;
