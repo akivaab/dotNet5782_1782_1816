@@ -57,7 +57,7 @@ namespace PL
 
         private void showCustomerListButton_Click(object sender, RoutedEventArgs e)
         {
-
+            new CustomerListWindow(bl).Show();
         }
 
         private void showPackageListButton_Click(object sender, RoutedEventArgs e)

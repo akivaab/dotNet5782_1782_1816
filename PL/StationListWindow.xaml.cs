@@ -60,7 +60,7 @@ namespace PL
         }
 
         /// <summary>
-        /// Open a StationWindow to perform actions with a drone double-clicked in stationListView.
+        /// Open a StationWindow to perform actions with a station double-clicked in stationListView.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
