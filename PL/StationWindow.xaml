@@ -6,20 +6,23 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="StationWindow" Height="450" Width="800" Closing="stationWindow_Closing">
+    <Window.Resources>
+        
+    </Window.Resources>
 
     <Grid Background="{StaticResource background}">
         <Grid x:Name="add">
-            <Label Content="Station ID:" HorizontalAlignment="Center" Margin="0,80,150,0" VerticalAlignment="Top" FontSize="16"/>
-            <Label Content="Name:" HorizontalAlignment="Center" Margin="0,130,150,0" VerticalAlignment="Top" FontSize="16"/>
-            <Label Content="Location:" HorizontalAlignment="Center" Margin="0,180,150,0" VerticalAlignment="Top" FontSize="16"/>
-            <Label Content="No. of Available Charging Slots:" HorizontalAlignment="Center" Margin="0,230,230,0" VerticalAlignment="Top" FontSize="16"/>
+            <Label Content="Station ID:" Margin="0,80,150,0" Style="{StaticResource addLabelStyle}"/>
+            <Label Content="Name:" Margin="0,130,150,0" Style="{StaticResource addLabelStyle}"/>
+            <Label Content="Location:" Margin="0,180,150,0" Style="{StaticResource addLabelStyle}"/>
+            <Label Content="No. of Available Charging Slots:" Margin="0,230,230,0" Style="{StaticResource addLabelStyle}"/>
 
-            <TextBox Name="add_StationID" HorizontalAlignment="Center" Margin="150,80,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="30" FontSize="16"/>
-            <TextBox Name="add_Name" HorizontalAlignment="Center" Margin="150,130,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="30" FontSize="16"/>
-            <TextBox Name="add_Latitude" HorizontalAlignment="Center" Margin="150,180,0,0" VerticalAlignment="Top" Width="120" Height="30" FontSize="16"/>
-            <TextBlock Text="," HorizontalAlignment="Center" Margin="285,180,0,0" VerticalAlignment="Top" FontSize="28"/>
-            <TextBox Name="add_Longitude" HorizontalAlignment="Center" Margin="420,180,0,0" VerticalAlignment="Top" Width="120" Height="30" FontSize="16"/>
-            <TextBox Name="add_AvailableChargeSlots" HorizontalAlignment="Center" Margin="150,230,0,0" VerticalAlignment="Top" Width="120" Height="30" FontSize="16"/>
+            <TextBox Name="add_StationID" Margin="150,80,0,0" Style="{StaticResource addTextBoxStyle}"/>
+            <TextBox Name="add_Name" Margin="150,130,0,0" Style="{StaticResource addTextBoxStyle}"/>
+            <TextBox Name="add_Latitude" Margin="150,180,0,0" Style="{StaticResource addTextBoxStyle}"/>
+            <TextBlock Text="," Margin="285,180,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="28"/>
+            <TextBox Name="add_Longitude" Margin="420,180,0,0" Style="{StaticResource addTextBoxStyle}"/>
+            <TextBox Name="add_AvailableChargeSlots" Margin="150,230,0,0" Style="{StaticResource addTextBoxStyle}"/>
 
             <Button Name="addButton" Content="Add" HorizontalAlignment="Center" Margin="0,0,0,90" VerticalAlignment="Bottom" Width="75" FontSize="16" Click="addButton_Click"/>
             <Button Name="cancelButton" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,30,20" VerticalAlignment="Bottom" Width="75" FontSize="16" Click="closeButton_Click"/>
@@ -32,18 +35,18 @@
             <Label Content="Available Charge Slots:" HorizontalAlignment="Left" Margin="100,160,0,0" VerticalAlignment="Top" FontSize="14"/>
             <Label Content="Drones Charging:" HorizontalAlignment="Left" Margin="100,190,0,0" VerticalAlignment="Top" FontSize="14"/>
 
-            <Label x:Name="actions_StationID" HorizontalAlignment="Left" Margin="275,70,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label x:Name="actions_StationID" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
             <TextBox x:Name="actions_Name" HorizontalAlignment="Left" Margin="275,100,0,0" VerticalAlignment="Top" Width="100" FontSize="14" Height="28"/>
-            <Label x:Name="actions_Location" HorizontalAlignment="Left" Margin="275,130,0,0" VerticalAlignment="Top" FontSize="14"/>
-            <Label x:Name="actions_AvailableChargeSlots" HorizontalAlignment="Left" Margin="275,160,0,0" VerticalAlignment="Top" FontSize="14"/>
-            <Label x:Name="actions_DronesCharging" HorizontalAlignment="Left" Margin="275,190,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label x:Name="actions_Location" Margin="275,130,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label x:Name="actions_AvailableChargeSlots" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <ListBox x:Name="actions_DronesCharging" HorizontalAlignment="Left" Margin="275,190,0,0" VerticalAlignment="Top" FontSize="14" MouseDoubleClick="dronesCharging_MouseDoubleClick"/>
 
             <Label Content="No. of Total Charge Slots:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,60,50,0" FontSize="16"/>
             <TextBox x:Name="actions_TotalChargeSlots" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,85,50,0" Width="185" Height="30" FontSize="16"/>
 
-            <Button Name="removeButton" Content="Remove" HorizontalAlignment="Left" Margin="30,0,0,20" VerticalAlignment="Bottom" FontSize="16" Width="75" Background="Crimson" Click="removeButton_Click"/>
-            <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,30,20" VerticalAlignment="Bottom" FontSize="16" Width="75" Click="closeButton_Click"/>
-            <Button Name="updateButton" Content="Update" HorizontalAlignment="Right" Margin="0,0,130,20" VerticalAlignment="Bottom" FontSize="16" Width="75" Click="updateButton_Click"/>
+            <Button Name="removeButton" Content="Remove" HorizontalAlignment="Left" Margin="30,0,0,20" Style="{StaticResource actionButtonStyle}" Background="Crimson" Click="removeButton_Click"/>
+            <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,30,20" Style="{StaticResource actionButtonStyle}" Click="closeButton_Click"/>
+            <Button Name="updateButton" Content="Update" HorizontalAlignment="Right" Margin="0,0,130,20" Style="{StaticResource actionButtonStyle}" Click="updateButton_Click"/>
         </Grid>
     </Grid>
 </Window>

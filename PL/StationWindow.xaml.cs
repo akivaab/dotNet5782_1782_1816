@@ -34,6 +34,10 @@ namespace PL
         /// </summary>
         private bool allowClose;
 
+        /// <summary>
+        /// StationWindow constructor for adding a station.
+        /// </summary>
+        /// <param name="bl">A BL object.</param>
         public StationWindow(BlApi.IBL bl)
         {
             InitializeComponent();
@@ -45,6 +49,11 @@ namespace PL
             actions.Visibility = Visibility.Collapsed;
         }
 
+        /// <summary>
+        /// StationWindow constructor for performing actions on a station.
+        /// </summary>
+        /// <param name="bl">A BL object.</param>
+        /// <param name="station">The station being acted upon.</param>
         public StationWindow(BlApi.IBL bl, BO.StationToList station)
         {
             InitializeComponent();
@@ -61,6 +70,11 @@ namespace PL
             loadStationData();
         }
 
+        /// <summary>
+        /// Add a station to the system.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
             int id;
@@ -101,6 +115,11 @@ namespace PL
             }
         }
 
+        /// <summary>
+        /// Update the name of the station and the total number of charging slots it has.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void updateButton_Click(object sender, RoutedEventArgs e)
         {
             int name;
@@ -131,6 +150,11 @@ namespace PL
             }
         }
 
+        /// <summary>
+        /// Remove the station from the system.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void removeButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -147,6 +171,20 @@ namespace PL
             }
         }
 
+        /// <summary>
+        /// Open a DroneWindow detailing a drone charging at the station.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dronesCharging_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            BO.DroneToList droneToList = bl.FindDrones(d => d.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.DroneCharging).ID).Single();
+            new DroneWindow(bl, droneToList).Show();
+        }
+
+        /// <summary>
+        /// Load the data of the station to be displayed in the window.
+        /// </summary>
         private void loadStationData()
         {
             try
@@ -157,13 +195,7 @@ namespace PL
                 actions_Name.Text = stationEntity.Name.ToString();
                 actions_Location.Content = stationEntity.Location;
                 actions_AvailableChargeSlots.Content = stationEntity.AvailableChargeSlots;
-
-                string presentDrones = "";
-                foreach (BO.DroneCharging droneCharging in stationEntity.DronesCharging)
-                {
-                    presentDrones += droneCharging + "\n";
-                }
-                actions_DronesCharging.Content = presentDrones;
+                actions_DronesCharging.ItemsSource = stationEntity.DronesCharging;
 
                 actions_TotalChargeSlots.Text = (station.NumAvailableChargeSlots + station.NumOccupiedChargeSlots).ToString();
             }
@@ -173,6 +205,11 @@ namespace PL
             }
         }
 
+        /// <summary>
+        /// Close the window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void closeButton_Click(object sender, RoutedEventArgs e)
         {
             allowClose = true;

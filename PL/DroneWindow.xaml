@@ -6,23 +6,6 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="Drone Delivery Service" Height="450" Width="1000" Closing="droneWindow_Closing">
-    <Window.Resources>
-        <Style x:Key="addLabelStyle" TargetType="Label">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="FontSize" Value="16"/>
-        </Style>
-        <Style x:Key="actionLabelStyle" TargetType="Label">
-            <Setter Property="HorizontalAlignment" Value="Left"/>
-            <Setter Property="VerticalAlignment" Value="Top"/>
-            <Setter Property="FontSize" Value="14"/>
-        </Style>
-        <Style x:Key="actionButtonStyle" TargetType="Button">
-            <Setter Property="VerticalAlignment" Value="Bottom"/>
-            <Setter Property="Width" Value="75"/>
-            <Setter Property="FontSize" Value="16"/>
-        </Style>
-    </Window.Resources>
 
     <Grid Background="{StaticResource background}">
         <Grid x:Name="add">
@@ -31,8 +14,8 @@
             <Label Content="Max. Weight:" Margin="0,180,150,0" Style="{StaticResource addLabelStyle}"/>
             <Label Content="Station ID:" Margin="0,230,150,0" Style="{StaticResource addLabelStyle}"/>
 
-            <TextBox Name="add_DroneID" HorizontalAlignment="Center" Margin="150,80,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="30" FontSize="16"/>
-            <TextBox Name="add_Model" HorizontalAlignment="Center" Margin="150,130,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Height="30" FontSize="16"/>
+            <TextBox Name="add_DroneID" Margin="150,80,0,0" Style="{StaticResource addTextBoxStyle}"/>
+            <TextBox Name="add_Model" Margin="150,130,0,0" Style="{StaticResource addTextBoxStyle}"/>
             <ComboBox Name="add_MaxWeight" HorizontalAlignment="Center" Margin="150,180,0,0" VerticalAlignment="Top" Width="120" Height="30" FontSize="16"/>
             <ComboBox Name="add_StationID" HorizontalAlignment="Center" Margin="150,230,0,0" VerticalAlignment="Top" Width="120" Height="30" FontSize="16"/>
 

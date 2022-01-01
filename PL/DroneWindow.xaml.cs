@@ -259,7 +259,7 @@ namespace PL
         }
 
         /// <summary>
-        /// Remove the drone.
+        /// Remove the drone from the system.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
