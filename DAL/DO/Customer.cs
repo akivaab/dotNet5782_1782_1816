@@ -37,6 +37,12 @@ namespace DO
         public bool Active { get; set; }
 
         /// <summary>
+        /// The customer password.
+        /// Defalt password is customerID
+        /// </summary>
+        public string Password { get; set; }
+
+        /// <summary>
         /// Convert a Customer entity to a string.
         /// </summary>
         /// <returns>String representation of a Customer.</returns>

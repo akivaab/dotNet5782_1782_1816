@@ -79,6 +79,13 @@ namespace BlApi
         public void UpdateCustomer(int customerID, string name = "", string phone= "");
 
         /// <summary>
+        /// Update a customer's password.
+        /// </summary>
+        /// <param name="customerID">The ID of the customer being updated.</param>
+        /// <param name="password">The new password.</param>       
+        public void UpdateCustomerPassword(int customerID, string password);
+
+        /// <summary>
         /// Send a drone to a station to charge.
         /// </summary>
         /// <param name="droneID">The ID of the drone being sent to charge.</param>
@@ -175,6 +182,13 @@ namespace BlApi
         /// <param name="droneID">The ID of the drone.</param>
         /// <returns>The DateTime the drone began charging.</returns>
         public DateTime GetTimeChargeBegan(int droneID);
+
+        /// <summary>
+        /// Get a customer's password.
+        /// </summary>
+        /// <param name="droneID">The ID of the customer.</param>
+        /// <returns>The customer's password.</returns>
+        public string GetCustomerPassword(int customerID);
 
         #endregion
 

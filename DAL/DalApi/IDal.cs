@@ -122,6 +122,13 @@ namespace DalApi
         public void UpdateCustomerPhone(int customerID, string phone);
 
         /// <summary>
+        /// Update the password of a customer.
+        /// </summary>
+        /// <param name="customerID">The customer ID.</param>
+        /// <param name="password">The customer's new password</param>
+        public void UpdateCustomerPassword(int customerID, string password);
+
+        /// <summary>
         /// Update the name of a station.
         /// </summary>
         /// <param name="stationID">The station ID.</param>
@@ -201,6 +208,13 @@ namespace DalApi
         /// <param name="droneID">The drone ID.</param>
         /// <returns>DateTime the drone began charging.</returns>
         public DateTime GetTimeChargeBegan(int droneID);
+
+        /// <summary>
+        /// Get the customer password.
+        /// </summary>
+        /// <param name="CustomerID">The customer ID.</param>
+        /// <returns>The customer password.</returns>
+        public string GetCustomerPassword(int customerID);
 
         #endregion
 

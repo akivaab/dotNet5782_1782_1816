@@ -98,6 +98,7 @@ namespace DalObject
                 // longitude is always a positive double between 0-2 (limited coordinate field)
                 customer.Longitude = random.NextDouble() * 2;
                 customer.Active = true;
+                customer.Password = customer.ID.ToString();
                 customers.Add(customer);
             }
 

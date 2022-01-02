@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿
+using System.Collections.Generic;
 using System.Linq;
 using DO;
 
@@ -31,6 +32,7 @@ namespace DalObject
             customer.Latitude = latitude;
             customer.Longitude = longitude;
             customer.Active = true;
+            customer.Password = id.ToString();
             DataSource.customers.Add(customer);
         }
 
@@ -63,6 +65,20 @@ namespace DalObject
             
             Customer customer = DataSource.customers[customerIndex];
             customer.Phone = phone;
+            DataSource.customers[customerIndex] = customer;
+        }
+
+        public void UpdateCustomerPassword(int customerID, string password)
+        {
+            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
+
+            if (customerIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no customer with the given ID.");
+            }
+
+            Customer customer = DataSource.customers[customerIndex];
+            customer.Password = password;
             DataSource.customers[customerIndex] = customer;
         }
 
@@ -104,6 +120,18 @@ namespace DalObject
             return from customer in DataSource.customers
                    where customer.Active
                    select customer;
+        }
+
+        public string GetCustomerPassword(int customerID)
+        {
+            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
+
+            if (customerIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no customer with the given ID.");
+            }
+
+            return DataSource.customers[customerIndex].Password;
         }
 
         #endregion

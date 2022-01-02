@@ -52,6 +52,18 @@ namespace BL
             }
         }
 
+        public void UpdateCustomerPassword(int customerID, string password)
+        {
+            try
+            {
+                dalObject.UpdateCustomerPassword(customerID, password);
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message, e);
+            }
+        }
+
         #endregion
 
         #region Remove Methods
@@ -113,6 +125,18 @@ namespace BL
                                                           let numPackagesExpected = dalObject.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null).Count()
                                                           select new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected);
             return customerToLists;
+        }
+
+        public string GetCustomerPassword(int customerID)
+        {
+            try
+            {
+                return dalObject.GetCustomerPassword(customerID); 
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message, e);
+            }
         }
 
         #endregion
