@@ -47,7 +47,13 @@
         <ListView x:Name="droneListView" ItemsSource="{Binding}" Margin="0,69,0,50" Grid.RowSpan="2" MouseDoubleClick="droneListView_MouseDoubleClick" Background="LightGreen">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="70"/>
+                    <GridViewColumn Header="Model" DisplayMemberBinding="{Binding Model}" Width="70"/>
+                    <GridViewColumn Header="Max. Weight" DisplayMemberBinding="{Binding MaxWeight}" Width="80"/>
+                    <GridViewColumn Header="Battery" DisplayMemberBinding="{Binding Battery}" Width="70"/>
+                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="100"/>
+                    <GridViewColumn Header="Location" DisplayMemberBinding="{Binding Location}" Width="300"/>
+                    <GridViewColumn Header="Package ID" DisplayMemberBinding="{Binding PackageID}" Width="70"/>
                 </GridView>
             </ListView.View>
             <ListView.GroupStyle>

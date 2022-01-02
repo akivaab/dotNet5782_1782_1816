@@ -36,7 +36,20 @@
             <Label x:Name="actions_MaxWeight" Margin="275,130,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label x:Name="actions_Battery" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label x:Name="actions_Status" Margin="275,190,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_PackageInTransfer" Margin="275,220,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label x:Name="actions_PackageInTransfer" Margin="275,220,0,0" MouseDoubleClick="package_MouseDoubleClick">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                        <Setter Property="VerticalAlignment" Value="Top"/>
+                        <Setter Property="FontSize" Value="14"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Blue"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
             <Label x:Name="actions_Location" Margin="275,300,0,0" Style="{StaticResource actionLabelStyle}"/>
 
             <Button Name="removeButton" Content="Remove" HorizontalAlignment="Left" Margin="30,0,0,20" Style="{StaticResource actionButtonStyle}" Click="removeButton_Click"/>

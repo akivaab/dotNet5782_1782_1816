@@ -5,9 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="CustomerListWindow" Height="450" Width="800" Closing="customerListWindow_Closing">
+        Title="CustomerListWindow" Height="450" Width="840" Closing="customerListWindow_Closing">
     <Grid Name="MainGrid" Background="MediumTurquoise">
         <ListView x:Name="customerListView" ItemsSource="{Binding}" Margin="0,20,0,50" MouseDoubleClick="customerListView_MouseDoubleClick" Background="LightGreen">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="70"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="70"/>
+                    <GridViewColumn Header="Phone Number" DisplayMemberBinding="{Binding Phone}" Width="100"/>
+                    <GridViewColumn Header="Packages Sent (Delivered)" DisplayMemberBinding="{Binding NumDeliveredPackagesSent}" Width="150"/>
+                    <GridViewColumn Header="Packages Sent (Undelivered)" DisplayMemberBinding="{Binding NumUndeliveredPackagesSent}" Width="165"/>
+                    <GridViewColumn Header="Packages Received" DisplayMemberBinding="{Binding NumPackagesReceived}" Width="120"/>
+                    <GridViewColumn Header="Packages Expected" DisplayMemberBinding="{Binding NumPackagesExpected}" Width="120"/>
+                </GridView>
+            </ListView.View>
         </ListView>
 
         <Button Name="refreshButton" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" FontWeight="Bold" Background="LightGoldenrodYellow" Click="refreshButton_Click"/>

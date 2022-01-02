@@ -122,6 +122,17 @@ namespace PL
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void package_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            BO.PackageToList packageToList = bl.FindPackages(p => p.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.PackageInTransfer).ID).Single();
+            new PackageWindow(bl, packageToList).Show();
+        }
+
+        /// <summary>
         /// Update the drone model.
         /// </summary>
         /// <param name="sender"></param>

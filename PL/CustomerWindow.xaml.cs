@@ -170,8 +170,8 @@ namespace PL
         /// <param name="e"></param>
         private void package_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            BO.PackageToList packageToList = bl.FindPackages(d => d.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.PackageForCustomer).ID).Single();
-            //new PackageWindow(bl, packageToList).Show();
+            BO.PackageToList packageToList = bl.FindPackages(p => p.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.PackageForCustomer).ID).Single();
+            new PackageWindow(bl, packageToList).Show();
         }
 
         /// <summary>

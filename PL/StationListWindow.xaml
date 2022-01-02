@@ -11,7 +11,10 @@
         <ListView x:Name="stationListView" ItemsSource="{Binding}" Margin="0,20,0,50" MouseDoubleClick="stationListView_MouseDoubleClick" Background="LightGreen">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="70"/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="70"/>
+                    <GridViewColumn Header="Available Charging Slots" DisplayMemberBinding="{Binding NumAvailableChargeSlots}" Width="170"/>
+                    <GridViewColumn Header="Occupied Charging Slots" DisplayMemberBinding="{Binding NumOccupiedChargeSlots}" Width="170"/>
                 </GridView>
             </ListView.View>
             <ListView.GroupStyle>
