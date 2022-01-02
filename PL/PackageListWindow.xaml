@@ -5,21 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="PackageListWindow" Height="450" Width="1000" Closing="packageListWindow_Closing">
+        Title="PackageListWindow" Height="450" Width="900" Closing="packageListWindow_Closing">
     <Window.Resources>
         <local:BoolInverter x:Key="boolInverter"/>
         <Style x:Key="comboBoxStyle" TargetType="ComboBox">
-            <Setter Property="IsEnabled" Value="{Binding ElementName=groupBySenderCheckBox, Path=IsChecked, Converter={StaticResource boolInverter}}"/>
-            <Setter Property="IsEnabled" Value="{Binding ElementName=groupByReceiverCheckBox, Path=IsChecked, Converter={StaticResource boolInverter}}"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Width" Value="180"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
             <Setter Property="Height" Value="50"/>
             <Setter Property="FontSize" Value="25"/>
         </Style>
         <Style x:Key="clearButtonStyle" TargetType="Button">
-            <Setter Property="IsEnabled" Value="{Binding ElementName=groupBySenderCheckBox, Path=IsChecked, Converter={StaticResource boolInverter}}"/>
-            <Setter Property="IsEnabled" Value="{Binding ElementName=groupByReceiverCheckBox, Path=IsChecked, Converter={StaticResource boolInverter}}"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Bottom"/>
             <Setter Property="Grid.Row" Value="1"/>
@@ -28,7 +23,7 @@
 
     <Grid Name="MainGrid" Background="MediumTurquoise">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50*"/>
+            <RowDefinition Height="70*"/>
             <RowDefinition Height="400*"/>
         </Grid.RowDefinitions>
 
@@ -53,7 +48,12 @@
         <ListView x:Name="packageListView" ItemsSource="{Binding}" Margin="0,69,0,50" Grid.RowSpan="2" MouseDoubleClick="packageListView_MouseDoubleClick" Background="LightGreen">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="70"/>
+                    <GridViewColumn Header="Sender" DisplayMemberBinding="{Binding SenderName}" Width="70"/>
+                    <GridViewColumn Header="Receiver" DisplayMemberBinding="{Binding ReceiverName}" Width="70"/>
+                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="70"/>
+                    <GridViewColumn Header="Weight" DisplayMemberBinding="{Binding Weight}" Width="70"/>
+                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="70"/>
                 </GridView>
             </ListView.View>
             <ListView.GroupStyle>
@@ -72,7 +72,8 @@
         <Button Name="clearStatusSelectorButton" Content="Clear Status Filter" Margin="20,0,0,15" Width="100" Height="20" Style="{StaticResource clearButtonStyle}" Click="clearStatusSelectorButton_Click"/>
         <Button Name="clearWeightSelectorButton" Content="Clear Weight Filter" Margin="130,0,0,15" Width="110" Height="20" Style="{StaticResource clearButtonStyle}" Click="clearWeightSelectorButton_Click"/>
         <Button Name="clearPrioritySelectorButton" Content="Clear Priority Filter" Margin="250,0,0,15" Width="110" Height="20" Style="{StaticResource clearButtonStyle}" Click="clearPrioritySelectorButton_Click"/>
-        <CheckBox Name="groupBySenderCheckBox" Content="Group By Sender" HorizontalAlignment="Left" Margin="370,0,0,18" Grid.Row="1" VerticalAlignment="Bottom" Checked="groupBySenderCheckBox_Checked" Unchecked="groupByCheckBox_Unchecked"/>
-        <CheckBox Name="groupByReceiverCheckBox" Content="Group By Receiver" HorizontalAlignment="Left" Margin="490,0,0,18" Grid.Row="1" VerticalAlignment="Bottom" IsChecked="{Binding ElementName=groupBySenderCheckBox, Path=IsChecked, Converter={StaticResource boolInverter}}" Checked="groupByReceiverCheckBox_Checked" Unchecked="groupByCheckBox_Unchecked"/>
+        <Button Name="clearRadioButtons" Content="Clear Groupings" Margin="475,0,0,5" Width="100" Height="20" Style="{StaticResource clearButtonStyle}" Click="clearRadioButtons_Click"/>
+        <RadioButton Name="groupBySenderRadioButton" Content="Group By Sender" HorizontalAlignment="Left" Margin="410,0,0,25" Grid.Row="1" VerticalAlignment="Bottom" Checked="groupBySenderRadioButton_Checked"/>
+        <RadioButton Name="groupByReceiverRadioButton" Content="Group By Receiver" HorizontalAlignment="Left" Margin="530,0,0,25" Grid.Row="1" VerticalAlignment="Bottom" Checked="groupByReceiverRadioButton_Checked"/>
     </Grid>
 </Window>

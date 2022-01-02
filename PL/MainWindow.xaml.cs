@@ -62,7 +62,7 @@ namespace PL
 
         private void showPackageListButton_Click(object sender, RoutedEventArgs e)
         {
-
+            new PackageListWindow(bl).Show();
         }
 
         //    /// <summary>

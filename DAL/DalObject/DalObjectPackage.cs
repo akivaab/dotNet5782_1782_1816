@@ -45,7 +45,7 @@ namespace DalObject
             package.Active = true;
             DataSource.Config.packageID++;
             DataSource.packages.Add(package);
-            return DataSource.Config.packageID;
+            return package.ID;
         }
 
         #endregion

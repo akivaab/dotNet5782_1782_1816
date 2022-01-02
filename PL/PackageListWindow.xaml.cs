@@ -71,18 +71,37 @@ namespace PL
             Predicate<object> weightPred = (object package) => { return (package as BO.PackageToList).Weight == (BO.Enums.WeightCategories)weightSelector.SelectedItem; };
             Predicate<object> priorityPred = (object package) => { return (package as BO.PackageToList).Priority == (BO.Enums.Priorities)prioritySelector.SelectedItem; };
 
-            view.Filter = defaultPred;
-            if (statusSelector.SelectedItem != null)
+            if (statusSelector.SelectedItem == null && weightSelector.SelectedItem == null && prioritySelector.SelectedItem == null)
             {
-                view.Filter = (object package) => view.Filter(package) && statusPred(package);
+                view.Filter = defaultPred;
             }
-            if (weightSelector.SelectedItem != null)
+            else if (weightSelector.SelectedItem == null && prioritySelector.SelectedItem == null)
             {
-                view.Filter = (object package) => view.Filter(package) && weightPred(package);
+                view.Filter = statusPred;
             }
-            if (prioritySelector.SelectedItem != null)
+            else if (statusSelector.SelectedItem == null && prioritySelector.SelectedItem == null)
             {
-                view.Filter = (object package) => view.Filter(package) && priorityPred(package);
+                view.Filter = weightPred;
+            }
+            else if (statusSelector.SelectedItem == null && weightSelector.SelectedItem == null)
+            {
+                view.Filter = priorityPred;
+            }
+            else if (prioritySelector.SelectedItem == null)
+            {
+                view.Filter = (object package) => statusPred(package) && weightPred(package);
+            }
+            else if (weightSelector.SelectedItem == null)
+            {
+                view.Filter = (object package) => statusPred(package) && priorityPred(package);
+            }
+            else if (statusSelector.SelectedItem == null)
+            {
+                view.Filter = (object package) => weightPred(package) && priorityPred(package);
+            }
+            else
+            {
+                view.Filter = (object package) => statusPred(package) && weightPred(package) && priorityPred(package);
             }
         }
 
@@ -146,9 +165,10 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void groupBySenderCheckBox_Checked(object sender, RoutedEventArgs e)
+        private void groupBySenderRadioButton_Checked(object sender, RoutedEventArgs e)
         {
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(packageListView.ItemsSource);
+            view.GroupDescriptions.Clear();
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("SenderName");
             view.GroupDescriptions.Add(groupDescription);
         }
@@ -158,9 +178,10 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void groupByReceiverCheckBox_Checked(object sender, RoutedEventArgs e)
+        private void groupByReceiverRadioButton_Checked(object sender, RoutedEventArgs e)
         {
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(packageListView.ItemsSource);
+            view.GroupDescriptions.Clear();
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("ReceiverName");
             view.GroupDescriptions.Add(groupDescription);
         }
@@ -170,8 +191,10 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void groupByCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        private void clearRadioButtons_Click(object sender, RoutedEventArgs e)
         {
+            groupBySenderRadioButton.IsChecked = false;
+            groupByReceiverRadioButton.IsChecked = false;
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(packageListView.ItemsSource);
             view.GroupDescriptions.Clear();
         }
@@ -181,11 +204,11 @@ namespace PL
         /// </summary>
         private void refreshButton_Click(object sender, RoutedEventArgs e)
         {
-            bool? groupedBySender = groupBySenderCheckBox.IsChecked;
-            bool? groupedByReceiver = groupByReceiverCheckBox.IsChecked;
+            bool? groupedBySender = groupBySenderRadioButton.IsChecked;
+            bool? groupedByReceiver = groupByReceiverRadioButton.IsChecked;
             BO.Enums.PackageStatus? packageStatus = (BO.Enums.PackageStatus?)statusSelector.SelectedItem;
             BO.Enums.WeightCategories? weightCategories = (BO.Enums.WeightCategories?)weightSelector.SelectedItem;
-            BO.Enums.Priorities? priorities = (BO.Enums.Priorities)prioritySelector.SelectedItem;
+            BO.Enums.Priorities? priorities = (BO.Enums.Priorities?)prioritySelector.SelectedItem;
 
             packageToListCollection.Clear();
             foreach (BO.PackageToList packageToList in bl.GetPackagesList())
@@ -196,8 +219,8 @@ namespace PL
             statusSelector.SelectedItem = packageStatus;
             weightSelector.SelectedItem = weightCategories;
             prioritySelector.SelectedItem = priorities;
-            groupBySenderCheckBox.IsChecked = groupedBySender;
-            groupByReceiverCheckBox.IsChecked = groupedByReceiver;
+            groupBySenderRadioButton.IsChecked = groupedBySender;
+            groupByReceiverRadioButton.IsChecked = groupedByReceiver;
         }
 
         /// <summary>
