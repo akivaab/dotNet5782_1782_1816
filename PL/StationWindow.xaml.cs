@@ -148,6 +148,8 @@ namespace PL
                 MessageBox.Show("Some of the information supplied is invalid. Please enter other information." +
                     "\n(Are the name, and number of charging slots all numbers?)");
             }
+
+            loadStationData();
         }
 
         /// <summary>
@@ -197,7 +199,7 @@ namespace PL
                 actions_AvailableChargeSlots.Content = stationEntity.AvailableChargeSlots;
                 actions_DronesCharging.ItemsSource = stationEntity.DronesCharging;
 
-                actions_TotalChargeSlots.Text = (station.NumAvailableChargeSlots + station.NumOccupiedChargeSlots).ToString();
+                actions_TotalChargeSlots.Text = (stationEntity.AvailableChargeSlots + station.NumOccupiedChargeSlots).ToString();
             }
             catch (BO.UndefinedObjectException)
             {

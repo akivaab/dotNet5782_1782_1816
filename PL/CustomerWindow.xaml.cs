@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 namespace PL
 {
     /// <summary>
-    /// Lógica interna para CustomerWindow.xaml
+    /// Interaction logic for CustomerWindow.xaml
     /// </summary>
     public partial class CustomerWindow : Window
     {
@@ -53,7 +53,7 @@ namespace PL
         /// CustomerWindow constructor for performing actions on a customer.
         /// </summary>
         /// <param name="bl">A BL object.</param>
-        /// <param name="station">The station being acted upon.</param>
+        /// <param name="customer">The station being acted upon.</param>
         public CustomerWindow(BlApi.IBL bl, BO.CustomerToList customer)
         {
             InitializeComponent();
@@ -185,8 +185,8 @@ namespace PL
 
                 actions_CustomerID.Content = customerEntity.ID;
                 actions_Name.Text = customerEntity.Name;
-                actions_Location.Content = customerEntity.Location;
                 actions_PhoneNumber.Text = customerEntity.Phone;
+                actions_Location.Content = customerEntity.Location;
                 actions_PackageToSend.ItemsSource = customerEntity.PackagesToSend;
                 actions_PackageToReceive.ItemsSource = customerEntity.PackagesToReceive;
 

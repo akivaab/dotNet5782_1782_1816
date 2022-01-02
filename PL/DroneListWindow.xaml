@@ -41,10 +41,10 @@
             <ComboBox Grid.Column="1" Name="statusSelector" Style="{StaticResource comboBoxStyle}" SelectionChanged="selector_SelectionChanged"/>
             <Label Grid.Column="2" Name="maxWeightLabel" Content="Max. Weight:" HorizontalAlignment="Center" VerticalAlignment="Center" Width="180" Height="50" FontSize="30" HorizontalContentAlignment="Center"/>
             <ComboBox Grid.Column="3" Name="maxWeightSelector" Style="{StaticResource comboBoxStyle}" SelectionChanged="selector_SelectionChanged"/>
-            <Button Grid.Column="0" Name="refreshButton" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" FontWeight="Bold" Background="Fuchsia" Click="refreshButton_Click"/>
+            <Button Grid.Column="0" Name="refreshButton" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" FontWeight="Bold" Background="LightGoldenrodYellow" Click="refreshButton_Click"/>
         </Grid>
 
-        <ListView x:Name="droneListView" ItemsSource="{Binding}" Margin="0,69,0,50" Grid.RowSpan="2" MouseDoubleClick="droneListView_MouseDoubleClick" Background="Pink">
+        <ListView x:Name="droneListView" ItemsSource="{Binding}" Margin="0,69,0,50" Grid.RowSpan="2" MouseDoubleClick="droneListView_MouseDoubleClick" Background="LightGreen">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>

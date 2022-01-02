@@ -39,7 +39,7 @@
             <Label x:Name="actions_PackageInTransfer" Margin="275,220,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label x:Name="actions_Location" Margin="275,300,0,0" Style="{StaticResource actionLabelStyle}"/>
 
-            <Button Name="removeButton" Content="Remove" HorizontalAlignment="Left" Margin="30,0,0,20" Background="Crimson" Style="{StaticResource actionButtonStyle}" Click="removeButton_Click"/>
+            <Button Name="removeButton" Content="Remove" HorizontalAlignment="Left" Margin="30,0,0,20" Style="{StaticResource actionButtonStyle}" Click="removeButton_Click"/>
             <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,30,20" Style="{StaticResource actionButtonStyle}" Click="closeButton_Click"/>
             <Button Name="updateButton" Content="Update" HorizontalAlignment="Right" Margin="0,0,330,20" Style="{StaticResource actionButtonStyle}" Click="updateButton_Click"/>
             <Button Name="chargeButton" Content="Charge" HorizontalAlignment="Right" Margin="0,0,230,20" Style="{StaticResource actionButtonStyle}" Click="chargeButton_Click"/>

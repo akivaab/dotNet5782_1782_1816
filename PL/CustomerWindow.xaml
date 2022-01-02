@@ -5,41 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="CustomerWindow" Height="850" Width="1200" Closing="customerWindow_Closing">
+        Title="CustomerWindow" Height="600" Width="1150" Closing="customerWindow_Closing">
     <Grid Background="{StaticResource background}">
     
         
-        <Grid x:Name="add" Visibility="Collapsed" Grid.ColumnSpan="2">
-            <Label Content="Customer ID:" Margin="0,80,150,0" Style="{StaticResource addLabelStyle}" RenderTransformOrigin="0.525,-0.096"/>
-            <Label Content="Name:" Margin="0,130,150,0" Style="{StaticResource addLabelStyle}"/>
-            <Label Content="Location:" Margin="0,230,150,0" Style="{StaticResource addLabelStyle}"/>
-            <Label Content="Phone Number:" Margin="0,180,150,0" Style="{StaticResource addLabelStyle}"/>
+        <Grid x:Name="add">
+            <Label Content="Customer ID:" Margin="0,100,150,0" Style="{StaticResource addLabelStyle}"/>
+            <Label Content="Name:" Margin="0,150,150,0" Style="{StaticResource addLabelStyle}"/>
+            <Label Content="Phone Number:" Margin="0,200,150,0" Style="{StaticResource addLabelStyle}"/>
+            <Label Content="Location:" Margin="0,250,150,0" Style="{StaticResource addLabelStyle}"/>
 
-            <TextBox Name="add_CustomerID" Margin="150,80,0,0" Style="{StaticResource addTextBoxStyle}"/>
-            <TextBox Name="add_Name" Margin="150,130,0,0" Style="{StaticResource addTextBoxStyle}"/>
-            <TextBox Name="add_Latitude" Margin="150,230,0,0" Style="{StaticResource addTextBoxStyle}"/>
-            <TextBlock Text="," Margin="285,230,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="28"/>
-            <TextBox Name="add_Longitude" Margin="420,230,0,0" Style="{StaticResource addTextBoxStyle}"/>
-            <TextBox Name="add_PhoneNumber" Margin="150,180,0,0" Style="{StaticResource addTextBoxStyle}"/>
+            <TextBox Name="add_CustomerID" Margin="150,100,0,0" Style="{StaticResource addTextBoxStyle}"/>
+            <TextBox Name="add_Name" Margin="150,150,0,0" Style="{StaticResource addTextBoxStyle}"/>
+            <TextBox Name="add_PhoneNumber" Margin="150,200,0,0" Style="{StaticResource addTextBoxStyle}"/>
+            <TextBox Name="add_Latitude" Margin="150,250,0,0" Style="{StaticResource addTextBoxStyle}"/>
+            <TextBlock Text="," Margin="285,250,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="28"/>
+            <TextBox Name="add_Longitude" Margin="420,250,0,0" Style="{StaticResource addTextBoxStyle}"/>
 
             <Button Name="addButton" Content="Add" HorizontalAlignment="Center" Margin="0,0,0,90" VerticalAlignment="Bottom" Width="75" FontSize="16" Click="addButton_Click"/>
             <Button Name="cancelButton" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,30,20" VerticalAlignment="Bottom" Width="75" FontSize="16" Click="closeButton_Click"/>
         </Grid>
 
         <Grid x:Name="actions" Grid.ColumnSpan="2" >
-            <Label Content="Customer ID:" HorizontalAlignment="Left" Margin="100,70,0,0" VerticalAlignment="Top" FontSize="14"/>
-            <Label Content="Name:" HorizontalAlignment="Left" Margin="100,100,0,0" VerticalAlignment="Top" FontSize="14"/>
-            <Label Content="Location:" HorizontalAlignment="Left" Margin="100,160,0,0" VerticalAlignment="Top" FontSize="14"/>
-            <Label Content="Phone Number:" HorizontalAlignment="Left" Margin="100,130,0,0" VerticalAlignment="Top" FontSize="14"/>
-            <Label Content="Packages to Send:" HorizontalAlignment="Left" Margin="100,190,0,0" VerticalAlignment="Top" FontSize="14"/>
-            <Label Content="Packages to Receive:" HorizontalAlignment="Left" Margin="100,320,0,0" VerticalAlignment="Top" FontSize="14"/>
+            <Label Content="Customer ID:" Margin="100,70,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="Name:" Margin="100,100,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="Location:" Margin="100,160,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="Phone Number:" Margin="100,130,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="Packages to Send:" Margin="100,190,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="Packages to Receive:" Margin="100,330,0,0" Style="{StaticResource actionLabelStyle}"/>
 
             <Label x:Name="actions_CustomerID" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
             <TextBox x:Name="actions_Name" HorizontalAlignment="Left" Margin="275,100,0,0" VerticalAlignment="Top" Width="100" FontSize="14" Height="28" RenderTransformOrigin="0.49,0.573"/>
             <Label x:Name="actions_Location" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
             <TextBox x:Name="actions_PhoneNumber" HorizontalAlignment="Left" Margin="275,130,0,0" VerticalAlignment="Top" Width="100" FontSize="14" Height="28" RenderTransformOrigin="0.49,0.573"/>
-            <ListBox x:Name="actions_PackageToSend" HorizontalAlignment="Left" Margin="275,190,0,0" VerticalAlignment="Top" FontSize="14" MouseDoubleClick="package_MouseDoubleClick"/>
-            <ListBox x:Name="actions_PackageToReceive" HorizontalAlignment="Left" Margin="275,320,0,0" VerticalAlignment="Top" FontSize="14" MouseDoubleClick="package_MouseDoubleClick"/>
+            <ListBox x:Name="actions_PackageToSend" HorizontalAlignment="Left" Margin="275,190,0,0" VerticalAlignment="Top" FontSize="14" Height="140" Width="850" MouseDoubleClick="package_MouseDoubleClick"/>
+            <ListBox x:Name="actions_PackageToReceive" HorizontalAlignment="Left" Margin="275,330,0,0" VerticalAlignment="Top" FontSize="14" Height="140" Width="850" MouseDoubleClick="package_MouseDoubleClick"/>
 
             <Button Name="removeButton" Content="Remove" HorizontalAlignment="Left" Margin="30,0,0,20" Style="{StaticResource actionButtonStyle}"  Click="removeButton_Click"/>
             <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,30,20" Style="{StaticResource actionButtonStyle}" Click="closeButton_Click"/>
