@@ -63,24 +63,21 @@ namespace PL
         /// <param name="e"></param>
         private void selector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
             if (statusSelector.SelectedItem == null && maxWeightSelector.SelectedItem == null)
             {
-                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
                 view.Filter = (object o) => { return true; };
             }
             else if (statusSelector.SelectedItem == null)
             {
-                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
                 view.Filter = (object drone) => { return (drone as BO.DroneToList).MaxWeight == (BO.Enums.WeightCategories)maxWeightSelector.SelectedItem; };
             }
             else if (maxWeightSelector.SelectedItem == null)
             {
-                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
                 view.Filter = (object drone) => { return (drone as BO.DroneToList).Status == (BO.Enums.DroneStatus)statusSelector.SelectedItem; };
             }
             else
             {
-                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
                 view.Filter = (object drone) => { return (drone as BO.DroneToList).MaxWeight == (BO.Enums.WeightCategories)maxWeightSelector.SelectedItem && (drone as BO.DroneToList).Status == (BO.Enums.DroneStatus)statusSelector.SelectedItem; };
             }
         }
@@ -131,31 +128,6 @@ namespace PL
         }
 
         /// <summary>
-        /// Close the window.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void closeButton_Click(object sender, RoutedEventArgs e)
-        {
-            allowClose = true;
-            Close();
-        }
-
-        /// <summary>
-        /// Prevent the window from being closed by force via the X button.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void droneListWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (!allowClose)
-            {
-                e.Cancel = true;
-                MessageBox.Show("Please use the Close button on the lower right.");
-            }
-        }
-
-        /// <summary>
         /// Group the drones in droneListView by status.
         /// </summary>
         /// <param name="sender"></param>
@@ -196,6 +168,31 @@ namespace PL
             statusSelector.SelectedItem = droneStatus;
             maxWeightSelector.SelectedItem = weightCategories;
             groupByStatusCheckBox.IsChecked = grouped;
+        }
+
+        /// <summary>
+        /// Close the window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void closeButton_Click(object sender, RoutedEventArgs e)
+        {
+            allowClose = true;
+            Close();
+        }
+
+        /// <summary>
+        /// Prevent the window from being closed by force via the X button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void droneListWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!allowClose)
+            {
+                e.Cancel = true;
+                MessageBox.Show("Please use the Close button on the lower right.");
+            }
         }
     }
 }
