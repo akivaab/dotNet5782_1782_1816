@@ -86,11 +86,11 @@ namespace PL
             bool isDouble1 = double.TryParse(add_Latitude.Text, out latitude);
             bool isDouble2 = double.TryParse(add_Longitude.Text, out longitude);
 
-            if (isInteger1 && isInteger2 && isDouble1 && isDouble2 && id > 0 && phoneNumber.ToString().Length == 9)
+            if (isInteger1 && isInteger2 && isDouble1 && isDouble2 && id > 0)
             {
                 try
                 {
-                    bl.AddCustomer(id, add_Name.Text, phoneNumber.ToString() , new(latitude, longitude));
+                    bl.AddCustomer(id, add_Name.Text, add_PhoneNumber.Text, new(latitude, longitude));
                     MessageBox.Show("Customer successfully added.");
 
                     allowClose = true;
@@ -98,7 +98,7 @@ namespace PL
                 }
                 catch (BO.IllegalArgumentException ex)
                 {
-                    MessageBox.Show(ex.Message + "\nThe latitude must be between -1 and 1 and the longitude between 0 and 2.");
+                    MessageBox.Show(ex.Message + "\nThe latitude must be between -1 and 1, the longitude between 0 and 2, and the phone number 9 digits long.");
                 }
                 catch (BO.NonUniqueIdException ex)
                 {
@@ -108,9 +108,8 @@ namespace PL
             else
             {
                 MessageBox.Show("Some of the information supplied is invalid. Please enter other information." +
-                    (isInteger1 || isInteger2 ? "" : "\n(Are the ID and PhoneNumbers numbers)") +
-                    (isDouble1 || isDouble2 ? "" : "\n(Are the latitude/longitude of the location floating point values?)") +
-                    (phoneNumber.ToString().Length == 9 ? "" : "\n(Please provide a valid phone number)"));
+                    (isInteger1 || isInteger2 ? "" : "\n(Are the ID and phone number numbers?)") +
+                    (isDouble1 || isDouble2 ? "" : "\n(Are the latitude/longitude of the location floating point values?)"));
             }
         }
 
@@ -124,17 +123,21 @@ namespace PL
             int phoneNumber;            
             bool isInteger = int.TryParse(actions_PhoneNumber.Text, out phoneNumber);
 
-            if (isInteger && phoneNumber.ToString().Length == 9)
+            if (isInteger)
             {
                 try
                 {
-                    bl.UpdateCustomer(customer.ID, actions_Name.Text , phoneNumber.ToString());
+                    bl.UpdateCustomer(customer.ID, actions_Name.Text, actions_PhoneNumber.Text);
                     MessageBox.Show("Customer successfully updated.");
                 }
                 catch (BO.UndefinedObjectException)
                 {
                     MessageBox.Show("Error: This customer is not in the system.\nTry closing this window and refreshing the list.");
-                }                
+                }    
+                catch (BO.IllegalArgumentException ex)
+                {
+                    MessageBox.Show(ex.Message + "\nIt must be 9 digits long.");
+                }
             }
             else
             {

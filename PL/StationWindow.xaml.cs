@@ -88,7 +88,7 @@ namespace PL
             bool isDouble1 = double.TryParse(add_Latitude.Text, out latitude);
             bool isDouble2 = double.TryParse(add_Longitude.Text, out longitude);
 
-            if (isInteger1 && isInteger2 && isInteger3 && isDouble1 && isDouble2 && id > 0 && numAvailableChargeSlots > 0)
+            if (isInteger1 && isInteger2 && isInteger3 && isDouble1 && isDouble2 && id > 0)
             {
                 try
                 {
@@ -100,7 +100,7 @@ namespace PL
                 }
                 catch (BO.IllegalArgumentException ex)
                 {
-                    MessageBox.Show(ex.Message + "\nThe latitude must be between -1 and 1 and the longitude between 0 and 2.");
+                    MessageBox.Show(ex.Message + "\nThe latitude must be between -1 and 1, the longitude between 0 and 2,\nand there cannot be a negative number of charge slots.");
                 }
                 catch (BO.NonUniqueIdException ex)
                 {

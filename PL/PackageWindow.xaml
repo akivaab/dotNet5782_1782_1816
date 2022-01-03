@@ -47,7 +47,6 @@
             
             <Button Name="removeButton" Content="Remove" HorizontalAlignment="Left" Margin="30,0,0,20" Style="{StaticResource actionButtonStyle}" Click="removeButton_Click"/>
             <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,30,20" Style="{StaticResource actionButtonStyle}" Click="closeButton_Click"/>
-            <Button Name="approveButton" Content="Approve" HorizontalAlignment="Right" Margin="0,0,130,20" Style="{StaticResource actionButtonStyle}" Click="approveButton_Click"/>
         </Grid>
     </Grid>
 </Window>

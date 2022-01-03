@@ -31,7 +31,14 @@ namespace PL
         public MainWindow()
         {
             InitializeComponent();
-            bl = BlApi.BlFactory.GetBl();
+            try
+            {
+                bl = BlApi.BlFactory.GetBl();
+            }
+            catch (BO.EmptyListException ex)
+            {
+                MessageBox.Show(ex.Message + "\nCongratulations, you achieved the near impossible situation where no randomly generated customer received a package yet!");
+            }
         }
 
         /// <summary>

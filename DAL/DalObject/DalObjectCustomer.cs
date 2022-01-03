@@ -14,11 +14,6 @@ namespace DalObject
 
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {
-            if (latitude < -1 || latitude > 1 || longitude < 0 || longitude > 2) //limited coordinate field
-            {
-                throw new IllegalArgumentException("The given latitude and/or longitude is out of our coordinate field range.");
-            }
-
             int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == id);
             if (customerIndex != -1 && DataSource.customers[customerIndex].Active)
             {

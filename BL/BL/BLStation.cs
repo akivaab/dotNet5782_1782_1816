@@ -14,13 +14,18 @@ namespace BL
 
         public Station AddStation(int stationID, int name, Location location, int numAvailableChargingSlots)
         {
+            if (numAvailableChargingSlots < 0)
+            {
+                throw new IllegalArgumentException("There cannot be a negative number of available charging slots.");
+            }
+            if (location.Latitude < -1 || location.Latitude > 1 || location.Longitude < 0 || location.Longitude > 2) //limited coordinate field
+            {
+                throw new IllegalArgumentException("The given latitude and/or longitude is out of our coordinate field range.");
+            }
+
             try
             {
                 dalObject.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
-            }
-            catch (DO.IllegalArgumentException e)
-            {
-                throw new IllegalArgumentException(e.Message, e);
             }
             catch (DO.NonUniqueIdException e)
             {

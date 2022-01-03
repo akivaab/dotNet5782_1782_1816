@@ -57,7 +57,7 @@ namespace DalObject
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID);
-            int droneChargeIndex = DataSource.droneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID);
+            int droneChargeIndex = DataSource.droneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID && droneCharge.StationID == stationID);
             
             if (droneIndex == -1 || stationIndex == -1)
             {

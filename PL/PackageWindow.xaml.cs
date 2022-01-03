@@ -111,11 +111,6 @@ namespace PL
             }
         }
 
-        private void approveButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         /// <summary>
         /// Remove the package from the system.
         /// </summary>

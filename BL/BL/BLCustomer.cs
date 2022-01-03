@@ -13,13 +13,18 @@ namespace BL
 
         public Customer AddCustomer(int customerID, string name, string phone, Location location)
         {
+            if (location.Latitude < -1 || location.Latitude > 1 || location.Longitude < 0 || location.Longitude > 2) //limited coordinate field
+            {
+                throw new IllegalArgumentException("The given latitude and/or longitude is out of our coordinate field range.");
+            }
+            if (phone.Length != 9)
+            {
+                throw new IllegalArgumentException("The phone number is invalid.");
+            }
+
             try
             {
                 dalObject.AddCustomer(customerID, name, phone, location.Latitude, location.Longitude);
-            }
-            catch (DO.IllegalArgumentException e)
-            {
-                throw new IllegalArgumentException(e.Message, e);
             }
             catch (DO.NonUniqueIdException e)
             {
@@ -35,6 +40,11 @@ namespace BL
 
         public void UpdateCustomer(int customerID, string name = "", string phone = "")
         {
+            if (phone != "" && phone.Length != 9)
+            {
+                throw new IllegalArgumentException("The phone number is invalid.");
+            }
+
             try
             {
                 if (name != "")
@@ -54,6 +64,11 @@ namespace BL
 
         public void UpdateCustomerPassword(int customerID, string password)
         {
+            if (password.Length < 6)
+            {
+                throw new IllegalArgumentException("The password is not secure.");
+            }
+
             try
             {
                 dalObject.UpdateCustomerPassword(customerID, password);

@@ -14,11 +14,6 @@ namespace DalObject
 
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
         {
-            if (latitude < -1 || latitude > 1 || longitude < 0 || longitude > 2) //limited coordinate field
-            {
-                throw new IllegalArgumentException("The given latitude and/or longitude is out of our coordinate field range.");
-            }
-
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == id && station.Active);
             if (stationIndex != -1 && DataSource.stations[stationIndex].Active)
             {

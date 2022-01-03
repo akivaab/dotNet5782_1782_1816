@@ -24,16 +24,16 @@
         <TabControl x:Name="login" Background="{StaticResource background}" SelectedIndex="0">
             <TabItem Header="Welcome" Visibility="Collapsed">
                 <Grid>
-                    <TextBlock Text="Welcome!" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,15,0,0" FontSize="35" FontFamily="Comic Sans MS" TextDecorations="Underline" Foreground="AliceBlue"/>
+                    <TextBlock Text="Welcome!" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,15,0,0" FontSize="35" FontFamily="Constantia" TextDecorations="Underline" Foreground="AliceBlue"/>
                     <Ellipse Fill="LawnGreen" Height="200" Width="200" StrokeThickness="2" Stroke="Gold" Margin="0,0,0,30">
                         <Ellipse.Triggers>
                             <EventTrigger RoutedEvent="MouseEnter">
                                 <EventTrigger.Actions>
                                     <BeginStoryboard>
                                         <Storyboard>
-                                            <DoubleAnimation Duration="0:0:0.500" Storyboard.TargetProperty="Height" To="218" AutoReverse="True"/>
-                                            <DoubleAnimation Duration="0:0:0.500" Storyboard.TargetProperty="Width" To="218" AutoReverse="True"/>
-                                            <DoubleAnimation Duration="0:0:0.500" Storyboard.TargetProperty="StrokeThickness" To="8" AutoReverse="True"/>
+                                            <DoubleAnimation Duration="0:0:0.500" Storyboard.TargetProperty="Height" To="218"/>
+                                            <DoubleAnimation Duration="0:0:0.500" Storyboard.TargetProperty="Width" To="218"/>
+                                            <DoubleAnimation Duration="0:0:0.500" Storyboard.TargetProperty="StrokeThickness" To="8"/>
                                         </Storyboard>
                                     </BeginStoryboard>
                                 </EventTrigger.Actions>
@@ -41,7 +41,7 @@
                         </Ellipse.Triggers>
                     </Ellipse>
                     <Image Source="Drone_Icon.jpg" Height="140" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,30" RenderTransformOrigin="0.5,0.5"/>
-                    <TextBlock Text="Click a tab above to sign in! " HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,50" FontSize="35" FontFamily="Comic Sans MS" Foreground="MidnightBlue"/>
+                    <TextBlock Text="Click a tab above to sign in! " HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,45" FontSize="35" FontFamily="Constantia" Foreground="MidnightBlue"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Employee" Height="50"  Width="390" Background="Beige" FontSize="25">
