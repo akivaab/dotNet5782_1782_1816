@@ -259,27 +259,29 @@ namespace BL
 
                 for (int i = 0; i < dalPackages.Count(); i++)
                 {
+                    DO.Package package = dalPackages.ElementAt(i);
+
                     //if no drone is assigned
-                    if (dalPackages.ElementAt(i).DroneID == null)
+                    if (package.DroneID == null)
                     {
-                        dalObject.ModifyPackageStatus(dalPackages.ElementAt(i).ID, null, null, null);
+                        dalObject.ModifyPackageStatus(package.ID, null, null, null);
                     }
                     else
                     {
                         //if the package was delivered
-                        if (dalPackages.ElementAt(i).Delivered != null)
+                        if (package.Delivered != null)
                         {
-                            dalObject.ModifyPackageStatus(dalPackages.ElementAt(i).ID, DateTime.Now, DateTime.Now, DateTime.Now);
+                            dalObject.ModifyPackageStatus(package.ID, DateTime.Now, DateTime.Now, DateTime.Now);
                         }
                         //if the package wasn't delivered but was collected
-                        else if (dalPackages.ElementAt(i).Collected != null)
+                        else if (package.Collected != null)
                         {
-                            dalObject.ModifyPackageStatus(dalPackages.ElementAt(i).ID, DateTime.Now, DateTime.Now, null);
+                            dalObject.ModifyPackageStatus(package.ID, DateTime.Now, DateTime.Now, null);
                         }
                         //even if the package wasn't collected, it was assigned
                         else
                         {
-                            dalObject.ModifyPackageStatus(dalPackages.ElementAt(i).ID, DateTime.Now, null, null);
+                            dalObject.ModifyPackageStatus(package.ID, DateTime.Now, null, null);
                         }
                     }
                 }
@@ -302,27 +304,29 @@ namespace BL
                 //iterate through the packages in reverse to avoid skipping any
                 for (int i = dalPackages.Count() - 1; i >= 0; i--)
                 {
+                    DO.Package package = dalPackages.ElementAt(i);
+
                     //remove packages whose sender is the receiver
-                    if (dalPackages.ElementAt(i).SenderID == dalPackages.ElementAt(i).ReceiverID)
+                    if (package.SenderID == package.ReceiverID)
                     {
-                        dalObject.RemovePackage(dalPackages.ElementAt(i).ID);
+                        dalObject.RemovePackage(package.ID);
                     }
                     //if this package was assigned to a drone
-                    else if (dalPackages.ElementAt(i).DroneID != null)
+                    else if (package.DroneID != null)
                     {
                         //remove packages whose weight is greater than the drone assigned to it can handle
-                        if (dalPackages.ElementAt(i).Weight > dalObject.GetDrone((int)dalPackages.ElementAt(i).DroneID).MaxWeight)
+                        if (package.Weight > dalObject.GetDrone((int)package.DroneID).MaxWeight)
                         {
-                            dalObject.RemovePackage(dalPackages.ElementAt(i).ID);
+                            dalObject.RemovePackage(package.ID);
                         }
                         //remove undelivered packages that were assigned to a drone already assigned to a different undelivered package
-                        else if (dalPackages.ElementAt(i).Delivered == null)
+                        else if (package.Delivered == null)
                         {
                             for (int j = i - 1; j >= 0; j--)
                             {
-                                if (dalPackages.ElementAt(j).Delivered == null && dalPackages.ElementAt(i).DroneID == dalPackages.ElementAt(j).DroneID)
+                                if (dalPackages.ElementAt(j).Delivered == null && package.DroneID == dalPackages.ElementAt(j).DroneID)
                                 {
-                                    dalObject.RemovePackage(dalPackages.ElementAt(i).ID);
+                                    dalObject.RemovePackage(package.ID);
                                     break;
                                 }
                             }

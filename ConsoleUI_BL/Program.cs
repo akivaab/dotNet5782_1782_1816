@@ -8,11 +8,11 @@ namespace ConsoleUI_BL
     /// </summary>
     class Program
     {
+        static BlApi.IBL bl = BlApi.BlFactory.GetBl();
         static void Main(string[] args)
         {
             try
             {
-                BlApi.IBL bl = BlApi.BlFactory.GetBl();
                 int option;
                 do
                 {
@@ -27,16 +27,16 @@ namespace ConsoleUI_BL
                     switch (option)
                     {
                         case 1:
-                            AddingOptions(bl);
+                            AddingOptions();
                             break;
                         case 2:
-                            UpdatingOptions(bl);
+                            UpdatingOptions();
                             break;
                         case 3:
-                            DisplayingOptions(bl);
+                            DisplayingOptions();
                             break;
                         case 4:
-                            ListDisplayingOptions(bl);
+                            ListDisplayingOptions();
                             break;
                         case 5:
                             Console.WriteLine("Bye");
@@ -56,7 +56,7 @@ namespace ConsoleUI_BL
         /// All the options of adding entities to the system.
         /// </summary>
         /// <param name="bl">A BL instance.</param>
-        public static void AddingOptions(BlApi.IBL bl)
+        public static void AddingOptions()
         {
             Console.WriteLine("Adding Options:");
             Console.WriteLine("1. Add new base station");
@@ -153,7 +153,7 @@ namespace ConsoleUI_BL
         /// All the options of updating the entities of the system.
         /// </summary>
         /// <param name="bl">A BL instance.</param>
-        public static void UpdatingOptions(BlApi.IBL bl)
+        public static void UpdatingOptions()
         {
             Console.WriteLine("Updatinging Options:");
             Console.WriteLine("1. Update drone model");
@@ -302,7 +302,7 @@ namespace ConsoleUI_BL
         /// All the options of displaying the entities of the system.
         /// </summary>
         /// <param name="bl">A BL instance.</param>
-        public static void DisplayingOptions(BlApi.IBL bl)
+        public static void DisplayingOptions()
         {
             Console.WriteLine("Displaying Options:");
             Console.WriteLine("1. Display station");
@@ -354,7 +354,7 @@ namespace ConsoleUI_BL
         /// All the options of displaying a list of the entities of the system.
         /// </summary>
         /// <param name="bl">A BL instance.</param>
-        public static void ListDisplayingOptions(BlApi.IBL bl)
+        public static void ListDisplayingOptions()
         {
             Console.WriteLine("List Displaying Options:");
             Console.WriteLine("1. Display all stations");

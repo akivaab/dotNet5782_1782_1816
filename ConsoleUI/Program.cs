@@ -8,9 +8,9 @@ namespace ConsoleUI
     /// </summary>
     class Program
     {
+        static DalApi.IDal dal = DalApi.DalFactory.GetDal("DalObject");
         static void Main(string[] args)
         {
-            DalApi.IDal dal = DalApi.DalFactory.GetDal("DalObject");
             int option;
             do
             {
@@ -25,16 +25,16 @@ namespace ConsoleUI
                 switch (option)
                 {
                     case 1:
-                        AddingOptions(dal);
+                        AddingOptions();
                         break;
                     case 2:
-                        UpdatingOptions(dal);
+                        UpdatingOptions();
                         break;
                     case 3:
-                        DisplayingOptions(dal);
+                        DisplayingOptions();
                         break;
                     case 4:
-                        ListDisplayingOptions(dal);
+                        ListDisplayingOptions();
                         break;
                     case 5:
                         Console.WriteLine("Bye");
@@ -49,7 +49,7 @@ namespace ConsoleUI
         /// All the options of adding entities to the system.
         /// </summary>
         /// <param name="dal">A DalObject instance.</param>
-        public static void AddingOptions(DalApi.IDal dal)
+        public static void AddingOptions()
         {
             Console.WriteLine("Adding Options:");
             Console.WriteLine("1. Add new base station");
@@ -142,7 +142,7 @@ namespace ConsoleUI
         /// All the options of updating the entities of the system.
         /// </summary>
         /// <param name="dal">A DalObject instance.</param>
-        public static void UpdatingOptions(DalApi.IDal dal)
+        public static void UpdatingOptions()
         {
             Console.WriteLine("Updatinging Options:");
             Console.WriteLine("1. Assign package to drone");
@@ -211,7 +211,7 @@ namespace ConsoleUI
         /// All the options of displaying an entity of the system.
         /// </summary>
         /// <param name="dal">A DalObject instance.</param>
-        public static void DisplayingOptions(DalApi.IDal dal)
+        public static void DisplayingOptions()
         {
             Console.WriteLine("Displaying Options:");
             Console.WriteLine("1. Display station");
@@ -263,7 +263,7 @@ namespace ConsoleUI
         /// All the options of displaying a list of entities of the system.
         /// </summary>
         /// <param name="dal">A DalObject instance.</param>
-        public static void ListDisplayingOptions(DalApi.IDal dal)
+        public static void ListDisplayingOptions()
         {
             Console.WriteLine("List Displaying Options:");
             Console.WriteLine("1. Display all stations");

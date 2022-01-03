@@ -51,7 +51,7 @@ namespace BL
 
             try
             {
-                IEnumerable<DO.Package> dalPackages = dalObject.FindPackages(p => p.DroneID == null);
+                IEnumerable<DO.Package> dalPackages = dalObject.FindPackages(p => p.DroneID == null && p.Assigned == null);
                 int bestPackageID = findBestPackage(dalPackages, drones[droneIndex]);
                 dalObject.AssignPackage(bestPackageID, droneID);
 

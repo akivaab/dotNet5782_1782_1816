@@ -21,7 +21,8 @@
     </Window.Resources>
 
     <Grid>
-        <TabControl x:Name="login" Background="{StaticResource background}" Visibility="Collapsed">
+        <TabControl x:Name="login" Background="{StaticResource background}" SelectedIndex="0">
+            <TabItem Header="Blank" Visibility="Collapsed"></TabItem>
             <TabItem Header="Employee" Height="50"  Width="390" Background="Beige" FontSize="25">
                 <Grid>
                     <Label Content="Enter Username:" Margin="135,87,0,0" HorizontalAlignment="Left" Width="420"/>
@@ -31,7 +32,7 @@
                     <Button x:Name="employeeSignIn" Content="Sign in" Height="40" Width="114" Margin="0,232,0,0" Click="employeeSignIn_Click" VerticalAlignment="Top" HorizontalAlignment="Center"/>
                 </Grid>
             </TabItem>
-            <TabItem Header="Customer" Height="50" Width="390" Background="Beige" FontSize="25" IsSelected="True">
+            <TabItem Header="Customer" Height="50" Width="390" Background="Beige" FontSize="25">
                 <Grid>
                     <Label Content="Enter User ID:" Margin="135,87,0,0" HorizontalAlignment="Left" Width="420"/>
                     <TextBox x:Name="customerID" Margin="335,92,0,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Left" Width="220"/>
@@ -52,7 +53,7 @@
             <Button Name="showPackageListButton" Content="Packages" HorizontalAlignment="Right" Margin="0,0,40,108" VerticalAlignment="Bottom" Style="{StaticResource buttonStyle}" Click="showPackageListButton_Click"/>
         </Grid>
 
-        <Grid Name="customerGrid" Background="{StaticResource background}">
+        <Grid Name="customerGrid" Background="{StaticResource background}" Visibility="Collapsed">
             <TextBlock Text="{Binding ElementName=customerID, Path=Text}" VerticalAlignment="Top" Margin="10,10,676,0" Height="37" FontSize="30" Foreground="Cornsilk"/>
             <Button x:Name="updatePassword" Content="Update Password" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Height="21" Width="98"/>
             <Button x:Name="requestPackage" Content="Request New Package" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,55,0,0" Height="27" Width="139"/>

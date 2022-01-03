@@ -95,7 +95,6 @@ namespace DalObject
             
             Package package = DataSource.packages[packageIndex];
             package.Delivered = DateTime.Now;
-            package.DroneID = 0;
             DataSource.packages[packageIndex] = package;
         }
 

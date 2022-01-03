@@ -29,7 +29,9 @@ namespace BL
                 }
 
                 dalObject.AddDrone(droneID, model, (DO.Enums.WeightCategories)maxWeight);
-                dalObject.ChargeDrone(droneID, stationID);  //the drone starts out charging in a station
+
+                //the drone starts out charging in a station
+                dalObject.ChargeDrone(droneID, stationID);  
 
                 //add to drones, the list of DroneToList entities
                 Location droneLocation = new(dalStation.Latitude, dalStation.Longitude);
@@ -190,7 +192,9 @@ namespace BL
             try
             {
                 PackageInTransfer packageInTransfer;
-                if (droneToList.PackageID != null && droneToList.Status == Enums.DroneStatus.delivery) //this drone is delivering a package
+
+                // if this drone is delivering a package
+                if (droneToList.PackageID != null && droneToList.Status == Enums.DroneStatus.delivery)
                 {
                     DO.Package dalPackage = dalObject.GetPackage((int)droneToList.PackageID);
 

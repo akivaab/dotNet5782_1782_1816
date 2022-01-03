@@ -45,6 +45,7 @@ namespace DalObject
             Station station = DataSource.stations[stationIndex];
             station.AvailableChargeSlots--;
             DataSource.stations[stationIndex] = station;
+            
             DroneCharge droneCharge = new DroneCharge();
             droneCharge.DroneID = droneID;
             droneCharge.StationID = stationID;
