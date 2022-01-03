@@ -27,7 +27,7 @@ namespace PL
         /// <summary>
         /// The drone we enabling the user to update.
         /// </summary>
-        private BO.DroneToList drone;
+        private Drone drone;
 
         /// <summary>
         /// Flag if the close button is clicked.
@@ -66,18 +66,23 @@ namespace PL
         public DroneWindow(BlApi.IBL bl, BO.DroneToList drone)
         {
             InitializeComponent();
+            try
+            {
+                this.drone = new(bl.GetDrone(drone.ID));
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Error: This drone is already removed from the system.\nTry closing this window and refreshing the list.");
+            }
+
             this.bl = bl;
-            this.drone = drone;
             allowClose = false;
 
-            DataContext = drone;
+            DataContext = this.drone;
 
             //make only the features needed for perfroming actions on a drone visible in the window. 
             add.Visibility = Visibility.Collapsed;
             actions.Visibility = Visibility.Visible;
-
-            //load the drone information displayed in the window
-            loadDroneData();
         }
 
         /// <summary>
@@ -122,7 +127,7 @@ namespace PL
         }
 
         /// <summary>
-        /// 
+        /// Open a more detailed PackageWindow for the package being transferred (if there is one). 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -147,7 +152,7 @@ namespace PL
                     MessageBox.Show("Model name successfully updated.");
 
                     //reload this window
-                    loadDroneData();
+                    reloadDroneData();
                 }
                 catch (BO.UndefinedObjectException)
                 {
@@ -186,7 +191,7 @@ namespace PL
                 }
 
                 //reload this window
-                loadDroneData();
+                reloadDroneData();
             }
             catch (BO.UnableToChargeException ex)
             {
@@ -222,7 +227,7 @@ namespace PL
                 }
                 else if ((BO.Enums.DroneStatus)actions_Status.Content == BO.Enums.DroneStatus.delivery)
                 {
-                    BO.Package package = bl.GetPackage((int)drone.PackageID);
+                    BO.Package package = bl.GetPackage(drone.PackageInTransfer.ID);
                     
                     if (package.CollectingTime == null)
                     {
@@ -245,7 +250,7 @@ namespace PL
                 }
 
                 //reload this window
-                loadDroneData();
+                reloadDroneData();
             }
             catch (BO.UndefinedObjectException)
             {
@@ -295,21 +300,19 @@ namespace PL
         }
 
         /// <summary>
-        /// Load the data of the drone to be displayed in the window.
+        /// Reload the data of the drone to be displayed in the window.
         /// </summary>
-        private void loadDroneData()
+        private void reloadDroneData()
         {
             try
             {
-                BO.Drone droneEntity = bl.GetDrone(drone.ID);
+                BO.Drone drone = bl.GetDrone(this.drone.ID);
+                this.drone.Model = drone.Model;
+                this.drone.Battery = drone.Battery;
+                this.drone.Status = drone.Status;
+                this.drone.PackageInTransfer = drone.PackageInTransfer;
+                this.drone.Location = drone.Location;
 
-                actions_DroneID.Content = droneEntity.ID;
-                actions_Model.Text = droneEntity.Model;
-                actions_MaxWeight.Content = droneEntity.MaxWeight;
-                actions_Battery.Content = Math.Floor(droneEntity.Battery) + "%";
-                actions_Status.Content = droneEntity.Status;
-                actions_PackageInTransfer.Content = droneEntity.PackageInTransfer;
-                actions_Location.Content = droneEntity.Location;
             }
             catch (BO.UndefinedObjectException)
             {

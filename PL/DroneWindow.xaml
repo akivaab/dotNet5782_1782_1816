@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="Drone Delivery Service" Height="450" Width="1000" Closing="droneWindow_Closing">
+    <Window.Resources>
+        <local:FormatBattery x:Key="format"/>
+    </Window.Resources>
 
     <Grid Background="{StaticResource background}">
         <Grid x:Name="add">
@@ -45,12 +48,12 @@
             </TextBlock>
             <Label Content="Location:" Margin="100,300,0,0" Style="{StaticResource actionLabelStyle}"/>
 
-            <Label x:Name="actions_DroneID" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <TextBox x:Name="actions_Model" Margin="275,100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="28" FontSize="14"/>
-            <Label x:Name="actions_MaxWeight" Margin="275,130,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_Battery" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_Status" Margin="275,190,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_PackageInTransfer" Margin="275,220,0,0" MouseDoubleClick="package_MouseDoubleClick">
+            <Label x:Name="actions_DroneID" Content="{Binding ID}" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <TextBox x:Name="actions_Model" Text="{Binding Model}" Margin="275,100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="28" FontSize="14"/>
+            <Label x:Name="actions_MaxWeight" Content="{Binding MaxWeight}" Margin="275,130,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label x:Name="actions_Battery" Content="{Binding Battery, Converter={StaticResource format}}" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label x:Name="actions_Status" Content="{Binding Status}" Margin="275,190,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label x:Name="actions_PackageInTransfer" Content="{Binding PackageInTransfer}" Margin="275,220,0,0" MouseDoubleClick="package_MouseDoubleClick">
                 <Label.Style>
                     <Style TargetType="Label">
                         <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -60,11 +63,14 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Foreground" Value="Blue"/>
                             </Trigger>
+                            <Trigger Property="Content" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </Trigger>
                         </Style.Triggers>
                     </Style>
                 </Label.Style>
             </Label>
-            <Label x:Name="actions_Location" Margin="275,300,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label x:Name="actions_Location" Content="{Binding Location}" Margin="275,300,0,0" Style="{StaticResource actionLabelStyle}"/>
 
             <Button Name="removeButton" Content="Remove" HorizontalAlignment="Left" Margin="30,0,0,20" Style="{StaticResource actionButtonStyle}" Click="removeButton_Click"/>
             <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,30,20" Style="{StaticResource actionButtonStyle}" Click="closeButton_Click"/>

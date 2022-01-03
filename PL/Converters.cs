@@ -45,13 +45,13 @@ namespace PL
     }
 
     /// <summary>
-    /// Perform a floor function on a value.
+    /// Perform a floor function on a value, and append '%'.
     /// </summary>
-    public class Floor : IValueConverter
+    public class FormatBattery : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Math.Floor((double)value);
+            return Math.Floor((double)value) + "%";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
