@@ -22,6 +22,7 @@
             <Button Name="addButton" Content="Add" HorizontalAlignment="Center" Margin="0,0,0,90" VerticalAlignment="Bottom" Width="75" FontSize="16" Click="addButton_Click"/>
             <Button Name="cancelButton" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,30,20" VerticalAlignment="Bottom" Width="75" FontSize="16" Click="closeButton_Click"/>
         </Grid>
+        
         <Grid x:Name="actions">
             <Label Content="Drone ID:" Margin="100,70,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="Model:" Margin="100,100,0,0" Style="{StaticResource actionLabelStyle}"/>
@@ -29,6 +30,19 @@
             <Label Content="Battery:" Margin="100,160,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="Status:" Margin="100,190,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="Package in Transfer:" Margin="100,220,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <TextBlock Text="Double-Click for details!" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="200,0,0,20" FontSize="18" FontWeight="Bold" TextDecorations="Underline">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=actions_PackageInTransfer, Path=IsMouseOver}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Setter Property="Foreground" Value="Blue"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
             <Label Content="Location:" Margin="100,300,0,0" Style="{StaticResource actionLabelStyle}"/>
 
             <Label x:Name="actions_DroneID" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>

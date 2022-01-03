@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Drone Delivery Service" Height="450" Width="800">
+        Title="Drone Delivery Service" Height="475" Width="800">
     <Window.Resources>
         <LinearGradientBrush x:Key="background" StartPoint="0.5,0" EndPoint="0.6,1" >
             <GradientStop Color="DarkSlateGray" Offset="0"/>
@@ -22,7 +22,28 @@
 
     <Grid>
         <TabControl x:Name="login" Background="{StaticResource background}" SelectedIndex="0">
-            <TabItem Header="Blank" Visibility="Collapsed"></TabItem>
+            <TabItem Header="Welcome" Visibility="Collapsed">
+                <Grid>
+                    <TextBlock Text="Welcome!" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,15,0,0" FontSize="35" FontFamily="Comic Sans MS" TextDecorations="Underline" Foreground="AliceBlue"/>
+                    <Ellipse Fill="LawnGreen" Height="200" Width="200" StrokeThickness="2" Stroke="Gold" Margin="0,0,0,30">
+                        <Ellipse.Triggers>
+                            <EventTrigger RoutedEvent="MouseEnter">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0:0:0.500" Storyboard.TargetProperty="Height" To="218" AutoReverse="True"/>
+                                            <DoubleAnimation Duration="0:0:0.500" Storyboard.TargetProperty="Width" To="218" AutoReverse="True"/>
+                                            <DoubleAnimation Duration="0:0:0.500" Storyboard.TargetProperty="StrokeThickness" To="8" AutoReverse="True"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </Ellipse.Triggers>
+                    </Ellipse>
+                    <Image Source="Drone_Icon.jpg" Height="140" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,30" RenderTransformOrigin="0.5,0.5"/>
+                    <TextBlock Text="Click a tab above to sign in! " HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,50" FontSize="35" FontFamily="Comic Sans MS" Foreground="MidnightBlue"/>
+                </Grid>
+            </TabItem>
             <TabItem Header="Employee" Height="50"  Width="390" Background="Beige" FontSize="25">
                 <Grid>
                     <Label Content="Enter Username:" Margin="135,87,0,0" HorizontalAlignment="Left" Width="420"/>
@@ -45,7 +66,7 @@
         </TabControl>
 
         <Grid Name="employeeGrid" Background="{StaticResource background}" Visibility="Collapsed">
-            <Image Source="Drone_Icon.jpg" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center" OpacityMask="{DynamicResource background}"/>
+            <Image Source="Drone_Icon.jpg" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding ElementName=employeeName, Path=Text}" VerticalAlignment="Top" Margin="100,10,100,0" Height="60" FontSize="30"/>
             <Button Name="showDroneListButton" Content="Drones" HorizontalAlignment="Left" Margin="40,91,0,0" VerticalAlignment="Top" Style="{StaticResource buttonStyle}" Click="showDroneListButton_Click"/>
             <Button Name="showStationListButton" Content="Stations" HorizontalAlignment="Left" Margin="40,0,0,108" VerticalAlignment="Bottom" Style="{StaticResource buttonStyle}" Click="showStationListButton_Click"/>
