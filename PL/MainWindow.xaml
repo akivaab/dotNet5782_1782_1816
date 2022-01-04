@@ -21,7 +21,7 @@
     </Window.Resources>
 
     <Grid>
-        <TabControl x:Name="login" Background="{StaticResource background}" SelectedIndex="0">
+        <TabControl x:Name="login" Background="{StaticResource background}" SelectedIndex="0" >
             <TabItem Header="Welcome" Visibility="Collapsed">
                 <Grid>
                     <TextBlock Text="Welcome!" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,15,0,0" FontSize="35" FontFamily="Constantia" TextDecorations="Underline" Foreground="AliceBlue"/>
@@ -76,10 +76,19 @@
 
         <Grid Name="customerGrid" Background="{StaticResource background}" Visibility="Collapsed">
             <TextBlock Text="{Binding ElementName=customerID, Path=Text}" VerticalAlignment="Top" Margin="10,10,676,0" Height="37" FontSize="30" Foreground="Cornsilk"/>
-            <Button x:Name="updatePassword" Content="Update Password" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Height="21" Width="98"/>
-            <Button x:Name="requestPackage" Content="Request New Package" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,55,0,0" Height="27" Width="139"/>
-            <Button x:Name="packagesDelivering" Content="Update Password" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,156" Height="21" Width="200"/>
-            <Button x:Name="packagesReceig" Content="Update Password" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="338,0,0,156" Height="21" Width="300"/>
+            <Button x:Name="updatePassword" Content="Update Password" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Height="21" Width="98" Click="updatePassword_Click"/>
+            <Button x:Name="requestPackage" Content="Request New Package" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Height="21" Width="139" Click="requestPackage_Click"/>
+            <Button x:Name="seeSend" Content="Packages Sending" Margin="240,0,0,10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="seeSend_Click" RenderTransformOrigin="0.481,-0.534" Height="21"/>
+            <Button x:Name="seeReceive" Content="Packages Receiving" Margin="439,0,0,9" HorizontalAlignment="Left" VerticalAlignment ="Bottom" Click="seeReceive_Click" RenderTransformOrigin="0.5,1.03" Height="23"/>
+
+            <ListView x:Name="sentPackagesNotCollected" Margin="10,55,10,234" Background="LightGreen"/>
+            <ListView x:Name="sentPackagesCollected" Margin="10,225,10,55" Background="LightGreen" />
+            <ListView x:Name="incomingPackagesNotReceived" Margin="10,55,10,234" Background="LightGreen"/>
+            <ListView x:Name="incomingPackagesReceived" Margin="10,225,10,55" Background="LightGreen"/>
+            <Button x:Name="logout" Content="Logout" HorizontalAlignment="Left" Margin="744,10,0,0" VerticalAlignment="Top" Click="logout_Click"/>
+
+            
         </Grid>
+
     </Grid>
 </Window>

@@ -100,6 +100,10 @@ namespace PL
                     allowClose = true;
                     Close();
                 }
+                catch (BO.IllegalArgumentException ex)
+                {
+                    MessageBox.Show(ex.Message + "\nPlease select a different option.");
+                }
                 catch (BO.UndefinedObjectException ex)
                 {
                     MessageBox.Show(ex.Message + "\nPlease try selecting a different option.");

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -91,8 +92,9 @@ namespace PL
             bool isInteger = int.TryParse(customerID.Text, out id);
             if (isInteger && customerPassword.Password == bl.GetCustomerPassword(id))
             {
-                login.Visibility = Visibility.Collapsed;
-                customerGrid.Visibility = Visibility.Visible;
+                //login.Visibility = Visibility.Collapsed;
+                //customerGrid.Visibility = Visibility.Visible;
+                openCustomerGrid(sender, e);
             }
         }
 
@@ -105,13 +107,52 @@ namespace PL
         {
             CustomerWindow registration = new CustomerWindow(bl);
             registration.Show();
-            registration.Closed += new EventHandler(registration_Closed);
+            registration.Closed += new EventHandler(openCustomerGrid);
         }
 
-        private void registration_Closed(object sender, EventArgs e)
+        private void openCustomerGrid(object sender, EventArgs e)
         {
             login.Visibility = Visibility.Collapsed;
             customerGrid.Visibility = Visibility.Visible;
+            
+            sentPackagesNotCollected.ItemsSource = new ObservableCollection<BO.PackageToList>(bl.FindPackages(p => p.SenderID.ToString() == customerID.Text && p.Collected == null));
+            sentPackagesCollected.ItemsSource = new ObservableCollection<BO.PackageToList>(bl.FindPackages(p => p.SenderID.ToString() == customerID.Text && p.Collected != null));
+            incomingPackagesNotReceived.ItemsSource = new ObservableCollection<BO.PackageToList>(bl.FindPackages(p => p.ReceiverID.ToString() == customerID.Text && p.Delivered == null));
+            incomingPackagesReceived.ItemsSource = new ObservableCollection<BO.PackageToList>(bl.FindPackages(p => p.ReceiverID.ToString() == customerID.Text && p.Delivered != null));
+        }
+
+        private void requestPackage_Click(object sender, RoutedEventArgs e)
+        {
+            new PackageWindow(bl).Show();
+        }
+
+        private void seeSend_Click(object sender, RoutedEventArgs e)
+        {
+            incomingPackagesNotReceived.Visibility = Visibility.Collapsed;
+            incomingPackagesReceived.Visibility = Visibility.Collapsed;
+            sentPackagesNotCollected.Visibility = Visibility.Visible;
+            sentPackagesCollected.Visibility = Visibility.Visible;
+        }
+
+        private void seeReceive_Click(object sender, RoutedEventArgs e)
+        {
+            sentPackagesNotCollected.Visibility = Visibility.Collapsed;
+            sentPackagesCollected.Visibility = Visibility.Collapsed;
+            incomingPackagesNotReceived.Visibility = Visibility.Visible;
+            incomingPackagesReceived.Visibility = Visibility.Visible;
+        }
+
+        private void logout_Click(object sender, RoutedEventArgs e)
+        {
+            customerGrid.Visibility = Visibility.Collapsed;
+            login.Visibility = Visibility.Visible;
+            customerID.Text = "";
+            customerPassword.Password = "";
+        }
+
+        private void updatePassword_Click(object sender, RoutedEventArgs e)
+        {
+            updatePasswordPopup.IsOpen = true;
         }
     }
 }

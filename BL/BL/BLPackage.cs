@@ -14,6 +14,11 @@ namespace BL
 
         public Package AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority)
         {
+            if (senderID == receiverID)
+            {
+                throw new IllegalArgumentException("Package sender and receiver must be different.");
+            }
+
             try
             {
                 DO.Customer sender = dalObject.GetCustomer(senderID);
@@ -214,7 +219,8 @@ namespace BL
                 IEnumerable<PackageToList> packageToLists = from DO.Package dalPackage in dalPackages
                                                             let senderName = dalObject.GetCustomer(dalPackage.SenderID).Name
                                                             let receiverName = dalObject.GetCustomer(dalPackage.ReceiverID).Name
-                                                            select new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, Enums.PackageStatus.created);
+                                                            let status = getPackageStatus(dalPackage)
+                                                            select new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, status);
                 return packageToLists;
             }
             catch (DO.UndefinedObjectException e)
