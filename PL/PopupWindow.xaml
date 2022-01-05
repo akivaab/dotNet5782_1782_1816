@@ -5,23 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="PopupWindow" Height="90" Width="135">
+        Title="Drone Delivery Service" Height="180" Width="200" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Grid x:Name="password">
+        <Grid x:Name="passwordGrid">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-
-            <TextBlock Text="Enter Password:" Grid.Row="0" Background="BurlyWood"/>
-            <PasswordBox x:Name="newPassword"  Grid.Row="1" Background="LemonChiffon"/>
-            <TextBlock Text="Confirm Password:" Grid.Row="2" Background="BurlyWood"/>
-            <PasswordBox x:Name="newPasswordConfirm"  Grid.Row="3" Background="LemonChiffon"/>
+            <TextBlock Text="Enter Password:" Grid.Row="0" Background="BurlyWood" FontSize="16"/>
+            <PasswordBox x:Name="newPassword"  Grid.Row="1" Background="LemonChiffon" FontSize="16"/>
+            <TextBlock Text="Confirm Password:" Grid.Row="2" Background="BurlyWood" FontSize="16"/>
+            <PasswordBox x:Name="newPasswordConfirm"  Grid.Row="3" Background="LemonChiffon" FontSize="16"/>
+            <Button x:Name="changePasswordButton" Content="Change Password" Grid.Row="4" FontSize="12" Click="changePasswordButton_Click" Margin="0,0,0,0"/>
         </Grid>
-        <Grid x:Name="confirm" Visibility="Collapsed">
 
+        <Grid x:Name="confirmPackageGrid" Background="BurlyWood" Visibility="Collapsed">
+            <TextBlock Text="Confirm?" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="14"/>
+            <Button x:Name="yesButton" Content="Yes" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="15" Width="40" Margin="10,0,0,10" FontSize="8" Click="yesButton_Click"/>
+            <Button x:Name="noButton" Content="No" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="15" Width="40" Margin="0,0,10,10" FontSize="8" Click="noButton_Click"/>
         </Grid>
     </Grid>
 </Window>

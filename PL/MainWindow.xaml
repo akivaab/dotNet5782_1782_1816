@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="Drone Delivery Service" Height="475" Width="800">
     <Window.Resources>
+        <local:BoolToVisibility x:Key="visibility"/>
         <LinearGradientBrush x:Key="background" StartPoint="0.5,0" EndPoint="0.6,1" >
             <GradientStop Color="DarkSlateGray" Offset="0"/>
             <GradientStop Color="MediumTurquoise" Offset="0.5"/>
@@ -75,20 +76,64 @@
         </Grid>
 
         <Grid Name="customerGrid" Background="{StaticResource background}" Visibility="Collapsed">
-            <TextBlock Text="{Binding ElementName=customerID, Path=Text}" VerticalAlignment="Top" Margin="10,10,676,0" Height="37" FontSize="30" Foreground="Cornsilk"/>
-            <Button x:Name="updatePassword" Content="Update Password" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Height="21" Width="98" Click="updatePassword_Click"/>
+            <TextBlock Text="{Binding Path=ID, StringFormat=ID: {0}}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" Height="30" Width="150" FontSize="20" Foreground="Cornsilk"/>
+            <TextBlock Text="{Binding Path=Name, StringFormat=Name: {0}}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="160,10,0,0" Height="30" Width="150" FontSize="20" Foreground="Cornsilk"/>
+            <TextBlock Text="{Binding Path=Phone, StringFormat=Phone: {0}}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="310,10,0,0" Height="30" Width="200" FontSize="20" Foreground="Cornsilk"/>
+            <TextBlock Text="{Binding Path=Location, StringFormat=Location: {0}}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,30,0,0" Height="30" Width="600" TextWrapping="Wrap" FontSize="20" Foreground="Cornsilk"/>
+
+            <ListView x:Name="sentPackagesNotCollected" Margin="50,65,10,234" Background="LightGreen" Visibility="{Binding ElementName=seeSend, Path=IsChecked, Converter={StaticResource visibility}}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="70"/>
+                        <GridViewColumn Header="Sender" DisplayMemberBinding="{Binding SenderName}" Width="70"/>
+                        <GridViewColumn Header="Receiver" DisplayMemberBinding="{Binding ReceiverName}" Width="70"/>
+                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="70"/>
+                        <GridViewColumn Header="Weight" DisplayMemberBinding="{Binding Weight}" Width="70"/>
+                        <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="70"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <ListView x:Name="sentPackagesCollected" Margin="50,225,10,55" Background="LightGreen" Visibility="{Binding ElementName=seeSend, Path=IsChecked, Converter={StaticResource visibility}}" MouseDoubleClick="sentPackagesCollected_MouseDoubleClick">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="70"/>
+                        <GridViewColumn Header="Sender" DisplayMemberBinding="{Binding SenderName}" Width="70"/>
+                        <GridViewColumn Header="Receiver" DisplayMemberBinding="{Binding ReceiverName}" Width="70"/>
+                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="70"/>
+                        <GridViewColumn Header="Weight" DisplayMemberBinding="{Binding Weight}" Width="70"/>
+                        <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="70"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <ListView x:Name="incomingPackagesNotReceived" Margin="50,65,10,234" Background="LightGreen" Visibility="{Binding ElementName=seeReceive, Path=IsChecked, Converter={StaticResource visibility}}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="70"/>
+                        <GridViewColumn Header="Sender" DisplayMemberBinding="{Binding SenderName}" Width="70"/>
+                        <GridViewColumn Header="Receiver" DisplayMemberBinding="{Binding ReceiverName}" Width="70"/>
+                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="70"/>
+                        <GridViewColumn Header="Weight" DisplayMemberBinding="{Binding Weight}" Width="70"/>
+                        <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="70"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <ListView x:Name="incomingPackagesReceived" Margin="50,225,10,55" Background="LightGreen" Visibility="{Binding ElementName=seeReceive, Path=IsChecked, Converter={StaticResource visibility}}" MouseDoubleClick="incomingPackagesReceived_MouseDoubleClick">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="70"/>
+                        <GridViewColumn Header="Sender" DisplayMemberBinding="{Binding SenderName}" Width="70"/>
+                        <GridViewColumn Header="Receiver" DisplayMemberBinding="{Binding ReceiverName}" Width="70"/>
+                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="70"/>
+                        <GridViewColumn Header="Weight" DisplayMemberBinding="{Binding Weight}" Width="70"/>
+                        <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="70"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Button x:Name="changePassword" Content="Change Password" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,10" Height="21" Width="98" Click="changePassword_Click"/>
             <Button x:Name="requestPackage" Content="Request New Package" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,10,10" Height="21" Width="139" Click="requestPackage_Click"/>
-            <Button x:Name="seeSend" Content="Packages Sending" Margin="240,0,0,10" HorizontalAlignment="Left" VerticalAlignment="Bottom" Click="seeSend_Click" RenderTransformOrigin="0.481,-0.534" Height="21"/>
-            <Button x:Name="seeReceive" Content="Packages Receiving" Margin="439,0,0,9" HorizontalAlignment="Left" VerticalAlignment ="Bottom" Click="seeReceive_Click" RenderTransformOrigin="0.5,1.03" Height="23"/>
-
-            <ListView x:Name="sentPackagesNotCollected" Margin="10,55,10,234" Background="LightGreen"/>
-            <ListView x:Name="sentPackagesCollected" Margin="10,225,10,55" Background="LightGreen" />
-            <ListView x:Name="incomingPackagesNotReceived" Margin="10,55,10,234" Background="LightGreen"/>
-            <ListView x:Name="incomingPackagesReceived" Margin="10,225,10,55" Background="LightGreen"/>
-            <Button x:Name="logout" Content="Logout" HorizontalAlignment="Left" Margin="744,10,0,0" VerticalAlignment="Top" Click="logout_Click"/>
-
-            
+            <RadioButton x:Name="seeSend" Content="Packages Sending" Margin="0,0,130,10" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+            <RadioButton x:Name="seeReceive" Content="Packages Receiving" Margin="130,0,0,10" HorizontalAlignment="Center" VerticalAlignment ="Bottom"/>
+            <Button x:Name="logoutButton" Content="Logout" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Click="logoutButton_Click"/>
         </Grid>
-
     </Grid>
 </Window>
