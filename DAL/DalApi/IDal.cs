@@ -268,6 +268,13 @@ namespace DalApi
         /// <returns>A collection of all appropriate stations.</returns>
         public IEnumerable<DO.Station> FindStations(Predicate<DO.Station> predicate);
 
+        /// <summary>
+        /// Find all customers according to a given predicate.
+        /// </summary>
+        /// <param name="predicate">Predicate used as a search parameter.</param>
+        /// <returns>A collection of all appropriate customers.</returns>
+        public IEnumerable<DO.Customer> FindCustomers(Predicate<DO.Customer> predicate);
+
         #endregion
     }
 }

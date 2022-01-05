@@ -243,6 +243,13 @@ namespace BlApi
         /// <returns>A collection of DroneToList entities.</returns>
         public IEnumerable<DroneToList> FindDrones(Predicate<DroneToList> predicate);
 
+        /// <summary>
+        /// Get a collection of all customers according to a certain predicate.
+        /// </summary>
+        /// <param name="predicate">The predicate used to filter the customers.</param>
+        /// <returns>A collection of CustomerToList entities.</returns>
+        public IEnumerable<CustomerToList> FindCustomers(Predicate<DO.Customer> predicate);
+
         #endregion
     }
 }

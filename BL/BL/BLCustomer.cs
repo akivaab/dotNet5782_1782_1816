@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BO;
 
@@ -155,5 +156,28 @@ namespace BL
         }
 
         #endregion
+
+        #region Find Methods
+        public IEnumerable<CustomerToList> FindCustomers(Predicate<DO.Customer> predicate)
+        {
+            try
+            {
+                IEnumerable<DO.Customer> dalCustomers = dalObject.FindCustomers(predicate);
+                IEnumerable<CustomerToList> customersToLists = from DO.Customer dalCustomer in dalCustomers
+                                                               let numDeliveredPackagesSent = dalObject.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered != null).Count()
+                                                               let numUndeliveredPackagesSent = dalObject.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered == null).Count()
+                                                               let numPackagesReceived = dalObject.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered != null).Count()
+                                                               let numPackagesExpected = dalObject.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null).Count()
+                                                               select new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected);
+                return customersToLists;
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message, e);
+            }
+        }
+
+        #endregion
+
     }
 }

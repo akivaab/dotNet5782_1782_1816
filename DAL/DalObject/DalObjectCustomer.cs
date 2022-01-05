@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using DO;
@@ -127,6 +127,16 @@ namespace DalObject
             }
 
             return DataSource.customers[customerIndex].Password;
+        }
+
+        #endregion
+
+        #region Find Methods
+        public IEnumerable<Customer> FindCustomers(Predicate<Customer> predicate)
+        {
+            return from customer in DataSource.customers
+                   where predicate(customer) && customer.Active
+                   select customer;
         }
 
         #endregion

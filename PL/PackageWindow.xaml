@@ -35,11 +35,50 @@
             <Label Content="Delivery Time:" Margin="100,340,0,0" Style="{StaticResource actionLabelStyle}"/>
 
             <Label Content="{Binding ID}" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label Content="{Binding Sender}" Margin="275,100,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label Content="{Binding Receiver}" Margin="275,130,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding Sender}" Margin="275,100,0,0" MouseDoubleClick="customer_MouseDoubleClick">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                        <Setter Property="VerticalAlignment" Value="Top"/>
+                        <Setter Property="FontSize" Value="14"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Blue"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Label Content="{Binding Receiver}" Margin="275,130,0,0" MouseDoubleClick="customer_MouseDoubleClick">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                        <Setter Property="VerticalAlignment" Value="Top"/>
+                        <Setter Property="FontSize" Value="14"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Blue"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
             <Label Content="{Binding Weight}" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="{Binding Priority}" Margin="275,190,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label Content="{Binding DroneDelivering}" Margin="275,220,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding DroneDelivering}" Margin="275,220,0,0" MouseDoubleClick="drone_MouseDoubleClick">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                        <Setter Property="VerticalAlignment" Value="Top"/>
+                        <Setter Property="FontSize" Value="14"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="Blue"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
             <Label Content="{Binding RequestTime}" Margin="275,250,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="{Binding AssigningTime}" Margin="275,280,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="{Binding CollectingTime}" Margin="275,310,0,0" Style="{StaticResource actionLabelStyle}"/>

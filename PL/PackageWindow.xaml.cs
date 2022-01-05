@@ -138,6 +138,28 @@ namespace PL
         }
 
         /// <summary>
+        /// Open a more detailed DroneWindow for the drone delivering the package.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void drone_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            BO.DroneToList droneToList = bl.FindDrones(d => d.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.DroneDelivering).ID).Single();
+            new DroneWindow(bl, droneToList).Show();
+        }
+
+        /// <summary>
+        /// Open a more detailed CustomerWindow for the sender of receiver.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void customer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            BO.CustomerToList customerToList = bl.FindCustomers(c => c.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.CustomerForPackage).ID).Single();
+            new CustomerWindow(bl, customerToList).Show();
+        }
+
+        /// <summary>
         /// Close the window.
         /// </summary>
         /// <param name="sender"></param>
