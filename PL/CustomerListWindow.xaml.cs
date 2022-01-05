@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace PL
 {
     /// <summary>
-    /// Lógica interna para CustomerListWindow.xaml
+    /// Internal logic of CustomerListWindow.xaml
     /// </summary>
     public partial class CustomerListWindow : Window
     {

@@ -27,7 +27,7 @@ namespace PL
         /// <summary>
         /// The customer we enabling the user to update.
         /// </summary>
-        private BO.CustomerToList customer;
+        private Customer customer;
 
         /// <summary>
         /// Flag if the close button is clicked.
@@ -54,20 +54,26 @@ namespace PL
         /// </summary>
         /// <param name="bl">A BL object.</param>
         /// <param name="customer">The station being acted upon.</param>
-        public CustomerWindow(BlApi.IBL bl, BO.CustomerToList customer)
+        public CustomerWindow(BlApi.IBL bl, BO.CustomerToList customerToList)
         {
             InitializeComponent();
+            try
+            {
+                this.customer = new(bl.GetCustomer(customerToList.ID));
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Error: This drone is already removed from the system.\nTry closing this window and refreshing the list.");
+            }
+
             this.bl = bl;
-            this.customer = customer;
             allowClose = false;
 
-            DataContext = customer;
+            DataContext = this.customer;
 
             //make only the features needed for perfroming actions on a station visible in the window. 
             add.Visibility = Visibility.Collapsed;
             actions.Visibility = Visibility.Visible;
-
-            loadCustomerData();
         }
 
         /// <summary>
@@ -121,14 +127,16 @@ namespace PL
         private void updateButton_Click(object sender, RoutedEventArgs e)
         {    
             int phoneNumber;            
-            bool isInteger = int.TryParse(actions_PhoneNumber.Text, out phoneNumber);
+            bool isInteger = int.TryParse(customer.Phone, out phoneNumber);
 
             if (isInteger)
             {
                 try
                 {
-                    bl.UpdateCustomer(customer.ID, actions_Name.Text, actions_PhoneNumber.Text);
+                    bl.UpdateCustomer(customer.ID, customer.Name, customer.Phone);
                     MessageBox.Show("Customer successfully updated.");
+
+                    reloadCustomerData();
                 }
                 catch (BO.UndefinedObjectException)
                 {
@@ -178,21 +186,15 @@ namespace PL
         }
 
         /// <summary>
-        /// Load the data of the customer to be displayed in the window.
+        /// Reload the data of the customer to be displayed in the window.
         /// </summary>
-        private void loadCustomerData()
+        private void reloadCustomerData()
         {
             try
             {
-                BO.Customer customerEntity = bl.GetCustomer(customer.ID);
-
-                actions_CustomerID.Content = customerEntity.ID;
-                actions_Name.Text = customerEntity.Name;
-                actions_PhoneNumber.Text = customerEntity.Phone;
-                actions_Location.Content = customerEntity.Location;
-                actions_PackageToSend.ItemsSource = customerEntity.PackagesToSend;
-                actions_PackageToReceive.ItemsSource = customerEntity.PackagesToReceive;
-
+                BO.Customer customer = bl.GetCustomer(this.customer.ID);
+                this.customer.Name = customer.Name;
+                this.customer.Phone = customer.Phone;
             }
             catch (BO.UndefinedObjectException)
             {

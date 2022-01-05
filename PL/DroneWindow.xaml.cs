@@ -63,12 +63,12 @@ namespace PL
         /// </summary>
         /// <param name="bl">A BL object.</param>
         /// <param name="drone">The drone being updated/acted upon.</param>
-        public DroneWindow(BlApi.IBL bl, BO.DroneToList drone)
+        public DroneWindow(BlApi.IBL bl, BO.DroneToList droneToList)
         {
             InitializeComponent();
             try
             {
-                this.drone = new(bl.GetDrone(drone.ID));
+                this.drone = new(bl.GetDrone(droneToList.ID));
             }
             catch (BO.UndefinedObjectException)
             {

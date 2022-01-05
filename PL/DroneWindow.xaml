@@ -49,7 +49,7 @@
             <Label Content="Location:" Margin="100,300,0,0" Style="{StaticResource actionLabelStyle}"/>
 
             <Label Content="{Binding ID}" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <TextBox Text="{Binding Model, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Margin="275,100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="28" FontSize="14"/>
+            <TextBox Text="{Binding Model}" Margin="275,100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="28" FontSize="14"/>
             <Label Content="{Binding MaxWeight}" Margin="275,130,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="{Binding Battery, Converter={StaticResource format}}" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="{Binding Status}" Margin="275,190,0,0" Style="{StaticResource actionLabelStyle}"/>

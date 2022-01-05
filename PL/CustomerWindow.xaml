@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL"
+        xmlns:local="clr-namespace:PL" d:DataContext="{d:DesignInstance Type=local:Customer}"
         mc:Ignorable="d"
         Title="CustomerWindow" Height="600" Width="1150" Closing="customerWindow_Closing">
     <Grid Background="{StaticResource background}">
@@ -34,12 +34,12 @@
             <Label Content="Packages to Send:" Margin="100,190,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="Packages to Receive:" Margin="100,330,0,0" Style="{StaticResource actionLabelStyle}"/>
 
-            <Label x:Name="actions_CustomerID" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <TextBox x:Name="actions_Name" HorizontalAlignment="Left" Margin="275,100,0,0" VerticalAlignment="Top" Width="100" FontSize="14" Height="28" RenderTransformOrigin="0.49,0.573"/>
-            <Label x:Name="actions_Location" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <TextBox x:Name="actions_PhoneNumber" HorizontalAlignment="Left" Margin="275,130,0,0" VerticalAlignment="Top" Width="100" FontSize="14" Height="28" RenderTransformOrigin="0.49,0.573"/>
-            <ListBox x:Name="actions_PackageToSend" HorizontalAlignment="Left" Margin="275,190,0,0" VerticalAlignment="Top" FontSize="14" Height="140" Width="850" MouseDoubleClick="package_MouseDoubleClick"/>
-            <ListBox x:Name="actions_PackageToReceive" HorizontalAlignment="Left" Margin="275,330,0,0" VerticalAlignment="Top" FontSize="14" Height="140" Width="850" MouseDoubleClick="package_MouseDoubleClick"/>
+            <Label Content="{Binding ID}" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <TextBox x:Name="actions_Name" Text="{Binding Name}"  HorizontalAlignment="Left" Margin="275,100,0,0" VerticalAlignment="Top" Width="100" FontSize="14" Height="28"/>
+            <TextBox x:Name="actions_PhoneNumber" Text="{Binding Phone}" HorizontalAlignment="Left" Margin="275,130,0,0" VerticalAlignment="Top" Width="100" FontSize="14" Height="28"/>
+            <Label Content="{Binding Location}" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <ListBox ItemsSource="{Binding PackagesToSend}" HorizontalAlignment="Left" Margin="275,190,0,0" VerticalAlignment="Top" FontSize="14" Height="140" Width="850" MouseDoubleClick="package_MouseDoubleClick"/>
+            <ListBox ItemsSource="{Binding PackagesToReceive}" HorizontalAlignment="Left" Margin="275,330,0,0" VerticalAlignment="Top" FontSize="14" Height="140" Width="850" MouseDoubleClick="package_MouseDoubleClick"/>
 
             <Button Name="removeButton" Content="Remove" HorizontalAlignment="Left" Margin="30,0,0,20" Style="{StaticResource actionButtonStyle}"  Click="removeButton_Click"/>
             <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,30,20" Style="{StaticResource actionButtonStyle}" Click="closeButton_Click"/>
