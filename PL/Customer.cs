@@ -43,6 +43,7 @@ namespace PL
                 }
             }
         }
+
         /// <summary>
         /// The customer's phone number.
         /// </summary>

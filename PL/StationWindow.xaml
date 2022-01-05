@@ -35,11 +35,11 @@
             <Label Content="Available Charge Slots:" HorizontalAlignment="Left" Margin="100,160,0,0" VerticalAlignment="Top" FontSize="14"/>
             <Label Content="Drones Charging:" HorizontalAlignment="Left" Margin="100,190,0,0" VerticalAlignment="Top" FontSize="14"/>
 
-            <Label x:Name="actions_StationID" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <TextBox x:Name="actions_Name" HorizontalAlignment="Left" Margin="275,100,0,0" VerticalAlignment="Top" Width="100" FontSize="14" Height="28"/>
-            <Label x:Name="actions_Location" Margin="275,130,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_AvailableChargeSlots" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <ListBox x:Name="actions_DronesCharging" HorizontalAlignment="Left" Margin="275,190,0,0" VerticalAlignment="Top" FontSize="14" MouseDoubleClick="dronesCharging_MouseDoubleClick"/>
+            <Label Content="{Binding ID}" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <TextBox x:Name="actions_Name" Text="{Binding Name}" HorizontalAlignment="Left" Margin="275,100,0,0" VerticalAlignment="Top" Width="100" FontSize="14" Height="28"/>
+            <Label Content="{Binding Location}" Margin="275,130,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding AvailableChargeSlots}" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <ListBox ItemsSource="{Binding DronesCharging}" HorizontalAlignment="Left" Margin="275,190,0,0" VerticalAlignment="Top" FontSize="14" MouseDoubleClick="dronesCharging_MouseDoubleClick"/>
 
             <Label Content="No. of Total Charge Slots:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,60,50,0" FontSize="16"/>
             <TextBox x:Name="actions_TotalChargeSlots" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,85,50,0" Width="185" Height="30" FontSize="16"/>

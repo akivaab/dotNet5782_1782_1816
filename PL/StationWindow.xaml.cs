@@ -25,9 +25,14 @@ namespace PL
         private BlApi.IBL bl;
 
         /// <summary>
-        /// The station we enabling the user to update.
+        /// The station we are enabling the user to update as BO entity.
         /// </summary>
-        private BO.StationToList station;
+        private BO.StationToList stationToList;
+
+        /// <summary>
+        /// The station we are enabling the user to update as PO entity.
+        /// </summary>
+        private Station station;
 
         /// <summary>
         /// Flag if the close button is clicked.
@@ -54,11 +59,12 @@ namespace PL
         /// </summary>
         /// <param name="bl">A BL object.</param>
         /// <param name="station">The station being acted upon.</param>
-        public StationWindow(BlApi.IBL bl, BO.StationToList station)
+        public StationWindow(BlApi.IBL bl, BO.StationToList stationToList)
         {
             InitializeComponent();
             this.bl = bl;
-            this.station = station;
+            this.stationToList = stationToList;
+            this.station = new(bl.GetStation(this.stationToList.ID));
             allowClose = false;
 
             DataContext = station;
@@ -67,7 +73,7 @@ namespace PL
             add.Visibility = Visibility.Collapsed;
             actions.Visibility = Visibility.Visible;
 
-            loadStationData();
+            actions_TotalChargeSlots.Text = (this.station.AvailableChargeSlots + stationToList.NumOccupiedChargeSlots).ToString();
         }
 
         /// <summary>
@@ -131,8 +137,10 @@ namespace PL
             {
                 try
                 {
-                    bl.UpdateStation(station.ID, name, numTotalChargeSlots);
+                    bl.UpdateStation(station.ID, station.Name, numTotalChargeSlots);
                     MessageBox.Show("Station successfully updated.");
+
+                    reloadStationData();
                 }
                 catch (BO.UndefinedObjectException)
                 {
@@ -148,8 +156,6 @@ namespace PL
                 MessageBox.Show("Some of the information supplied is invalid. Please enter other information." +
                     "\n(Are the name, and number of charging slots all numbers?)");
             }
-
-            loadStationData();
         }
 
         /// <summary>
@@ -187,19 +193,15 @@ namespace PL
         /// <summary>
         /// Load the data of the station to be displayed in the window.
         /// </summary>
-        private void loadStationData()
+        private void reloadStationData()
         {
             try
             {
-                BO.Station stationEntity = bl.GetStation(station.ID);
+                BO.Station station = bl.GetStation(this.station.ID);
+                this.station.Name = station.Name;
+                this.station.AvailableChargeSlots = station.AvailableChargeSlots;
 
-                actions_StationID.Content = stationEntity.ID;
-                actions_Name.Text = stationEntity.Name.ToString();
-                actions_Location.Content = stationEntity.Location;
-                actions_AvailableChargeSlots.Content = stationEntity.AvailableChargeSlots;
-                actions_DronesCharging.ItemsSource = stationEntity.DronesCharging;
-
-                actions_TotalChargeSlots.Text = (stationEntity.AvailableChargeSlots + station.NumOccupiedChargeSlots).ToString();
+                actions_TotalChargeSlots.Text = (this.station.AvailableChargeSlots + stationToList.NumOccupiedChargeSlots).ToString();
             }
             catch (BO.UndefinedObjectException)
             {
