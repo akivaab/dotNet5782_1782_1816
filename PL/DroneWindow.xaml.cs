@@ -144,11 +144,11 @@ namespace PL
         /// <param name="e"></param>
         private void updateButton_Click(object sender, RoutedEventArgs e)
         {
-            if (actions_Model.Text.Length > 0)
+            if (drone.Model.Length > 0)
             {
                 try
                 {
-                    bl.UpdateDroneModel(drone.ID, actions_Model.Text);
+                    bl.UpdateDroneModel(drone.ID, drone.Model);
                     MessageBox.Show("Model name successfully updated.");
 
                     //reload this window
@@ -174,12 +174,12 @@ namespace PL
         {
             try
             {
-                if ((BO.Enums.DroneStatus)actions_Status.Content == BO.Enums.DroneStatus.available)
+                if (drone.Status == BO.Enums.DroneStatus.available)
                 {
                     bl.SendDroneToCharge(drone.ID);
                     MessageBox.Show("Drone successfully sent to station to charge.");
                 }
-                else if ((BO.Enums.DroneStatus)actions_Status.Content == BO.Enums.DroneStatus.maintenance)
+                else if (drone.Status == BO.Enums.DroneStatus.maintenance)
                 {
                     DateTime beganCharging = bl.GetTimeChargeBegan(drone.ID);
                     bl.ReleaseFromCharge(drone.ID, (DateTime.Now - beganCharging).TotalHours);
@@ -220,12 +220,12 @@ namespace PL
         {
             try
             {
-                if ((BO.Enums.DroneStatus)actions_Status.Content == BO.Enums.DroneStatus.available)
+                if (drone.Status == BO.Enums.DroneStatus.available)
                 {
                     bl.AssignPackage(drone.ID);
                     MessageBox.Show("Package successfully assigned to drone.");
                 }
-                else if ((BO.Enums.DroneStatus)actions_Status.Content == BO.Enums.DroneStatus.delivery)
+                else if (drone.Status == BO.Enums.DroneStatus.delivery)
                 {
                     BO.Package package = bl.GetPackage(drone.PackageInTransfer.ID);
                     
