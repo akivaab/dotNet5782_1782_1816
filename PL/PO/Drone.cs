@@ -5,10 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PL
+namespace PO
 {
+    /// <summary>
+    /// Copy of the BO.Drone used for Data Binding in the PL.
+    /// </summary>
     class Drone : INotifyPropertyChanged
     {
+        #region Fields
+
         /// <summary>
         /// The drone ID.
         /// </summary>
@@ -128,7 +133,19 @@ namespace PL
             }
         }
 
+        #endregion
+
+        #region PropertyChanged
+
+        /// <summary>
+        /// An event to implement INotifyPropertyChanged interface
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Fire the PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">Name of the property that changed.</param>
         private void onPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
@@ -137,6 +154,14 @@ namespace PL
             }
         }
 
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Construct PO.Drone from a BO.Drone.
+        /// </summary>
+        /// <param name="blDrone">A BO.Drone from the BL.</param>
         public Drone(BO.Drone blDrone)
         {
             ID = blDrone.ID;
@@ -147,5 +172,7 @@ namespace PL
             PackageInTransfer = blDrone.PackageInTransfer;
             Location = blDrone.Location;
         }
+
+        #endregion
     }
 }

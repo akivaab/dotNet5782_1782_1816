@@ -19,6 +19,8 @@ namespace PL
     /// </summary>
     public partial class PackageWindow : Window
     {
+        #region Fields
+
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -27,12 +29,16 @@ namespace PL
         /// <summary>
         /// The package we enabling the user to update.
         /// </summary>
-        private Package package;
+        private PO.Package package;
 
         /// <summary>
         /// Flag if the close button is clicked.
         /// </summary>
         private bool allowClose;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// PackageWindow constructor for adding a package.
@@ -80,6 +86,10 @@ namespace PL
             actions.Visibility = Visibility.Visible;
         }
 
+        #endregion
+
+        #region Add
+
         /// <summary>
         /// Add a package to the system.
         /// </summary>
@@ -112,6 +122,10 @@ namespace PL
             }
         }
 
+        #endregion
+
+        #region Action
+
         /// <summary>
         /// Remove the package from the system.
         /// </summary>
@@ -137,6 +151,10 @@ namespace PL
             }
         }
 
+        #endregion
+
+        #region Open Window
+
         /// <summary>
         /// Open a more detailed DroneWindow for the drone delivering the package.
         /// </summary>
@@ -158,6 +176,10 @@ namespace PL
             BO.CustomerToList customerToList = bl.FindCustomers(c => c.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.CustomerForPackage).ID).Single();
             new CustomerWindow(bl, customerToList).Show();
         }
+
+        #endregion
+
+        #region Close
 
         /// <summary>
         /// Close the window.
@@ -183,5 +205,7 @@ namespace PL
                 MessageBox.Show("Please use the " + (add.Visibility == Visibility.Visible ? "Cancel" : "Close") + " button on the lower right.");
             }
         }
+
+        #endregion
     }
 }

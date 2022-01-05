@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Drone_Icon.ico</ApplicationIcon>
+    <ApplicationIcon>Graphics\Drone_Icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Drone_Icon.jpg" />
+    <Resource Include="Graphics\Drone_Icon.jpg" />
   </ItemGroup>
 
 </Project>

@@ -20,6 +20,8 @@ namespace PL
     /// </summary>
     public partial class DroneListWindow : Window
     {
+        #region Fields
+
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -34,6 +36,10 @@ namespace PL
         /// The drones being displayed.
         /// </summary>
         private ObservableCollection<BO.DroneToList> droneToListCollection;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// DroneListWindow constructor, initializes ItemSources.
@@ -56,8 +62,12 @@ namespace PL
             maxWeightSelector.ItemsSource = weights;
         }
 
+        #endregion
+
+        #region Filter ListView
+
         /// <summary>
-        /// Filter the droneViewList based on the selected options of both selectors.
+        /// Filter the droneListView based on the selected options of both selectors.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -101,31 +111,6 @@ namespace PL
         {
             maxWeightSelector.SelectedItem = null;
         }
-        
-        /// <summary>
-        /// Open a DroneWindow to add a drone to the system.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void addDroneButton_Click(object sender, RoutedEventArgs e)
-        {
-            new DroneWindow(bl).Show();
-        }
-
-        /// <summary>
-        /// Open a DroneWindow to perform actions with a drone double-clicked in droneListView.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void droneListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            //make sure that a drone was double-clicked (not just anywhere on the window)
-            BO.DroneToList drone = ((FrameworkElement)e.OriginalSource).DataContext as BO.DroneToList;
-            if (drone != null)
-            {
-                new DroneWindow(bl, drone).Show();
-            }
-        }
 
         /// <summary>
         /// Group the drones in droneListView by status.
@@ -150,6 +135,43 @@ namespace PL
             view.GroupDescriptions.Clear();
         }
 
+        #endregion
+
+        #region Add
+
+        /// <summary>
+        /// Open a DroneWindow to add a drone to the system.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void addDroneButton_Click(object sender, RoutedEventArgs e)
+        {
+            new DroneWindow(bl).Show();
+        }
+
+        #endregion
+
+        #region Action
+
+        /// <summary>
+        /// Open a DroneWindow to perform actions with a drone double-clicked in droneListView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void droneListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //make sure that a drone was double-clicked (not just anywhere on the window)
+            BO.DroneToList drone = ((FrameworkElement)e.OriginalSource).DataContext as BO.DroneToList;
+            if (drone != null)
+            {
+                new DroneWindow(bl, drone).Show();
+            }
+        }
+
+        #endregion
+
+        #region Refresh
+
         /// <summary>
         /// Refresh the droneListView to reflect any updates.
         /// </summary>
@@ -169,6 +191,10 @@ namespace PL
             maxWeightSelector.SelectedItem = weightCategories;
             groupByStatusCheckBox.IsChecked = grouped;
         }
+
+        #endregion
+
+        #region Close
 
         /// <summary>
         /// Close the window.
@@ -194,5 +220,7 @@ namespace PL
                 MessageBox.Show("Please use the Close button on the lower right.");
             }
         }
+
+        #endregion
     }
 }

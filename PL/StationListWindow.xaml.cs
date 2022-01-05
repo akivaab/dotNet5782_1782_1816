@@ -20,6 +20,8 @@ namespace PL
     /// </summary>
     public partial class StationListWindow : Window
     {
+        #region Fields
+
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -35,6 +37,10 @@ namespace PL
         /// </summary>
         private ObservableCollection<BO.StationToList> stationToListCollection;
 
+        #endregion
+
+        #region Constructors
+
         /// <summary>
         /// StationListWindow constructor.
         /// </summary>
@@ -49,30 +55,9 @@ namespace PL
             DataContext = stationToListCollection;
         }
 
-        /// <summary>
-        /// Open a StationWindow to add a station to the system.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void addStationButton_Click(object sender, RoutedEventArgs e)
-        {
-            new StationWindow(bl).Show();
-        }
+        #endregion
 
-        /// <summary>
-        /// Open a StationWindow to perform actions with a station double-clicked in stationListView.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void stationListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            //make sure that a station was double-clicked (not just anywhere on the window)
-            BO.StationToList station = ((FrameworkElement)e.OriginalSource).DataContext as BO.StationToList;
-            if (station != null)
-            {
-                new StationWindow(bl, station).Show();
-            }
-        }
+        #region Filter ListView
 
         /// <summary>
         /// Group the stations in stationListView by number of available charging slots.
@@ -97,6 +82,43 @@ namespace PL
             view.GroupDescriptions.Clear();
         }
 
+        #endregion
+
+        #region Add
+
+        /// <summary>
+        /// Open a StationWindow to add a station to the system.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void addStationButton_Click(object sender, RoutedEventArgs e)
+        {
+            new StationWindow(bl).Show();
+        }
+
+        #endregion
+
+        #region Action
+
+        /// <summary>
+        /// Open a StationWindow to perform actions with a station double-clicked in stationListView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void stationListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //make sure that a station was double-clicked (not just anywhere on the window)
+            BO.StationToList station = ((FrameworkElement)e.OriginalSource).DataContext as BO.StationToList;
+            if (station != null)
+            {
+                new StationWindow(bl, station).Show();
+            }
+        }
+
+        #endregion
+
+        #region Refresh
+
         /// <summary>
         /// Refresh the stationListView.
         /// </summary>
@@ -110,6 +132,10 @@ namespace PL
                 stationToListCollection.Add(stationToList);
             }
         }
+
+        #endregion
+
+        #region Close
 
         /// <summary>
         /// Close the window.
@@ -135,5 +161,7 @@ namespace PL
                 MessageBox.Show("Please use the Close button on the lower right.");
             }
         }
+
+        #endregion
     }
 }

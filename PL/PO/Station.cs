@@ -6,10 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PL
+namespace PO
 {
+    /// <summary>
+    /// Copy of the BO.Station used for Data Binding in the PL.
+    /// </summary>
     class Station : INotifyPropertyChanged
     {
+        #region Fields
+
         /// <summary>
         /// The station ID.
         /// </summary>
@@ -95,7 +100,19 @@ namespace PL
             }
         }
 
+        #endregion
+
+        #region PropertyChanged
+
+        /// <summary>
+        /// An event to implement INotifyPropertyChanged interface
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Fire the PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">Name of the property that changed.</param>
         private void onPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
@@ -104,6 +121,14 @@ namespace PL
             }
         }
 
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Construct PO.Station from a BO.Station.
+        /// </summary>
+        /// <param name="blStation">A BO.Station from the BL.</param>
         public Station(BO.Station blStation)
         {
             ID = blStation.ID;
@@ -112,5 +137,7 @@ namespace PL
             AvailableChargeSlots = blStation.AvailableChargeSlots;
             DronesCharging = new ObservableCollection<BO.DroneCharging>(blStation.DronesCharging);
         }
+
+        #endregion
     }
 }

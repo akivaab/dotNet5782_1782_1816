@@ -51,7 +51,7 @@ namespace PL
     public class FormatBattery : IValueConverter
     {
         /// <summary>
-        /// Convert the double to a string consisting of the floor of the double and a '%'.
+        /// Convert the double to a string consisting of the floor of the double and an appended '%'.
         /// </summary>
         /// <param name="value"></param>
         /// <param name="targetType"></param>

@@ -6,10 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PL
+namespace PO
 {
+    /// <summary>
+    /// Copy of the BO.Customer used for Data Binding in the PL.
+    /// </summary>
     class Customer : INotifyPropertyChanged
     {
+        #region Fields
+
         /// <summary>
         /// The customer's ID.
         /// </summary>
@@ -112,7 +117,19 @@ namespace PL
             }
         }
 
+        #endregion
+
+        #region PropertyChanged
+
+        /// <summary>
+        /// An event to implement INotifyPropertyChanged interface
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Fire the PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">Name of the property that changed.</param>
         private void onPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
@@ -121,6 +138,14 @@ namespace PL
             }
         }
 
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Construct PO.Customer from a BO.Customer.
+        /// </summary>
+        /// <param name="blCustomer">A BO.Customer from the BL.</param>
         public Customer(BO.Customer blCustomer)
         {
             ID = blCustomer.ID;
@@ -130,5 +155,7 @@ namespace PL
             PackagesToSend = new ObservableCollection<BO.PackageForCustomer>(blCustomer.PackagesToSend);
             PackagesToReceive = new ObservableCollection<BO.PackageForCustomer>(blCustomer.PackagesToReceive);
         }
+
+        #endregion
     }
 }

@@ -20,6 +20,8 @@ namespace PL
     /// </summary>
     public partial class PopupWindow : Window
     {
+        #region Fields
+
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -39,6 +41,10 @@ namespace PL
         /// The collection of packages that the selected package is part of.
         /// </summary>
         private ObservableCollection<BO.PackageToList> packages;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// PopupWindow constructor, for changing the customer's password.
@@ -68,6 +74,15 @@ namespace PL
             confirmPackageGrid.Visibility = Visibility.Visible;
         }
 
+        #endregion
+
+        #region Password
+
+        /// <summary>
+        /// Change the customer's password.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void changePasswordButton_Click(object sender, RoutedEventArgs e)
         {
             if (newPassword.Password == newPasswordConfirm.Password)
@@ -94,15 +109,31 @@ namespace PL
             }
         }
 
+        #endregion
+
+        #region Confirm Package
+
+        /// <summary>
+        /// Confirm that a package was collected/received.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void yesButton_Click(object sender, RoutedEventArgs e)
         {
             packages.Remove(package);
             Close();
         }
 
+        /// <summary>
+        /// Cancel confirmation that a package was collected/received.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void noButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
+
+        #endregion
     }
 }

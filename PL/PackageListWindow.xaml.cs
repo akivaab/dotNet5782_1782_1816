@@ -20,6 +20,8 @@ namespace PL
     /// </summary>
     public partial class PackageListWindow : Window
     {
+        #region Fields
+
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -34,6 +36,10 @@ namespace PL
         /// The packages being displayed.
         /// </summary>
         private ObservableCollection<BO.PackageToList> packageToListCollection;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// PackageListWindow constructor, initializes ItemSources.
@@ -58,8 +64,12 @@ namespace PL
             prioritySelector.ItemsSource = Enum.GetValues(typeof(BO.Enums.Priorities));
         }
 
+        #endregion
+
+        #region Filter ListView
+
         /// <summary>
-        /// Filter the packageViewList based on the selected options of all selectors.
+        /// Filter the packageListView based on the selected options of all selectors.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -136,31 +146,6 @@ namespace PL
         }
 
         /// <summary>
-        /// Open a PackageWindow to add a package to the system.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void addPackageButton_Click(object sender, RoutedEventArgs e)
-        {
-            new PackageWindow(bl).Show();
-        }
-
-        /// <summary>
-        /// Open a PackageWindow to perform actions with a package double-clicked in packageListView.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void packageListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            //make sure that a package was double-clicked (not just anywhere on the window)
-            BO.PackageToList package = ((FrameworkElement)e.OriginalSource).DataContext as BO.PackageToList;
-            if (package != null)
-            {
-                new PackageWindow(bl, package).Show();
-            }
-        }
-
-        /// <summary>
         /// Group the packages in packageListView by sender.
         /// </summary>
         /// <param name="sender"></param>
@@ -199,6 +184,43 @@ namespace PL
             view.GroupDescriptions.Clear();
         }
 
+        #endregion
+
+        #region Add
+
+        /// <summary>
+        /// Open a PackageWindow to add a package to the system.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void addPackageButton_Click(object sender, RoutedEventArgs e)
+        {
+            new PackageWindow(bl).Show();
+        }
+
+        #endregion
+
+        #region Action
+
+        /// <summary>
+        /// Open a PackageWindow to perform actions with a package double-clicked in packageListView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void packageListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //make sure that a package was double-clicked (not just anywhere on the window)
+            BO.PackageToList package = ((FrameworkElement)e.OriginalSource).DataContext as BO.PackageToList;
+            if (package != null)
+            {
+                new PackageWindow(bl, package).Show();
+            }
+        }
+
+        #endregion
+
+        #region Refresh
+
         /// <summary>
         /// Refresh the packageListView to reflect any updates.
         /// </summary>
@@ -222,6 +244,10 @@ namespace PL
             groupBySenderRadioButton.IsChecked = groupedBySender;
             groupByReceiverRadioButton.IsChecked = groupedByReceiver;
         }
+
+        #endregion
+
+        #region Close
 
         /// <summary>
         /// Close the window.
@@ -247,5 +273,7 @@ namespace PL
                 MessageBox.Show("Please use the Close button on the lower right.");
             }
         }
+
+        #endregion
     }
 }

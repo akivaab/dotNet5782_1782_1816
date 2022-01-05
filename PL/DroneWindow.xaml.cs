@@ -19,6 +19,8 @@ namespace PL
     /// </summary>
     public partial class DroneWindow : Window
     {
+        #region Fields
+
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -27,12 +29,16 @@ namespace PL
         /// <summary>
         /// The drone we enabling the user to update.
         /// </summary>
-        private Drone drone;
+        private PO.Drone drone;
 
         /// <summary>
         /// Flag if the close button is clicked.
         /// </summary>
         private bool allowClose;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// DroneWindow constructor for adding a drone.
@@ -62,7 +68,7 @@ namespace PL
         /// DroneWindow constructor for performing actions on a drone.
         /// </summary>
         /// <param name="bl">A BL object.</param>
-        /// <param name="drone">The drone being updated/acted upon.</param>
+        /// <param name="droneToList">The drone being updated/acted upon.</param>
         public DroneWindow(BlApi.IBL bl, BO.DroneToList droneToList)
         {
             InitializeComponent();
@@ -84,6 +90,10 @@ namespace PL
             add.Visibility = Visibility.Collapsed;
             actions.Visibility = Visibility.Visible;
         }
+
+        #endregion
+
+        #region Add
 
         /// <summary>
         /// Add a drone to the system.
@@ -126,16 +136,9 @@ namespace PL
             }
         }
 
-        /// <summary>
-        /// Open a more detailed PackageWindow for the package being transferred (if there is one). 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void package_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            BO.PackageToList packageToList = bl.FindPackages(p => p.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.PackageInTransfer).ID).Single();
-            new PackageWindow(bl, packageToList).Show();
-        }
+        #endregion
+
+        #region Action
 
         /// <summary>
         /// Update the drone model.
@@ -299,6 +302,25 @@ namespace PL
             }
         }
 
+        #endregion
+
+        #region Open Window
+
+        /// <summary>
+        /// Open a more detailed PackageWindow for the package being transferred (if there is one). 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void package_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            BO.PackageToList packageToList = bl.FindPackages(p => p.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.PackageInTransfer).ID).Single();
+            new PackageWindow(bl, packageToList).Show();
+        }
+
+        #endregion
+
+        #region Reload
+
         /// <summary>
         /// Reload the data of the drone to be displayed in the window.
         /// </summary>
@@ -319,6 +341,10 @@ namespace PL
                 MessageBox.Show("Error: This drone is not in the system.\nTry closing this window and refreshing the list.");
             }
         }
+
+        #endregion
+
+        #region Close
 
         /// <summary>
         /// Close the window.
@@ -344,5 +370,7 @@ namespace PL
                 MessageBox.Show("Please use the " + (add.Visibility == Visibility.Visible ? "Cancel" : "Close") + " button on the lower right.");
             }
         }
+
+        #endregion
     }
 }

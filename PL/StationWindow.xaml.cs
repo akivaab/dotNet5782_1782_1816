@@ -19,6 +19,8 @@ namespace PL
     /// </summary>
     public partial class StationWindow : Window
     {
+        #region Fields
+
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -32,12 +34,16 @@ namespace PL
         /// <summary>
         /// The station we are enabling the user to update as PO entity.
         /// </summary>
-        private Station station;
+        private PO.Station station;
 
         /// <summary>
         /// Flag if the close button is clicked.
         /// </summary>
         private bool allowClose;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// StationWindow constructor for adding a station.
@@ -58,7 +64,7 @@ namespace PL
         /// StationWindow constructor for performing actions on a station.
         /// </summary>
         /// <param name="bl">A BL object.</param>
-        /// <param name="station">The station being acted upon.</param>
+        /// <param name="stationToList">The station being acted upon.</param>
         public StationWindow(BlApi.IBL bl, BO.StationToList stationToList)
         {
             InitializeComponent();
@@ -75,6 +81,10 @@ namespace PL
 
             actions_TotalChargeSlots.Text = (this.station.AvailableChargeSlots + stationToList.NumOccupiedChargeSlots).ToString();
         }
+
+        #endregion
+
+        #region Add
 
         /// <summary>
         /// Add a station to the system.
@@ -120,6 +130,10 @@ namespace PL
                     (isDouble1 || isDouble2 ? "" : "\n(Are the latitude/longitude of the location floating point values?)"));
             }
         }
+
+        #endregion
+
+        #region Action
 
         /// <summary>
         /// Update the name of the station and the total number of charging slots it has.
@@ -179,6 +193,10 @@ namespace PL
             }
         }
 
+        #endregion
+
+        #region Open Window
+
         /// <summary>
         /// Open a DroneWindow detailing a drone charging at the station.
         /// </summary>
@@ -190,8 +208,12 @@ namespace PL
             new DroneWindow(bl, droneToList).Show();
         }
 
+        #endregion
+
+        #region Reload
+
         /// <summary>
-        /// Load the data of the station to be displayed in the window.
+        /// Reload the data of the station to be displayed in the window.
         /// </summary>
         private void reloadStationData()
         {
@@ -208,6 +230,10 @@ namespace PL
                 MessageBox.Show("Error: This station is not in the system.\nTry closing this window and refreshing the list.");
             }
         }
+
+        #endregion
+
+        #region Close
 
         /// <summary>
         /// Close the window.
@@ -233,5 +259,7 @@ namespace PL
                 MessageBox.Show("Please use the " + (add.Visibility == Visibility.Visible ? "Cancel" : "Close") + " button on the lower right.");
             }
         }
+
+        #endregion
     }
 }

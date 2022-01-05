@@ -19,6 +19,8 @@ namespace PL
     /// </summary>
     public partial class CustomerWindow : Window
     {
+        #region Fields
+
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -27,12 +29,16 @@ namespace PL
         /// <summary>
         /// The customer we enabling the user to update.
         /// </summary>
-        private Customer customer;
+        private PO.Customer customer;
 
         /// <summary>
         /// Flag if the close button is clicked.
         /// </summary>
         private bool allowClose;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// CustomerWindow constructor for adding a customer.
@@ -53,7 +59,7 @@ namespace PL
         /// CustomerWindow constructor for performing actions on a customer.
         /// </summary>
         /// <param name="bl">A BL object.</param>
-        /// <param name="customer">The station being acted upon.</param>
+        /// <param name="customerToList">The station being acted upon.</param>
         public CustomerWindow(BlApi.IBL bl, BO.CustomerToList customerToList)
         {
             InitializeComponent();
@@ -75,6 +81,10 @@ namespace PL
             add.Visibility = Visibility.Collapsed;
             actions.Visibility = Visibility.Visible;
         }
+
+        #endregion
+
+        #region Add
 
         /// <summary>
         /// Add a customer to the system.
@@ -118,6 +128,10 @@ namespace PL
                     (isDouble1 || isDouble2 ? "" : "\n(Are the latitude/longitude of the location floating point values?)"));
             }
         }
+
+        #endregion
+
+        #region Action
 
         /// <summary>
         /// Update the name of the station and the total number of charging slots it has.
@@ -174,6 +188,10 @@ namespace PL
             }
         }
 
+        #endregion
+
+        #region Open Window
+
         /// <summary>
         /// Open a package detailing a customer package.
         /// </summary>
@@ -184,6 +202,10 @@ namespace PL
             BO.PackageToList packageToList = bl.FindPackages(p => p.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.PackageForCustomer).ID).Single();
             new PackageWindow(bl, packageToList).Show();
         }
+
+        #endregion
+
+        #region Reload
 
         /// <summary>
         /// Reload the data of the customer to be displayed in the window.
@@ -201,6 +223,10 @@ namespace PL
                 MessageBox.Show("Error: This customer is not in the system.\nTry closing this window and refreshing the list.");
             }
         }
+
+        #endregion
+
+        #region Close
 
         /// <summary>
         /// Close the window.
@@ -226,6 +252,8 @@ namespace PL
                 MessageBox.Show("Please use the " + (add.Visibility == Visibility.Visible ? "Cancel" : "Close") + " button on the lower right.");
             }
         }
+
+        #endregion
     }
 
 

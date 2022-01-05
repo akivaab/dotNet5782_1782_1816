@@ -41,7 +41,7 @@
                             </EventTrigger>
                         </Ellipse.Triggers>
                     </Ellipse>
-                    <Image Source="Drone_Icon.jpg" Height="140" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,30" RenderTransformOrigin="0.5,0.5"/>
+                    <Image Source="Graphics/Drone_Icon.jpg" Height="140" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,30" RenderTransformOrigin="0.5,0.5"/>
                     <TextBlock Text="Click a tab above to sign in! " HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,45" FontSize="35" FontFamily="Constantia" Foreground="MidnightBlue"/>
                 </Grid>
             </TabItem>
@@ -67,7 +67,7 @@
         </TabControl>
 
         <Grid Name="employeeGrid" Background="{StaticResource background}" Visibility="Collapsed">
-            <Image Source="Drone_Icon.jpg" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Image Source="Graphics/Drone_Icon.jpg" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Text="{Binding ElementName=employeeName, Path=Text}" VerticalAlignment="Top" Margin="100,10,100,0" Height="60" FontSize="30"/>
             <Button Name="showDroneListButton" Content="Drones" HorizontalAlignment="Left" Margin="40,91,0,0" VerticalAlignment="Top" Style="{StaticResource buttonStyle}" Click="showDroneListButton_Click"/>
             <Button Name="showStationListButton" Content="Stations" HorizontalAlignment="Left" Margin="40,0,0,108" VerticalAlignment="Bottom" Style="{StaticResource buttonStyle}" Click="showStationListButton_Click"/>

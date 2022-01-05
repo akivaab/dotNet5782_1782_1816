@@ -22,6 +22,7 @@ namespace PL
     public partial class MainWindow : Window
     {
         #region Fields
+
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -51,9 +52,11 @@ namespace PL
         /// Collection of packages the customer is receiving that have been delivered.
         /// </summary>
         ObservableCollection<BO.PackageToList> incomingPackagesReceivedCollection;
+        
         #endregion
 
         #region Constructors
+
         /// <summary>
         /// MainWindow constructor that gets a BL instance.
         /// </summary>
@@ -69,6 +72,7 @@ namespace PL
                 MessageBox.Show(ex.Message + "\nCongratulations, you achieved the near impossible situation where no randomly generated customer received a package yet!");
             }
         }
+
         #endregion
 
         #region Employee Interface
@@ -128,6 +132,7 @@ namespace PL
         #endregion
 
         #region Customer Interface
+
         /// <summary>
         /// Register a new customer.
         /// </summary>
@@ -243,6 +248,7 @@ namespace PL
             seeSend.IsChecked = false;
             seeReceive.IsChecked = false;
         }
+
         #endregion
     }
 }

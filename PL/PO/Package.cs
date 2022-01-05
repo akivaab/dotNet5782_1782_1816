@@ -6,10 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PL
+namespace PO
 {
+    /// <summary>
+    /// Copy of the BO.Package used for Data Binding in the PL.
+    /// </summary>
     class Package : INotifyPropertyChanged
     {
+        #region Fields
+
         /// <summary>
         /// The package ID.
         /// </summary>
@@ -180,8 +185,19 @@ namespace PL
             }
         }
 
+        #endregion
 
+        #region PropertyChanged
+
+        /// <summary>
+        /// An event to implement INotifyPropertyChanged interface
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Fire the PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">Name of the property that changed.</param>
         private void onPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
@@ -190,6 +206,14 @@ namespace PL
             }
         }
 
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Construct PO.Package from a BO.Package.
+        /// </summary>
+        /// <param name="blPackage">A BO.Package from the BL.</param>
         public Package(BO.Package blPackage)
         {
             ID = blPackage.ID;
@@ -203,5 +227,7 @@ namespace PL
             CollectingTime = blPackage.CollectingTime;
             DeliveringTime = blPackage.DeliveringTime;
         }
+
+        #endregion
     }
 }
