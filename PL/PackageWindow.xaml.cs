@@ -27,7 +27,7 @@ namespace PL
         /// <summary>
         /// The package we enabling the user to update.
         /// </summary>
-        private BO.PackageToList package;
+        private Package package;
 
         /// <summary>
         /// Flag if the close button is clicked.
@@ -65,12 +65,12 @@ namespace PL
         /// PackageWindow constructor for performing actions on a package.
         /// </summary>
         /// <param name="bl">A BL object.</param>
-        /// <param name="package">The package being acted upon.</param>
-        public PackageWindow(BlApi.IBL bl, BO.PackageToList package)
+        /// <param name="packageToList">The package being acted upon.</param>
+        public PackageWindow(BlApi.IBL bl, BO.PackageToList packageToList)
         {
             InitializeComponent();
             this.bl = bl;
-            this.package = package;
+            this.package = new(bl.GetPackage(packageToList.ID));
             allowClose = false;
 
             DataContext = package;
@@ -78,9 +78,6 @@ namespace PL
             //make only the features needed for perfroming actions on a drone visible in the window. 
             add.Visibility = Visibility.Collapsed;
             actions.Visibility = Visibility.Visible;
-
-            //load the package information displayed in the window
-            loadPackageData();
         }
 
         /// <summary>
@@ -137,32 +134,6 @@ namespace PL
             catch (BO.UnableToRemoveException ex)
             {
                 MessageBox.Show(ex.Message + "\nIt cannot be removed.");
-            }
-        }
-
-        /// <summary>
-        /// Load the data of the package to be displayed in the window.
-        /// </summary>
-        private void loadPackageData()
-        {
-            try
-            {
-                BO.Package packageEntity = bl.GetPackage(package.ID);
-
-                actions_PackageID.Content = packageEntity.ID;
-                actions_Sender.Content = packageEntity.Sender;
-                actions_Receiver.Content = packageEntity.Receiver;
-                actions_Weight.Content = packageEntity.Weight;
-                actions_Priority.Content = package.Priority;
-                actions_DroneDelivering.Content = packageEntity.DroneDelivering;
-                actions_CreationTime.Content = packageEntity.RequestTime;
-                actions_AssignmentTime.Content = packageEntity.AssigningTime;
-                actions_CollectionTime.Content = packageEntity.CollectingTime;
-                actions_DeliveryTime.Content = packageEntity.DeliveringTime;
-            }
-            catch (BO.UndefinedObjectException)
-            {
-                MessageBox.Show("Error: This drone is not in the system.\nTry closing this window and refreshing the list.");
             }
         }
 

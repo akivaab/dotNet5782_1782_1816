@@ -34,16 +34,16 @@
             <Label Content="Collection Time:" Margin="100,310,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="Delivery Time:" Margin="100,340,0,0" Style="{StaticResource actionLabelStyle}"/>
 
-            <Label x:Name="actions_PackageID" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_Sender" Margin="275,100,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_Receiver" Margin="275,130,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_Weight" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_Priority" Margin="275,190,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_DroneDelivering" Margin="275,220,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_CreationTime" Margin="275,250,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_AssignmentTime" Margin="275,280,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_CollectionTime" Margin="275,310,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label x:Name="actions_DeliveryTime" Margin="275,340,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding ID}" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding Sender}" Margin="275,100,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding Receiver}" Margin="275,130,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding Weight}" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding Priority}" Margin="275,190,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding DroneDelivering}" Margin="275,220,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding RequestTime}" Margin="275,250,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding AssigningTime}" Margin="275,280,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding CollectingTime}" Margin="275,310,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding DeliveringTime}" Margin="275,340,0,0" Style="{StaticResource actionLabelStyle}"/>
             
             <Button Name="removeButton" Content="Remove" HorizontalAlignment="Left" Margin="30,0,0,20" Style="{StaticResource actionButtonStyle}" Click="removeButton_Click"/>
             <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,30,20" Style="{StaticResource actionButtonStyle}" Click="closeButton_Click"/>
