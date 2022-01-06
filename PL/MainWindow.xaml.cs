@@ -31,7 +31,7 @@ namespace PL
         /// <summary>
         /// The customer who signed in (initialized at sign in).
         /// </summary>
-        private BO.Customer customer;
+        private PO.Customer customer;
 
         /// <summary>
         /// Collection of packages the customer is sending that have not yet been collected.
@@ -141,7 +141,9 @@ namespace PL
         private void register_Click(object sender, RoutedEventArgs e)
         {
             new CustomerWindow(bl).Show();
-            MessageBox.Show("Note: You will still need to sign in after registering.");
+            MessageBox.Show("Note: You will still need to sign in after registering.\n" +
+                            "Your password will default to matching your ID.\n" +
+                            "It is strongly advised that you change it after signing in.");
         }
 
         /// <summary>
@@ -153,15 +155,22 @@ namespace PL
         {
             int id;
             bool isInteger = int.TryParse(customerID.Text, out id);
-            if (isInteger && customerPassword.Password == bl.GetCustomerPassword(id))
+            try
             {
-                this.customer = bl.GetCustomer(id);
-                DataContext = customer;
-                openCustomerGrid(sender, e);
+                if (isInteger && customerPassword.Password == bl.GetCustomerPassword(id))
+                {
+                    this.customer = new(bl.GetCustomer(id));
+                    DataContext = customer;
+                    openCustomerGrid(sender, e);
+                }
+                else
+                {
+                    MessageBox.Show("Either the ID or password supplied is incorrect");
+                }
             }
-            else
+            catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("The password is incorrect");
+                MessageBox.Show("Error. This ID does not match any known customer.");
             }
         }
 
@@ -187,11 +196,47 @@ namespace PL
         }
 
         /// <summary>
+        /// Update the user profile.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void updateProfileButton_Click(object sender, RoutedEventArgs e)
+        {
+            int phoneNumber;
+            bool isInteger = int.TryParse(customer.Phone, out phoneNumber);
+
+            if (isInteger)
+            {
+                try
+                {
+                    bl.UpdateCustomer(customer.ID, customer.Name, customer.Phone);
+                    MessageBox.Show("Profile successfully updated.");
+
+                    BO.Customer blCustomer = bl.GetCustomer(customer.ID);
+                    customer.Name = blCustomer.Name;
+                    customer.Phone = blCustomer.Phone;
+                }
+                catch (BO.UndefinedObjectException)
+                {
+                    MessageBox.Show("Error: Try logging out and logging back in.");
+                }
+                catch (BO.IllegalArgumentException ex)
+                {
+                    MessageBox.Show(ex.Message + "\nIt must be 9 digits long.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please provide a valid phone number.");
+            }
+        }
+
+        /// <summary>
         /// Change the customer's password.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void changePassword_Click(object sender, RoutedEventArgs e)
+        private void changePasswordButton_Click(object sender, RoutedEventArgs e)
         {
             new PopupWindow(bl, customer.ID).Show();
         }
@@ -201,9 +246,20 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void requestPackage_Click(object sender, RoutedEventArgs e)
+        private void requestPackageButton_Click(object sender, RoutedEventArgs e)
         {
-            new PackageWindow(bl).Show();
+            PackageWindow packageWindow = new PackageWindow(bl, customer.ID);
+            packageWindow.Show();
+
+            //refresh when the PackageWindow closes so the new requested package appears
+            packageWindow.Closed += new EventHandler((object sender, EventArgs e) =>
+            {
+                sentPackagesNotCollectedCollection.Clear();
+                foreach (BO.PackageToList package in bl.FindPackages(p => p.SenderID == customer.ID && p.Collected == null))
+                {
+                    sentPackagesNotCollectedCollection.Add(package);
+                }
+            });
         }
 
         /// <summary>
@@ -245,8 +301,7 @@ namespace PL
             login.Visibility = Visibility.Visible;
             customerID.Text = "";
             customerPassword.Password = "";
-            seeSend.IsChecked = false;
-            seeReceive.IsChecked = false;
+            seeSend.IsChecked = true;
         }
 
         #endregion

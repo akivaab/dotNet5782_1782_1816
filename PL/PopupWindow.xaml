@@ -5,9 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Drone Delivery Service" Height="180" Width="200" WindowStartupLocation="CenterScreen">
-    <Grid>
-        <Grid x:Name="passwordGrid">
+        Title="Drone Delivery Service" Height="auto" Width="auto" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+    <Grid Height="150" Width="150">
+        
+        <Grid x:Name="passwordGrid" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -19,13 +20,14 @@
             <PasswordBox x:Name="newPassword"  Grid.Row="1" Background="LemonChiffon" FontSize="16"/>
             <TextBlock Text="Confirm Password:" Grid.Row="2" Background="BurlyWood" FontSize="16"/>
             <PasswordBox x:Name="newPasswordConfirm"  Grid.Row="3" Background="LemonChiffon" FontSize="16"/>
-            <Button x:Name="changePasswordButton" Content="Change Password" Grid.Row="4" FontSize="12" Click="changePasswordButton_Click" Margin="0,0,0,0"/>
+            <Button x:Name="changePasswordButton" Content="Change Password" Grid.Row="4" FontSize="14" Click="changePasswordButton_Click" Margin="0,0,0,0"/>
         </Grid>
 
         <Grid x:Name="confirmPackageGrid" Background="BurlyWood" Visibility="Collapsed">
-            <TextBlock Text="Confirm?" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,10,0,0" FontSize="14"/>
-            <Button x:Name="yesButton" Content="Yes" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="15" Width="40" Margin="10,0,0,10" FontSize="8" Click="yesButton_Click"/>
-            <Button x:Name="noButton" Content="No" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="15" Width="40" Margin="0,0,10,10" FontSize="8" Click="noButton_Click"/>
+            <TextBlock Text="Confirm?" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,30,0,0" FontSize="24"/>
+            <Button x:Name="yesButton" Content="Yes" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="25" Width="60" Margin="0,0,0,50" FontSize="14" Click="yesButton_Click"/>
+            <Button x:Name="noButton" Content="No" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="25" Width="60" Margin="0,0,0,20" FontSize="14" Click="noButton_Click"/>
         </Grid>
+    
     </Grid>
 </Window>

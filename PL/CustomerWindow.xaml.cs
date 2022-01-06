@@ -134,7 +134,7 @@ namespace PL
         #region Action
 
         /// <summary>
-        /// Update the name of the station and the total number of charging slots it has.
+        /// Update the customer's name and phone number.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

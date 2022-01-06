@@ -68,6 +68,17 @@ namespace PL
         }
 
         /// <summary>
+        /// PackageWindow constructor for adding a package when done through the customer interface.
+        /// </summary>
+        /// <param name="bl">The BL instance.</param>
+        /// <param name="customerID">The ID of the customer requesting a package to send.</param>
+        public PackageWindow(BlApi.IBL bl, int customerID) : this(bl)
+        {
+            add_SenderID.SelectedItem = customerID;
+            add_SenderID.IsEnabled = false;
+        }
+
+        /// <summary>
         /// PackageWindow constructor for performing actions on a package.
         /// </summary>
         /// <param name="bl">A BL object.</param>
