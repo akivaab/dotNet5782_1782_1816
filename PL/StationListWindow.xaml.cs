@@ -109,9 +109,18 @@ namespace PL
         {
             //make sure that a station was double-clicked (not just anywhere on the window)
             BO.StationToList station = ((FrameworkElement)e.OriginalSource).DataContext as BO.StationToList;
-            if (station != null)
+
+            try
             {
-                new StationWindow(bl, station).Show();
+                if (station != null)
+                {
+                    bl.GetStation(station.ID);
+                    new StationWindow(bl, station).Show();
+                }
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("This station has been deleted. Please refresh the list.");
             }
         }
 

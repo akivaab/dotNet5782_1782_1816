@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="CustomerListWindow" Height="450" Width="840" Closing="customerListWindow_Closing">
-    <Grid Name="MainGrid" Background="MediumTurquoise">
+        Title="CustomerListWindow" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="customerListWindow_Closing">
+    
+    <Grid Name="MainGrid" Height="450" Width="840" Background="MediumTurquoise">
         <ListView x:Name="customerListView" ItemsSource="{Binding}" Margin="0,20,0,50" MouseDoubleClick="customerListView_MouseDoubleClick" Background="LightGreen">
             <ListView.View>
                 <GridView>
@@ -22,7 +23,7 @@
         </ListView>
 
         <Button Name="refreshButton" Content="Refresh" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50" FontWeight="Bold" Background="LightGoldenrodYellow" Click="refreshButton_Click"/>
-        <Button Name="addCustomerButton" Content="Add New Customer" HorizontalAlignment="Right" Margin="0,0,90,15" VerticalAlignment="Bottom" Click="addCustomerButton_Click" Width="115" Height="20"/>
-        <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,20,15" VerticalAlignment="Bottom" Click="closeButton_Click" Width="55" Height="20"/>
+        <Button Name="addCustomerButton" Content="Add New Customer" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,90,15" Height="20" Width="115" Click="addCustomerButton_Click"/>
+        <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,15" Height="20" Width="55" Click="closeButton_Click"/>
     </Grid>
 </Window>

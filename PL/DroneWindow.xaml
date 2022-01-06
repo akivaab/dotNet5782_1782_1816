@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Drone Delivery Service" Height="450" Width="1000" Closing="droneWindow_Closing">
+        Title="Drone Delivery Service" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="droneWindow_Closing">
     <Window.Resources>
         <local:FormatBattery x:Key="format"/>
     </Window.Resources>
 
-    <Grid Background="{StaticResource background}">
+    <Grid Height="450" Width="1000" Background="{StaticResource background}">
         <Grid x:Name="add">
             <Label Content="Drone ID:" Margin="0,80,150,0" Style="{StaticResource addLabelStyle}"/>
             <Label Content="Model:" Margin="0,130,150,0" Style="{StaticResource addLabelStyle}"/>
@@ -49,7 +49,7 @@
             <Label Content="Location:" Margin="100,300,0,0" Style="{StaticResource actionLabelStyle}"/>
 
             <Label Content="{Binding ID}" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <TextBox Text="{Binding Model}" Margin="275,100,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="28" FontSize="14"/>
+            <TextBox Text="{Binding Model}" Margin="275,100,0,0" Style="{StaticResource actionTextBoxStyle}"/>
             <Label Content="{Binding MaxWeight}" Margin="275,130,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="{Binding Battery, Converter={StaticResource format}}" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="{Binding Status}" Margin="275,190,0,0" Style="{StaticResource actionLabelStyle}"/>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="PackageListWindow" Height="450" Width="900" Closing="packageListWindow_Closing">
+        Title="PackageListWindow" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="packageListWindow_Closing">
     <Window.Resources>
         <Style x:Key="comboBoxStyle" TargetType="ComboBox">
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -15,7 +15,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid Name="MainGrid" Background="MediumTurquoise">
+    <Grid Height="450" Width="900" Name="MainGrid" Background="MediumTurquoise">
         <Grid.RowDefinitions>
             <RowDefinition Height="70*"/>
             <RowDefinition Height="400*"/>

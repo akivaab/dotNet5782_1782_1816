@@ -76,6 +76,7 @@ namespace PL
         #endregion
 
         #region Employee Interface
+
         /// <summary>
         /// Verify an employee signing in.
         /// </summary>
@@ -129,6 +130,20 @@ namespace PL
         {
             new PackageListWindow(bl).Show();
         }
+
+        /// <summary>
+        /// Employee logout.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void employeeLogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            employeeGrid.Visibility = Visibility.Collapsed;
+            login.Visibility = Visibility.Visible;
+            employeeName.Text = "";
+            employeePassword.Password = "";
+        }
+
         #endregion
 
         #region Customer Interface
@@ -295,7 +310,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void logoutButton_Click(object sender, RoutedEventArgs e)
+        private void customerLogoutButton_Click(object sender, RoutedEventArgs e)
         {
             customerGrid.Visibility = Visibility.Collapsed;
             login.Visibility = Visibility.Visible;

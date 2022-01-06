@@ -211,9 +211,18 @@ namespace PL
         {
             //make sure that a package was double-clicked (not just anywhere on the window)
             BO.PackageToList package = ((FrameworkElement)e.OriginalSource).DataContext as BO.PackageToList;
-            if (package != null)
+
+            try
             {
-                new PackageWindow(bl, package).Show();
+                if (package != null)
+                {
+                    bl.GetPackage(package.ID);
+                    new PackageWindow(bl, package).Show();
+                }
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("This package has been deleted. Please refresh the list.");
             }
         }
 

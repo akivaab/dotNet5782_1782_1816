@@ -162,9 +162,18 @@ namespace PL
         {
             //make sure that a drone was double-clicked (not just anywhere on the window)
             BO.DroneToList drone = ((FrameworkElement)e.OriginalSource).DataContext as BO.DroneToList;
-            if (drone != null)
+
+            try
             {
-                new DroneWindow(bl, drone).Show();
+                if (drone != null)
+                {
+                    bl.GetDrone(drone.ID);
+                    new DroneWindow(bl, drone).Show();
+                }
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("This drone has been deleted. Please refresh the list.");
             }
         }
 

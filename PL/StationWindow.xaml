@@ -5,12 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="StationWindow" Height="450" Width="800" Closing="stationWindow_Closing">
-    <Window.Resources>
-        
-    </Window.Resources>
+        Title="StationWindow" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="stationWindow_Closing">
 
-    <Grid Background="{StaticResource background}">
+    <Grid Height="450" Width="800" Background="{StaticResource background}">
         <Grid x:Name="add">
             <Label Content="Station ID:" Margin="0,80,150,0" Style="{StaticResource addLabelStyle}"/>
             <Label Content="Name:" Margin="0,130,150,0" Style="{StaticResource addLabelStyle}"/>
@@ -36,10 +33,10 @@
             <Label Content="Drones Charging:" HorizontalAlignment="Left" Margin="100,190,0,0" VerticalAlignment="Top" FontSize="14"/>
 
             <Label Content="{Binding ID}" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <TextBox x:Name="actions_Name" Text="{Binding Name}" HorizontalAlignment="Left" Margin="275,100,0,0" VerticalAlignment="Top" Width="100" FontSize="14" Height="28"/>
+            <TextBox x:Name="actions_Name" Text="{Binding Name}" Margin="275,100,0,0" Style="{StaticResource actionTextBoxStyle}"/>
             <Label Content="{Binding Location}" Margin="275,130,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="{Binding AvailableChargeSlots}" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <ListBox ItemsSource="{Binding DronesCharging}" HorizontalAlignment="Left" Margin="275,190,0,0" VerticalAlignment="Top" FontSize="14" MouseDoubleClick="dronesCharging_MouseDoubleClick"/>
+            <ListBox ItemsSource="{Binding DronesCharging}" Margin="275,190,0,0" Style="{StaticResource listBoxStyle}" MouseDoubleClick="dronesCharging_MouseDoubleClick"/>
 
             <Label Content="No. of Total Charge Slots:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,60,50,0" FontSize="16"/>
             <TextBox x:Name="actions_TotalChargeSlots" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,85,50,0" Width="185" Height="30" FontSize="16"/>

@@ -82,9 +82,18 @@ namespace PL
         {
             //make sure that a customer was double-clicked (not just anywhere on the window)
             BO.CustomerToList customer = ((FrameworkElement)e.OriginalSource).DataContext as BO.CustomerToList;
-            if (customer != null)
+            
+            try
             {
-                new CustomerWindow(bl, customer).Show();
+                if (customer != null)
+                {
+                    bl.GetCustomer(customer.ID);
+                    new CustomerWindow(bl, customer).Show();
+                }
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("This customer has been deleted. Please refresh the list.");
             }
         }
 

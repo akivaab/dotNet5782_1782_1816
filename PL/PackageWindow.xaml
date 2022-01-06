@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="PackageWindow" Height="500" Width="1000" Closing="packageWindow_Closing">
-    <Grid Background="{StaticResource background}">
+        Title="PackageWindow" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="packageWindow_Closing">
+    
+    <Grid Height="500" Width="1000" Background="{StaticResource background}">
         <Grid x:Name="add">
             <Label Content="Sender ID:" Margin="0,80,150,0" Style="{StaticResource addLabelStyle}"/>
             <Label Content="Receiver ID:" Margin="0,130,150,0" Style="{StaticResource addLabelStyle}"/>
