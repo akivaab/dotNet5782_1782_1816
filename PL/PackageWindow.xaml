@@ -72,7 +72,11 @@
                         <Setter Property="HorizontalAlignment" Value="Left"/>
                         <Setter Property="VerticalAlignment" Value="Top"/>
                         <Setter Property="FontSize" Value="14"/>
+                        <Setter Property="Visibility" Value="Hidden"/>
                         <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=deliveringTime, Path=Content}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Foreground" Value="Blue"/>
                             </Trigger>
@@ -83,7 +87,7 @@
             <Label Content="{Binding RequestTime}" Margin="275,250,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="{Binding AssigningTime}" Margin="275,280,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="{Binding CollectingTime}" Margin="275,310,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label Content="{Binding DeliveringTime}" Margin="275,340,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label x:Name="deliveringTime" Content="{Binding DeliveringTime}" Margin="275,340,0,0" Style="{StaticResource actionLabelStyle}"/>
             
             <Button Name="removeButton" Content="Remove" HorizontalAlignment="Left" Margin="30,0,0,20" Style="{StaticResource actionButtonStyle}" Click="removeButton_Click"/>
             <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,30,20" Style="{StaticResource actionButtonStyle}" Click="closeButton_Click"/>

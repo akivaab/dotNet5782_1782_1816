@@ -37,10 +37,10 @@
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <Setter Property="Visibility" Value="Hidden"/>
+                        <Setter Property="Foreground" Value="Blue"/>
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding ElementName=actions_PackageInTransfer, Path=IsMouseOver}" Value="True">
                                 <Setter Property="Visibility" Value="Visible"/>
-                                <Setter Property="Foreground" Value="Blue"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
