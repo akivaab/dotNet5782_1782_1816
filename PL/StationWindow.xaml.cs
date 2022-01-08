@@ -191,6 +191,10 @@ namespace PL
             {
                 MessageBox.Show("Error: This station is already removed from the system.\nTry closing this window and refreshing the list.");
             }
+            catch (BO.UnableToRemoveException ex)
+            {
+                MessageBox.Show(ex.Message + "\nIt cannot be removed.");
+            }
         }
 
         #endregion

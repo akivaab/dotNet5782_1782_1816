@@ -149,32 +149,31 @@ namespace BL
 
         public void RemoveDrone(int droneID)
         {
-            int droneIndex = drones.FindIndex(d => d.ID == droneID);
-            if (droneIndex == -1)
-            {
-                throw new UndefinedObjectException("There is no drone with the given ID.");
-            }
-
-            if (drones[droneIndex].Status == Enums.DroneStatus.delivery)
-            {
-                throw new UnableToRemoveException("The drone is currently delivering.");
-            }
-
-            if (drones[droneIndex].Status == Enums.DroneStatus.maintenance)
-            {
-                throw new UnableToRemoveException("The drone is currently charging.");
-            }
-
             try
             {
+                int droneIndex = drones.FindIndex(d => d.ID == droneID);
+                if (droneIndex == -1)
+                {
+                    throw new UndefinedObjectException("There is no drone with the given ID.");
+                }
+
+                if (drones[droneIndex].Status == Enums.DroneStatus.delivery)
+                {
+                    throw new UnableToRemoveException("The drone is currently delivering.");
+                }
+
+                if (drones[droneIndex].Status == Enums.DroneStatus.maintenance)
+                {
+                    throw new UnableToRemoveException("The drone is currently charging.");
+                }
+
                 dalObject.RemoveDrone(droneID);
+                drones.RemoveAt(droneIndex);
             }
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
-
-            drones.RemoveAt(droneIndex);
         }
 
         #endregion

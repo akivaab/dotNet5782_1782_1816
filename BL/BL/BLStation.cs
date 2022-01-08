@@ -77,6 +77,10 @@ namespace BL
         {
             try
             {
+                if (FindStations(s => s.ID == stationID).Single().NumOccupiedChargeSlots > 0)
+                {
+                    throw new UnableToRemoveException("The station has drones charging in it.");
+                }
                 dalObject.RemoveStation(stationID);
             }
             catch (DO.UndefinedObjectException e)

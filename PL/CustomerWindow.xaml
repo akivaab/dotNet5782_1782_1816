@@ -21,7 +21,7 @@
             <TextBlock Text="," Margin="285,250,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="28"/>
             <TextBox Name="add_Longitude" Margin="420,250,0,0" Style="{StaticResource addTextBoxStyle}"/>
 
-            <Button Name="addButton" Content="Add" HorizontalAlignment="Center" Margin="0,0,0,90" VerticalAlignment="Bottom" Width="75" FontSize="16" Click="addButton_Click"/>
+            <Button Name="addButton" Content="Register" HorizontalAlignment="Center" Margin="0,0,0,90" VerticalAlignment="Bottom" Width="75" FontSize="16" Click="addButton_Click"/>
             <Button Name="cancelButton" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,30,20" VerticalAlignment="Bottom" Width="75" FontSize="16" Click="closeButton_Click"/>
         </Grid>
 

@@ -88,6 +88,11 @@ namespace BL
         {
             try
             {
+                IEnumerable<DO.Package> packages = dalObject.FindPackages(p => p.SenderID == customerID || p.ReceiverID == customerID);
+                if (packages.Count() > 0)
+                {
+                    throw new UnableToRemoveException("The customer is in the midst of a transaction.");
+                }
                 dalObject.RemoveCustomer(customerID);
             }
             catch (DO.UndefinedObjectException e)

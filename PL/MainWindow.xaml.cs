@@ -180,7 +180,7 @@ namespace PL
                 }
                 else
                 {
-                    MessageBox.Show("Either the ID or password supplied is incorrect");
+                    MessageBox.Show("The information supplied is incorrect");
                 }
             }
             catch (BO.UndefinedObjectException)
