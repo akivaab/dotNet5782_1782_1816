@@ -134,8 +134,6 @@ namespace BL
                 drones[droneIndex].Location = receiverLocation;
                 drones[droneIndex].Status = Enums.DroneStatus.available;
                 drones[droneIndex].PackageID = null;
-
-                dalObject.RemovePackage(dalPackage.ID);
             }
             catch (DO.UndefinedObjectException e)
             {

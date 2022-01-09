@@ -313,8 +313,20 @@ namespace PL
         /// <param name="e"></param>
         private void package_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            BO.PackageToList packageToList = bl.FindPackages(p => p.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.PackageInTransfer).ID).Single();
-            new PackageWindow(bl, packageToList).Show();
+            BO.PackageInTransfer packageInTransfer = ((FrameworkElement)e.OriginalSource).DataContext as BO.PackageInTransfer;
+
+            try
+            {
+                if (packageInTransfer != null)
+                {
+                    BO.PackageToList packageToList = bl.FindPackages(p => p.ID == packageInTransfer.ID).Single();
+                    new PackageWindow(bl, packageToList).Show();
+                }
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Error: Package could not be found. It may have been deleted.");
+            }
         }
 
         #endregion

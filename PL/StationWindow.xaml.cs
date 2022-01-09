@@ -208,8 +208,19 @@ namespace PL
         /// <param name="e"></param>
         private void dronesCharging_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            BO.DroneToList droneToList = bl.FindDrones(d => d.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.DroneCharging).ID).Single();
-            new DroneWindow(bl, droneToList).Show();
+            BO.DroneCharging droneCharging = ((FrameworkElement)e.OriginalSource).DataContext as BO.DroneCharging;
+            try
+            {
+                if (droneCharging != null)
+                {
+                    BO.DroneToList droneToList = bl.FindDrones(d => d.ID == droneCharging.ID).Single();
+                    new DroneWindow(bl, droneToList).Show();
+                }
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Error: Station could not be found. It may have been deleted.");
+            }
         }
 
         #endregion

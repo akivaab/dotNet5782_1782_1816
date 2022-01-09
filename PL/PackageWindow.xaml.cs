@@ -173,8 +173,20 @@ namespace PL
         /// <param name="e"></param>
         private void drone_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            BO.DroneToList droneToList = bl.FindDrones(d => d.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.DroneDelivering).ID).Single();
-            new DroneWindow(bl, droneToList).Show();
+            BO.DroneDelivering droneDelivering = ((FrameworkElement)e.OriginalSource).DataContext as BO.DroneDelivering;
+            
+            try
+            {
+                if (droneDelivering != null)
+                {
+                    BO.DroneToList droneToList = bl.FindDrones(d => d.ID == droneDelivering.ID).Single();
+                    new DroneWindow(bl, droneToList).Show();
+                }
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Error: Drone could not be found. It may have been deleted.");
+            }
         }
 
         /// <summary>
@@ -184,8 +196,20 @@ namespace PL
         /// <param name="e"></param>
         private void customer_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            BO.CustomerToList customerToList = bl.FindCustomers(c => c.ID == (((FrameworkElement)e.OriginalSource).DataContext as BO.CustomerForPackage).ID).Single();
-            new CustomerWindow(bl, customerToList).Show();
+            BO.CustomerForPackage customerForPackage = ((FrameworkElement)e.OriginalSource).DataContext as BO.CustomerForPackage;
+            
+            try
+            {
+                if (customerForPackage != null)
+                {
+                    BO.CustomerToList customerToList = bl.FindCustomers(c => c.ID == customerForPackage.ID).Single();
+                    new CustomerWindow(bl, customerToList).Show();
+                }
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Error: Customer could not be found. It may have been deleted.");
+            }
         }
 
         #endregion
