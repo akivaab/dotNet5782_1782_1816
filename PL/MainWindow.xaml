@@ -41,7 +41,19 @@
                             </EventTrigger>
                         </Ellipse.Triggers>
                     </Ellipse>
-                    <Image Source="Graphics/Drone_Icon.jpg" Height="140" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,30" RenderTransformOrigin="0.5,0.5"/>
+                    <Image x:Name="droneImage" Source="Graphics/Drone_Icon.jpg" Height="140" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,30">
+                        <Image.Triggers>
+                            <EventTrigger RoutedEvent="MouseEnter">
+                                <EventTrigger.Actions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0:0:0.500" Storyboard.TargetProperty="Height" To="100"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger.Actions>
+                            </EventTrigger>
+                        </Image.Triggers>
+                    </Image>
                     <TextBlock Text="Click a tab above to sign in! " HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,45" FontSize="35" FontFamily="Constantia" Foreground="MidnightBlue"/>
                 </Grid>
             </TabItem>
@@ -79,11 +91,29 @@
         <Grid Name="customerGrid" Background="{StaticResource background}" Visibility="Collapsed">
             <TextBlock Text="{Binding Path=ID, StringFormat=ID: {0}}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,10,0,0" Height="30" Width="150" FontSize="20" Foreground="Cornsilk"/>
             <TextBlock Text="Name:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,60,0,0" Height="30" Width="60" FontSize="20" Foreground="Cornsilk"/>
-            <TextBox Text="{Binding Path=Name}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="75,60,0,0" Height="30" Width="150" FontSize="20"/>
+            <TextBox x:Name="name" Text="{Binding Path=Name}"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="75,60,0,0" Height="30" Width="150" FontSize="20"/>
             <TextBlock Text="Phone:" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,110,0,0" Height="30" Width="70" FontSize="20" Foreground="Cornsilk"/>
             <TextBox Text="{Binding Path=Phone}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="75,110,0,0" Height="30" Width="200" FontSize="20"/>
             <TextBlock Text="{Binding Path=Location, StringFormat=Location: {0}}" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,160,0,0" Height="80" Width="290" TextWrapping="Wrap" FontSize="20" Foreground="Cornsilk"/>
-
+            <TextBlock x:Name="easterEgg" Text="Nice name!" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,300,0,0" FontSize="25" Foreground="MidnightBlue">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding ElementName=name, Path=IsKeyboardFocused}" Value="True"/>
+                                    <Condition Binding="{Binding ElementName=name, Path=IsMouseOver}" Value="True"/>
+                                    <Condition Binding="{Binding ElementName=name, Path=Text}" Value="Guy"/>
+                                </MultiDataTrigger.Conditions>
+                                <MultiDataTrigger.Setters>
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </MultiDataTrigger.Setters>
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
             <TextBlock Text="Packages you are sending:" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,39,360,0" Foreground="Cornsilk" Visibility="{Binding ElementName=seeSend, Path=IsChecked, Converter={StaticResource visibility}}"/>
             <ListView x:Name="sentPackagesNotCollected" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,60,10,0" Height="160" Width="490" Background="LightGreen" Visibility="{Binding ElementName=seeSend, Path=IsChecked, Converter={StaticResource visibility}}">
                 <ListView.View>
