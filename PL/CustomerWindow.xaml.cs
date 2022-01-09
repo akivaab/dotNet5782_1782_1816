@@ -209,13 +209,14 @@ namespace PL
             {
                 if (packageForCustomer != null)
                 {
+                    bl.GetPackage(packageForCustomer.ID);
                     BO.PackageToList packageToList = bl.FindPackages(p => p.ID == packageForCustomer.ID).Single();
                     new PackageWindow(bl, packageToList).Show();
                 }
             }
             catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("Error: Package could not be found. It may have been deleted.");
+                MessageBox.Show("The package has been deleted. Refresh by closing and reopening the window.");
             }
             
         }

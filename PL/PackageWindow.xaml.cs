@@ -179,13 +179,14 @@ namespace PL
             {
                 if (droneDelivering != null)
                 {
+                    bl.GetDrone(droneDelivering.ID);
                     BO.DroneToList droneToList = bl.FindDrones(d => d.ID == droneDelivering.ID).Single();
                     new DroneWindow(bl, droneToList).Show();
                 }
             }
             catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("Error: Drone could not be found. It may have been deleted.");
+                MessageBox.Show("The drone has been deleted. Refresh by closing and reopening the window.");
             }
         }
 
@@ -202,13 +203,14 @@ namespace PL
             {
                 if (customerForPackage != null)
                 {
+                    bl.GetCustomer(customerForPackage.ID);
                     BO.CustomerToList customerToList = bl.FindCustomers(c => c.ID == customerForPackage.ID).Single();
                     new CustomerWindow(bl, customerToList).Show();
                 }
             }
             catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("Error: Customer could not be found. It may have been deleted.");
+                MessageBox.Show("The customer has been deleted. Refresh by closing and reopening the window.");
             }
         }
 

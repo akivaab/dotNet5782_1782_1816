@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="CustomerWindow" Height="auto" Width="auto" SizeToContent="WidthAndHeight"  Closing="customerWindow_Closing">
 
-    <Grid Height="600" Width="1150" Background="{StaticResource background}">
+    <Grid Height="600" Width="1000" Background="{StaticResource background}">
         <Grid x:Name="add">
             <Label Content="Customer ID:" Margin="0,100,150,0" Style="{StaticResource addLabelStyle}"/>
             <Label Content="Name:" Margin="0,150,150,0" Style="{StaticResource addLabelStyle}"/>
@@ -37,8 +37,28 @@
             <TextBox x:Name="actions_Name" Text="{Binding Name}" Margin="275,100,0,0" Style="{StaticResource actionTextBoxStyle}"/>
             <TextBox x:Name="actions_PhoneNumber" Text="{Binding Phone}" Margin="275,130,0,0" Style="{StaticResource actionTextBoxStyle}"/>
             <Label Content="{Binding Location}" Margin="275,160,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <ListBox ItemsSource="{Binding PackagesToSend}" Margin="275,190,0,0" Style="{StaticResource listBoxStyle}" Height="140" Width="850" MouseDoubleClick="package_MouseDoubleClick"/>
-            <ListBox ItemsSource="{Binding PackagesToReceive}" Margin="275,330,0,0" Style="{StaticResource listBoxStyle}" Height="140" Width="850" MouseDoubleClick="package_MouseDoubleClick"/>
+            <ListView ItemsSource="{Binding PackagesToSend}" Margin="275,190,0,0" Style="{StaticResource actionListViewStyle}" Height="140" MouseDoubleClick="package_MouseDoubleClick">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="70"/>
+                        <GridViewColumn Header="Weight" DisplayMemberBinding="{Binding Weight}" Width="70"/>
+                        <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="90"/>
+                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="70"/>
+                        <GridViewColumn Header="Package Receiver" DisplayMemberBinding="{Binding OtherParty}" Width="320"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <ListView ItemsSource="{Binding PackagesToReceive}" Margin="275,330,0,0" Style="{StaticResource actionListViewStyle}" Height="140" MouseDoubleClick="package_MouseDoubleClick">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="70"/>
+                        <GridViewColumn Header="Weight" DisplayMemberBinding="{Binding Weight}" Width="70"/>
+                        <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="90"/>
+                        <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="70"/>
+                        <GridViewColumn Header="Package Sender" DisplayMemberBinding="{Binding OtherParty}" Width="320"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
 
             <Button Name="removeButton" Content="Remove" HorizontalAlignment="Left" Margin="30,0,0,20" Style="{StaticResource actionButtonStyle}"  Click="removeButton_Click"/>
             <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,30,20" Style="{StaticResource actionButtonStyle}" Click="closeButton_Click"/>

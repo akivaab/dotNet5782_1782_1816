@@ -213,13 +213,14 @@ namespace PL
             {
                 if (droneCharging != null)
                 {
+                    bl.GetDrone(droneCharging.ID);
                     BO.DroneToList droneToList = bl.FindDrones(d => d.ID == droneCharging.ID).Single();
                     new DroneWindow(bl, droneToList).Show();
                 }
             }
             catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("Error: Station could not be found. It may have been deleted.");
+                MessageBox.Show("The station has been deleted. Refresh by closing and reopening the window.");
             }
         }
 
