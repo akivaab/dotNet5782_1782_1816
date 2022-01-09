@@ -27,8 +27,9 @@
     </Window.Resources>
 
     <Grid Height="150" Width="150">
-        <Grid x:Name="passwordGrid" Visibility="Collapsed">
+        <Grid x:Name="passwordGrid">
             <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -40,6 +41,7 @@
             <TextBlock Text="Confirm Password:" Grid.Row="2" FontSize="16" Background="DarkBlue" Foreground="LightGoldenrodYellow"/>
             <PasswordBox x:Name="newPasswordConfirm"  Grid.Row="3" FontSize="16" Background="LightGoldenrodYellow"/>
             <Button x:Name="changePasswordButton" Content="Change Password" Grid.Row="4" FontSize="14" Background="AliceBlue" Click="changePasswordButton_Click"/>
+            <Button x:Name="cancelButton" Content="Cancel" Grid.Row="5" FontSize="14" Background="AliceBlue" Click="noButton_Click"/>
         </Grid>
 
         <Grid x:Name="confirmPackageGrid" Background="DarkBlue" Visibility="Collapsed">

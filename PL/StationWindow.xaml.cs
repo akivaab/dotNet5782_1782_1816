@@ -27,11 +27,6 @@ namespace PL
         private BlApi.IBL bl;
 
         /// <summary>
-        /// The station we are enabling the user to update as BO entity.
-        /// </summary>
-        private BO.StationToList stationToList;
-
-        /// <summary>
         /// The station we are enabling the user to update as PO entity.
         /// </summary>
         private PO.Station station;
@@ -69,8 +64,7 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
-            this.stationToList = stationToList;
-            this.station = new(bl.GetStation(this.stationToList.ID));
+            this.station = new(bl.GetStation(stationToList.ID));
             allowClose = false;
 
             DataContext = station;
@@ -239,7 +233,7 @@ namespace PL
                 this.station.Name = station.Name;
                 this.station.AvailableChargeSlots = station.AvailableChargeSlots;
 
-                actions_TotalChargeSlots.Text = (this.station.AvailableChargeSlots + stationToList.NumOccupiedChargeSlots).ToString();
+                actions_TotalChargeSlots.Text = (station.AvailableChargeSlots + station.DronesCharging.Count()).ToString();
             }
             catch (BO.UndefinedObjectException)
             {

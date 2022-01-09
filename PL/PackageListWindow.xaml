@@ -43,11 +43,11 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" Width="70"/>
-                    <GridViewColumn Header="Sender" DisplayMemberBinding="{Binding SenderName}" Width="70"/>
-                    <GridViewColumn Header="Receiver" DisplayMemberBinding="{Binding ReceiverName}" Width="70"/>
+                    <GridViewColumn Header="Sender" DisplayMemberBinding="{Binding SenderName}" Width="100"/>
+                    <GridViewColumn Header="Receiver" DisplayMemberBinding="{Binding ReceiverName}" Width="100"/>
                     <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="70"/>
                     <GridViewColumn Header="Weight" DisplayMemberBinding="{Binding Weight}" Width="70"/>
-                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="70"/>
+                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="75"/>
                 </GridView>
             </ListView.View>
             <ListView.GroupStyle>

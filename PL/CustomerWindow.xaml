@@ -44,7 +44,8 @@
                         <GridViewColumn Header="Weight" DisplayMemberBinding="{Binding Weight}" Width="70"/>
                         <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="90"/>
                         <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="70"/>
-                        <GridViewColumn Header="Package Receiver" DisplayMemberBinding="{Binding OtherParty}" Width="320"/>
+                        <GridViewColumn Header="Package Receiver ID" DisplayMemberBinding="{Binding OtherParty.ID}" Width="140"/>
+                        <GridViewColumn Header="Package Receiver Name" DisplayMemberBinding="{Binding OtherParty.Name}" Width="160"/>
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -55,7 +56,8 @@
                         <GridViewColumn Header="Weight" DisplayMemberBinding="{Binding Weight}" Width="70"/>
                         <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" Width="90"/>
                         <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" Width="70"/>
-                        <GridViewColumn Header="Package Sender" DisplayMemberBinding="{Binding OtherParty}" Width="320"/>
+                        <GridViewColumn Header="Package Sender ID" DisplayMemberBinding="{Binding OtherParty.ID}" Width="140"/>
+                        <GridViewColumn Header="Package Sender Name" DisplayMemberBinding="{Binding OtherParty.Name}" Width="160"/>
                     </GridView>
                 </ListView.View>
             </ListView>

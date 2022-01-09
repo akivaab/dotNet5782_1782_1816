@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace BO
 {
     /// <summary>
@@ -40,7 +41,7 @@ namespace BO
         /// <returns>String representation of a DroneDelivering.</returns>
         public override string ToString()
         {
-            return $"Drone ID: {ID}, Battery Status: {Battery}%, Current Location: {CurrentLocation}";
+            return $"Drone ID: {ID}, Battery Status: {Math.Floor(Battery)}%, Current Location: {CurrentLocation}";
         }
     }
 }

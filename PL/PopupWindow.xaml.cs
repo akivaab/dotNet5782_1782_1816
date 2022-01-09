@@ -126,6 +126,7 @@ namespace PL
 
         /// <summary>
         /// Cancel confirmation that a package was collected/received.
+        /// Also used to cancel a password change.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
