@@ -237,7 +237,7 @@ namespace BL
 
         public IEnumerable<DroneToList> GetDronesList()
         {
-            return drones;
+            return drones.OrderBy(d => d.ID);
         }
 
         #endregion

@@ -30,12 +30,17 @@ namespace PL
         /// <summary>
         /// Flag if the close button was clicked.
         /// </summary>
-        private bool allowClose;
+        private bool allowClose = false;
 
         /// <summary>
         /// The stations being displayed.
         /// </summary>
         private ObservableCollection<BO.StationToList> stationToListCollection;
+
+        /// <summary>
+        /// CollectionView of the stationListView to easily allow the filtering and grouping of StationToLists.
+        /// </summary>
+        private CollectionView view;
 
         #endregion
 
@@ -49,9 +54,8 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
-            allowClose = false;
             stationToListCollection = new ObservableCollection<BO.StationToList>(bl.GetStationsList());
-
+            view = (CollectionView)CollectionViewSource.GetDefaultView(stationToListCollection);
             DataContext = stationToListCollection;
         }
 
@@ -66,7 +70,6 @@ namespace PL
         /// <param name="e"></param>
         private void groupByChargeSlotQuantityCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(stationListView.ItemsSource);
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("NumAvailableChargeSlots");
             view.GroupDescriptions.Add(groupDescription);
         }
@@ -78,7 +81,6 @@ namespace PL
         /// <param name="e"></param>
         private void groupByChargeSlotsQuantityCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(stationListView.ItemsSource);
             view.GroupDescriptions.Clear();
         }
 

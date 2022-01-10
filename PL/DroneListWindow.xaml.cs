@@ -30,12 +30,17 @@ namespace PL
         /// <summary>
         /// Flag if the window was closed properly.
         /// </summary>
-        private bool allowClose;
+        private bool allowClose = false;
 
         /// <summary>
         /// The drones being displayed.
         /// </summary>
         private ObservableCollection<BO.DroneToList> droneToListCollection;
+
+        /// <summary>
+        /// CollectionView of the droneListView to easily allow the filtering and grouping of DroneToLists.
+        /// </summary>
+        private CollectionView view;
 
         #endregion
 
@@ -49,11 +54,10 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
-            allowClose = false;
             droneToListCollection = new ObservableCollection<BO.DroneToList>(bl.GetDronesList());
-
+            view = (CollectionView)CollectionViewSource.GetDefaultView(droneToListCollection);
             DataContext = droneToListCollection;
-            
+
             statusSelector.ItemsSource = Enum.GetValues(typeof(BO.Enums.DroneStatus));
 
             //ensure MaxWeightSelector.ItemsSource does not include "free"
@@ -73,7 +77,6 @@ namespace PL
         /// <param name="e"></param>
         private void selector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
             if (statusSelector.SelectedItem == null && maxWeightSelector.SelectedItem == null)
             {
                 view.Filter = (object o) => { return true; };
@@ -119,7 +122,6 @@ namespace PL
         /// <param name="e"></param>
         private void groupByStatusCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("Status");
             view.GroupDescriptions.Add(groupDescription);
         }
@@ -131,7 +133,6 @@ namespace PL
         /// <param name="e"></param>
         private void groupByStatusCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(droneListView.ItemsSource);
             view.GroupDescriptions.Clear();
         }
 

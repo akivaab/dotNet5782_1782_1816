@@ -30,7 +30,7 @@ namespace PL
         /// <summary>
         /// Flag if the close button was clicked.
         /// </summary>
-        private bool allowClose;
+        private bool allowClose = false;
 
         /// <summary>
         /// The customer being displayed.
@@ -49,9 +49,7 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
-            allowClose = false;
             customerToListCollection = new ObservableCollection<BO.CustomerToList>(bl.GetCustomersList());
-
             DataContext = customerToListCollection;
         }
 

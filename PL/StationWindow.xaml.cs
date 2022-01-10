@@ -34,7 +34,7 @@ namespace PL
         /// <summary>
         /// Flag if the close button is clicked.
         /// </summary>
-        private bool allowClose;
+        private bool allowClose = false;
 
         #endregion
 
@@ -48,7 +48,6 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
-            allowClose = false;
 
             //make only the features needed for adding a station visible in the window. 
             add.Visibility = Visibility.Visible;
@@ -63,11 +62,16 @@ namespace PL
         public StationWindow(BlApi.IBL bl, BO.StationToList stationToList)
         {
             InitializeComponent();
-            this.bl = bl;
-            this.station = new(bl.GetStation(stationToList.ID));
-            allowClose = false;
-
-            DataContext = station;
+            try
+            {
+                station = new(bl.GetStation(stationToList.ID));
+                this.bl = bl;
+                DataContext = station;
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Error: This station is already removed from the system.\nTry closing this window and refreshing the list.");
+            }
 
             //make only the features needed for perfroming actions on a station visible in the window. 
             add.Visibility = Visibility.Collapsed;

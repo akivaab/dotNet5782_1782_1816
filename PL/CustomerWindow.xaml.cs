@@ -34,7 +34,7 @@ namespace PL
         /// <summary>
         /// Flag if the close button is clicked.
         /// </summary>
-        private bool allowClose;
+        private bool allowClose = false;
 
         #endregion
 
@@ -48,7 +48,6 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
-            allowClose = false;
 
             //make only the features needed for adding a customer visible in the window. 
             add.Visibility = Visibility.Visible;
@@ -65,17 +64,14 @@ namespace PL
             InitializeComponent();
             try
             {
-                this.customer = new(bl.GetCustomer(customerToList.ID));
+                customer = new(bl.GetCustomer(customerToList.ID));
+                this.bl = bl;
+                DataContext = customer;
             }
             catch (BO.UndefinedObjectException)
             {
                 MessageBox.Show("Error: This drone is already removed from the system.\nTry closing this window and refreshing the list.");
             }
-
-            this.bl = bl;
-            allowClose = false;
-
-            DataContext = this.customer;
 
             //make only the features needed for perfroming actions on a station visible in the window. 
             add.Visibility = Visibility.Collapsed;

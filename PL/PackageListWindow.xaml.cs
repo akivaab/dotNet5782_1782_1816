@@ -30,12 +30,17 @@ namespace PL
         /// <summary>
         /// Flag if the window was closed properly.
         /// </summary>
-        private bool allowClose;
+        private bool allowClose = false;
 
         /// <summary>
         /// The packages being displayed.
         /// </summary>
         private ObservableCollection<BO.PackageToList> packageToListCollection;
+
+        /// <summary>
+        /// CollectionView of the packageListView to easily allow the filtering and grouping of PackageToLists.
+        /// </summary>
+        private CollectionView view;
 
         #endregion
 
@@ -49,9 +54,8 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
-            allowClose = false;
             packageToListCollection = new ObservableCollection<BO.PackageToList>(bl.GetPackagesList());
-
+            view = (CollectionView)CollectionViewSource.GetDefaultView(packageToListCollection);
             DataContext = packageToListCollection;
 
             statusSelector.ItemsSource = Enum.GetValues(typeof(BO.Enums.PackageStatus));
@@ -75,7 +79,6 @@ namespace PL
         /// <param name="e"></param>
         private void selector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(packageListView.ItemsSource);
             Predicate<object> defaultPred = (object package) => { return true; };
             Predicate<object> statusPred = (object package) => { return (package as BO.PackageToList).Status == (BO.Enums.PackageStatus)statusSelector.SelectedItem; };
             Predicate<object> weightPred = (object package) => { return (package as BO.PackageToList).Weight == (BO.Enums.WeightCategories)weightSelector.SelectedItem; };
@@ -152,7 +155,6 @@ namespace PL
         /// <param name="e"></param>
         private void groupBySenderRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(packageListView.ItemsSource);
             view.GroupDescriptions.Clear();
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("SenderName");
             view.GroupDescriptions.Add(groupDescription);
@@ -165,7 +167,6 @@ namespace PL
         /// <param name="e"></param>
         private void groupByReceiverRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(packageListView.ItemsSource);
             view.GroupDescriptions.Clear();
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("ReceiverName");
             view.GroupDescriptions.Add(groupDescription);
@@ -180,7 +181,6 @@ namespace PL
         {
             groupBySenderRadioButton.IsChecked = false;
             groupByReceiverRadioButton.IsChecked = false;
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(packageListView.ItemsSource);
             view.GroupDescriptions.Clear();
         }
 

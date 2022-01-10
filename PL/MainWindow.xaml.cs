@@ -157,7 +157,7 @@ namespace PL
         {
             new CustomerWindow(bl).Show();
             MessageBox.Show("Note: You will still need to sign in after registering.\n" +
-                            "Your password will default to matching your ID.\n" +
+                            "Your default password will match your ID.\n" +
                             "It is strongly advised that you change it after signing in.");
         }
 
