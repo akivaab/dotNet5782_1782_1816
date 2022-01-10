@@ -30,8 +30,8 @@
             <Label Content="Name:" Margin="100,100,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="Location:" Margin="100,160,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="Phone Number:" Margin="100,130,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label Content="Packages to Send:" Margin="100,190,0,0" Style="{StaticResource actionLabelStyle}"/>
-            <Label Content="Packages to Receive:" Margin="100,330,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="Packages Sending:" Margin="100,190,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="Packages Receiving:" Margin="100,330,0,0" Style="{StaticResource actionLabelStyle}"/>
 
             <Label Content="{Binding ID}" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
             <TextBox x:Name="actions_Name" Text="{Binding Name}" Margin="275,100,0,0" Style="{StaticResource actionTextBoxStyle}"/>

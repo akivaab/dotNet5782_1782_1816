@@ -11,7 +11,6 @@ namespace DalObject
     partial class DalObject : DalApi.IDal
     {
         #region Add Methods
-
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {
             int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == id);
@@ -30,11 +29,9 @@ namespace DalObject
             customer.Password = id.ToString();
             DataSource.customers.Add(customer);
         }
-
         #endregion
 
         #region Update Methods
-
         public void UpdateCustomerName(int customerID, string name)
         {
             int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
@@ -76,11 +73,9 @@ namespace DalObject
             customer.Password = password;
             DataSource.customers[customerIndex] = customer;
         }
-
         #endregion
 
         #region Remove Methods
-
         public void RemoveCustomer(int customerID)
         {
             int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
@@ -93,11 +88,9 @@ namespace DalObject
             customer.Active = false;
             DataSource.customers[customerIndex] = customer;
         }
-
         #endregion
 
         #region Getter Methods
-
         public Customer GetCustomer(int customerID)
         {
             int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
@@ -128,7 +121,6 @@ namespace DalObject
 
             return DataSource.customers[customerIndex].Password;
         }
-
         #endregion
 
         #region Find Methods
@@ -138,7 +130,6 @@ namespace DalObject
                    where predicate(customer) && customer.Active
                    select customer;
         }
-
         #endregion
     }
 }

@@ -9,7 +9,6 @@ namespace DalApi
     public interface IDal
     {
         #region Add Methods
-
         /// <summary>
         /// Add a new station to the system.
         /// </summary>
@@ -27,8 +26,6 @@ namespace DalApi
         /// <param name="id">The drone ID.</param>
         /// <param name="model">The drone model.</param>
         /// <param name="maxWeight">The maximum weight the drone can handle.</param>
-        /// <param name="status">The drone status.</param>
-        /// <param name="batteryLevel">The battery level of the drone.</param>
         public void AddDrone(int id, string model, DO.Enums.WeightCategories maxWeight);
 
         /// <summary> 
@@ -51,11 +48,9 @@ namespace DalApi
         /// <param name="droneID">The ID of the drone assigned to the package.</param>
         /// <returns>automatic package ID, or -1 if adding a package failed</returns>
         public int AddPackage(int senderID, int receiverID, DO.Enums.WeightCategories weight, DO.Enums.Priorities priority, int? droneID = null);
-
         #endregion
 
         #region Update Methods
-
         /// <summary>
         /// Assign a package to a drone.
         /// </summary>
@@ -141,11 +136,9 @@ namespace DalApi
         /// <param name="stationID">The station ID.</param>
         /// <param name="availableChargingSlots">The number of available charging slots at the station.</param>
         public void UpdateStationChargeSlots(int stationID, int availableChargingSlots);
-
         #endregion
 
         #region Remove Methods
-
         /// <summary>
         /// Remove a station from the system.
         /// </summary>
@@ -169,11 +162,9 @@ namespace DalApi
         /// </summary>
         /// <param name="packageID"></param>
         public void RemovePackage(int packageID);
-
         #endregion
 
         #region Getter Methods - Single Entity
-
         /// <summary>
         /// Get a single station.
         /// </summary>
@@ -212,14 +203,12 @@ namespace DalApi
         /// <summary>
         /// Get the customer password.
         /// </summary>
-        /// <param name="CustomerID">The customer ID.</param>
+        /// <param name="customerID">The customer ID.</param>
         /// <returns>The customer password.</returns>
         public string GetCustomerPassword(int customerID);
-
         #endregion
 
         #region Getter Methods - Entity Collection
-
         /// <summary>
         /// Get all stations.
         /// </summary>
@@ -249,11 +238,9 @@ namespace DalApi
         /// </summary>
         /// <returns>A collection of doubles for how much power is consumed for different tasks.</returns>
         public IEnumerable<double> DronePowerConsumption();
-
         #endregion
 
         #region Find Methods
-
         /// <summary>
         /// Find all packages according to a given predicate.
         /// </summary>
@@ -281,7 +268,6 @@ namespace DalApi
         /// <param name="predicate">Predicate used as a search parameter.</param>
         /// <returns>A collection of all appropriate droneCharges.</returns>
         public IEnumerable<DO.DroneCharge> FindDroneCharges(Predicate<DO.DroneCharge> predicate);
-
         #endregion
     }
 }

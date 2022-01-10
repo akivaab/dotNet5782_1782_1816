@@ -21,7 +21,6 @@ namespace PL
     public partial class PackageListWindow : Window
     {
         #region Fields
-
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -41,11 +40,9 @@ namespace PL
         /// CollectionView of the packageListView to easily allow the filtering and grouping of PackageToLists.
         /// </summary>
         private CollectionView view;
-
         #endregion
 
         #region Constructors
-
         /// <summary>
         /// PackageListWindow constructor, initializes ItemSources.
         /// </summary>
@@ -67,11 +64,9 @@ namespace PL
 
             prioritySelector.ItemsSource = Enum.GetValues(typeof(BO.Enums.Priorities));
         }
-
         #endregion
 
         #region Filter ListView
-
         /// <summary>
         /// Filter the packageListView based on the selected options of all selectors.
         /// </summary>
@@ -183,11 +178,9 @@ namespace PL
             groupByReceiverRadioButton.IsChecked = false;
             view.GroupDescriptions.Clear();
         }
-
         #endregion
 
         #region Add
-
         /// <summary>
         /// Open a PackageWindow to add a package to the system.
         /// </summary>
@@ -197,11 +190,9 @@ namespace PL
         {
             new PackageWindow(bl).Show();
         }
-
         #endregion
 
         #region Action
-
         /// <summary>
         /// Open a PackageWindow to perform actions with a package double-clicked in packageListView.
         /// </summary>
@@ -225,11 +216,9 @@ namespace PL
                 MessageBox.Show("This package has been deleted. Please refresh the list.");
             }
         }
-
         #endregion
 
         #region Refresh
-
         /// <summary>
         /// Refresh the packageListView to reflect any updates.
         /// </summary>
@@ -253,11 +242,9 @@ namespace PL
             groupBySenderRadioButton.IsChecked = groupedBySender;
             groupByReceiverRadioButton.IsChecked = groupedByReceiver;
         }
-
         #endregion
 
         #region Close
-
         /// <summary>
         /// Close the window.
         /// </summary>
@@ -282,7 +269,6 @@ namespace PL
                 MessageBox.Show("Please use the Close button on the lower right.");
             }
         }
-
         #endregion
     }
 }

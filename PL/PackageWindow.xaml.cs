@@ -20,7 +20,6 @@ namespace PL
     public partial class PackageWindow : Window
     {
         #region Fields
-
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -35,11 +34,9 @@ namespace PL
         /// Flag if the close button is clicked.
         /// </summary>
         private bool allowClose = false;
-
         #endregion
 
         #region Constructors
-
         /// <summary>
         /// PackageWindow constructor for adding a package.
         /// </summary>
@@ -100,11 +97,9 @@ namespace PL
             add.Visibility = Visibility.Collapsed;
             actions.Visibility = Visibility.Visible;
         }
-
         #endregion
 
         #region Add
-
         /// <summary>
         /// Add a package to the system.
         /// </summary>
@@ -136,11 +131,9 @@ namespace PL
                 MessageBox.Show("Please fill in all necessary information.");
             }
         }
-
         #endregion
 
         #region Action
-
         /// <summary>
         /// Remove the package from the system.
         /// </summary>
@@ -165,11 +158,9 @@ namespace PL
                 MessageBox.Show(ex.Message + "\nIt cannot be removed.");
             }
         }
-
         #endregion
 
         #region Open Window
-
         /// <summary>
         /// Open a more detailed DroneWindow for the drone delivering the package.
         /// </summary>
@@ -217,11 +208,9 @@ namespace PL
                 MessageBox.Show("The customer has been deleted. Refresh by closing and reopening the window.");
             }
         }
-
         #endregion
 
         #region Close
-
         /// <summary>
         /// Close the window.
         /// </summary>
@@ -246,7 +235,6 @@ namespace PL
                 MessageBox.Show("Please use the " + (add.Visibility == Visibility.Visible ? "Cancel" : "Close") + " button on the lower right.");
             }
         }
-
         #endregion
     }
 }

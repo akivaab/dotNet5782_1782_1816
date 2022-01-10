@@ -17,7 +17,6 @@ namespace DalObject
                    where predicate(droneCharge) && droneCharge.Active
                    select droneCharge;
         }
-
         #endregion
     }
 }

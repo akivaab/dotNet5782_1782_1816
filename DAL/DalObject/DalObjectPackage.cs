@@ -11,7 +11,6 @@ namespace DalObject
     partial class DalObject : DalApi.IDal
     {
         #region Add Methods
-
         public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int? droneID = null)
         {
             int senderIndex = DataSource.customers.FindIndex(customer => customer.ID == senderID);
@@ -47,11 +46,9 @@ namespace DalObject
             DataSource.packages.Add(package);
             return package.ID;
         }
-
         #endregion
 
         #region Update Methods
-
         public void AssignPackage(int packageID, int droneID)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
@@ -113,11 +110,9 @@ namespace DalObject
             package.Delivered = delivered;
             DataSource.packages[packageIndex] = package;
         }
-
         #endregion
 
         #region Remove Methods
-
         public void RemovePackage(int packageID)
         {
             int packageIndex = DataSource.packages.FindIndex(package => package.ID == packageID && package.Active);
@@ -131,11 +126,9 @@ namespace DalObject
             package.Active = false;
             DataSource.packages[packageIndex] = package;
         }
-
         #endregion
 
         #region Getter Methods
-
         public Package GetPackage(int packageID)
         {
             int packageIndex = DataSource.packages.FindIndex(package => package.ID == packageID && package.Active);
@@ -154,18 +147,15 @@ namespace DalObject
                    where package.Active
                    select package;
         }
-
         #endregion
 
         #region Find Methods
-
         public IEnumerable<Package> FindPackages(Predicate<Package> predicate)
         {
             return from package in DataSource.packages
                    where predicate(package) && package.Active
                    select package;
         }
-
         #endregion
     }
 }

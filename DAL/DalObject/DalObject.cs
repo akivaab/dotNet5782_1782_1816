@@ -8,7 +8,6 @@ namespace DalObject
     sealed partial class DalObject : DalApi.IDal
     {
         #region Fields
-
         /// <summary>
         /// Lazy and implicitly thread-safe initialization of a DalObject.
         /// </summary>
@@ -18,11 +17,9 @@ namespace DalObject
         /// Instance of the DalObject that is first instantiated when the getter is called.
         /// </summary>
         internal static DalObject instance { get { return lazyDalObject.Value; } }
-
         #endregion
 
         #region Constructor
-
         /// <summary>
         /// A constructor that adds initial values to the entity lists, private to maintain Singleton design pattern.
         /// </summary>
@@ -30,7 +27,6 @@ namespace DalObject
         {
             DataSource.Initialize();
         }
-
         #endregion
     }
 }

@@ -14,7 +14,6 @@ namespace PO
     class Package : INotifyPropertyChanged
     {
         #region Fields
-
         /// <summary>
         /// The package ID.
         /// </summary>
@@ -184,11 +183,9 @@ namespace PO
                 }
             }
         }
-
         #endregion
 
         #region PropertyChanged
-
         /// <summary>
         /// An event to implement INotifyPropertyChanged interface
         /// </summary>
@@ -205,11 +202,9 @@ namespace PO
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
         #endregion
 
         #region Constructor
-
         /// <summary>
         /// Construct PO.Package from a BO.Package.
         /// </summary>
@@ -227,7 +222,6 @@ namespace PO
             CollectingTime = blPackage.CollectingTime;
             DeliveringTime = blPackage.DeliveringTime;
         }
-
         #endregion
     }
 }

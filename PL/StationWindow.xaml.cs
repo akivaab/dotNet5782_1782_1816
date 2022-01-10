@@ -20,7 +20,6 @@ namespace PL
     public partial class StationWindow : Window
     {
         #region Fields
-
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -35,11 +34,9 @@ namespace PL
         /// Flag if the close button is clicked.
         /// </summary>
         private bool allowClose = false;
-
         #endregion
 
         #region Constructors
-
         /// <summary>
         /// StationWindow constructor for adding a station.
         /// </summary>
@@ -77,13 +74,11 @@ namespace PL
             add.Visibility = Visibility.Collapsed;
             actions.Visibility = Visibility.Visible;
 
-            actions_TotalChargeSlots.Text = (this.station.AvailableChargeSlots + stationToList.NumOccupiedChargeSlots).ToString();
+            actions_TotalChargeSlots.Text = (station.AvailableChargeSlots + station.DronesCharging.Count).ToString();
         }
-
         #endregion
 
         #region Add
-
         /// <summary>
         /// Add a station to the system.
         /// </summary>
@@ -128,11 +123,9 @@ namespace PL
                     (isDouble1 || isDouble2 ? "" : "\n(Are the latitude/longitude of the location floating point values?)"));
             }
         }
-
         #endregion
 
         #region Action
-
         /// <summary>
         /// Update the name of the station and the total number of charging slots it has.
         /// </summary>
@@ -194,11 +187,9 @@ namespace PL
                 MessageBox.Show(ex.Message + "\nIt cannot be removed.");
             }
         }
-
         #endregion
 
         #region Open Window
-
         /// <summary>
         /// Open a DroneWindow detailing a drone charging at the station.
         /// </summary>
@@ -218,14 +209,12 @@ namespace PL
             }
             catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("The station has been deleted. Refresh by closing and reopening the window.");
+                MessageBox.Show("The drone has been deleted. Refresh by closing and reopening the window.");
             }
         }
-
         #endregion
 
         #region Reload
-
         /// <summary>
         /// Reload the data of the station to be displayed in the window.
         /// </summary>
@@ -244,11 +233,9 @@ namespace PL
                 MessageBox.Show("Error: This station is not in the system.\nTry closing this window and refreshing the list.");
             }
         }
-
         #endregion
 
         #region Close
-
         /// <summary>
         /// Close the window.
         /// </summary>
@@ -273,7 +260,6 @@ namespace PL
                 MessageBox.Show("Please use the " + (add.Visibility == Visibility.Visible ? "Cancel" : "Close") + " button on the lower right.");
             }
         }
-
         #endregion
     }
 }

@@ -14,7 +14,6 @@ namespace PO
     class Station : INotifyPropertyChanged
     {
         #region Fields
-
         /// <summary>
         /// The station ID.
         /// </summary>
@@ -99,11 +98,9 @@ namespace PO
                 }
             }
         }
-
         #endregion
 
         #region PropertyChanged
-
         /// <summary>
         /// An event to implement INotifyPropertyChanged interface
         /// </summary>
@@ -120,11 +117,9 @@ namespace PO
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
         #endregion
 
         #region Constructor
-
         /// <summary>
         /// Construct PO.Station from a BO.Station.
         /// </summary>
@@ -137,7 +132,6 @@ namespace PO
             AvailableChargeSlots = blStation.AvailableChargeSlots;
             DronesCharging = new ObservableCollection<BO.DroneCharging>(blStation.DronesCharging);
         }
-
         #endregion
     }
 }

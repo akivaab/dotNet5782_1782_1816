@@ -8,7 +8,15 @@ namespace ConsoleUI
     /// </summary>
     class Program
     {
+        /// <summary>
+        /// Instance of DAL.
+        /// </summary>
         static DalApi.IDal dal = DalApi.DalFactory.GetDal("DalObject");
+
+        /// <summary>
+        /// Main method, runs the main menu.
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             int option;
@@ -45,10 +53,10 @@ namespace ConsoleUI
             } while (option != 5);
         }
 
+        #region Adding
         /// <summary>
         /// All the options of adding entities to the system.
         /// </summary>
-        /// <param name="dal">A DalObject instance.</param>
         public static void AddingOptions()
         {
             Console.WriteLine("Adding Options:");
@@ -137,11 +145,12 @@ namespace ConsoleUI
                 Console.WriteLine(e.Message);
             }
         }
+        #endregion
 
+        #region Updating
         /// <summary>
         /// All the options of updating the entities of the system.
         /// </summary>
-        /// <param name="dal">A DalObject instance.</param>
         public static void UpdatingOptions()
         {
             Console.WriteLine("Updatinging Options:");
@@ -206,11 +215,12 @@ namespace ConsoleUI
                 Console.WriteLine(e.Message);
             }
         }
+        #endregion
 
+        #region Displaying
         /// <summary>
         /// All the options of displaying an entity of the system.
         /// </summary>
-        /// <param name="dal">A DalObject instance.</param>
         public static void DisplayingOptions()
         {
             Console.WriteLine("Displaying Options:");
@@ -258,11 +268,12 @@ namespace ConsoleUI
                 Console.WriteLine(e.Message);
             }
         }
+        #endregion
 
+        #region Displaying List
         /// <summary>
         /// All the options of displaying a list of entities of the system.
         /// </summary>
-        /// <param name="dal">A DalObject instance.</param>
         public static void ListDisplayingOptions()
         {
             Console.WriteLine("List Displaying Options:");
@@ -317,5 +328,6 @@ namespace ConsoleUI
                     break;
             }
         }
+        #endregion
     }
 }

@@ -21,7 +21,6 @@ namespace PL
     public partial class StationListWindow : Window
     {
         #region Fields
-
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -41,11 +40,9 @@ namespace PL
         /// CollectionView of the stationListView to easily allow the filtering and grouping of StationToLists.
         /// </summary>
         private CollectionView view;
-
         #endregion
 
         #region Constructors
-
         /// <summary>
         /// StationListWindow constructor.
         /// </summary>
@@ -58,11 +55,9 @@ namespace PL
             view = (CollectionView)CollectionViewSource.GetDefaultView(stationToListCollection);
             DataContext = stationToListCollection;
         }
-
         #endregion
 
         #region Filter ListView
-
         /// <summary>
         /// Group the stations in stationListView by number of available charging slots.
         /// </summary>
@@ -83,11 +78,9 @@ namespace PL
         {
             view.GroupDescriptions.Clear();
         }
-
         #endregion
 
         #region Add
-
         /// <summary>
         /// Open a StationWindow to add a station to the system.
         /// </summary>
@@ -97,11 +90,9 @@ namespace PL
         {
             new StationWindow(bl).Show();
         }
-
         #endregion
 
         #region Action
-
         /// <summary>
         /// Open a StationWindow to perform actions with a station double-clicked in stationListView.
         /// </summary>
@@ -125,11 +116,9 @@ namespace PL
                 MessageBox.Show("This station has been deleted. Please refresh the list.");
             }
         }
-
         #endregion
 
         #region Refresh
-
         /// <summary>
         /// Refresh the stationListView.
         /// </summary>
@@ -143,11 +132,9 @@ namespace PL
                 stationToListCollection.Add(stationToList);
             }
         }
-
         #endregion
 
         #region Close
-
         /// <summary>
         /// Close the window.
         /// </summary>
@@ -172,7 +159,6 @@ namespace PL
                 MessageBox.Show("Please use the Close button on the lower right.");
             }
         }
-
         #endregion
     }
 }

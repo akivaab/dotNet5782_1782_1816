@@ -21,7 +21,6 @@ namespace PL
     public partial class PopupWindow : Window
     {
         #region Fields
-
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -41,11 +40,9 @@ namespace PL
         /// The collection of packages that the selected package is part of.
         /// </summary>
         private ObservableCollection<BO.PackageToList> packages;
-
         #endregion
 
         #region Constructors
-
         /// <summary>
         /// PopupWindow constructor, for changing the customer's password.
         /// </summary>
@@ -73,11 +70,9 @@ namespace PL
             this.packages = packages;
             confirmPackageGrid.Visibility = Visibility.Visible;
         }
-
         #endregion
 
         #region Password
-
         /// <summary>
         /// Change the customer's password.
         /// </summary>
@@ -108,11 +103,9 @@ namespace PL
                 MessageBox.Show("Your confirmation did not match your new password.");
             }
         }
-
         #endregion
 
         #region Confirm Package
-
         /// <summary>
         /// Confirm that a package was collected/received.
         /// </summary>
@@ -134,7 +127,6 @@ namespace PL
         {
             Close();
         }
-
         #endregion
     }
 }

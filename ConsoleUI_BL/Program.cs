@@ -8,7 +8,15 @@ namespace ConsoleUI_BL
     /// </summary>
     class Program
     {
+        /// <summary>
+        /// Instance of BL.
+        /// </summary>
         static BlApi.IBL bl = BlApi.BlFactory.GetBl();
+
+        /// <summary>
+        /// Main method, runs the main menu.
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             try
@@ -52,10 +60,10 @@ namespace ConsoleUI_BL
             }
         }
 
+        #region Adding
         /// <summary>
         /// All the options of adding entities to the system.
         /// </summary>
-        /// <param name="bl">A BL instance.</param>
         public static void AddingOptions()
         {
             Console.WriteLine("Adding Options:");
@@ -148,11 +156,12 @@ namespace ConsoleUI_BL
                 Console.WriteLine(e.Message);
             }
         }
+        #endregion
 
+        #region Updating
         /// <summary>
         /// All the options of updating the entities of the system.
         /// </summary>
-        /// <param name="bl">A BL instance.</param>
         public static void UpdatingOptions()
         {
             Console.WriteLine("Updatinging Options:");
@@ -297,11 +306,12 @@ namespace ConsoleUI_BL
                 Console.WriteLine(e.Message);
             }
         }
+        #endregion
 
+        #region Displaying
         /// <summary>
         /// All the options of displaying the entities of the system.
         /// </summary>
-        /// <param name="bl">A BL instance.</param>
         public static void DisplayingOptions()
         {
             Console.WriteLine("Displaying Options:");
@@ -349,11 +359,12 @@ namespace ConsoleUI_BL
                 Console.WriteLine(e.Message);
             }
         }
+        #endregion
 
+        #region Displaying List
         /// <summary>
         /// All the options of displaying a list of the entities of the system.
         /// </summary>
-        /// <param name="bl">A BL instance.</param>
         public static void ListDisplayingOptions()
         {
             Console.WriteLine("List Displaying Options:");
@@ -408,5 +419,6 @@ namespace ConsoleUI_BL
                     break;
             }
         }
+        #endregion
     }
 }

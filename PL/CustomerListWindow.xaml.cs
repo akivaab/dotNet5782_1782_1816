@@ -21,7 +21,6 @@ namespace PL
     public partial class CustomerListWindow : Window
     {
         #region Fields
-
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -36,11 +35,9 @@ namespace PL
         /// The customer being displayed.
         /// </summary>
         private ObservableCollection<BO.CustomerToList> customerToListCollection;
-
         #endregion
 
         #region Constructors
-
         /// <summary>
         /// CustomerListWindow constructor.
         /// </summary>
@@ -52,11 +49,9 @@ namespace PL
             customerToListCollection = new ObservableCollection<BO.CustomerToList>(bl.GetCustomersList());
             DataContext = customerToListCollection;
         }
-
         #endregion
 
         #region Add
-
         /// <summary>
         /// Open a CustomerWindow to add a customer to the system.
         /// </summary>
@@ -66,11 +61,9 @@ namespace PL
         {
             new CustomerWindow(bl).Show();
         }
-
         #endregion
 
         #region Action
-
         /// <summary>
         /// Open a CustomerWindow to perform actions with a customer double-clicked in customerListView.
         /// </summary>
@@ -94,11 +87,9 @@ namespace PL
                 MessageBox.Show("This customer has been deleted. Please refresh the list.");
             }
         }
-
         #endregion
 
         #region Refresh
-
         /// <summary>
         /// Refresh the customernListView.
         /// </summary>
@@ -112,11 +103,9 @@ namespace PL
                 customerToListCollection.Add(customerToList);
             }
         }
-
         #endregion
 
         #region Close
-
         /// <summary>
         /// Close the window.
         /// </summary>
@@ -141,7 +130,6 @@ namespace PL
                 MessageBox.Show("Please use the Close button on the lower right.");
             }
         }
-
         #endregion
     }
 }

@@ -20,7 +20,6 @@ namespace PL
     public partial class DroneWindow : Window
     {
         #region Fields
-
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -35,11 +34,9 @@ namespace PL
         /// Flag if the close button is clicked.
         /// </summary>
         private bool allowClose = false;
-
         #endregion
 
         #region Constructors
-
         /// <summary>
         /// DroneWindow constructor for adding a drone.
         /// </summary>
@@ -86,11 +83,9 @@ namespace PL
             add.Visibility = Visibility.Collapsed;
             actions.Visibility = Visibility.Visible;
         }
-
         #endregion
 
         #region Add
-
         /// <summary>
         /// Add a drone to the system.
         /// </summary>
@@ -131,11 +126,9 @@ namespace PL
                     (idIsInteger ? "" : "\n(Is your Drone ID a number?)"));
             }
         }
-
         #endregion
 
         #region Action
-
         /// <summary>
         /// Update the drone model.
         /// </summary>
@@ -297,11 +290,9 @@ namespace PL
                 MessageBox.Show(ex.Message + "\nThe drone may be removed after this is completed.");
             }
         }
-
         #endregion
 
         #region Open Window
-
         /// <summary>
         /// Open a more detailed PackageWindow for the package being transferred (if there is one). 
         /// </summary>
@@ -325,11 +316,9 @@ namespace PL
                 MessageBox.Show("The package has been deleted. Refresh by closing and reopening the window.");
             }
         }
-
         #endregion
 
         #region Reload
-
         /// <summary>
         /// Reload the data of the drone to be displayed in the window.
         /// </summary>
@@ -350,11 +339,9 @@ namespace PL
                 MessageBox.Show("Error: This drone is not in the system.\nTry closing this window and refreshing the list.");
             }
         }
-
         #endregion
 
         #region Close
-
         /// <summary>
         /// Close the window.
         /// </summary>
@@ -379,7 +366,6 @@ namespace PL
                 MessageBox.Show("Please use the " + (add.Visibility == Visibility.Visible ? "Cancel" : "Close") + " button on the lower right.");
             }
         }
-
         #endregion
     }
 }

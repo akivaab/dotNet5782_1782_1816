@@ -13,7 +13,6 @@ namespace PO
     class Drone : INotifyPropertyChanged
     {
         #region Fields
-
         /// <summary>
         /// The drone ID.
         /// </summary>
@@ -132,11 +131,9 @@ namespace PO
                 }
             }
         }
-
         #endregion
 
         #region PropertyChanged
-
         /// <summary>
         /// An event to implement INotifyPropertyChanged interface
         /// </summary>
@@ -153,11 +150,9 @@ namespace PO
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
         #endregion
 
         #region Constructor
-
         /// <summary>
         /// Construct PO.Drone from a BO.Drone.
         /// </summary>
@@ -172,7 +167,6 @@ namespace PO
             PackageInTransfer = blDrone.PackageInTransfer;
             Location = blDrone.Location;
         }
-
         #endregion
     }
 }

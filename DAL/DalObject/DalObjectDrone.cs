@@ -11,7 +11,6 @@ namespace DalObject
     partial class DalObject : DalApi.IDal
     {
         #region Add Methods
-
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == id && drone.Active);
@@ -27,11 +26,9 @@ namespace DalObject
             drone.Active = true;
             DataSource.drones.Add(drone);
         }
-
         #endregion
 
         #region Update Methods
-
         public void ChargeDrone(int droneID, int stationID)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
@@ -91,11 +88,9 @@ namespace DalObject
             drone.Model = model;
             DataSource.drones[droneIndex] = drone;
         }
-
         #endregion
 
         #region Remove Methods
-
         public void RemoveDrone(int droneID)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
@@ -108,11 +103,9 @@ namespace DalObject
             drone.Active = false;
             DataSource.drones[droneIndex] = drone;
         }
-
         #endregion
 
         #region Getter Methods
-
         public Drone GetDrone(int droneID)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
@@ -154,7 +147,6 @@ namespace DalObject
             powerConsumptionValues[4] = DataSource.Config.chargingRate;
             return powerConsumptionValues;
         }
-
         #endregion
     }
 }

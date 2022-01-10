@@ -9,6 +9,7 @@ using System.Windows.Data;
 
 namespace PL
 {
+    #region Invert Boolean
     /// <summary>
     /// Invert a boolean value.
     /// </summary>
@@ -44,7 +45,9 @@ namespace PL
             return Convert(value, targetType, parameter, culture);
         }
     }
+    #endregion
 
+    #region Format Double (battery)
     /// <summary>
     /// Perform a floor function on a value, and append '%'.
     /// </summary>
@@ -76,7 +79,9 @@ namespace PL
             throw new NotImplementedException();
         }
     }
+    #endregion
 
+    #region Convert Boolean to Visibility
     /// <summary>
     /// Convert from a boolean value to Visibility.
     /// </summary>
@@ -126,4 +131,5 @@ namespace PL
             return false;
         }
     }
+    #endregion
 }

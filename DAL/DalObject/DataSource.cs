@@ -10,7 +10,6 @@ namespace DalObject
     class DataSource
     {
         #region Entity Storage
-
         /// <summary>
         /// Lists storing the system entity information.
         /// </summary>
@@ -19,11 +18,9 @@ namespace DalObject
         internal static List<Customer> customers = new();
         internal static List<Package> packages = new();
         internal static List<DroneCharge> droneCharges = new();
-
         #endregion
 
         #region Config Class
-
         /// <summary>
         /// Subclass maintaining values key to configuration of the system.
         /// </summary>
@@ -47,11 +44,9 @@ namespace DalObject
             /// </summary>
             internal static double chargingRate = 20.0;
         }
-
         #endregion
 
         #region Data Initialization
-
         /// <summary>
         /// Initialize all entity listss with random variables.
         /// </summary>/
@@ -132,7 +127,6 @@ namespace DalObject
                 Config.packageID++;
             }
         }
-
         #endregion
     }
 }

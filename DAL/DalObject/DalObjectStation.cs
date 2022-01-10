@@ -11,7 +11,6 @@ namespace DalObject
     partial class DalObject : DalApi.IDal
     {
         #region Add Methods
-
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
         {
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == id && station.Active);
@@ -29,11 +28,9 @@ namespace DalObject
             station.Active = true;
             DataSource.stations.Add(station);
         }
-
         #endregion
 
         #region Update Methods
-
         public void UpdateStationName(int stationID, int name)
         {
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
@@ -61,11 +58,9 @@ namespace DalObject
             station.AvailableChargeSlots = availableChargingSlots;
             DataSource.stations[stationIndex] = station;
         }
-
         #endregion
 
         #region Remove Methods
-
         public void RemoveStation(int stationID)
         {
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
@@ -78,11 +73,9 @@ namespace DalObject
             station.Active = false;
             DataSource.stations[stationIndex] = station;
         }
-
         #endregion
 
         #region Getter Methods
-
         public Station GetStation(int stationID)
         {
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
@@ -101,18 +94,15 @@ namespace DalObject
                    where station.Active
                    select station;
         }
-
         #endregion
 
         #region Find Methods
-
         public IEnumerable<Station> FindStations(Predicate<Station> predicate)
         {
             return from station in DataSource.stations
                    where predicate(station) && station.Active
                    select station;
         }
-
         #endregion
     }
 }

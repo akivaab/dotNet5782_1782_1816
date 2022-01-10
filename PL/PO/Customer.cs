@@ -14,7 +14,6 @@ namespace PO
     class Customer : INotifyPropertyChanged
     {
         #region Fields
-
         /// <summary>
         /// The customer's ID.
         /// </summary>
@@ -116,11 +115,9 @@ namespace PO
                 }
             }
         }
-
         #endregion
 
         #region PropertyChanged
-
         /// <summary>
         /// An event to implement INotifyPropertyChanged interface
         /// </summary>
@@ -137,11 +134,9 @@ namespace PO
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
         #endregion
 
         #region Constructor
-
         /// <summary>
         /// Construct PO.Customer from a BO.Customer.
         /// </summary>
@@ -155,7 +150,6 @@ namespace PO
             PackagesToSend = new ObservableCollection<BO.PackageForCustomer>(blCustomer.PackagesToSend);
             PackagesToReceive = new ObservableCollection<BO.PackageForCustomer>(blCustomer.PackagesToReceive);
         }
-
         #endregion
     }
 }

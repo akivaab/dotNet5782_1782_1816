@@ -21,7 +21,6 @@ namespace PL
     public partial class DroneListWindow : Window
     {
         #region Fields
-
         /// <summary>
         /// Instance of the BL.
         /// </summary>
@@ -41,11 +40,9 @@ namespace PL
         /// CollectionView of the droneListView to easily allow the filtering and grouping of DroneToLists.
         /// </summary>
         private CollectionView view;
-
         #endregion
 
         #region Constructors
-
         /// <summary>
         /// DroneListWindow constructor, initializes ItemSources.
         /// </summary>
@@ -65,11 +62,9 @@ namespace PL
             weights.Remove(BO.Enums.WeightCategories.free);
             maxWeightSelector.ItemsSource = weights;
         }
-
         #endregion
 
         #region Filter ListView
-
         /// <summary>
         /// Filter the droneListView based on the selected options of both selectors.
         /// </summary>
@@ -135,11 +130,9 @@ namespace PL
         {
             view.GroupDescriptions.Clear();
         }
-
         #endregion
 
         #region Add
-
         /// <summary>
         /// Open a DroneWindow to add a drone to the system.
         /// </summary>
@@ -149,11 +142,9 @@ namespace PL
         {
             new DroneWindow(bl).Show();
         }
-
         #endregion
 
         #region Action
-
         /// <summary>
         /// Open a DroneWindow to perform actions with a drone double-clicked in droneListView.
         /// </summary>
@@ -177,11 +168,9 @@ namespace PL
                 MessageBox.Show("This drone has been deleted. Please refresh the list.");
             }
         }
-
         #endregion
 
         #region Refresh
-
         /// <summary>
         /// Refresh the droneListView to reflect any updates.
         /// </summary>
@@ -201,11 +190,9 @@ namespace PL
             maxWeightSelector.SelectedItem = weightCategories;
             groupByStatusCheckBox.IsChecked = grouped;
         }
-
         #endregion
 
         #region Close
-
         /// <summary>
         /// Close the window.
         /// </summary>
@@ -230,7 +217,6 @@ namespace PL
                 MessageBox.Show("Please use the Close button on the lower right.");
             }
         }
-
         #endregion
     }
 }

@@ -10,7 +10,6 @@ namespace BlApi
     public interface IBL
     {
         #region Add Methods
-
         /// <summary>
         /// Add a station to the system.
         /// </summary>
@@ -50,11 +49,9 @@ namespace BlApi
         /// <param name="priority">The prioroty of the package being added.</param>
         /// <returns>The newly added package.</returns>
         public Package AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority);
-
         #endregion
 
         #region Update Methods
-
         /// <summary>
         /// Update the model of a drone.
         /// </summary>
@@ -115,11 +112,9 @@ namespace BlApi
         /// </summary>
         /// <param name="droneID">The ID of the drone being sent to deliver its package.</param>
         public void DeliverPackage(int droneID);
-
         #endregion
 
         #region Remove Methods
-
         /// <summary>
         /// Remove a station from the system.
         /// </summary>
@@ -143,11 +138,9 @@ namespace BlApi
         /// </summary>
         /// <param name="packageID">The package ID.</param>
         public void RemovePackage(int packageID);
-
         #endregion
 
         #region Getter Methods - Single Entity
-
         /// <summary>
         /// Find a station by its ID.
         /// </summary>
@@ -189,11 +182,9 @@ namespace BlApi
         /// <param name="droneID">The ID of the customer.</param>
         /// <returns>The customer's password.</returns>
         public string GetCustomerPassword(int customerID);
-
         #endregion
 
         #region Getter Methods - Entity Collection
-
         /// <summary>
         /// Get a collection of all the stations in the system.
         /// </summary>
@@ -217,11 +208,9 @@ namespace BlApi
         /// </summary>
         /// <returns>A collection of PackageToList entities.</returns>
         public IEnumerable<PackageToList> GetPackagesList();
-
         #endregion
 
         #region Find Methods
-
         /// <summary>
         /// Get a collection of all the packages according to a certain predicate.
         /// </summary>
@@ -249,7 +238,6 @@ namespace BlApi
         /// <param name="predicate">The predicate used to filter the customers.</param>
         /// <returns>A collection of CustomerToList entities.</returns>
         public IEnumerable<CustomerToList> FindCustomers(Predicate<DO.Customer> predicate);
-
         #endregion
     }
 }
