@@ -275,6 +275,13 @@ namespace DalApi
         /// <returns>A collection of all appropriate customers.</returns>
         public IEnumerable<DO.Customer> FindCustomers(Predicate<DO.Customer> predicate);
 
+        /// <summary>
+        /// Find all droneCharges according to a given predicate.
+        /// </summary>
+        /// <param name="predicate">Predicate used as a search parameter.</param>
+        /// <returns>A collection of all appropriate droneCharges.</returns>
+        public IEnumerable<DO.DroneCharge> FindDroneCharges(Predicate<DO.DroneCharge> predicate);
+
         #endregion
     }
 }

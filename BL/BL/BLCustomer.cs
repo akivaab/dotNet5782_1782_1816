@@ -11,7 +11,6 @@ namespace BL
     partial class BL : BlApi.IBL
     {
         #region Add Methods
-
         public Customer AddCustomer(int customerID, string name, string phone, Location location)
         {
             if (location.Latitude < -1 || location.Latitude > 1 || location.Longitude < 0 || location.Longitude > 2) //limited coordinate field
@@ -34,11 +33,9 @@ namespace BL
             Customer customer = new(customerID, name, phone, location, new List<PackageForCustomer>(), new List<PackageForCustomer>());
             return customer;
         }
-
         #endregion
 
         #region Update Methods
-
         public void UpdateCustomer(int customerID, string name = "", string phone = "")
         {
             if (phone != "" && phone.Length != 9)
@@ -79,11 +76,9 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-
         #endregion
 
         #region Remove Methods
-
         public void RemoveCustomer(int customerID)
         {
             try
@@ -93,6 +88,7 @@ namespace BL
                 {
                     throw new UnableToRemoveException("The customer is in the midst of a transaction.");
                 }
+
                 dalObject.RemoveCustomer(customerID);
             }
             catch (DO.UndefinedObjectException e)
@@ -100,11 +96,9 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-
         #endregion
 
         #region Getter Methods
-
         public Customer GetCustomer(int customerID)
         {
             try
@@ -159,7 +153,6 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-
         #endregion
 
         #region Find Methods
@@ -181,8 +174,6 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-
         #endregion
-
     }
 }

@@ -11,7 +11,6 @@ namespace BL
     partial class BL : BlApi.IBL
     {
         #region Add Methods
-
         public Package AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority)
         {
             if (senderID == receiverID)
@@ -36,11 +35,9 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-
         #endregion
 
         #region Update Methods
-
         public void AssignPackage(int droneID)
         {
             int droneIndex = drones.FindIndex(d => d.ID == droneID);
@@ -140,7 +137,6 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-
         #endregion
 
         #region Remove Methods
@@ -161,7 +157,6 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-
         #endregion
 
         #region Getter Methods
@@ -204,11 +199,9 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-
         #endregion
 
         #region Find Methods
-
         public IEnumerable<PackageToList> FindPackages(Predicate<DO.Package> predicate)
         {
             try
@@ -217,8 +210,7 @@ namespace BL
                 IEnumerable<PackageToList> packageToLists = from DO.Package dalPackage in dalPackages
                                                             let senderName = dalObject.GetCustomer(dalPackage.SenderID).Name
                                                             let receiverName = dalObject.GetCustomer(dalPackage.ReceiverID).Name
-                                                            let status = getPackageStatus(dalPackage)
-                                                            select new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, status);
+                                                            select new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, getPackageStatus(dalPackage));
                 return packageToLists;
             }
             catch (DO.UndefinedObjectException e)
@@ -226,7 +218,6 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-
         #endregion
     }
 }

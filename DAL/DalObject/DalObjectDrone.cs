@@ -50,6 +50,7 @@ namespace DalObject
             droneCharge.DroneID = droneID;
             droneCharge.StationID = stationID;
             droneCharge.BeganCharge = DateTime.Now;
+            droneCharge.Active = true;
             DataSource.droneCharges.Add(droneCharge);
         }
 

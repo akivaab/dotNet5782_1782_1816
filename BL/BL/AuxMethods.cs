@@ -11,7 +11,6 @@ namespace BL
     public partial class BL
     {
         #region Generic Auxiliary Methods
-
         /// <summary>
         /// Calculates the distance in kilometers between two locations.
         /// </summary>
@@ -26,7 +25,7 @@ namespace BL
             double long2 = location2.Longitude;
 
             double equatorialEarthRadius = 6378.1370;
-            double degreeToRadian = (Math.PI / 180);
+            double degreeToRadian = Math.PI / 180;
             double dlong = (long2 - long1) * degreeToRadian;
             double dlat = (lat2 - lat1) * degreeToRadian;
             double a = Math.Pow(Math.Sin(dlat / 2D), 2D) + Math.Cos(lat1 * degreeToRadian) * Math.Cos(lat2 * degreeToRadian) * Math.Pow(Math.Sin(dlong / 2D), 2D);
@@ -65,11 +64,9 @@ namespace BL
                 throw new UndefinedObjectException(e.Message);
             }
         }
-        
         #endregion
 
         #region Auxiliary Station Methods
-
         /// <summary>
         /// Find the station closest to some location.
         /// </summary>
@@ -119,11 +116,9 @@ namespace BL
                                                         select station;
             return reachableStations;
         }
-
         #endregion
 
         #region Auxiliary Customer Methods
-
         /// <summary>
         /// Find the location of a customer.
         /// </summary>
@@ -170,11 +165,9 @@ namespace BL
                 throw new UndefinedObjectException(e.Message);
             }
         }
-
         #endregion
 
         #region Auxiliary Package Methods
-
         /// <summary>
         /// Find the best package based on priority, weight, and distance.
         /// </summary>
@@ -234,11 +227,9 @@ namespace BL
             }
             return status;
         }
-        
         #endregion
 
         #region Data Layer Cleanup Methods
-        
         /// <summary>
         /// Clean up the information randomly generated in the data layer so it all makes sense.
         /// </summary>
@@ -339,7 +330,6 @@ namespace BL
                 throw new UndefinedObjectException(e.Message);
             }
         }
-
         #endregion
     }
 }

@@ -11,7 +11,6 @@ namespace BL
     sealed partial class BL : BlApi.IBL
     {
         #region Fields
-
         /// <summary>
         /// Lazy and implicitly thread-safe initialization of a BL object.
         /// </summary>
@@ -41,11 +40,9 @@ namespace BL
         /// The amount a drone battery charges per hour.
         /// </summary>
         private double chargeRatePerHour;
-
         #endregion
 
         #region Constructor
-
         /// <summary>
         /// Constructor of BL class, private to maintain Singleton design pattern.
         /// </summary>
@@ -63,7 +60,6 @@ namespace BL
             List<DO.Drone> dalDrones = dalObject.GetDronesList().ToList();
 
             #region Add assigned drones to BL Drone List
-
             //find all packages undelivered but with a drone assigned
             List<DO.Package> dalPackages = dalObject.FindPackages(p => p.Delivered == null && p.DroneID != null).ToList();
             
@@ -93,11 +89,9 @@ namespace BL
                 DroneToList droneToList = new(drone.ID, drone.Model, (Enums.WeightCategories)drone.MaxWeight, battery, Enums.DroneStatus.delivery, droneLocation, package.ID);
                 drones.Add(droneToList);
             }
-
             #endregion
 
             #region Add unassigned drones to BL Drone List
-
             Random random = new Random();
 
             //for remaining drones that are not delivering
@@ -115,15 +109,16 @@ namespace BL
                     droneToList.Status = Enums.DroneStatus.maintenance;
 
                     //get random station as drone location
-                    List<DO.Station> dalStations = dalObject.GetStationsList().ToList();
-                    int randStation = random.Next(dalStations.Count);
-                    droneToList.Location = new(dalStations[randStation].Latitude, dalStations[randStation].Longitude);
+                    IEnumerable<DO.Station> dalStations = dalObject.GetStationsList();
+                    int randStation = random.Next(dalStations.Count());
+                    DO.Station dalStation = dalStations.ElementAt(randStation);
+                    droneToList.Location = new(dalStation.Latitude, dalStation.Longitude);
                     
                     //get random battery level 0%-20%
                     droneToList.Battery = random.Next(21);
 
                     //create appropriate DroneCharge entity in data layer
-                    dalObject.ChargeDrone(drone.ID, dalStations[randStation].ID);
+                    dalObject.ChargeDrone(drone.ID, dalStation.ID);
                 }
                 else if (randInt == 2)
                 {
@@ -142,10 +137,8 @@ namespace BL
 
                 drones.Add(droneToList);
             }
-
             #endregion
         }
-
         #endregion
     }
 }

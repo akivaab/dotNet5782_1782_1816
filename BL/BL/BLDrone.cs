@@ -11,7 +11,6 @@ namespace BL
     partial class BL : BlApi.IBL
     {
         #region Add Methods
-
         public Drone AddDrone(int droneID, string model, Enums.WeightCategories maxWeight, int stationID)
         {
             if (drones.FindIndex(d => d.ID == droneID) != -1)
@@ -51,11 +50,9 @@ namespace BL
                 throw new NonUniqueIdException(e.Message, e);
             }
         }
-
         #endregion
 
         #region Update Methods
-
         public void UpdateDroneModel(int droneID, string model)
         {
             int droneIndex = drones.FindIndex(d => d.ID == droneID);
@@ -77,7 +74,7 @@ namespace BL
             //update in the list of DroneToLists
             drones[droneIndex].Model = model;
         }
-        
+
         public void SendDroneToCharge(int droneID)
         {
             int droneIndex = drones.FindIndex(d => d.ID == droneID);
@@ -130,9 +127,9 @@ namespace BL
             }
 
             try 
-            { 
-                IEnumerable<DO.Station> dalStations = dalObject.FindStations(s => s.Latitude == drones[droneIndex].Location.Latitude && s.Longitude == drones[droneIndex].Location.Longitude);
-                dalObject.ReleaseDroneFromCharging(droneID, dalStations.First().ID);
+            {
+                DO.DroneCharge dalDroneCharge = dalObject.FindDroneCharges(dc => dc.DroneID == droneID).Single();
+                dalObject.ReleaseDroneFromCharging(droneID, dalDroneCharge.StationID);
 
                 drones[droneIndex].Battery = Math.Min(drones[droneIndex].Battery + (chargeRatePerHour * chargingTimeInHours), 100);
                 drones[droneIndex].Status = Enums.DroneStatus.available;
@@ -142,11 +139,9 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-
         #endregion
 
         #region Remove Methods
-
         public void RemoveDrone(int droneID)
         {
             try
@@ -175,7 +170,6 @@ namespace BL
                 throw new UndefinedObjectException(e.Message, e);
             }
         }
-
         #endregion
 
         #region Getter Methods
@@ -239,18 +233,15 @@ namespace BL
         {
             return drones.OrderBy(d => d.ID);
         }
-
         #endregion
 
         #region Find Methods
-
         public IEnumerable<DroneToList> FindDrones(Predicate<DroneToList> predicate)
         {
             return from DroneToList drone in drones
                    where predicate(drone)
                    select drone;
         }
-
         #endregion
     }
 }
