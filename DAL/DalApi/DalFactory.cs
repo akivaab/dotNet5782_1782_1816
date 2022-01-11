@@ -23,7 +23,7 @@ namespace DalApi
                 case "DalObject":
                     return DalObject.DalObject.instance;
                 //case "DalXml":
-                //    return DalXml.DalXml.Instance;
+                //    return DalXml.DalXml.instance;
                 default:
                     throw new DO.IllegalArgumentException("The given string does not match any instance.");
             }

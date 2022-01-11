@@ -21,12 +21,9 @@ namespace DalObject
 
         #region Constructor
         /// <summary>
-        /// A constructor that adds initial values to the entity lists, private to maintain Singleton design pattern.
+        /// A private constructor to maintain Singleton design pattern.
         /// </summary>
-        private DalObject()
-        {
-            DataSource.Initialize();
-        }
+        private DalObject() { }
         #endregion
     }
 }
