@@ -28,66 +28,47 @@ namespace DalXml
         /// <summary>
         /// Path to the directory containing the xml files.
         /// </summary>
-        internal static string directory = @"Data\";
+        private static string directory = @"Data\";
 
         /// <summary>
         /// Path to the xml file storing drone data.
         /// </summary>
-        internal string droneXmlPath = directory + @"Drones.xml";
+        private string droneXmlPath = directory + @"Drones.xml";
 
         /// <summary>
         /// Path to the xml file storing station data.
         /// </summary>
-        internal string stationXmlPath = directory + @"Stations.xml";
+        private string stationXmlPath = directory + @"Stations.xml";
 
         /// <summary>
         /// Path to the xml file storing customer data.
         /// </summary>
-        internal string customerXmlPath = directory + @"Customers.xml";
+        private string customerXmlPath = directory + @"Customers.xml";
 
         /// <summary>
         /// Path to the xml file storing package data.
         /// </summary>
-        internal string packageXmlPath = directory + @"Packages.xml";
+        private string packageXmlPath = directory + @"Packages.xml";
 
         /// <summary>
         /// Path to the xml file storing droneCharge data.
         /// </summary>
-        internal string droneChargeXmlPath = directory + @"DroneCharges.xml";
+        private string droneChargeXmlPath = directory + @"DroneCharges.xml";
+
+        /// <summary>
+        /// Root element of an XML file of Drones.
+        /// </summary>
+        private XElement droneRoot;
         #endregion
 
         #region Constructors
         /// <summary>
-        /// A constructor that ensures the existance of a directory to store xml files.
+        /// A constructor that ensures the existance of a directory of xml files.
         /// Visibility is private to maintain Singleton design pattern.
         /// </summary>
         private DalXml()
         {
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
-
-            if (!File.Exists(directory + droneXmlPath))
-            {
-                //add using XElement
-            }
-            if (!File.Exists(directory + stationXmlPath))
-            {
-                XMLSerializer.SaveListToXMLSerializer<Station>(DalObject.DataSource.stations, directory + stationXmlPath);
-            }
-            if (!File.Exists(directory + customerXmlPath))
-            {
-                XMLSerializer.SaveListToXMLSerializer<Customer>(DalObject.DataSource.customers, directory + customerXmlPath);
-            }
-            if (!File.Exists(directory + packageXmlPath))
-            {
-                XMLSerializer.SaveListToXMLSerializer<Package>(DalObject.DataSource.packages, directory + packageXmlPath);
-            }
-            if (!File.Exists(directory + droneChargeXmlPath))
-            {
-                XMLSerializer.SaveListToXMLSerializer<DroneCharge>(DalObject.DataSource.droneCharges, directory + droneChargeXmlPath);
-            }
+            initializeXMLFiles();
         }
         #endregion
     }

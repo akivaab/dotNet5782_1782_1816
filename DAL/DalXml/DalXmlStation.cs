@@ -15,7 +15,7 @@ namespace DalXml
         #region Add Methods
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
         {
-            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+            List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
 
             int stationIndex = stations.FindIndex(station => station.ID == id && station.Active);
             if (stationIndex != -1 && stations[stationIndex].Active)
@@ -32,14 +32,14 @@ namespace DalXml
             station.Active = true;
             stations.Add(station);
 
-            XMLSerializer.SaveListToXMLSerializer<Station>(stations, stationXmlPath);
+            saveListToXMLSerializer<Station>(stations, stationXmlPath);
         }
         #endregion
 
         #region Update Methods
         public void UpdateStationName(int stationID, int name)
         {
-            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+            List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
 
             int stationIndex = stations.FindIndex(station => station.ID == stationID && station.Active);
             if (stationIndex == -1)
@@ -51,12 +51,12 @@ namespace DalXml
             station.Name = name;
             stations[stationIndex] = station;
 
-            XMLSerializer.SaveListToXMLSerializer<Station>(stations, stationXmlPath);
+            saveListToXMLSerializer<Station>(stations, stationXmlPath);
         }
 
         public void UpdateStationChargeSlots(int stationID, int availableChargingSlots)
         {
-            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+            List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
 
             int stationIndex = stations.FindIndex(station => station.ID == stationID && station.Active);
             if (stationIndex == -1)
@@ -68,14 +68,14 @@ namespace DalXml
             station.AvailableChargeSlots = availableChargingSlots;
             stations[stationIndex] = station;
 
-            XMLSerializer.SaveListToXMLSerializer<Station>(stations, stationXmlPath);
+            saveListToXMLSerializer<Station>(stations, stationXmlPath);
         }
         #endregion
 
         #region Remove Methods
         public void RemoveStation(int stationID)
         {
-            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+            List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
 
             int stationIndex = stations.FindIndex(station => station.ID == stationID && station.Active);
             if (stationIndex == -1)
@@ -87,14 +87,14 @@ namespace DalXml
             station.Active = false;
             stations[stationIndex] = station;
 
-            XMLSerializer.SaveListToXMLSerializer<Station>(stations, stationXmlPath);
+            saveListToXMLSerializer<Station>(stations, stationXmlPath);
         }
         #endregion
 
         #region Getter Methods
         public Station GetStation(int stationID)
         {
-            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+            List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
 
             int stationIndex = stations.FindIndex(station => station.ID == stationID && station.Active);
             if (stationIndex == -1)
@@ -107,7 +107,7 @@ namespace DalXml
 
         public IEnumerable<Station> GetStationsList()
         {
-            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+            List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
 
             return from station in stations
                    where station.Active
@@ -118,7 +118,7 @@ namespace DalXml
         #region Find Methods
         public IEnumerable<Station> FindStations(Predicate<Station> predicate)
         {
-            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+            List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
 
             return from station in stations
                    where predicate(station) && station.Active
