@@ -15,7 +15,7 @@ namespace DalXml
         #region Add Methods
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {
-            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(directory + customerXmlFile);
+            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(customerXmlPath);
 
             int customerIndex = customers.FindIndex(customer => customer.ID == id);
             if (customerIndex != -1 && customers[customerIndex].Active)
@@ -33,14 +33,14 @@ namespace DalXml
             customer.Password = id.ToString();
             customers.Add(customer);
 
-            XMLSerializer.SaveListToXMLSerializer<Customer>(customers, directory + customerXmlFile);
+            XMLSerializer.SaveListToXMLSerializer<Customer>(customers, customerXmlPath);
         }
         #endregion
 
         #region Update Methods
         public void UpdateCustomerName(int customerID, string name)
         {
-            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(directory + customerXmlFile);
+            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(customerXmlPath);
             
             int customerIndex = customers.FindIndex(customer => customer.ID == customerID && customer.Active);
             if (customerIndex == -1)
@@ -52,12 +52,12 @@ namespace DalXml
             customer.Name = name;
             customers[customerIndex] = customer;
 
-            XMLSerializer.SaveListToXMLSerializer<Customer>(customers, directory + customerXmlFile);
+            XMLSerializer.SaveListToXMLSerializer<Customer>(customers, customerXmlPath);
         }
 
         public void UpdateCustomerPhone(int customerID, string phone)
         {
-            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(directory + customerXmlFile);
+            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(customerXmlPath);
 
             int customerIndex = customers.FindIndex(customer => customer.ID == customerID && customer.Active);
             if (customerIndex == -1)
@@ -69,12 +69,12 @@ namespace DalXml
             customer.Phone = phone;
             customers[customerIndex] = customer;
 
-            XMLSerializer.SaveListToXMLSerializer<Customer>(customers, directory + customerXmlFile);
+            XMLSerializer.SaveListToXMLSerializer<Customer>(customers, customerXmlPath);
         }
 
         public void UpdateCustomerPassword(int customerID, string password)
         {
-            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(directory + customerXmlFile);
+            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(customerXmlPath);
 
             int customerIndex = customers.FindIndex(customer => customer.ID == customerID && customer.Active);
             if (customerIndex == -1)
@@ -86,14 +86,14 @@ namespace DalXml
             customer.Password = password;
             customers[customerIndex] = customer;
 
-            XMLSerializer.SaveListToXMLSerializer<Customer>(customers, directory + customerXmlFile);
+            XMLSerializer.SaveListToXMLSerializer<Customer>(customers, customerXmlPath);
         }
         #endregion
 
         #region Remove Methods
         public void RemoveCustomer(int customerID)
         {
-            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(directory + customerXmlFile);
+            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(customerXmlPath);
 
             int customerIndex = customers.FindIndex(customer => customer.ID == customerID && customer.Active);
             if (customerIndex == -1)
@@ -105,7 +105,7 @@ namespace DalXml
             customer.Active = false;
             customers[customerIndex] = customer;
 
-            XMLSerializer.SaveListToXMLSerializer<Customer>(customers, directory + customerXmlFile);
+            XMLSerializer.SaveListToXMLSerializer<Customer>(customers, customerXmlPath);
 
         }
         #endregion
@@ -113,7 +113,7 @@ namespace DalXml
         #region Getter Methods
         public Customer GetCustomer(int customerID)
         {
-            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(directory + customerXmlFile);
+            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(customerXmlPath);
 
             int customerIndex = customers.FindIndex(customer => customer.ID == customerID && customer.Active);
             if (customerIndex == -1)
@@ -126,7 +126,7 @@ namespace DalXml
 
         public IEnumerable<Customer> GetCustomersList()
         {
-            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(directory + customerXmlFile);
+            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(customerXmlPath);
 
             return from customer in customers
                    where customer.Active
@@ -135,7 +135,7 @@ namespace DalXml
 
         public string GetCustomerPassword(int customerID)
         {
-            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(directory + customerXmlFile);
+            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(customerXmlPath);
             
             int customerIndex = customers.FindIndex(customer => customer.ID == customerID && customer.Active);
             if (customerIndex == -1)
@@ -150,7 +150,7 @@ namespace DalXml
         #region Find Methods
         public IEnumerable<Customer> FindCustomers(Predicate<Customer> predicate)
         {
-            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(directory + customerXmlFile);
+            List<Customer> customers = XMLSerializer.LoadListFromXMLSerializer<Customer>(customerXmlPath);
 
             return from customer in customers
                    where predicate(customer) && customer.Active

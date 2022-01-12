@@ -11,8 +11,8 @@ namespace DalObject
     partial class DalObject : DalApi.IDal
     {
         #region Add Methods
-        public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority, int? droneID = null)
-        {
+        public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority)
+        {   
             int senderIndex = DataSource.customers.FindIndex(customer => customer.ID == senderID);
             int receiverIndex = DataSource.customers.FindIndex(customer => customer.ID == receiverID);
             if (senderIndex == -1 || !DataSource.customers[senderIndex].Active || 
@@ -21,22 +21,13 @@ namespace DalObject
                 throw new UndefinedObjectException("There is no customer with the given ID.");
             }
 
-            if (droneID != null)
-            {
-                int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID);
-                if (droneIndex == -1 || !DataSource.drones[droneIndex].Active)
-                {
-                    throw new UndefinedObjectException("There is no drone with the given ID.");
-                }
-            }
-            
             Package package = new();
             package.ID = DataSource.Config.packageID;
             package.SenderID = senderID;
             package.ReceiverID = receiverID;
             package.Weight = weight;
             package.Priority = priority;
-            package.DroneID = droneID;
+            package.DroneID = null;
             package.Requested = DateTime.Now;
             package.Assigned = null;
             package.Collected = null;

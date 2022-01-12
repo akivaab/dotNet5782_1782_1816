@@ -28,32 +28,32 @@ namespace DalXml
         /// <summary>
         /// Path to the directory containing the xml files.
         /// </summary>
-        internal string directory = @"Data\";
+        internal static string directory = @"Data\";
 
         /// <summary>
         /// Path to the xml file storing drone data.
         /// </summary>
-        internal string droneXmlFile = @"Drones.xml";
+        internal string droneXmlPath = directory + @"Drones.xml";
 
         /// <summary>
         /// Path to the xml file storing station data.
         /// </summary>
-        internal string stationXmlFile = @"Stations.xml";
+        internal string stationXmlPath = directory + @"Stations.xml";
 
         /// <summary>
         /// Path to the xml file storing customer data.
         /// </summary>
-        internal string customerXmlFile = @"Customers.xml";
+        internal string customerXmlPath = directory + @"Customers.xml";
 
         /// <summary>
         /// Path to the xml file storing package data.
         /// </summary>
-        internal string packageXmlFile = @"Packages.xml";
+        internal string packageXmlPath = directory + @"Packages.xml";
 
         /// <summary>
         /// Path to the xml file storing droneCharge data.
         /// </summary>
-        internal string droneChargeXmlFile = @"DroneCharges.xml";
+        internal string droneChargeXmlPath = directory + @"DroneCharges.xml";
         #endregion
 
         #region Constructors
@@ -68,25 +68,25 @@ namespace DalXml
                 Directory.CreateDirectory(directory);
             }
 
-            if (!File.Exists(directory + droneXmlFile))
+            if (!File.Exists(directory + droneXmlPath))
             {
                 //add using XElement
             }
-            if (!File.Exists(directory + stationXmlFile))
+            if (!File.Exists(directory + stationXmlPath))
             {
-                XMLSerializer.SaveListToXMLSerializer<Station>(DalObject.DataSource.stations, directory + stationXmlFile);
+                XMLSerializer.SaveListToXMLSerializer<Station>(DalObject.DataSource.stations, directory + stationXmlPath);
             }
-            if (!File.Exists(directory + customerXmlFile))
+            if (!File.Exists(directory + customerXmlPath))
             {
-                XMLSerializer.SaveListToXMLSerializer<Customer>(DalObject.DataSource.customers, directory + customerXmlFile);
+                XMLSerializer.SaveListToXMLSerializer<Customer>(DalObject.DataSource.customers, directory + customerXmlPath);
             }
-            if (!File.Exists(directory + packageXmlFile))
+            if (!File.Exists(directory + packageXmlPath))
             {
-                XMLSerializer.SaveListToXMLSerializer<Package>(DalObject.DataSource.packages, directory + packageXmlFile);
+                XMLSerializer.SaveListToXMLSerializer<Package>(DalObject.DataSource.packages, directory + packageXmlPath);
             }
-            if (!File.Exists(directory + droneChargeXmlFile))
+            if (!File.Exists(directory + droneChargeXmlPath))
             {
-                XMLSerializer.SaveListToXMLSerializer<DroneCharge>(DalObject.DataSource.droneCharges, directory + droneChargeXmlFile);
+                XMLSerializer.SaveListToXMLSerializer<DroneCharge>(DalObject.DataSource.droneCharges, directory + droneChargeXmlPath);
             }
         }
         #endregion

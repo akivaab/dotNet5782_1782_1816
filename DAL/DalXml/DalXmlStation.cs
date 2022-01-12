@@ -1,0 +1,129 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DO;
+
+namespace DalXml
+{
+    /// <summary>
+    /// Station-related functionality of the Data Layer.
+    /// </summary>
+    partial class DalXml : DalApi.IDal
+    {
+        #region Add Methods
+        public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
+        {
+            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+
+            int stationIndex = stations.FindIndex(station => station.ID == id && station.Active);
+            if (stationIndex != -1 && stations[stationIndex].Active)
+            {
+                throw new NonUniqueIdException("The given station ID is not unique.");
+            }
+
+            Station station = new();
+            station.ID = id;
+            station.Name = name;
+            station.AvailableChargeSlots = numChargeSlots;
+            station.Latitude = latitude;
+            station.Longitude = longitude;
+            station.Active = true;
+            stations.Add(station);
+
+            XMLSerializer.SaveListToXMLSerializer<Station>(stations, stationXmlPath);
+        }
+        #endregion
+
+        #region Update Methods
+        public void UpdateStationName(int stationID, int name)
+        {
+            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+
+            int stationIndex = stations.FindIndex(station => station.ID == stationID && station.Active);
+            if (stationIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no station with the given ID.");
+            }
+
+            Station station = stations[stationIndex];
+            station.Name = name;
+            stations[stationIndex] = station;
+
+            XMLSerializer.SaveListToXMLSerializer<Station>(stations, stationXmlPath);
+        }
+
+        public void UpdateStationChargeSlots(int stationID, int availableChargingSlots)
+        {
+            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+
+            int stationIndex = stations.FindIndex(station => station.ID == stationID && station.Active);
+            if (stationIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no station with the given ID.");
+            }
+
+            Station station = stations[stationIndex];
+            station.AvailableChargeSlots = availableChargingSlots;
+            stations[stationIndex] = station;
+
+            XMLSerializer.SaveListToXMLSerializer<Station>(stations, stationXmlPath);
+        }
+        #endregion
+
+        #region Remove Methods
+        public void RemoveStation(int stationID)
+        {
+            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+
+            int stationIndex = stations.FindIndex(station => station.ID == stationID && station.Active);
+            if (stationIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no station with the given ID");
+            }
+
+            Station station = stations[stationIndex];
+            station.Active = false;
+            stations[stationIndex] = station;
+
+            XMLSerializer.SaveListToXMLSerializer<Station>(stations, stationXmlPath);
+        }
+        #endregion
+
+        #region Getter Methods
+        public Station GetStation(int stationID)
+        {
+            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+
+            int stationIndex = stations.FindIndex(station => station.ID == stationID && station.Active);
+            if (stationIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no station with the given ID.");
+            }
+
+            return stations[stationIndex];
+        }
+
+        public IEnumerable<Station> GetStationsList()
+        {
+            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+
+            return from station in stations
+                   where station.Active
+                   select station;
+        }
+        #endregion
+
+        #region Find Methods
+        public IEnumerable<Station> FindStations(Predicate<Station> predicate)
+        {
+            List<Station> stations = XMLSerializer.LoadListFromXMLSerializer<Station>(stationXmlPath);
+
+            return from station in stations
+                   where predicate(station) && station.Active
+                   select station;
+        }
+        #endregion
+    }
+}

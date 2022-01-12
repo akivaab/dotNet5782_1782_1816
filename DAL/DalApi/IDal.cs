@@ -45,9 +45,8 @@ namespace DalApi
         /// <param name="receiverID">The ID of the package receiver.</param>
         /// <param name="weight">The weight of the package.</param>
         /// <param name="priority">The priority of the package.</param>
-        /// <param name="droneID">The ID of the drone assigned to the package.</param>
-        /// <returns>automatic package ID, or -1 if adding a package failed</returns>
-        public int AddPackage(int senderID, int receiverID, DO.Enums.WeightCategories weight, DO.Enums.Priorities priority, int? droneID = null);
+        /// <returns>The automatic package ID.</returns>
+        public int AddPackage(int senderID, int receiverID, DO.Enums.WeightCategories weight, DO.Enums.Priorities priority);
         #endregion
 
         #region Update Methods
