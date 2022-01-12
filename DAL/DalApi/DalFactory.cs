@@ -14,7 +14,7 @@ namespace DalApi
         /// <summary>
         /// Get a IDal-implementing object.
         /// </summary>
-        /// <param name="instance">string representing which instantiation to choose.</param>
+        /// <param name="instance">String representing which instantiation to choose.</param>
         /// <returns>An IDal object.</returns>
         public static IDal GetDal(string instance)
         {
@@ -22,8 +22,8 @@ namespace DalApi
             {
                 case "DalObject":
                     return DalObject.DalObject.instance;
-                //case "DalXml":
-                //    return DalXml.DalXml.instance;
+                case "DalXml":
+                    return DalXml.DalXml.instance;
                 default:
                     throw new DO.IllegalArgumentException("The given string does not match any instance.");
             }
