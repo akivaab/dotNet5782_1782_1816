@@ -14,7 +14,7 @@ namespace DalObject
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == id && drone.Active);
-            if (droneIndex != -1 && DataSource.drones[droneIndex].Active)
+            if (droneIndex != -1)
             {
                 throw new NonUniqueIdException("The given drone ID is not unique.");
             }
@@ -55,7 +55,7 @@ namespace DalObject
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID);
-            int droneChargeIndex = DataSource.droneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID && droneCharge.StationID == stationID);
+            int droneChargeIndex = DataSource.droneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID && droneCharge.StationID == stationID && droneCharge.Active);
             
             if (droneIndex == -1 || stationIndex == -1)
             {
@@ -116,18 +116,6 @@ namespace DalObject
             }
             
             return DataSource.drones[droneIndex];
-        }
-
-        public DateTime GetTimeChargeBegan(int droneID)
-        {
-            int droneChargeIndex = DataSource.droneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID);
-
-            if (droneChargeIndex == -1)
-            {
-                throw new UndefinedObjectException("There is no drone with the given ID.");
-            }
-
-            return DataSource.droneCharges[droneChargeIndex].BeganCharge;
         }
 
         public IEnumerable<Drone> GetDronesList()

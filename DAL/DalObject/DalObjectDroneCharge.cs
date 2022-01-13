@@ -10,6 +10,20 @@ namespace DalObject
     /// </summary>
     partial class DalObject : DalApi.IDal
     {
+        #region Getter Methods
+        public DateTime GetTimeChargeBegan(int droneID)
+        {
+            int droneChargeIndex = DataSource.droneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID && droneCharge.Active);
+
+            if (droneChargeIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no drone with the given ID currently charging.");
+            }
+
+            return DataSource.droneCharges[droneChargeIndex].BeganCharge;
+        }
+        #endregion
+
         #region Find Methods
         public IEnumerable<DroneCharge> FindDroneCharges(Predicate<DroneCharge> predicate)
         {

@@ -14,7 +14,7 @@ namespace DalObject
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
         {
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == id && station.Active);
-            if (stationIndex != -1 && DataSource.stations[stationIndex].Active)
+            if (stationIndex != -1)
             {
                 throw new NonUniqueIdException("The given station ID is not unique.");
             }

@@ -105,7 +105,7 @@ namespace DalXml
 
         #region Save/Load with XElement (Drone)
         /// <summary>
-        /// Save a Drone root element to an XML file.
+        /// Save the droneRoot element to an XML file.
         /// </summary>
         private void saveDrones()
         {
@@ -127,13 +127,13 @@ namespace DalXml
         {
             try
             {
-                droneRoot = new XElement("drones",
+                droneRoot = new XElement("Drones",
                     from d in drones
-                    select new XElement("drone",
-                                        new XElement("id", d.ID),
-                                        new XElement("model", d.Model),
-                                        new XElement("maxWeight", d.MaxWeight),
-                                        new XElement("active", d.Active)));
+                    select new XElement("Drone",
+                                        new XElement("ID", d.ID),
+                                        new XElement("Model", d.Model),
+                                        new XElement("MaxWeight", d.MaxWeight),
+                                        new XElement("Active", d.Active)));
                 saveDrones();
             }
             catch
@@ -143,7 +143,7 @@ namespace DalXml
         }
 
         /// <summary>
-        /// Load a Drone root element from an XML file.
+        /// Load the droneRoot element from an XML file.
         /// </summary>
         private void loadDrones()
         {
@@ -155,6 +155,27 @@ namespace DalXml
             {
                 //throw new exception  
             }
+        }
+
+        private IEnumerable<Drone> loadDronesList()
+        {
+            try
+            {
+                loadDrones();
+                return (from drone in droneRoot.Elements()
+                        select new Drone()
+                        {
+                            ID = int.Parse(drone.Element("ID").Value),
+                            Model = drone.Element("Model").Value,
+                            MaxWeight = (Enums.WeightCategories)Enum.Parse(typeof(Enums.WeightCategories), drone.Element("MaxWeight").Value),
+                            Active = bool.Parse(drone.Element("Active").Value)
+                        });
+            }
+            catch
+            {
+                //throw new exception
+            }
+            return null;
         }
         #endregion
     }
