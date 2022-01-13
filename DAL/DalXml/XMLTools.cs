@@ -105,18 +105,40 @@ namespace DalXml
 
         #region Save/Load with XElement (Drone)
         /// <summary>
-        /// Save the droneRoot element to an XML file.
+        /// Save a root XElement to an XML file.
         /// </summary>
-        private void saveDrones()
+        /// <typeparam name="T">The type of element in the file.</typeparam>
+        /// <param name="root">The root element.</param>
+        /// <param name="filePath">The path to the XML file.</param>
+        private void saveElementToXML<T>(XElement root, string filePath)
         {
             try
             {
-                droneRoot.Save(droneXmlPath);
+                root.Save(filePath);
             }
             catch
             {
                 //throw new exception
             }
+        }
+
+        /// <summary>
+        /// Load the root XElement from an XML file.
+        /// </summary>
+        /// <typeparam name="T">The type of element in the file.</typeparam>
+        /// <param name="filePath">The path to the XML file.</param>
+        /// <returns>The root XElement.</returns>
+        private XElement loadElementFromXML<T>(string filePath)
+        {
+            try
+            {
+                return XElement.Load(filePath);
+            }
+            catch
+            {
+                //throw new exception  
+            }
+            return null;
         }
 
         /// <summary>
@@ -127,14 +149,14 @@ namespace DalXml
         {
             try
             {
-                droneRoot = new XElement("Drones",
+                XElement droneRoot = new XElement("Drones",
                     from d in drones
                     select new XElement("Drone",
                                         new XElement("ID", d.ID),
                                         new XElement("Model", d.Model),
                                         new XElement("MaxWeight", d.MaxWeight),
                                         new XElement("Active", d.Active)));
-                saveDrones();
+                saveElementToXML<Drone>(droneRoot, droneXmlPath);
             }
             catch
             {
@@ -143,25 +165,14 @@ namespace DalXml
         }
 
         /// <summary>
-        /// Load the droneRoot element from an XML file.
+        /// Load a list of drones from an XML file.
         /// </summary>
-        private void loadDrones()
+        /// <returns>The list of drones.</returns>
+        private List<Drone> loadDronesList()
         {
             try
             {
-                droneRoot = XElement.Load(droneXmlPath);
-            }
-            catch
-            {
-                //throw new exception  
-            }
-        }
-
-        private IEnumerable<Drone> loadDronesList()
-        {
-            try
-            {
-                loadDrones();
+                XElement droneRoot = loadElementFromXML<Drone>(droneXmlPath);
                 return (from drone in droneRoot.Elements()
                         select new Drone()
                         {
@@ -169,7 +180,7 @@ namespace DalXml
                             Model = drone.Element("Model").Value,
                             MaxWeight = (Enums.WeightCategories)Enum.Parse(typeof(Enums.WeightCategories), drone.Element("MaxWeight").Value),
                             Active = bool.Parse(drone.Element("Active").Value)
-                        });
+                        }).ToList();
             }
             catch
             {
@@ -178,5 +189,10 @@ namespace DalXml
             return null;
         }
         #endregion
+
+        private bool activeDroneExists(XElement droneRoot, int id)
+        {
+            return droneRoot.Elements().Where(drone => int.Parse(drone.Element("ID").Value) == id && bool.Parse(drone.Element("Active").Value)).Any();
+        }
     }
 }

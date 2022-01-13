@@ -54,11 +54,6 @@ namespace DalXml
         /// Path to the xml file storing droneCharge data.
         /// </summary>
         private string droneChargeXmlPath = directory + @"DroneCharges.xml";
-
-        /// <summary>
-        /// Root element of an XML file of Drones.
-        /// </summary>
-        private XElement droneRoot;
         #endregion
 
         #region Constructors
