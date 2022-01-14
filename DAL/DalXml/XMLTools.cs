@@ -26,18 +26,6 @@ namespace DalXml
                 Directory.CreateDirectory(directory);
             }
 
-            if (!File.Exists(configXmlPath))
-            {
-                XElement configRoot = new XElement("Config",
-                                                    new XElement("packageID", 1),
-                                                    new XElement("free", 0.01),
-                                                    new XElement("lightWeight", 0.05),
-                                                    new XElement("midWeight", 0.1),
-                                                    new XElement("heavyWeight", 0.15),
-                                                    new XElement("chargingRate", 20.0));
-                saveElementToXML(configRoot, configXmlPath);
-            }
-
             if (!File.Exists(droneXmlPath) || !File.Exists(stationXmlPath) || !File.Exists(customerXmlPath) || !File.Exists(packageXmlPath) || !File.Exists(droneChargeXmlPath))
             {
                 saveDronesList(DalObject.DataSource.drones);
@@ -45,6 +33,16 @@ namespace DalXml
                 saveListToXMLSerializer<Customer>(DalObject.DataSource.customers, customerXmlPath);
                 saveListToXMLSerializer<Package>(DalObject.DataSource.packages, packageXmlPath);
                 saveListToXMLSerializer<DroneCharge>(DalObject.DataSource.droneCharges, droneChargeXmlPath);
+
+                int packageIDConfig = loadListFromXMLSerializer<Package>(packageXmlPath).Last().ID + 1;
+                XElement configRoot = new XElement("Config",
+                                                    new XElement("packageID", packageIDConfig),
+                                                    new XElement("free", 0.01),
+                                                    new XElement("lightWeight", 0.05),
+                                                    new XElement("midWeight", 0.1),
+                                                    new XElement("heavyWeight", 0.15),
+                                                    new XElement("chargingRate", 20.0));
+                saveElementToXML(configRoot, configXmlPath);
             }
         }
         #endregion
