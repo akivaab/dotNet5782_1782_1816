@@ -26,24 +26,24 @@ namespace DalXml
                 Directory.CreateDirectory(directory);
             }
 
-            if (!File.Exists(droneXmlPath))
+            if (!File.Exists(configXmlPath))
+            {
+                XElement configRoot = new XElement("Config",
+                                                    new XElement("packageID", 1),
+                                                    new XElement("free", 0.01),
+                                                    new XElement("lightWeight", 0.05),
+                                                    new XElement("midWeight", 0.1),
+                                                    new XElement("heavyWeight", 0.15),
+                                                    new XElement("chargingRate", 20.0));
+                saveElementToXML(configRoot, configXmlPath);
+            }
+
+            if (!File.Exists(droneXmlPath) || !File.Exists(stationXmlPath) || !File.Exists(customerXmlPath) || !File.Exists(packageXmlPath) || !File.Exists(droneChargeXmlPath))
             {
                 saveDronesList(DalObject.DataSource.drones);
-            }
-            if (!File.Exists(stationXmlPath))
-            {
                 saveListToXMLSerializer<Station>(DalObject.DataSource.stations, stationXmlPath);
-            }
-            if (!File.Exists(customerXmlPath))
-            {
                 saveListToXMLSerializer<Customer>(DalObject.DataSource.customers, customerXmlPath);
-            }
-            if (!File.Exists(packageXmlPath))
-            {
                 saveListToXMLSerializer<Package>(DalObject.DataSource.packages, packageXmlPath);
-            }
-            if (!File.Exists(droneChargeXmlPath))
-            {
                 saveListToXMLSerializer<DroneCharge>(DalObject.DataSource.droneCharges, droneChargeXmlPath);
             }
         }
@@ -107,10 +107,9 @@ namespace DalXml
         /// <summary>
         /// Save a root XElement to an XML file.
         /// </summary>
-        /// <typeparam name="T">The type of element in the file.</typeparam>
         /// <param name="root">The root element.</param>
         /// <param name="filePath">The path to the XML file.</param>
-        private void saveElementToXML<T>(XElement root, string filePath)
+        private void saveElementToXML(XElement root, string filePath)
         {
             try
             {
@@ -125,10 +124,9 @@ namespace DalXml
         /// <summary>
         /// Load the root XElement from an XML file.
         /// </summary>
-        /// <typeparam name="T">The type of element in the file.</typeparam>
         /// <param name="filePath">The path to the XML file.</param>
         /// <returns>The root XElement.</returns>
-        private XElement loadElementFromXML<T>(string filePath)
+        private XElement loadElementFromXML(string filePath)
         {
             try
             {
@@ -156,7 +154,7 @@ namespace DalXml
                                         new XElement("Model", d.Model),
                                         new XElement("MaxWeight", d.MaxWeight),
                                         new XElement("Active", d.Active)));
-                saveElementToXML<Drone>(droneRoot, droneXmlPath);
+                saveElementToXML(droneRoot, droneXmlPath);
             }
             catch
             {
@@ -164,6 +162,7 @@ namespace DalXml
             }
         }
 
+        [Obsolete]
         /// <summary>
         /// Load a list of drones from an XML file.
         /// </summary>
@@ -172,7 +171,7 @@ namespace DalXml
         {
             try
             {
-                XElement droneRoot = loadElementFromXML<Drone>(droneXmlPath);
+                XElement droneRoot = loadElementFromXML(droneXmlPath);
                 return (from drone in droneRoot.Elements()
                         select new Drone()
                         {
@@ -190,9 +189,45 @@ namespace DalXml
         }
         #endregion
 
-        private bool activeDroneExists(XElement droneRoot, int id)
+        #region Query XML (Drone)
+        /// <summary>
+        /// Check if there is an active drone with a given ID in an XML file.
+        /// </summary>
+        /// <param name="droneRoot">The root element of an XML file.</param>
+        /// <param name="droneID">The ID of the drone being searched for.</param>
+        /// <returns>True if the drone exists, false otherwise.</returns>
+        private bool activeDroneExists(XElement droneRoot, int droneID)
         {
-            return droneRoot.Elements().Where(drone => int.Parse(drone.Element("ID").Value) == id && bool.Parse(drone.Element("Active").Value)).Any();
+            try
+            {
+                extractDrone(droneRoot, droneID);
+                return true;
+            }
+            catch (UndefinedObjectException)
+            {
+                return false;
+            }
         }
+
+        /// <summary>
+        /// Extract a drone child element from an XML file.
+        /// </summary>
+        /// <param name="droneRoot">The root element of an XML file.</param>
+        /// <param name="droneID">The ID of the drone being searched for.</param>
+        /// <returns>The drone child element.</returns>
+        private XElement extractDrone(XElement droneRoot, int droneID)
+        {
+            XElement drone = (from d in droneRoot.Elements()
+                              where int.Parse(d.Element("ID").Value) == droneID && bool.Parse(d.Element("Active").Value)
+                              select d).SingleOrDefault(); /*.DefaultIfEmpty(null).Single();*/
+
+            if (drone == null) /*default(XElement)*/
+            {
+                throw new UndefinedObjectException("There is no drone with the given ID.");
+            }
+
+            return drone;
+        }
+        #endregion
     }
 }

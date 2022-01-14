@@ -13,7 +13,7 @@ namespace DalXml
         #region Add Methods
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
         {
-            XElement droneRoot = loadElementFromXML<Drone>(droneXmlPath);
+            XElement droneRoot = loadElementFromXML(droneXmlPath);
 
             if (activeDroneExists(droneRoot, id))
             {
@@ -27,14 +27,14 @@ namespace DalXml
             drone.Active = true;
             droneRoot.Add(drone);
 
-            saveElementToXML<Drone>(droneRoot, droneXmlPath);
+            saveElementToXML(droneRoot, droneXmlPath);
         }
         #endregion
 
         #region Update Methods
         public void ChargeDrone(int droneID, int stationID)
         {
-            XElement droneRoot = loadElementFromXML<Drone>(droneXmlPath);
+            XElement droneRoot = loadElementFromXML(droneXmlPath);
 
             List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
             int stationIndex = stations.FindIndex(station => station.ID == stationID && station.Active);
@@ -61,7 +61,7 @@ namespace DalXml
 
         public void ReleaseDroneFromCharging(int droneID, int stationID)
         {
-            XElement droneRoot = loadElementFromXML<Drone>(droneXmlPath);
+            XElement droneRoot = loadElementFromXML(droneXmlPath);
 
             List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
             List<DroneCharge> droneCharges = loadListFromXMLSerializer<DroneCharge>(droneChargeXmlPath);
@@ -91,17 +91,63 @@ namespace DalXml
 
         public void UpdateDroneModel(int droneID, string model)
         {
-            List<Drone> drones = loadDronesList();
+            XElement droneRoot = loadElementFromXML(droneXmlPath);
+            XElement drone = extractDrone(droneRoot, droneID);
+            drone.Element("Model").Value = model;
+            saveElementToXML(droneRoot, droneXmlPath);
+        }
+        #endregion
 
-            int droneIndex = drones.FindIndex(drone => drone.ID == droneID && drone.Active);
-            if (droneIndex == -1)
+        #region Remove Methods
+        public void RemoveDrone(int droneID)
+        {
+            XElement droneRoot = loadElementFromXML(droneXmlPath);
+            XElement drone = extractDrone(droneRoot, droneID);
+            drone.Element("Active").Value = false.ToString();
+            saveElementToXML(droneRoot, droneXmlPath);
+        }
+        #endregion
+
+        #region Getter Methods
+        public Drone GetDrone(int droneID)
+        {
+            XElement droneRoot = loadElementFromXML(droneXmlPath);
+            XElement drone = extractDrone(droneRoot, droneID);
+
+            return new Drone()
             {
-                throw new UndefinedObjectException("There is no drone with the given ID.");
-            }
+                ID = droneID,
+                Model = drone.Element("Model").Value,
+                MaxWeight = (Enums.WeightCategories)Enum.Parse(typeof(Enums.WeightCategories), drone.Element("MaxWeight").Value),
+                Active = true
+            };
+        }
 
-            Drone drone = drones[droneIndex];
-            drone.Model = model;
-            drones[droneIndex] = drone;
+        public IEnumerable<Drone> GetDronesList()
+        {
+            XElement droneRoot = loadElementFromXML(droneXmlPath);
+            return from drone in droneRoot.Elements()
+                   where bool.Parse(drone.Element("Active").Value)
+                   select new Drone()
+                   {
+                       ID = int.Parse(drone.Element("ID").Value),
+                       Model = drone.Element("Model").Value,
+                       MaxWeight = (Enums.WeightCategories)Enum.Parse(typeof(Enums.WeightCategories), drone.Element("MaxWeight").Value),
+                       Active = true
+                   };
+        }
+
+        public IEnumerable<double> DronePowerConsumption()
+        {
+            double[] powerConsumptionValues = new double[5];
+            XElement configRoot = loadElementFromXML(configXmlPath);
+
+            powerConsumptionValues[0] = double.Parse(configRoot.Element("free").Value);
+            powerConsumptionValues[1] = double.Parse(configRoot.Element("lightWeight").Value);
+            powerConsumptionValues[2] = double.Parse(configRoot.Element("midWeight").Value);
+            powerConsumptionValues[3] = double.Parse(configRoot.Element("heavyWeight").Value);
+            powerConsumptionValues[4] = double.Parse(configRoot.Element("chargingRate").Value);
+            return powerConsumptionValues;
         }
         #endregion
     }

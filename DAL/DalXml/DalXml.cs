@@ -26,32 +26,37 @@ namespace DalXml
         internal static DalXml instance { get { return lazyDalXml.Value; } }
 
         /// <summary>
-        /// Path to the directory containing the xml files.
+        /// Path to the directory containing the XML files.
         /// </summary>
         private static string directory = @"Data\";
 
         /// <summary>
-        /// Path to the xml file storing drone data.
+        /// Path to the XML file storing configuration data. 
+        /// </summary>
+        private string configXmlPath = directory + @"config.xml";
+
+        /// <summary>
+        /// Path to the XML file storing drone data.
         /// </summary>
         private string droneXmlPath = directory + @"Drones.xml";
 
         /// <summary>
-        /// Path to the xml file storing station data.
+        /// Path to the XML file storing station data.
         /// </summary>
         private string stationXmlPath = directory + @"Stations.xml";
 
         /// <summary>
-        /// Path to the xml file storing customer data.
+        /// Path to the XML file storing customer data.
         /// </summary>
         private string customerXmlPath = directory + @"Customers.xml";
 
         /// <summary>
-        /// Path to the xml file storing package data.
+        /// Path to the XML file storing package data.
         /// </summary>
         private string packageXmlPath = directory + @"Packages.xml";
 
         /// <summary>
-        /// Path to the xml file storing droneCharge data.
+        /// Path to the XML file storing droneCharge data.
         /// </summary>
         private string droneChargeXmlPath = directory + @"DroneCharges.xml";
         #endregion
