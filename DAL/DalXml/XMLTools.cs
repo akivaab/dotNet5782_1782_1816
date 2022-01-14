@@ -130,7 +130,10 @@ namespace DalXml
         {
             try
             {
-                return XElement.Load(filePath);
+                if (File.Exists(filePath))
+                {
+                    return XElement.Load(filePath);
+                }
             }
             catch
             {

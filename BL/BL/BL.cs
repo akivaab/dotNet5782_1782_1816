@@ -50,7 +50,7 @@ namespace BL
         {
             //initialize fields
             drones = new();
-            dalObject = DalApi.DalFactory.GetDal("DalObject");
+            dalObject = DalApi.DalFactory.GetDal("DalXml");
             powerConsumption = dalObject.DronePowerConsumption().Take(4);
             chargeRatePerHour = dalObject.DronePowerConsumption().Last();
 
