@@ -7,6 +7,8 @@ namespace DalObject
     /// </summary>
     sealed partial class DalObject : DalApi.IDal
     {
+        public bool DataCleanupRequired { get; }
+
         #region Fields
         /// <summary>
         /// Lazy and implicitly thread-safe initialization of a DalObject.
@@ -23,7 +25,10 @@ namespace DalObject
         /// <summary>
         /// A private constructor to maintain Singleton design pattern.
         /// </summary>
-        private DalObject() { }
+        private DalObject() 
+        {
+            DataCleanupRequired = true;
+        }
         #endregion
     }
 }

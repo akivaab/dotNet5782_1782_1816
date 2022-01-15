@@ -8,6 +8,8 @@ namespace DalApi
     /// </summary>
     public interface IDal
     {
+        public bool DataCleanupRequired { get; }
+
         #region Add Methods
         /// <summary>
         /// Add a new station to the system.

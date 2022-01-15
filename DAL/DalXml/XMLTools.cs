@@ -19,7 +19,8 @@ namespace DalXml
         /// <summary>
         /// Initialize a directory of XML files (if they don't exist yet).
         /// </summary>
-        private void initializeXMLFiles()
+        /// <returns>True if XML files were initialized, false otherwise.</returns>
+        private bool initializeXMLFiles()
         {
             if (!Directory.Exists(directory))
             {
@@ -43,7 +44,9 @@ namespace DalXml
                                                     new XElement("heavyWeight", 0.15),
                                                     new XElement("chargingRate", 20.0));
                 saveElementToXML(configRoot, configXmlPath);
+                return true;
             }
+            return false;
         }
         #endregion
 

@@ -55,7 +55,10 @@ namespace BL
             chargeRatePerHour = dalObject.DronePowerConsumption().Last();
 
             //remove problematic entities from the data layer
-            dataCleanup();
+            if (dalObject.DataCleanupRequired)
+            {
+                dataCleanup();
+            }
             
             List<DO.Drone> dalDrones = dalObject.GetDronesList().ToList();
 
@@ -92,48 +95,74 @@ namespace BL
             #endregion
 
             #region Add unassigned drones to BL Drone List
-            Random random = new Random();
-
             //for remaining drones that are not delivering
-            foreach (DO.Drone drone in dalDrones) 
+            foreach (DO.Drone drone in dalDrones)
             {
                 DroneToList droneToList = new();
                 droneToList.ID = drone.ID;
                 droneToList.Model = drone.Model;
                 droneToList.MaxWeight = (Enums.WeightCategories)drone.MaxWeight;
 
-                //randomly choose state of drone
-                int randInt = random.Next(1, 3);
-                if (randInt == 1)
+                //randomly assign remaining data, as this is the drone entity initialization
+                if (dalObject.DataCleanupRequired)
                 {
-                    droneToList.Status = Enums.DroneStatus.maintenance;
+                    Random random = new Random();
 
-                    //get random station as drone location
-                    IEnumerable<DO.Station> dalStations = dalObject.GetStationsList();
-                    int randStation = random.Next(dalStations.Count());
-                    DO.Station dalStation = dalStations.ElementAt(randStation);
-                    droneToList.Location = new(dalStation.Latitude, dalStation.Longitude);
-                    
-                    //get random battery level 0%-20%
-                    droneToList.Battery = random.Next(21);
+                    //randomly choose state of drone
+                    int randInt = random.Next(1, 3);
+                    if (randInt == 1)
+                    {
+                        droneToList.Status = Enums.DroneStatus.maintenance;
 
-                    //create appropriate DroneCharge entity in data layer
-                    dalObject.ChargeDrone(drone.ID, dalStation.ID);
+                        //get random station as drone location
+                        IEnumerable<DO.Station> dalStations = dalObject.GetStationsList();
+                        int randStation = random.Next(dalStations.Count());
+                        DO.Station dalStation = dalStations.ElementAt(randStation);
+                        droneToList.Location = new(dalStation.Latitude, dalStation.Longitude);
+
+                        //get random battery level 0%-20%
+                        droneToList.Battery = random.Next(21);
+
+                        //create appropriate DroneCharge entity in data layer
+                        dalObject.ChargeDrone(drone.ID, dalStation.ID);
+                    }
+                    else if (randInt == 2)
+                    {
+                        droneToList.Status = Enums.DroneStatus.available;
+
+                        //get random customer that received a package as drone location
+                        DO.Customer customer = randomPackageReceiver();
+                        droneToList.Location = new(customer.Latitude, customer.Longitude);
+
+                        //get random battery level
+                        droneToList.Battery = random.Next((int)Math.Ceiling(powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(droneToList.Location, getClosestStation(droneToList.Location))), 101);
+                    }
                 }
-                else if (randInt == 2)
+                //reinstate the appropriate entity data based on the XML files
+                else
                 {
-                    droneToList.Status = Enums.DroneStatus.available;
-                    
-                    //get random customer that received a package as drone location
-                    DO.Customer customer = randomPackageReceiver();
-                    droneToList.Location = new(customer.Latitude, customer.Longitude);
-                    
-                    //get random battery level
-                    droneToList.Battery = random.Next((int)Math.Ceiling(powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(droneToList.Location, getClosestStation(droneToList.Location))), 101);
+                    DO.DroneCharge dalDroneCharge = dalObject.FindDroneCharges(dc => dc.DroneID == drone.ID).SingleOrDefault();
+                    if (dalDroneCharge.Equals(default(DO.DroneCharge)))
+                    {
+                        droneToList.Status = Enums.DroneStatus.available;
+
+                        //droneToList.Location = I've got no clue how this is possible.
+
+                        //droneToList.Battery = I've got no clue how this is possible.
+                    }
+                    else
+                    {
+                        droneToList.Status = Enums.DroneStatus.maintenance;
+
+                        DO.Station stationChargingIn = dalObject.GetStation(dalDroneCharge.StationID);
+                        droneToList.Location = new(stationChargingIn.Latitude, stationChargingIn.Longitude);
+
+                        //droneToList.Battery = I've got no clue how this is possible.
+                    }
                 }
 
                 //no package assigned
-                droneToList.PackageID = null; 
+                droneToList.PackageID = null;
 
                 drones.Add(droneToList);
             }

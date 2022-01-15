@@ -14,6 +14,8 @@ namespace DalXml
     /// </summary>
     sealed partial class DalXml : DalApi.IDal
     {
+        public bool DataCleanupRequired { get; }
+
         #region Fields
         /// <summary>
         /// Lazy and implicitly thread-safe initialization of a DalXml.
@@ -68,7 +70,8 @@ namespace DalXml
         /// </summary>
         private DalXml()
         {
-            initializeXMLFiles();
+            bool initializedNewXMLFiles = initializeXMLFiles();
+            DataCleanupRequired = initializedNewXMLFiles;
         }
         #endregion
     }
