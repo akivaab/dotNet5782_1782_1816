@@ -24,7 +24,7 @@ namespace BL
 
             try
             {
-                dalObject.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
+                dal.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
             }
             catch (DO.NonUniqueIdException e)
             {
@@ -42,14 +42,14 @@ namespace BL
             {
                 if (name != -1)
                 {
-                    dalObject.UpdateStationName(stationID, name);
+                    dal.UpdateStationName(stationID, name);
                 }
                 if (totalChargingSlots != -1)
                 {
-                    DO.Station dalStation = dalObject.GetStation(stationID);
+                    DO.Station dalStation = dal.GetStation(stationID);
 
                     //find the amount of drones in this station
-                    IEnumerable<DO.DroneCharge> dronesAtStation = dalObject.FindDroneCharges(dc => dc.StationID == stationID);
+                    IEnumerable<DO.DroneCharge> dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == stationID);
                     
                     int availableChargeSlots = totalChargingSlots - dronesAtStation.Count();
                     if (availableChargeSlots < 0)
@@ -57,7 +57,7 @@ namespace BL
                         throw new IllegalArgumentException("There cannot be less charging slots than drones charging.");
                     }
 
-                    dalObject.UpdateStationChargeSlots(stationID, availableChargeSlots);
+                    dal.UpdateStationChargeSlots(stationID, availableChargeSlots);
                 }
             }
             catch (DO.UndefinedObjectException e)
@@ -76,7 +76,7 @@ namespace BL
                 {
                     throw new UnableToRemoveException("The station has drones charging in it.");
                 }
-                dalObject.RemoveStation(stationID);
+                dal.RemoveStation(stationID);
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -90,12 +90,12 @@ namespace BL
         {
             try
             {
-                DO.Station dalStation = dalObject.GetStation(stationID);
+                DO.Station dalStation = dal.GetStation(stationID);
 
                 Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
 
                 //find drones at this station
-                IEnumerable<DO.DroneCharge> dronesAtStation = dalObject.FindDroneCharges(dc => dc.StationID == stationID);
+                IEnumerable<DO.DroneCharge> dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == stationID);
 
                 //initialize DroneCharging entities
                 IEnumerable<DroneCharging> dronesCharging = from DO.DroneCharge droneCharge in dronesAtStation
@@ -112,9 +112,9 @@ namespace BL
         
         public IEnumerable<StationToList> GetStationsList()
         {
-            IEnumerable<DO.Station> dalStations = dalObject.GetStationsList();
+            IEnumerable<DO.Station> dalStations = dal.GetStationsList();
             IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
-                                                        let dronesAtStation = dalObject.FindDroneCharges(dc => dc.StationID == dalStation.ID)
+                                                        let dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == dalStation.ID)
                                                         select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count());
             return stationToLists;
         }
@@ -123,9 +123,9 @@ namespace BL
         #region Find Methods
         public IEnumerable<StationToList> FindStations(Predicate<DO.Station> predicate)
         {
-            IEnumerable<DO.Station> dalStations = dalObject.FindStations(predicate);
+            IEnumerable<DO.Station> dalStations = dal.FindStations(predicate);
             IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
-                                                        let dronesAtStation = dalObject.FindDroneCharges(dc => dc.StationID == dalStation.ID)
+                                                        let dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == dalStation.ID)
                                                         select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count());
             return stationToLists;
         }

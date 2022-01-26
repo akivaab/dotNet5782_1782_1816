@@ -24,7 +24,7 @@ namespace BL
 
             try
             {
-                dalObject.AddCustomer(customerID, name, phone, location.Latitude, location.Longitude);
+                dal.AddCustomer(customerID, name, phone, location.Latitude, location.Longitude);
             }
             catch (DO.NonUniqueIdException e)
             {
@@ -47,11 +47,11 @@ namespace BL
             {
                 if (name != "")
                 {
-                    dalObject.UpdateCustomerName(customerID, name);
+                    dal.UpdateCustomerName(customerID, name);
                 }
                 if (phone != "")
                 {
-                    dalObject.UpdateCustomerPhone(customerID, phone);
+                    dal.UpdateCustomerPhone(customerID, phone);
                 }
             }
             catch (DO.UndefinedObjectException e)
@@ -69,7 +69,7 @@ namespace BL
 
             try
             {
-                dalObject.UpdateCustomerPassword(customerID, password);
+                dal.UpdateCustomerPassword(customerID, password);
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -83,13 +83,13 @@ namespace BL
         {
             try
             {
-                IEnumerable<DO.Package> packages = dalObject.FindPackages(p => p.SenderID == customerID || p.ReceiverID == customerID);
+                IEnumerable<DO.Package> packages = dal.FindPackages(p => p.SenderID == customerID || p.ReceiverID == customerID);
                 if (packages.Count() > 0)
                 {
                     throw new UnableToRemoveException("The customer is in the midst of a transaction.");
                 }
 
-                dalObject.RemoveCustomer(customerID);
+                dal.RemoveCustomer(customerID);
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -103,21 +103,21 @@ namespace BL
         {
             try
             {
-                DO.Customer dalCustomer = dalObject.GetCustomer(customerID);
+                DO.Customer dalCustomer = dal.GetCustomer(customerID);
 
                 //create two lists of PackageForCustomers
-                IEnumerable<DO.Package> dalPackagesToSend = dalObject.FindPackages(p => p.SenderID == customerID);
-                IEnumerable<DO.Package> dalPackagesToReceive = dalObject.FindPackages(p => p.ReceiverID == customerID);
+                IEnumerable<DO.Package> dalPackagesToSend = dal.FindPackages(p => p.SenderID == customerID);
+                IEnumerable<DO.Package> dalPackagesToReceive = dal.FindPackages(p => p.ReceiverID == customerID);
 
                 //create collection of PackageForCustomers this customer is sending
                 IEnumerable<PackageForCustomer> packagesToSend = from DO.Package dalPackage in dalPackagesToSend
-                                                                 let receiver = dalObject.GetCustomer(dalPackage.ReceiverID)
+                                                                 let receiver = dal.GetCustomer(dalPackage.ReceiverID)
                                                                  let receiverForPackage = new CustomerForPackage(receiver.ID, receiver.Name)
                                                                  select new PackageForCustomer(dalPackage.ID, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, getPackageStatus(dalPackage), receiverForPackage);
 
                 //create collection of PackageForCustomers this customer is receiving
                 IEnumerable<PackageForCustomer> packagesToReceive = from DO.Package dalPackage in dalPackagesToReceive
-                                                                    let sender = dalObject.GetCustomer(dalPackage.SenderID)
+                                                                    let sender = dal.GetCustomer(dalPackage.SenderID)
                                                                     let senderForPackage = new CustomerForPackage(sender.ID, sender.Name)
                                                                     select new PackageForCustomer(dalPackage.ID, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, getPackageStatus(dalPackage), senderForPackage);
                 
@@ -132,12 +132,12 @@ namespace BL
         
         public IEnumerable<CustomerToList> GetCustomersList()
         {
-            IEnumerable<DO.Customer> dalCustomers = dalObject.GetCustomersList();
+            IEnumerable<DO.Customer> dalCustomers = dal.GetCustomersList();
             IEnumerable<CustomerToList> customerToLists = from DO.Customer dalCustomer in dalCustomers
-                                                          let numDeliveredPackagesSent = dalObject.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered != null).Count()
-                                                          let numUndeliveredPackagesSent = dalObject.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered == null).Count()
-                                                          let numPackagesReceived = dalObject.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered != null).Count()
-                                                          let numPackagesExpected = dalObject.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null).Count()
+                                                          let numDeliveredPackagesSent = dal.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered != null).Count()
+                                                          let numUndeliveredPackagesSent = dal.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered == null).Count()
+                                                          let numPackagesReceived = dal.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered != null).Count()
+                                                          let numPackagesExpected = dal.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null).Count()
                                                           select new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected);
             return customerToLists;
         }
@@ -146,7 +146,7 @@ namespace BL
         {
             try
             {
-                return dalObject.GetCustomerPassword(customerID); 
+                return dal.GetCustomerPassword(customerID); 
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -160,12 +160,12 @@ namespace BL
         {
             try
             {
-                IEnumerable<DO.Customer> dalCustomers = dalObject.FindCustomers(predicate);
+                IEnumerable<DO.Customer> dalCustomers = dal.FindCustomers(predicate);
                 IEnumerable<CustomerToList> customersToLists = from DO.Customer dalCustomer in dalCustomers
-                                                               let numDeliveredPackagesSent = dalObject.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered != null).Count()
-                                                               let numUndeliveredPackagesSent = dalObject.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered == null).Count()
-                                                               let numPackagesReceived = dalObject.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered != null).Count()
-                                                               let numPackagesExpected = dalObject.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null).Count()
+                                                               let numDeliveredPackagesSent = dal.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered != null).Count()
+                                                               let numUndeliveredPackagesSent = dal.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered == null).Count()
+                                                               let numPackagesReceived = dal.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered != null).Count()
+                                                               let numPackagesExpected = dal.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null).Count()
                                                                select new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected);
                 return customersToLists;
             }

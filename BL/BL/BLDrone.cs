@@ -21,16 +21,16 @@ namespace BL
             try
             {
                 //these statements may throw exceptions:
-                DO.Station dalStation = dalObject.GetStation(stationID);
+                DO.Station dalStation = dal.GetStation(stationID);
                 if (dalStation.AvailableChargeSlots <= 0)
                 {
                     throw new UnableToChargeException("There are no available charge slots for the drone in the given station.");
                 }
 
-                dalObject.AddDrone(droneID, model, (DO.Enums.WeightCategories)maxWeight);
+                dal.AddDrone(droneID, model, (DO.Enums.WeightCategories)maxWeight);
 
                 //the drone starts out charging in a station
-                dalObject.ChargeDrone(droneID, stationID);  
+                dal.ChargeDrone(droneID, stationID);  
 
                 //add to drones, the list of DroneToList entities
                 Location droneLocation = new(dalStation.Latitude, dalStation.Longitude);
@@ -64,7 +64,7 @@ namespace BL
             try
             {
                 //update in the data layer
-                dalObject.UpdateDroneModel(droneID, model);
+                dal.UpdateDroneModel(droneID, model);
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -97,10 +97,10 @@ namespace BL
             try 
             { 
                 Location closestStationLocation = getClosestStation(drones[droneIndex].Location, reachableStations);
-                IEnumerable<DO.Station> dalStations = dalObject.GetStationsList();
+                IEnumerable<DO.Station> dalStations = dal.GetStationsList();
                 DO.Station dalStation = dalStations.Where(s => s.Latitude == closestStationLocation.Latitude && s.Longitude == closestStationLocation.Longitude).First();
                 
-                dalObject.ChargeDrone(droneID, dalStation.ID);
+                dal.ChargeDrone(droneID, dalStation.ID);
 
                 drones[droneIndex].Battery = Math.Max(drones[droneIndex].Battery - (powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(drones[droneIndex].Location, closestStationLocation)), 0);
                 drones[droneIndex].Location = closestStationLocation;
@@ -128,8 +128,8 @@ namespace BL
 
             try 
             {
-                DO.DroneCharge dalDroneCharge = dalObject.FindDroneCharges(dc => dc.DroneID == droneID).Single();
-                dalObject.ReleaseDroneFromCharging(droneID, dalDroneCharge.StationID);
+                DO.DroneCharge dalDroneCharge = dal.FindDroneCharges(dc => dc.DroneID == droneID).Single();
+                dal.ReleaseDroneFromCharging(droneID, dalDroneCharge.StationID);
 
                 drones[droneIndex].Battery = Math.Min(drones[droneIndex].Battery + (chargeRatePerHour * chargingTimeInHours), 100);
                 drones[droneIndex].Status = Enums.DroneStatus.available;
@@ -162,7 +162,7 @@ namespace BL
                     throw new UnableToRemoveException("The drone is currently charging.");
                 }
 
-                dalObject.RemoveDrone(droneID);
+                dal.RemoveDrone(droneID);
                 drones.RemoveAt(droneIndex);
             }
             catch (DO.UndefinedObjectException e)
@@ -189,10 +189,10 @@ namespace BL
                 // if this drone is delivering a package
                 if (droneToList.PackageID != null && droneToList.Status == Enums.DroneStatus.delivery)
                 {
-                    DO.Package dalPackage = dalObject.GetPackage((int)droneToList.PackageID);
+                    DO.Package dalPackage = dal.GetPackage((int)droneToList.PackageID);
 
-                    DO.Customer sender = dalObject.GetCustomer(dalPackage.SenderID);
-                    DO.Customer receiver = dalObject.GetCustomer(dalPackage.ReceiverID);
+                    DO.Customer sender = dal.GetCustomer(dalPackage.SenderID);
+                    DO.Customer receiver = dal.GetCustomer(dalPackage.ReceiverID);
                     
                     CustomerForPackage packageSender = new(sender.ID, sender.Name);
                     CustomerForPackage packageReceiver = new(receiver.ID, receiver.Name);
@@ -221,7 +221,7 @@ namespace BL
         {
             try
             {
-                return dalObject.GetTimeChargeBegan(droneID);
+                return dal.GetTimeChargeBegan(droneID);
             }
             catch (DO.UndefinedObjectException e)
             {
