@@ -19,45 +19,38 @@ namespace ConsoleUI_BL
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            try
+            int option;
+            do
             {
-                int option;
-                do
+                Console.WriteLine("Main Menu:");
+                Console.WriteLine("1. Adding options");
+                Console.WriteLine("2. Updating options");
+                Console.WriteLine("3. Display options");
+                Console.WriteLine("4. List Display options");
+                Console.WriteLine("5. Exit");
+                Console.Write("Choose an option: ");
+                int.TryParse(Console.ReadLine(), out option);
+                switch (option)
                 {
-                    Console.WriteLine("Main Menu:");
-                    Console.WriteLine("1. Adding options");
-                    Console.WriteLine("2. Updating options");
-                    Console.WriteLine("3. Display options");
-                    Console.WriteLine("4. List Display options");
-                    Console.WriteLine("5. Exit");
-                    Console.Write("Choose an option: ");
-                    int.TryParse(Console.ReadLine(), out option);
-                    switch (option)
-                    {
-                        case 1:
-                            AddingOptions();
-                            break;
-                        case 2:
-                            UpdatingOptions();
-                            break;
-                        case 3:
-                            DisplayingOptions();
-                            break;
-                        case 4:
-                            ListDisplayingOptions();
-                            break;
-                        case 5:
-                            Console.WriteLine("Bye");
-                            break;
-                        default:
-                            break;
-                    }
-                } while (option != 5);
-            }
-            catch (UndefinedObjectException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+                    case 1:
+                        AddingOptions();
+                        break;
+                    case 2:
+                        UpdatingOptions();
+                        break;
+                    case 3:
+                        DisplayingOptions();
+                        break;
+                    case 4:
+                        ListDisplayingOptions();
+                        break;
+                    case 5:
+                        Console.WriteLine("Bye");
+                        break;
+                    default:
+                        break;
+                }
+            } while (option != 5);
         }
 
         #region Adding
@@ -152,6 +145,10 @@ namespace ConsoleUI_BL
                 Console.WriteLine(e.Message);
             }
             catch (UndefinedObjectException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (XMLFileLoadCreateException e)
             {
                 Console.WriteLine(e.Message);
             }
@@ -305,6 +302,10 @@ namespace ConsoleUI_BL
             {
                 Console.WriteLine(e.Message);
             }
+            catch (XMLFileLoadCreateException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
         #endregion
 
@@ -358,6 +359,10 @@ namespace ConsoleUI_BL
             {
                 Console.WriteLine(e.Message);
             }
+            catch (XMLFileLoadCreateException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
         #endregion
 
@@ -367,56 +372,63 @@ namespace ConsoleUI_BL
         /// </summary>
         public static void ListDisplayingOptions()
         {
-            Console.WriteLine("List Displaying Options:");
-            Console.WriteLine("1. Display all stations");
-            Console.WriteLine("2. Display all drones");
-            Console.WriteLine("3. Display all customers");
-            Console.WriteLine("4. Display all packages");
-            Console.WriteLine("5. Display all unassigned packages");
-            Console.WriteLine("6. Display all stations with unoccupied charging slots");
-            Console.Write("Choose a list displaying option: ");
-            int listDisplayingOption;
-            int.TryParse(Console.ReadLine(), out listDisplayingOption);
-            switch (listDisplayingOption)
+            try
             {
-                case 1:
-                    foreach (StationToList station in bl.GetStationsList())
-                    {
-                        Console.WriteLine(station);
-                    }
-                    break;
-                case 2:
-                    foreach (DroneToList drone in bl.GetDronesList())
-                    {
-                        Console.WriteLine(drone);
-                    }
-                    break;
-                case 3:
-                    foreach (CustomerToList customer in bl.GetCustomersList())
-                    {
-                        Console.WriteLine(customer);
-                    }
-                    break;
-                case 4:
-                    foreach (PackageToList package in bl.GetPackagesList())
-                    {
-                        Console.WriteLine(package);
-                    }
-                    break;
-                case 5:
-                    foreach (PackageToList package in bl.FindPackages(p => p.DroneID == null))
-                    {
-                        Console.WriteLine(package);
-                    }
-                    break;
-                case 6:
-                    foreach (StationToList station in bl.FindStations(s => s.AvailableChargeSlots > 0))
-                    {
-                        Console.WriteLine(station);
-                    }
-                    break;
-                default:
-                    break;
+                Console.WriteLine("List Displaying Options:");
+                Console.WriteLine("1. Display all stations");
+                Console.WriteLine("2. Display all drones");
+                Console.WriteLine("3. Display all customers");
+                Console.WriteLine("4. Display all packages");
+                Console.WriteLine("5. Display all unassigned packages");
+                Console.WriteLine("6. Display all stations with unoccupied charging slots");
+                Console.Write("Choose a list displaying option: ");
+                int listDisplayingOption;
+                int.TryParse(Console.ReadLine(), out listDisplayingOption);
+                switch (listDisplayingOption)
+                {
+                    case 1:
+                        foreach (StationToList station in bl.GetStationsList())
+                        {
+                            Console.WriteLine(station);
+                        }
+                        break;
+                    case 2:
+                        foreach (DroneToList drone in bl.GetDronesList())
+                        {
+                            Console.WriteLine(drone);
+                        }
+                        break;
+                    case 3:
+                        foreach (CustomerToList customer in bl.GetCustomersList())
+                        {
+                            Console.WriteLine(customer);
+                        }
+                        break;
+                    case 4:
+                        foreach (PackageToList package in bl.GetPackagesList())
+                        {
+                            Console.WriteLine(package);
+                        }
+                        break;
+                    case 5:
+                        foreach (PackageToList package in bl.FindPackages(p => p.DroneID == null))
+                        {
+                            Console.WriteLine(package);
+                        }
+                        break;
+                    case 6:
+                        foreach (StationToList station in bl.FindStations(s => s.AvailableChargeSlots > 0))
+                        {
+                            Console.WriteLine(station);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (XMLFileLoadCreateException e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
         #endregion

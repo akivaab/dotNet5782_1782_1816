@@ -180,6 +180,10 @@ namespace PL
             {
                 MessageBox.Show("Error. This ID does not match any known customer.");
             }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
 
         /// <summary>
@@ -192,15 +196,22 @@ namespace PL
             login.Visibility = Visibility.Collapsed;
             customerGrid.Visibility = Visibility.Visible;
 
-            sentPackagesNotCollectedCollection = new ObservableCollection<BO.PackageToList>(bl.FindPackages(p => p.SenderID == customer.ID && p.Collected == null));
-            sentPackagesCollectedCollection = new ObservableCollection<BO.PackageToList>(bl.FindPackages(p => p.SenderID == customer.ID && p.Collected != null));
-            incomingPackagesNotReceivedCollection = new ObservableCollection<BO.PackageToList>(bl.FindPackages(p => p.ReceiverID == customer.ID && p.Delivered == null));
-            incomingPackagesReceivedCollection = new ObservableCollection<BO.PackageToList>(bl.FindPackages(p => p.ReceiverID == customer.ID && p.Delivered != null));
+            try
+            {
+                sentPackagesNotCollectedCollection = new ObservableCollection<BO.PackageToList>(bl.FindPackages(p => p.SenderID == customer.ID && p.Collected == null));
+                sentPackagesCollectedCollection = new ObservableCollection<BO.PackageToList>(bl.FindPackages(p => p.SenderID == customer.ID && p.Collected != null));
+                incomingPackagesNotReceivedCollection = new ObservableCollection<BO.PackageToList>(bl.FindPackages(p => p.ReceiverID == customer.ID && p.Delivered == null));
+                incomingPackagesReceivedCollection = new ObservableCollection<BO.PackageToList>(bl.FindPackages(p => p.ReceiverID == customer.ID && p.Delivered != null));
 
-            sentPackagesNotCollected.ItemsSource = sentPackagesNotCollectedCollection;
-            sentPackagesCollected.ItemsSource = sentPackagesCollectedCollection;
-            incomingPackagesNotReceived.ItemsSource = incomingPackagesNotReceivedCollection;
-            incomingPackagesReceived.ItemsSource = incomingPackagesReceivedCollection;
+                sentPackagesNotCollected.ItemsSource = sentPackagesNotCollectedCollection;
+                sentPackagesCollected.ItemsSource = sentPackagesCollectedCollection;
+                incomingPackagesNotReceived.ItemsSource = incomingPackagesNotReceivedCollection;
+                incomingPackagesReceived.ItemsSource = incomingPackagesReceivedCollection;
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
 
         /// <summary>
@@ -232,6 +243,10 @@ namespace PL
                 {
                     MessageBox.Show(ex.Message + "\nIt must be 9 digits long.");
                 }
+                catch (BO.XMLFileLoadCreateException)
+                {
+                    MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                }
             }
             else
             {
@@ -259,15 +274,22 @@ namespace PL
             PackageWindow packageWindow = new PackageWindow(bl, customer.ID);
             packageWindow.Show();
 
-            //refresh when the PackageWindow closes so the new requested package appears
-            packageWindow.Closed += new EventHandler((object sender, EventArgs e) =>
+            try
             {
-                sentPackagesNotCollectedCollection.Clear();
-                foreach (BO.PackageToList package in bl.FindPackages(p => p.SenderID == customer.ID && p.Collected == null))
+                //refresh when the PackageWindow closes so the new requested package appears
+                packageWindow.Closed += new EventHandler((object sender, EventArgs e) =>
                 {
-                    sentPackagesNotCollectedCollection.Add(package);
-                }
-            });
+                    sentPackagesNotCollectedCollection.Clear();
+                    foreach (BO.PackageToList package in bl.FindPackages(p => p.SenderID == customer.ID && p.Collected == null))
+                    {
+                        sentPackagesNotCollectedCollection.Add(package);
+                    }
+                });
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
 
         /// <summary>

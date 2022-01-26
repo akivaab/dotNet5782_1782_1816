@@ -167,6 +167,10 @@ namespace PL
             {
                 MessageBox.Show("This drone has been deleted. Please refresh the list.");
             }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
         #endregion
 

@@ -22,9 +22,16 @@ namespace DalXml
         /// <returns>True if XML files were initialized, false otherwise.</returns>
         private bool initializeXMLFiles()
         {
-            if (!Directory.Exists(directory))
+            try
             {
-                Directory.CreateDirectory(directory);
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+            }
+            catch (Exception)
+            {
+                throw new XMLFileLoadCreateException("Failed to create directory.");
             }
 
             if (!File.Exists(droneXmlPath) || !File.Exists(stationXmlPath) || !File.Exists(customerXmlPath) || !File.Exists(packageXmlPath) || !File.Exists(droneChargeXmlPath))
@@ -66,9 +73,9 @@ namespace DalXml
                 x.Serialize(file, list);
                 file.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //throw new DO.XMLFileLoadCreateException(filePath, $"fail to create xml file: {filePath}", ex);
+                throw new XMLFileLoadCreateException(filePath, $"Failed to save XML file: {filePath}");
             }
         }
 
@@ -96,9 +103,9 @@ namespace DalXml
                     return new List<T>();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                //throw new DO.XMLFileLoadCreateException(filePath, $"fail to load xml file: {filePath}", ex);
+                throw new XMLFileLoadCreateException(filePath, $"Failed to load XML file: {filePath}");
             }
             return null;
         }
@@ -116,9 +123,9 @@ namespace DalXml
             {
                 root.Save(filePath);
             }
-            catch
+            catch (Exception)
             {
-                //throw new exception
+                throw new XMLFileLoadCreateException(filePath, $"Failed to save XML file: {filePath}");
             }
         }
 
@@ -136,9 +143,9 @@ namespace DalXml
                     return XElement.Load(filePath);
                 }
             }
-            catch
+            catch (Exception)
             {
-                //throw new exception  
+                throw new XMLFileLoadCreateException(filePath, $"Failed to load XML file: {filePath}");
             }
             return null;
         }
@@ -160,9 +167,9 @@ namespace DalXml
                                         new XElement("Active", d.Active)));
                 saveElementToXML(droneRoot, droneXmlPath);
             }
-            catch
+            catch (Exception)
             {
-                //throw new exception
+                throw new XMLFileLoadCreateException(filePath, $"Failed to save XML file: {filePath}");
             }
         }
 
@@ -185,9 +192,9 @@ namespace DalXml
                             Active = bool.Parse(drone.Element("Active").Value)
                         }).ToList();
             }
-            catch
+            catch (Exception)
             {
-                //throw new exception
+                throw new XMLFileLoadCreateException(filePath, $"Failed to load XML file: {filePath}");
             }
             return null;
         }
@@ -221,16 +228,27 @@ namespace DalXml
         /// <returns>The drone child element.</returns>
         private XElement extractDrone(XElement droneRoot, int droneID)
         {
-            XElement drone = (from d in droneRoot.Elements()
-                              where int.Parse(d.Element("ID").Value) == droneID && bool.Parse(d.Element("Active").Value)
-                              select d).SingleOrDefault(); /*.DefaultIfEmpty(null).Single();*/
-
-            if (drone == null) /*default(XElement)*/
+            try
             {
-                throw new UndefinedObjectException("There is no drone with the given ID.");
-            }
+                XElement drone = (from d in droneRoot.Elements()
+                                where int.Parse(d.Element("ID").Value) == droneID && bool.Parse(d.Element("Active").Value)
+                                select d).SingleOrDefault(); /*.DefaultIfEmpty(null).Single();*/
 
-            return drone;
+                if (drone == null) /*default(XElement)*/
+                {
+                    throw new UndefinedObjectException("There is no drone with the given ID.");
+                }
+
+                return drone;
+            }
+            catch (ArgumentNullException)
+            {
+                throw new UndefinedObjectException("The XML file of drones is null.")
+            }
+            catch (InvalidOperationException)
+            {
+                throw new NonUniqueIDException("Multiple drones have the same ID.");
+            }
         }
         #endregion
     }

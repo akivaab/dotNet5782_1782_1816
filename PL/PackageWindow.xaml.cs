@@ -50,10 +50,17 @@ namespace PL
             add.Visibility = Visibility.Visible;
             actions.Visibility = Visibility.Collapsed;
 
-            IEnumerable<int> customerIDs = from BO.CustomerToList customer in bl.GetCustomersList()
-                                           select customer.ID;
-            add_SenderID.ItemsSource = customerIDs;
-            add_ReceiverID.ItemsSource = customerIDs;
+            try
+            {
+                IEnumerable<int> customerIDs = from BO.CustomerToList customer in bl.GetCustomersList()
+                                               select customer.ID;
+                add_SenderID.ItemsSource = customerIDs;
+                add_ReceiverID.ItemsSource = customerIDs;
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
 
             //remove "free" from the possible MaxWeights to choose from
             List<BO.Enums.WeightCategories> weights = new((BO.Enums.WeightCategories[])Enum.GetValues(typeof(BO.Enums.WeightCategories)));
@@ -92,6 +99,10 @@ namespace PL
             {
                 MessageBox.Show("Error: This package is already removed from the system.\nTry closing this window and refreshing the list.");
             }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
 
             //make only the features needed for perfroming actions on a drone visible in the window. 
             add.Visibility = Visibility.Collapsed;
@@ -125,6 +136,10 @@ namespace PL
                 {
                     MessageBox.Show(ex.Message + "\nPlease try selecting a different option.");
                 }
+                catch (BO.XMLFileLoadCreateException)
+                {
+                    MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                }
             }
             else
             {
@@ -157,6 +172,10 @@ namespace PL
             {
                 MessageBox.Show(ex.Message + "\nIt cannot be removed.");
             }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
         #endregion
 
@@ -183,6 +202,10 @@ namespace PL
             {
                 MessageBox.Show("The drone has been deleted. Refresh by closing and reopening the window.");
             }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
 
         /// <summary>
@@ -206,6 +229,10 @@ namespace PL
             catch (BO.UndefinedObjectException)
             {
                 MessageBox.Show("The customer has been deleted. Refresh by closing and reopening the window.");
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
             }
         }
         #endregion

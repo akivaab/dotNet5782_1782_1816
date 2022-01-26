@@ -34,6 +34,10 @@ namespace BL
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
         #endregion
 
@@ -63,6 +67,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
 
@@ -97,6 +105,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         
@@ -136,6 +148,10 @@ namespace BL
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
         #endregion
 
@@ -155,6 +171,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         #endregion
@@ -181,6 +201,10 @@ namespace BL
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
         
         public IEnumerable<PackageToList> GetPackagesList()
@@ -197,6 +221,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         #endregion
@@ -216,6 +244,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         #endregion

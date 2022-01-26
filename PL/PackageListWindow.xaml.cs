@@ -51,9 +51,17 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
-            packageToListCollection = new ObservableCollection<BO.PackageToList>(bl.GetPackagesList());
-            view = (CollectionView)CollectionViewSource.GetDefaultView(packageToListCollection);
-            DataContext = packageToListCollection;
+
+            try
+            {
+                packageToListCollection = new ObservableCollection<BO.PackageToList>(bl.GetPackagesList());
+                view = (CollectionView)CollectionViewSource.GetDefaultView(packageToListCollection);
+                DataContext = packageToListCollection;
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
 
             statusSelector.ItemsSource = Enum.GetValues(typeof(BO.Enums.PackageStatus));
 
@@ -215,6 +223,10 @@ namespace PL
             {
                 MessageBox.Show("This package has been deleted. Please refresh the list.");
             }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
         #endregion
 
@@ -230,10 +242,17 @@ namespace PL
             BO.Enums.WeightCategories? weightCategories = (BO.Enums.WeightCategories?)weightSelector.SelectedItem;
             BO.Enums.Priorities? priorities = (BO.Enums.Priorities?)prioritySelector.SelectedItem;
 
-            packageToListCollection.Clear();
-            foreach (BO.PackageToList packageToList in bl.GetPackagesList())
+            try
             {
-                packageToListCollection.Add(packageToList);
+                packageToListCollection.Clear();
+                foreach (BO.PackageToList packageToList in bl.GetPackagesList())
+                {
+                    packageToListCollection.Add(packageToList);
+                }
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
             }
 
             statusSelector.SelectedItem = packageStatus;

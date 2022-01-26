@@ -55,9 +55,16 @@ namespace PL
             weights.Remove(BO.Enums.WeightCategories.free);
             add_MaxWeight.ItemsSource = weights;
 
-            //initialize existing station IDs to choose from
-            add_StationID.ItemsSource = from station in bl.GetStationsList()
-                                        select station.ID;
+            try
+            {
+                //initialize existing station IDs to choose from
+                add_StationID.ItemsSource = from station in bl.GetStationsList()
+                                            select station.ID;
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
 
         /// <summary>
@@ -77,6 +84,10 @@ namespace PL
             catch (BO.UndefinedObjectException)
             {
                 MessageBox.Show("Error: This drone is already removed from the system.\nTry closing this window and refreshing the list.");
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
             }
 
             //make only the features needed for perfroming actions on a drone visible in the window. 
@@ -119,6 +130,10 @@ namespace PL
                 {
                     MessageBox.Show(ex.Message + "\nPlease select a different station.");
                 }
+                catch (BO.XMLFileLoadCreateException)
+                {
+                    MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                }
             }
             else
             {
@@ -149,6 +164,10 @@ namespace PL
                 catch (BO.UndefinedObjectException)
                 {
                     MessageBox.Show("Error: The relevant station does not exist.");
+                }
+                catch (BO.XMLFileLoadCreateException)
+                {
+                    MessageBox.Show("An error occured while saving/loading data from an XML file.");
                 }
             }
             else
@@ -200,6 +219,10 @@ namespace PL
             catch (BO.EmptyListException)
             {
                 MessageBox.Show("Error: There are no stations.");
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
             }
         }
 
@@ -264,6 +287,10 @@ namespace PL
             {
                 MessageBox.Show(ex.Message + "\nTry using a different drone.");
             }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
 
         /// <summary>
@@ -288,6 +315,10 @@ namespace PL
             catch (BO.UnableToRemoveException ex)
             {
                 MessageBox.Show(ex.Message + "\nThe drone may be removed after this is completed.");
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
             }
         }
         #endregion
@@ -315,6 +346,10 @@ namespace PL
             {
                 MessageBox.Show("The package has been deleted. Refresh by closing and reopening the window.");
             }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
         #endregion
 
@@ -337,6 +372,10 @@ namespace PL
             catch (BO.UndefinedObjectException)
             {
                 MessageBox.Show("Error: This drone is not in the system.\nTry closing this window and refreshing the list.");
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
             }
         }
         #endregion

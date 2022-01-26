@@ -142,4 +142,17 @@ namespace BO
         /// <param name="s">A message describing the exception.</param>
         public UnableToRemoveException(string s) : base(s) { }
     }
+
+    /// <summary>
+    /// An exception thrown when there is a problem creating, saving, or loading XML files.
+    /// </summary>
+    public class XMLFileLoadCreateException : Exception
+    {
+        /// <summary>
+        /// XMLFileLoadCreateException constructor.
+        /// </summary>
+        /// <param name="s">A message describing the exception.</param>
+        /// <param name="e">A matching exception thrown from the data layer.</param>
+        public XMLFileLoadCreateException(string s, DO.XMLFileLoadCreateException e): base(s, e) { }
+    }
 }

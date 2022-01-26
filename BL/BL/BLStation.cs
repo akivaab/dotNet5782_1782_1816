@@ -30,6 +30,11 @@ namespace BL
             {
                 throw new NonUniqueIdException(e.Message, e);
             }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
+
             Station station = new(stationID, name, location, numAvailableChargingSlots, new List<DroneCharging>());
             return station;
         }
@@ -64,6 +69,10 @@ namespace BL
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
         #endregion
 
@@ -81,6 +90,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         #endregion
@@ -108,26 +121,44 @@ namespace BL
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
         
         public IEnumerable<StationToList> GetStationsList()
         {
-            IEnumerable<DO.Station> dalStations = dal.GetStationsList();
-            IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
-                                                        let dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == dalStation.ID)
-                                                        select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count());
-            return stationToLists;
+            try
+            {
+                IEnumerable<DO.Station> dalStations = dal.GetStationsList();
+                IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
+                                                            let dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == dalStation.ID)
+                                                            select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count());
+                return stationToLists;
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
         #endregion
 
         #region Find Methods
         public IEnumerable<StationToList> FindStations(Predicate<DO.Station> predicate)
         {
-            IEnumerable<DO.Station> dalStations = dal.FindStations(predicate);
-            IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
-                                                        let dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == dalStation.ID)
-                                                        select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count());
-            return stationToLists;
+            try
+            {
+                IEnumerable<DO.Station> dalStations = dal.FindStations(predicate);
+                IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
+                                                            let dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == dalStation.ID)
+                                                            select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count());
+                return stationToLists;
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
         #endregion
     }

@@ -95,6 +95,10 @@ namespace PL
                 {
                     MessageBox.Show("Error. You do not exist in the system.");
                 }
+                catch (BO.XMLFileLoadCreateException)
+                {
+                    MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                }
             }
             else
             {

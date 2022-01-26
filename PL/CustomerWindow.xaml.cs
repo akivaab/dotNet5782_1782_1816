@@ -69,6 +69,10 @@ namespace PL
             {
                 MessageBox.Show("Error: This drone is already removed from the system.\nTry closing this window and refreshing the list.");
             }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
 
             //make only the features needed for perfroming actions on a station visible in the window. 
             add.Visibility = Visibility.Collapsed;
@@ -111,6 +115,10 @@ namespace PL
                 {
                     MessageBox.Show(ex.Message + "\nPlease enter a different ID.");
                 }
+                catch (BO.XMLFileLoadCreateException)
+                {
+                    MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                }
             }
             else
             {
@@ -149,6 +157,10 @@ namespace PL
                 {
                     MessageBox.Show(ex.Message + "\nIt must be 9 digits long.");
                 }
+                catch (BO.XMLFileLoadCreateException)
+                {
+                    MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                }
             }
             else
             {
@@ -179,6 +191,10 @@ namespace PL
             {
                 MessageBox.Show(ex.Message + "\nIt cannot be removed.");
             }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
         #endregion
 
@@ -205,7 +221,10 @@ namespace PL
             {
                 MessageBox.Show("The package has been deleted. Refresh by closing and reopening the window.");
             }
-            
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
         #endregion
 
@@ -224,6 +243,10 @@ namespace PL
             catch (BO.UndefinedObjectException)
             {
                 MessageBox.Show("Error: This customer is not in the system.\nTry closing this window and refreshing the list.");
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
             }
         }
         #endregion
@@ -255,6 +278,4 @@ namespace PL
         }
         #endregion
     }
-
-
 }

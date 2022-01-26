@@ -30,6 +30,11 @@ namespace BL
             {
                 throw new NonUniqueIdException(e.Message, e);
             }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
+
             Customer customer = new(customerID, name, phone, location, new List<PackageForCustomer>(), new List<PackageForCustomer>());
             return customer;
         }
@@ -58,6 +63,10 @@ namespace BL
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
 
         public void UpdateCustomerPassword(int customerID, string password)
@@ -74,6 +83,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         #endregion
@@ -94,6 +107,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         #endregion
@@ -128,18 +145,29 @@ namespace BL
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
         
         public IEnumerable<CustomerToList> GetCustomersList()
         {
-            IEnumerable<DO.Customer> dalCustomers = dal.GetCustomersList();
-            IEnumerable<CustomerToList> customerToLists = from DO.Customer dalCustomer in dalCustomers
-                                                          let numDeliveredPackagesSent = dal.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered != null).Count()
-                                                          let numUndeliveredPackagesSent = dal.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered == null).Count()
-                                                          let numPackagesReceived = dal.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered != null).Count()
-                                                          let numPackagesExpected = dal.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null).Count()
-                                                          select new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected);
-            return customerToLists;
+            try
+            {
+                IEnumerable<DO.Customer> dalCustomers = dal.GetCustomersList();
+                IEnumerable<CustomerToList> customerToLists = from DO.Customer dalCustomer in dalCustomers
+                                                              let numDeliveredPackagesSent = dal.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered != null).Count()
+                                                              let numUndeliveredPackagesSent = dal.FindPackages(p => p.SenderID == dalCustomer.ID && p.Delivered == null).Count()
+                                                              let numPackagesReceived = dal.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered != null).Count()
+                                                              let numPackagesExpected = dal.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null).Count()
+                                                              select new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected);
+                return customerToLists;
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
 
         public string GetCustomerPassword(int customerID)
@@ -151,6 +179,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         #endregion
@@ -172,6 +204,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         #endregion

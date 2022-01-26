@@ -61,7 +61,11 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         #endregion
@@ -74,8 +78,15 @@ namespace BL
         /// <returns>The location of the station closest to the location given.</returns>
         private Location getClosestStation(Location location)
         {
-            IEnumerable<DO.Station> dalStations = dal.GetStationsList();
-            return getClosestStation(location, dalStations);
+            try
+            {
+                IEnumerable<DO.Station> dalStations = dal.GetStationsList();
+                return getClosestStation(location, dalStations);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
 
         /// <summary>
@@ -107,14 +118,21 @@ namespace BL
         /// <returns>A collection of stations that the drone is capable of reaching.</returns>
         private IEnumerable<DO.Station> getReachableStations(DroneToList drone)
         {
-            IEnumerable<DO.Station> availableStations = dal.FindStations(s => s.AvailableChargeSlots > 0);
-            
-            IEnumerable<DO.Station> reachableStations = from DO.Station station in availableStations
-                                                        let stationLocation = new Location(station.Latitude, station.Longitude)
-                                                        let requiredBattery = powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(drone.Location, stationLocation)
-                                                        where requiredBattery <= drone.Battery
-                                                        select station;
-            return reachableStations;
+            try
+            {
+                IEnumerable<DO.Station> availableStations = dal.FindStations(s => s.AvailableChargeSlots > 0);
+
+                IEnumerable<DO.Station> reachableStations = from DO.Station station in availableStations
+                                                            let stationLocation = new Location(station.Latitude, station.Longitude)
+                                                            let requiredBattery = powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(drone.Location, stationLocation)
+                                                            where requiredBattery <= drone.Battery
+                                                            select station;
+                return reachableStations;
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
         #endregion
 
@@ -134,7 +152,11 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
 
@@ -162,7 +184,11 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         #endregion
@@ -279,7 +305,11 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
 
@@ -327,7 +357,11 @@ namespace BL
             }
             catch (DO.UndefinedObjectException e)
             {
-                throw new UndefinedObjectException(e.Message);
+                throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         #endregion

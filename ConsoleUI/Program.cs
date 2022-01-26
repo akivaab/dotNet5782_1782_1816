@@ -144,6 +144,11 @@ namespace ConsoleUI
             {
                 Console.WriteLine(e.Message);
             }
+            catch (XMLFileLoadCreateException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
         }
         #endregion
 
@@ -214,6 +219,10 @@ namespace ConsoleUI
             {
                 Console.WriteLine(e.Message);
             }
+            catch (XMLFileLoadCreateException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
         #endregion
 
@@ -267,6 +276,10 @@ namespace ConsoleUI
             {
                 Console.WriteLine(e.Message);
             }
+            catch (XMLFileLoadCreateException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
         #endregion
 
@@ -286,46 +299,53 @@ namespace ConsoleUI
             Console.Write("Choose a list displaying option: ");
             int listDisplayingOption;
             int.TryParse(Console.ReadLine(), out listDisplayingOption);
-            switch (listDisplayingOption)
+            try
             {
-                case 1:
-                    foreach (Station station in dal.GetStationsList())
-                    {
-                        Console.WriteLine(station);
-                    }
-                    break;
-                case 2:
-                    foreach (Drone drone in dal.GetDronesList())
-                    {
-                        Console.WriteLine(drone);
-                    }
-                    break;
-                case 3:
-                    foreach (Customer customer in dal.GetCustomersList())
-                    {
-                        Console.WriteLine(customer);
-                    }
-                    break;
-                case 4:
-                    foreach (Package package in dal.GetPackagesList())
-                    {
-                        Console.WriteLine(package);
-                    }
-                    break;
-                case 5:
-                    foreach (Package package in dal.FindPackages(p => p.DroneID == null))
-                    {
-                        Console.WriteLine(package);
-                    }
-                    break;
-                case 6:
-                    foreach (Station station in dal.FindStations(s => s.AvailableChargeSlots > 0))
-                    {
-                        Console.WriteLine(station);
-                    }
-                    break;
-                default:
-                    break;
+                switch (listDisplayingOption)
+                {
+                    case 1:
+                        foreach (Station station in dal.GetStationsList())
+                        {
+                            Console.WriteLine(station);
+                        }
+                        break;
+                    case 2:
+                        foreach (Drone drone in dal.GetDronesList())
+                        {
+                            Console.WriteLine(drone);
+                        }
+                        break;
+                    case 3:
+                        foreach (Customer customer in dal.GetCustomersList())
+                        {
+                            Console.WriteLine(customer);
+                        }
+                        break;
+                    case 4:
+                        foreach (Package package in dal.GetPackagesList())
+                        {
+                            Console.WriteLine(package);
+                        }
+                        break;
+                    case 5:
+                        foreach (Package package in dal.FindPackages(p => p.DroneID == null))
+                        {
+                            Console.WriteLine(package);
+                        }
+                        break;
+                    case 6:
+                        foreach (Station station in dal.FindStations(s => s.AvailableChargeSlots > 0))
+                        {
+                            Console.WriteLine(station);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (XMLFileLoadCreateException e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
         #endregion

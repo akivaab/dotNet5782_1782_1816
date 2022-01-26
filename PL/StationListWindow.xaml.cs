@@ -51,9 +51,17 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
-            stationToListCollection = new ObservableCollection<BO.StationToList>(bl.GetStationsList());
-            view = (CollectionView)CollectionViewSource.GetDefaultView(stationToListCollection);
-            DataContext = stationToListCollection;
+
+            try
+            {
+                stationToListCollection = new ObservableCollection<BO.StationToList>(bl.GetStationsList());
+                view = (CollectionView)CollectionViewSource.GetDefaultView(stationToListCollection);
+                DataContext = stationToListCollection;
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
         #endregion
 
@@ -115,6 +123,10 @@ namespace PL
             {
                 MessageBox.Show("This station has been deleted. Please refresh the list.");
             }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
         #endregion
 
@@ -126,10 +138,17 @@ namespace PL
         /// <param name="e"></param>
         private void refreshButton_Click(object sender, RoutedEventArgs e)
         {
-            stationToListCollection.Clear();
-            foreach (BO.StationToList stationToList in bl.GetStationsList())
+            try
             {
-                stationToListCollection.Add(stationToList);
+                stationToListCollection.Clear();
+                foreach (BO.StationToList stationToList in bl.GetStationsList())
+                {
+                    stationToListCollection.Add(stationToList);
+                }
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
             }
         }
         #endregion

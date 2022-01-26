@@ -20,13 +20,11 @@ namespace DalXml
                 throw new NonUniqueIdException("The given drone ID is not unique.");
             }
 
-            Drone drone = new();
-            drone.ID = id;
-            drone.Model = model;
-            drone.MaxWeight = maxWeight;
-            drone.Active = true;
-            droneRoot.Add(drone);
-
+            droneRoot.Add(new XElement("Drone",
+                                        new XElement("ID", id),
+                                        new XElement("Model", model),
+                                        new XElement("MaxWeight", maxWeight),
+                                        new XElement("Active", true)));
             saveElementToXML(droneRoot, droneXmlPath);
         }
         #endregion

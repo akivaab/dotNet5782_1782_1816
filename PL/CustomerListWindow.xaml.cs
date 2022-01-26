@@ -46,8 +46,16 @@ namespace PL
         {
             InitializeComponent();
             this.bl = bl;
-            customerToListCollection = new ObservableCollection<BO.CustomerToList>(bl.GetCustomersList());
-            DataContext = customerToListCollection;
+
+            try
+            {
+                customerToListCollection = new ObservableCollection<BO.CustomerToList>(bl.GetCustomersList());
+                DataContext = customerToListCollection;
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
         #endregion
 
@@ -86,6 +94,10 @@ namespace PL
             {
                 MessageBox.Show("This customer has been deleted. Please refresh the list.");
             }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
         }
         #endregion
 
@@ -97,10 +109,17 @@ namespace PL
         /// <param name="e"></param>
         private void refreshButton_Click(object sender, RoutedEventArgs e)
         {
-            customerToListCollection.Clear();
-            foreach (BO.CustomerToList customerToList in bl.GetCustomersList())
+            try
             {
-                customerToListCollection.Add(customerToList);
+                customerToListCollection.Clear();
+                foreach (BO.CustomerToList customerToList in bl.GetCustomersList())
+                {
+                    customerToListCollection.Add(customerToList);
+                }
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
             }
         }
         #endregion

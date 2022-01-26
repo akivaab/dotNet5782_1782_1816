@@ -49,6 +49,10 @@ namespace BL
             {
                 throw new NonUniqueIdException(e.Message, e);
             }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
         #endregion
 
@@ -69,6 +73,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
 
             //update in the list of DroneToLists
@@ -110,6 +118,10 @@ namespace BL
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
         
         public void ReleaseFromCharge(int droneID, double chargingTimeInHours)
@@ -137,6 +149,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         #endregion
@@ -168,6 +184,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
         #endregion
@@ -215,6 +235,10 @@ namespace BL
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
         }
 
         public DateTime GetTimeChargeBegan(int droneID)
@@ -226,6 +250,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
 
