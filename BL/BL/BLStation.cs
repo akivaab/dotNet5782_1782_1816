@@ -25,6 +25,9 @@ namespace BL
             try
             {
                 dal.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
+
+                Station station = new(stationID, name, location, numAvailableChargingSlots, new List<DroneCharging>());
+                return station;
             }
             catch (DO.NonUniqueIdException e)
             {
@@ -34,9 +37,6 @@ namespace BL
             {
                 throw new XMLFileLoadCreateException(e.Message, e);
             }
-
-            Station station = new(stationID, name, location, numAvailableChargingSlots, new List<DroneCharging>());
-            return station;
         }
         #endregion
 

@@ -75,7 +75,7 @@ namespace DalXml
             }
             catch (Exception)
             {
-                throw new XMLFileLoadCreateException(filePath, $"Failed to save XML file: {filePath}");
+                throw new XMLFileLoadCreateException($"Failed to save XML file: {filePath}");
             }
         }
 
@@ -105,7 +105,7 @@ namespace DalXml
             }
             catch (Exception)
             {
-                throw new XMLFileLoadCreateException(filePath, $"Failed to load XML file: {filePath}");
+                throw new XMLFileLoadCreateException($"Failed to load XML file: {filePath}");
             }
             return null;
         }
@@ -125,7 +125,7 @@ namespace DalXml
             }
             catch (Exception)
             {
-                throw new XMLFileLoadCreateException(filePath, $"Failed to save XML file: {filePath}");
+                throw new XMLFileLoadCreateException($"Failed to save XML file: {droneXmlPath}");
             }
         }
 
@@ -145,7 +145,7 @@ namespace DalXml
             }
             catch (Exception)
             {
-                throw new XMLFileLoadCreateException(filePath, $"Failed to load XML file: {filePath}");
+                throw new XMLFileLoadCreateException($"Failed to load XML file: {filePath}");
             }
             return null;
         }
@@ -169,7 +169,7 @@ namespace DalXml
             }
             catch (Exception)
             {
-                throw new XMLFileLoadCreateException(filePath, $"Failed to save XML file: {filePath}");
+                throw new XMLFileLoadCreateException($"Failed to save XML file: {droneXmlPath}");
             }
         }
 
@@ -194,7 +194,7 @@ namespace DalXml
             }
             catch (Exception)
             {
-                throw new XMLFileLoadCreateException(filePath, $"Failed to load XML file: {filePath}");
+                throw new XMLFileLoadCreateException($"Failed to load XML file: {droneXmlPath}");
             }
             return null;
         }
@@ -243,11 +243,11 @@ namespace DalXml
             }
             catch (ArgumentNullException)
             {
-                throw new UndefinedObjectException("The XML file of drones is null.")
+                throw new UndefinedObjectException("The XML file of drones is null.");
             }
             catch (InvalidOperationException)
             {
-                throw new NonUniqueIDException("Multiple drones have the same ID.");
+                throw new NonUniqueIdException("Multiple drones have the same ID.");
             }
         }
         #endregion

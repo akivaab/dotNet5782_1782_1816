@@ -25,6 +25,9 @@ namespace BL
             try
             {
                 dal.AddCustomer(customerID, name, phone, location.Latitude, location.Longitude);
+
+                Customer customer = new(customerID, name, phone, location, new List<PackageForCustomer>(), new List<PackageForCustomer>());
+                return customer;
             }
             catch (DO.NonUniqueIdException e)
             {
@@ -34,9 +37,6 @@ namespace BL
             {
                 throw new XMLFileLoadCreateException(e.Message, e);
             }
-
-            Customer customer = new(customerID, name, phone, location, new List<PackageForCustomer>(), new List<PackageForCustomer>());
-            return customer;
         }
         #endregion
 
