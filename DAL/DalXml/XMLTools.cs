@@ -107,7 +107,6 @@ namespace DalXml
             {
                 throw new XMLFileLoadCreateException($"Failed to load XML file: {filePath}");
             }
-            return null;
         }
         #endregion
 
@@ -196,7 +195,6 @@ namespace DalXml
             {
                 throw new XMLFileLoadCreateException($"Failed to load XML file: {droneXmlPath}");
             }
-            return null;
         }
         #endregion
 
