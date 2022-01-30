@@ -693,4 +693,13 @@
     <Active>true</Active>
     <Password>120002</Password>
   </Customer>
+  <Customer>
+    <ID>111</ID>
+    <Name>asds</Name>
+    <Phone>123456784</Phone>
+    <Latitude>-0.12345676543</Latitude>
+    <Longitude>1.98787</Longitude>
+    <Active>false</Active>
+    <Password>111</Password>
+  </Customer>
 </ArrayOfCustomer>

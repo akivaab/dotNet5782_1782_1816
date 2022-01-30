@@ -13,9 +13,9 @@ namespace DalObject
         #region Add Methods
         public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority)
         {   
-            int senderIndex = DataSource.customers.FindIndex(customer => customer.ID == senderID && customer.Active);
-            int receiverIndex = DataSource.customers.FindIndex(customer => customer.ID == receiverID && customer.Active);
-            if (senderIndex == -1 || receiverIndex == -1)
+            bool senderExists = DataSource.customers.Exists(customer => customer.ID == senderID && customer.Active);
+            bool receiverExists = DataSource.customers.Exists(customer => customer.ID == receiverID && customer.Active);
+            if (!(senderExists && receiverExists))
             {
                 throw new UndefinedObjectException("There is no customer with the given ID.");
             }

@@ -17,8 +17,7 @@ namespace DalXml
         {
             List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
 
-            int stationIndex = stations.FindIndex(station => station.ID == id && station.Active);
-            if (stationIndex != -1)
+            if (stations.Exists(station => station.ID == id && station.Active))
             {
                 throw new NonUniqueIdException("The given station ID is not unique.");
             }

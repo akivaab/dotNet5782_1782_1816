@@ -50,14 +50,20 @@
   </Drone>
   <Drone>
     <ID>7</ID>
-    <Model>as</Model>
+    <Model>MX7</Model>
     <MaxWeight>light</MaxWeight>
     <Active>true</Active>
   </Drone>
   <Drone>
     <ID>9</ID>
-    <Model>qw</Model>
+    <Model>MX99</Model>
     <MaxWeight>light</MaxWeight>
+    <Active>true</Active>
+  </Drone>
+  <Drone>
+    <ID>10</ID>
+    <Model>MX100</Model>
+    <MaxWeight>medium</MaxWeight>
     <Active>true</Active>
   </Drone>
 </Drones>

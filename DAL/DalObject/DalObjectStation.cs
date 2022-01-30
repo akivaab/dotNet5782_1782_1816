@@ -13,8 +13,7 @@ namespace DalObject
         #region Add Methods
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
         {
-            int stationIndex = DataSource.stations.FindIndex(station => station.ID == id && station.Active);
-            if (stationIndex != -1)
+            if (DataSource.stations.Exists(station => station.ID == id && station.Active))
             {
                 throw new NonUniqueIdException("The given station ID is not unique.");
             }

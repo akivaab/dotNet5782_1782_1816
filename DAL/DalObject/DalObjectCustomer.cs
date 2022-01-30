@@ -13,8 +13,7 @@ namespace DalObject
         #region Add Methods
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {
-            int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == id && customer.Active);
-            if (customerIndex != -1)
+            if (DataSource.customers.Exists(customer => customer.ID == id && customer.Active))
             {
                 throw new NonUniqueIdException("The given customer ID is not unique.");
             }

@@ -90,8 +90,10 @@ namespace DalXml
         public void UpdateDroneModel(int droneID, string model)
         {
             XElement droneRoot = loadElementFromXML(droneXmlPath);
+
             XElement drone = extractDrone(droneRoot, droneID);
             drone.Element("Model").Value = model;
+
             saveElementToXML(droneRoot, droneXmlPath);
         }
         #endregion
@@ -100,8 +102,10 @@ namespace DalXml
         public void RemoveDrone(int droneID)
         {
             XElement droneRoot = loadElementFromXML(droneXmlPath);
+
             XElement drone = extractDrone(droneRoot, droneID);
             drone.Element("Active").Value = false.ToString();
+
             saveElementToXML(droneRoot, droneXmlPath);
         }
         #endregion

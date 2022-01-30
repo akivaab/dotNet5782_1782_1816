@@ -17,9 +17,9 @@ namespace DalXml
         public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority)
         {
             List<Customer> customers = loadListFromXMLSerializer<Customer>(customerXmlPath);
-            int senderIndex = customers.FindIndex(customer => customer.ID == senderID && customer.Active);
-            int receiverIndex = customers.FindIndex(customer => customer.ID == receiverID && customer.Active);
-            if (senderIndex == -1 || receiverIndex == -1)
+            bool senderExists = customers.Exists(customer => customer.ID == senderID && customer.Active);
+            bool receiverExists = customers.Exists(customer => customer.ID == receiverID && customer.Active);
+            if (!(senderExists && receiverExists))
             {
                 throw new UndefinedObjectException("There is no customer with the given ID.");
             }
@@ -44,6 +44,7 @@ namespace DalXml
             packages.Add(package);
             saveListToXMLSerializer<Package>(packages, packageXmlPath);
 
+            //increment package ID in config file
             configRoot.Element("packageID").Value = (packageID + 1).ToString();
             saveElementToXML(configRoot, configXmlPath);
 

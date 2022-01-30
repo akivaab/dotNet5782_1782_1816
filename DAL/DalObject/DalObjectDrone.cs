@@ -13,8 +13,7 @@ namespace DalObject
         #region Add Methods
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
         {
-            int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == id && drone.Active);
-            if (droneIndex != -1)
+            if (DataSource.drones.Exists(drone => drone.ID == id && drone.Active))
             {
                 throw new NonUniqueIdException("The given drone ID is not unique.");
             }

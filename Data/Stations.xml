@@ -24,4 +24,12 @@
     <Longitude>0.3553757492245062</Longitude>
     <Active>true</Active>
   </Station>
+  <Station>
+    <ID>4</ID>
+    <Name>12</Name>
+    <AvailableChargeSlots>2</AvailableChargeSlots>
+    <Latitude>0.54322</Latitude>
+    <Longitude>0.12828282828</Longitude>
+    <Active>false</Active>
+  </Station>
 </ArrayOfStation>

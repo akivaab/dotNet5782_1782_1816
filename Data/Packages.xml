@@ -396,10 +396,10 @@
     <ReceiverID>100017</ReceiverID>
     <Weight>medium</Weight>
     <Priority>emergency</Priority>
-    <DroneID xsi:nil="true" />
+    <DroneID>3</DroneID>
     <Requested>2022-01-30T12:38:38.1779924+02:00</Requested>
-    <Assigned xsi:nil="true" />
-    <Collected xsi:nil="true" />
+    <Assigned>2022-01-30T13:14:15.7216691+02:00</Assigned>
+    <Collected>2022-01-30T13:14:19.3521866+02:00</Collected>
     <Delivered xsi:nil="true" />
     <Active>true</Active>
   </Package>

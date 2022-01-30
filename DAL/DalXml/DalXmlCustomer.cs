@@ -17,8 +17,7 @@ namespace DalXml
         {
             List<Customer> customers = loadListFromXMLSerializer<Customer>(customerXmlPath);
 
-            int customerIndex = customers.FindIndex(customer => customer.ID == id && customer.Active);
-            if (customerIndex != -1)
+            if (customers.Exists(customer => customer.ID == id && customer.Active))
             {
                 throw new NonUniqueIdException("The given customer ID is not unique.");
             }
