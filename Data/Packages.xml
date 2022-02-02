@@ -9,8 +9,8 @@
     <DroneID>1</DroneID>
     <Requested>2022-02-02T15:55:22.7036637+02:00</Requested>
     <Assigned>2022-02-02T15:55:23.0962382+02:00</Assigned>
-    <Collected xsi:nil="true" />
-    <Delivered xsi:nil="true" />
+    <Collected>2022-02-02T16:34:08.3222298+02:00</Collected>
+    <Delivered>2022-02-02T16:34:21.5307616+02:00</Delivered>
     <Active>true</Active>
   </Package>
   <Package>
@@ -1618,10 +1618,10 @@
     <ReceiverID>100015</ReceiverID>
     <Weight>medium</Weight>
     <Priority>emergency</Priority>
-    <DroneID xsi:nil="true" />
+    <DroneID>2</DroneID>
     <Requested>2022-02-02T15:55:22.7097189+02:00</Requested>
-    <Assigned xsi:nil="true" />
-    <Collected xsi:nil="true" />
+    <Assigned>2022-02-02T16:35:47.9501533+02:00</Assigned>
+    <Collected>2022-02-02T16:35:52.3440382+02:00</Collected>
     <Delivered xsi:nil="true" />
     <Active>true</Active>
   </Package>
@@ -3581,11 +3581,11 @@
     <ReceiverID>100017</ReceiverID>
     <Weight>heavy</Weight>
     <Priority>emergency</Priority>
-    <DroneID xsi:nil="true" />
+    <DroneID>1</DroneID>
     <Requested>2022-02-02T15:55:22.7099287+02:00</Requested>
-    <Assigned xsi:nil="true" />
-    <Collected xsi:nil="true" />
-    <Delivered xsi:nil="true" />
+    <Assigned>2022-02-02T17:42:30.0029271+02:00</Assigned>
+    <Collected>2022-02-02T17:42:31.736933+02:00</Collected>
+    <Delivered>2022-02-02T17:42:33.4396911+02:00</Delivered>
     <Active>true</Active>
   </Package>
   <Package>
@@ -4088,11 +4088,11 @@
     <ReceiverID>100012</ReceiverID>
     <Weight>heavy</Weight>
     <Priority>emergency</Priority>
-    <DroneID xsi:nil="true" />
+    <DroneID>1</DroneID>
     <Requested>2022-02-02T15:55:22.7099755+02:00</Requested>
-    <Assigned xsi:nil="true" />
-    <Collected xsi:nil="true" />
-    <Delivered xsi:nil="true" />
+    <Assigned>2022-02-02T17:42:15.3906499+02:00</Assigned>
+    <Collected>2022-02-02T17:42:22.0636921+02:00</Collected>
+    <Delivered>2022-02-02T17:42:25.8298562+02:00</Delivered>
     <Active>true</Active>
   </Package>
   <Package>
@@ -4543,10 +4543,10 @@
     <ReceiverID>100038</ReceiverID>
     <Weight>medium</Weight>
     <Priority>emergency</Priority>
-    <DroneID xsi:nil="true" />
+    <DroneID>3</DroneID>
     <Requested>2022-02-02T15:55:22.7100141+02:00</Requested>
-    <Assigned xsi:nil="true" />
-    <Collected xsi:nil="true" />
+    <Assigned>2022-02-02T16:34:29.3762029+02:00</Assigned>
+    <Collected>2022-02-02T16:34:33.6100111+02:00</Collected>
     <Delivered xsi:nil="true" />
     <Active>true</Active>
   </Package>
@@ -5804,11 +5804,11 @@
     <ReceiverID>100040</ReceiverID>
     <Weight>medium</Weight>
     <Priority>emergency</Priority>
-    <DroneID xsi:nil="true" />
+    <DroneID>6</DroneID>
     <Requested>2022-02-02T15:55:22.7101245+02:00</Requested>
-    <Assigned xsi:nil="true" />
-    <Collected xsi:nil="true" />
-    <Delivered xsi:nil="true" />
+    <Assigned>2022-02-02T17:36:47.7412562+02:00</Assigned>
+    <Collected>2022-02-02T17:36:50.5291507+02:00</Collected>
+    <Delivered>2022-02-02T17:36:56.1697838+02:00</Delivered>
     <Active>true</Active>
   </Package>
   <Package>

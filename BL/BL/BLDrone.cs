@@ -13,7 +13,7 @@ namespace BL
         #region Add Methods
         public Drone AddDrone(int droneID, string model, Enums.WeightCategories maxWeight, int stationID)
         {
-            if (drones.FindIndex(d => d.ID == droneID) != -1)
+            if (drones.Exists(d => d.ID == droneID))
             {
                 throw new NonUniqueIdException("The given drone ID is not unique.");
             }
@@ -216,12 +216,16 @@ namespace BL
                     
                     CustomerForPackage packageSender = new(sender.ID, sender.Name);
                     CustomerForPackage packageReceiver = new(receiver.ID, receiver.Name);
-                    
+
+                    Location currentLocation = droneToList.Location;
                     Location collectLocation = new(sender.Latitude, sender.Longitude);
                     Location deliveryLocation = new(receiver.Latitude, receiver.Longitude);
-
+                    
                     bool status = dalPackage.Collected != null && dalPackage.Delivered == null ? true : false;
-                    packageInTransfer = new(dalPackage.ID, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, status, packageSender, packageReceiver, collectLocation, deliveryLocation, getDistance(collectLocation, deliveryLocation));
+
+                    double distance = dalPackage.Collected == null ? getDistance(currentLocation, collectLocation) : getDistance(collectLocation, deliveryLocation);
+                    
+                    packageInTransfer = new(dalPackage.ID, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, status, packageSender, packageReceiver, collectLocation, deliveryLocation, distance);
                 }
                 else
                 {

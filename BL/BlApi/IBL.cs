@@ -149,7 +149,7 @@ namespace BlApi
         public Station GetStation(int stationID);
 
         /// <summary>
-        /// Find a station by it's ID.
+        /// Find a drone by it's ID.
         /// </summary>
         /// <param name="droneID">The ID of the drone to be found.</param>
         /// <returns>The corresponding drone.</returns>

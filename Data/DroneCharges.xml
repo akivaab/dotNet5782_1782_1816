@@ -24,4 +24,22 @@
     <BeganCharge>2022-02-02T15:56:04.0855484+02:00</BeganCharge>
     <Active>false</Active>
   </DroneCharge>
+  <DroneCharge>
+    <DroneID>1</DroneID>
+    <StationID>2</StationID>
+    <BeganCharge>2022-02-02T17:41:58.3797894+02:00</BeganCharge>
+    <Active>false</Active>
+  </DroneCharge>
+  <DroneCharge>
+    <DroneID>1</DroneID>
+    <StationID>2</StationID>
+    <BeganCharge>2022-02-02T17:42:08.6283084+02:00</BeganCharge>
+    <Active>false</Active>
+  </DroneCharge>
+  <DroneCharge>
+    <DroneID>1</DroneID>
+    <StationID>1</StationID>
+    <BeganCharge>2022-02-02T17:42:36.2187072+02:00</BeganCharge>
+    <Active>false</Active>
+  </DroneCharge>
 </ArrayOfDroneCharge>

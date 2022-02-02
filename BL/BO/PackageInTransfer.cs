@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace BO
 {
     /// <summary>
@@ -83,7 +84,7 @@ namespace BO
         public override string ToString()
         {
             return $"Package ID: {ID}, Weight: {Weight}, Priority: {Priority}\n" +
-                $"Package in transfer: {Status}, Distance to deliver: {DeliveryDistance} km\n" +
+                $"Package in transfer: {Status}, Distance to deliver: {Math.Round(DeliveryDistance, 2)} km\n" +
                 $"  Collect from {Sender} at {CollectLocation}\n" + 
                 $"  Deliver to {Receiver} at {DeliveryLocation}";
         }
