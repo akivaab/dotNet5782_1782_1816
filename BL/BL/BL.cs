@@ -70,6 +70,10 @@ namespace BL
             {
                 throw new XMLFileLoadCreateException(e.Message, e);
             }
+            catch (DO.IllegalArgumentException e)
+            {
+                throw new IllegalArgumentException(e.Message, e);
+            }
         }
 
         /// <summary>

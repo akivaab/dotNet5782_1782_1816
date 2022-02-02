@@ -11,7 +11,7 @@ namespace ConsoleUI
         /// <summary>
         /// Instance of DAL.
         /// </summary>
-        static DalApi.IDal dal = DalApi.DalFactory.GetDal("DalObject");
+        static DalApi.IDal dal;
 
         /// <summary>
         /// Main method, runs the main menu.
@@ -19,6 +19,15 @@ namespace ConsoleUI
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            try
+            {
+                dal = DalApi.DalFactory.GetDal("DalObject");
+            }
+            catch (IllegalArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
             int option;
             do
             {
@@ -131,10 +140,6 @@ namespace ConsoleUI
                     default:
                         break;
                 }
-            }
-            catch (IllegalArgumentException e)
-            {
-                Console.WriteLine(e.Message);
             }
             catch (NonUniqueIdException e)
             {

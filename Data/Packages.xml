@@ -5037,11 +5037,11 @@
     <ReceiverID>100044</ReceiverID>
     <Weight>medium</Weight>
     <Priority>emergency</Priority>
-    <DroneID xsi:nil="true" />
+    <DroneID>2</DroneID>
     <Requested>2022-01-30T12:38:38.1787525+02:00</Requested>
-    <Assigned xsi:nil="true" />
-    <Collected xsi:nil="true" />
-    <Delivered xsi:nil="true" />
+    <Assigned>2022-02-02T15:21:15.9477173+02:00</Assigned>
+    <Collected>2022-02-02T15:21:22.2490529+02:00</Collected>
+    <Delivered>2022-02-02T15:21:26.0248534+02:00</Delivered>
     <Active>true</Active>
   </Package>
   <Package>
