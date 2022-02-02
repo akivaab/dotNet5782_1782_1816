@@ -48,8 +48,8 @@
     <DroneID>6</DroneID>
     <Requested>2022-01-30T12:38:38.177927+02:00</Requested>
     <Assigned>2022-01-30T12:38:38.9523941+02:00</Assigned>
-    <Collected xsi:nil="true" />
-    <Delivered xsi:nil="true" />
+    <Collected>2022-02-02T13:35:03.227314+02:00</Collected>
+    <Delivered>2022-02-02T13:35:05.3647592+02:00</Delivered>
     <Active>true</Active>
   </Package>
   <Package>
@@ -1449,11 +1449,11 @@
     <ReceiverID>100013</ReceiverID>
     <Weight>light</Weight>
     <Priority>emergency</Priority>
-    <DroneID xsi:nil="true" />
+    <DroneID>7</DroneID>
     <Requested>2022-01-30T12:38:38.1781785+02:00</Requested>
-    <Assigned xsi:nil="true" />
-    <Collected xsi:nil="true" />
-    <Delivered xsi:nil="true" />
+    <Assigned>2022-02-02T13:34:25.4636174+02:00</Assigned>
+    <Collected>2022-02-02T13:34:32.938228+02:00</Collected>
+    <Delivered>2022-02-02T13:34:35.1869866+02:00</Delivered>
     <Active>true</Active>
   </Package>
   <Package>

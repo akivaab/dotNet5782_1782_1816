@@ -62,9 +62,9 @@ namespace BL
                     dataCleanup();
                 }
 
-                List<DO.Drone> dalDrones = dal.GetDronesList().ToList();
-                addAssignedDrones(dalDrones);
-                addUnassignedDrones(dalDrones);
+                IEnumerable<DO.Drone> dalDrones = dal.GetDronesList();
+                IEnumerable<DO.Drone> unassignedDalDrones = addAssignedDrones(dalDrones);
+                addUnassignedDrones(unassignedDalDrones);
             }
             catch (DO.XMLFileLoadCreateException e)
             {
@@ -75,16 +75,20 @@ namespace BL
         /// <summary>
         /// Add assigned drones to the BL Drone List.
         /// </summary>
-        /// <param name="dalDrones">List of drones from the DAL layer.</param>
-        private void addAssignedDrones(List<DO.Drone> dalDrones)
+        /// <param name="dalDrones">Collection of drones from the DAL layer.</param>
+        /// <returns>A collection of drones from the DAL layer excluding those assigned a package.</returns>
+        private IEnumerable<DO.Drone> addAssignedDrones(IEnumerable<DO.Drone> dalDrones)
         {
+            //copy to avoid changing input
+            List<DO.Drone> dalDronesCopy = new(dalDrones);
+
             //find all packages undelivered but with a drone assigned
-            List<DO.Package> dalPackages = dal.FindPackages(p => p.Delivered == null && p.DroneID != null).ToList();
+            IEnumerable<DO.Package> dalPackages = dal.FindPackages(p => p.Delivered == null && p.DroneID != null);
 
             foreach (DO.Package package in dalPackages)
             {
-                DO.Drone drone = dalDrones.Find(drone => drone.ID == package.DroneID);
-                dalDrones.Remove(drone);
+                DO.Drone drone = dalDronesCopy.Find(drone => drone.ID == package.DroneID);
+                dalDronesCopy.Remove(drone);
 
                 Location droneLocation = new();
 
@@ -107,13 +111,14 @@ namespace BL
                 DroneToList droneToList = new(drone.ID, drone.Model, (Enums.WeightCategories)drone.MaxWeight, battery, Enums.DroneStatus.delivery, droneLocation, package.ID);
                 drones.Add(droneToList);
             }
+            return dalDronesCopy;
         }
 
         /// <summary>
         /// Add unassigned drones to the BL Drone List.
         /// </summary>
         /// <param name="dalDrones">List of drones from the DAL layer.</param>
-        private void addUnassignedDrones(List<DO.Drone> dalDrones)
+        private void addUnassignedDrones(IEnumerable<DO.Drone> dalDrones)
         {
             if (dal.DataCleanupRequired)
             {
@@ -129,7 +134,7 @@ namespace BL
         /// Randomly initialize the drones being added to the BL Drone List.
         /// </summary>
         /// <param name="dalDrones">List of drones from the DAL layer.</param>
-        private void randomInitialization(List<DO.Drone> dalDrones)
+        private void randomInitialization(IEnumerable<DO.Drone> dalDrones)
         {
             Random random = new Random();
 
@@ -181,7 +186,7 @@ namespace BL
         /// Initialize the drones being added to the BL Drone List based on data from XML files.
         /// </summary>
         /// <param name="dalDrones">List of drones from the DAL layer.</param>
-        private void xmlInitialization(List<DO.Drone> dalDrones)
+        private void xmlInitialization(IEnumerable<DO.Drone> dalDrones)
         {
             Random random = new Random();
 
