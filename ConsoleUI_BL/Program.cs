@@ -252,7 +252,7 @@ namespace ConsoleUI_BL
                         double chargingTime;
                         Console.Write("Input drone ID: ");
                         int.TryParse(Console.ReadLine(), out droneToReleaseID);
-                        Console.Write("Input charging time: ");
+                        Console.Write("Input charging time (in seconds): ");
                         double.TryParse(Console.ReadLine(), out chargingTime);
                         bl.ReleaseFromCharge(droneToReleaseID, chargingTime);
                         break;

@@ -39,7 +39,7 @@ namespace BL
         /// <summary>
         /// The amount a drone battery charges per hour.
         /// </summary>
-        private double chargeRatePerHour;
+        private double chargeRatePerSecond;
         #endregion
 
         #region Constructor (and its Helper Methods)
@@ -54,7 +54,7 @@ namespace BL
                 drones = new();
                 dal = DalApi.DalFactory.GetDal("DalXml");
                 powerConsumption = dal.DronePowerConsumption().Take(4);
-                chargeRatePerHour = dal.DronePowerConsumption().Last();
+                chargeRatePerSecond = dal.DronePowerConsumption().Last();
 
                 //remove problematic entities from the data layer
                 if (dal.DataCleanupRequired)

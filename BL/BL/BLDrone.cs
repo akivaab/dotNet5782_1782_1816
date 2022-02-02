@@ -124,7 +124,7 @@ namespace BL
             }
         }
         
-        public void ReleaseFromCharge(int droneID, double chargingTimeInHours)
+        public void ReleaseFromCharge(int droneID, double chargingTimeInSeconds)
         {
             int droneIndex = drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
@@ -143,7 +143,7 @@ namespace BL
                 DO.DroneCharge dalDroneCharge = dal.FindDroneCharges(dc => dc.DroneID == droneID).Single();
                 dal.ReleaseDroneFromCharging(droneID, dalDroneCharge.StationID);
 
-                drones[droneIndex].Battery = Math.Min(drones[droneIndex].Battery + (chargeRatePerHour * chargingTimeInHours), 100);
+                drones[droneIndex].Battery = Math.Min(drones[droneIndex].Battery + (chargeRatePerSecond * chargingTimeInSeconds), 100);
                 drones[droneIndex].Status = Enums.DroneStatus.available;
             }
             catch (DO.UndefinedObjectException e)

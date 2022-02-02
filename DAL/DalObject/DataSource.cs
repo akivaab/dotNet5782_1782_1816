@@ -40,9 +40,9 @@ namespace DalObject
             internal static double heavyWeight = 0.15;
 
             /// <summary>
-            /// Represents how much percent a drone charges per hour.
+            /// Represents how much percent a drone charges per second.
             /// </summary>
-            internal static double chargingRate = 20.0;
+            internal static double chargingRate = 10.0;
         }
         #endregion
 

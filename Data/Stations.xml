@@ -3,33 +3,17 @@
   <Station>
     <ID>1</ID>
     <Name>32</Name>
-    <AvailableChargeSlots>5</AvailableChargeSlots>
-    <Latitude>0.7732456306802321</Latitude>
-    <Longitude>0.9103512554012012</Longitude>
+    <AvailableChargeSlots>3</AvailableChargeSlots>
+    <Latitude>-0.5330827164152091</Latitude>
+    <Longitude>0.7471929857261447</Longitude>
     <Active>true</Active>
   </Station>
   <Station>
     <ID>2</ID>
     <Name>64</Name>
     <AvailableChargeSlots>4</AvailableChargeSlots>
-    <Latitude>0.33608976254988915</Latitude>
-    <Longitude>0.9266435573467257</Longitude>
+    <Latitude>-0.17213034079043676</Latitude>
+    <Longitude>0.7285736998210539</Longitude>
     <Active>true</Active>
-  </Station>
-  <Station>
-    <ID>3</ID>
-    <Name>96</Name>
-    <AvailableChargeSlots>2</AvailableChargeSlots>
-    <Latitude>-0.09569911756352481</Latitude>
-    <Longitude>0.3553757492245062</Longitude>
-    <Active>true</Active>
-  </Station>
-  <Station>
-    <ID>4</ID>
-    <Name>12</Name>
-    <AvailableChargeSlots>2</AvailableChargeSlots>
-    <Latitude>0.54322</Latitude>
-    <Longitude>0.12828282828</Longitude>
-    <Active>false</Active>
   </Station>
 </ArrayOfStation>

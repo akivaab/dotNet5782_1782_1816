@@ -49,7 +49,7 @@ namespace DalXml
                                                     new XElement("lightWeight", 0.05),
                                                     new XElement("midWeight", 0.1),
                                                     new XElement("heavyWeight", 0.15),
-                                                    new XElement("chargingRate", 20.0));
+                                                    new XElement("chargingRate", 10.0));
                 saveElementToXML(configRoot, configXmlPath);
                 return true;
             }

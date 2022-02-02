@@ -2,67 +2,37 @@
 <Drones>
   <Drone>
     <ID>1</ID>
+    <Model>MX5</Model>
+    <MaxWeight>heavy</MaxWeight>
+    <Active>true</Active>
+  </Drone>
+  <Drone>
+    <ID>2</ID>
     <Model>MX3</Model>
     <MaxWeight>medium</MaxWeight>
     <Active>true</Active>
   </Drone>
   <Drone>
-    <ID>2</ID>
-    <Model>MX22</Model>
-    <MaxWeight>medium</MaxWeight>
-    <Active>true</Active>
-  </Drone>
-  <Drone>
     <ID>3</ID>
-    <Model>MX4</Model>
+    <Model>MX2</Model>
     <MaxWeight>medium</MaxWeight>
     <Active>true</Active>
   </Drone>
   <Drone>
     <ID>4</ID>
     <Model>MX3</Model>
-    <MaxWeight>light</MaxWeight>
+    <MaxWeight>heavy</MaxWeight>
     <Active>true</Active>
   </Drone>
   <Drone>
     <ID>5</ID>
     <Model>MX1</Model>
-    <MaxWeight>heavy</MaxWeight>
+    <MaxWeight>light</MaxWeight>
     <Active>true</Active>
   </Drone>
   <Drone>
     <ID>6</ID>
-    <Model>MX4</Model>
-    <MaxWeight>light</MaxWeight>
-    <Active>true</Active>
-  </Drone>
-  <Drone>
-    <ID>7</ID>
-    <Model>MX5</Model>
-    <MaxWeight>light</MaxWeight>
-    <Active>False</Active>
-  </Drone>
-  <Drone>
-    <ID>8</ID>
-    <Model>MX36</Model>
-    <MaxWeight>heavy</MaxWeight>
-    <Active>true</Active>
-  </Drone>
-  <Drone>
-    <ID>7</ID>
-    <Model>MX7</Model>
-    <MaxWeight>light</MaxWeight>
-    <Active>true</Active>
-  </Drone>
-  <Drone>
-    <ID>9</ID>
-    <Model>MX99</Model>
-    <MaxWeight>light</MaxWeight>
-    <Active>true</Active>
-  </Drone>
-  <Drone>
-    <ID>10</ID>
-    <Model>MX100</Model>
+    <Model>MX1</Model>
     <MaxWeight>medium</MaxWeight>
     <Active>true</Active>
   </Drone>
