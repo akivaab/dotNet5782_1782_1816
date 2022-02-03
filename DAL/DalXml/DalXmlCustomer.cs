@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using DO;
 
 namespace DalXml
@@ -13,6 +12,7 @@ namespace DalXml
     partial class DalXml : DalApi.IDal
     {
         #region Add Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {
             List<Customer> customers = loadListFromXMLSerializer<Customer>(customerXmlPath);
@@ -37,6 +37,7 @@ namespace DalXml
         #endregion
 
         #region Update Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateCustomerName(int customerID, string name)
         {
             List<Customer> customers = loadListFromXMLSerializer<Customer>(customerXmlPath);
@@ -54,6 +55,7 @@ namespace DalXml
             saveListToXMLSerializer<Customer>(customers, customerXmlPath);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateCustomerPhone(int customerID, string phone)
         {
             List<Customer> customers = loadListFromXMLSerializer<Customer>(customerXmlPath);
@@ -71,6 +73,7 @@ namespace DalXml
             saveListToXMLSerializer<Customer>(customers, customerXmlPath);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateCustomerPassword(int customerID, string password)
         {
             List<Customer> customers = loadListFromXMLSerializer<Customer>(customerXmlPath);
@@ -90,6 +93,7 @@ namespace DalXml
         #endregion
 
         #region Remove Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RemoveCustomer(int customerID)
         {
             List<Customer> customers = loadListFromXMLSerializer<Customer>(customerXmlPath);
@@ -110,6 +114,7 @@ namespace DalXml
         #endregion
 
         #region Getter Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Customer GetCustomer(int customerID)
         {
             List<Customer> customers = loadListFromXMLSerializer<Customer>(customerXmlPath);
@@ -123,6 +128,7 @@ namespace DalXml
             return customers[customerIndex];
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Customer> GetCustomersList()
         {
             List<Customer> customers = loadListFromXMLSerializer<Customer>(customerXmlPath);
@@ -132,6 +138,7 @@ namespace DalXml
                    select customer;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public string GetCustomerPassword(int customerID)
         {
             List<Customer> customers = loadListFromXMLSerializer<Customer>(customerXmlPath);
@@ -147,6 +154,7 @@ namespace DalXml
         #endregion
 
         #region Find Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Customer> FindCustomers(Predicate<Customer> predicate)
         {
             List<Customer> customers = loadListFromXMLSerializer<Customer>(customerXmlPath);

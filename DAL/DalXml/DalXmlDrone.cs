@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using DO;
 
@@ -11,6 +10,7 @@ namespace DalXml
     partial class DalXml : DalApi.IDal
     {
         #region Add Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
         {
             XElement droneRoot = loadElementFromXML(droneXmlPath);
@@ -30,6 +30,7 @@ namespace DalXml
         #endregion
 
         #region Update Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void ChargeDrone(int droneID, int stationID)
         {
             XElement droneRoot = loadElementFromXML(droneXmlPath);
@@ -57,6 +58,7 @@ namespace DalXml
             saveListToXMLSerializer<DroneCharge>(droneCharges, droneChargeXmlPath);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void ReleaseDroneFromCharging(int droneID, int stationID)
         {
             XElement droneRoot = loadElementFromXML(droneXmlPath);
@@ -87,6 +89,7 @@ namespace DalXml
             saveListToXMLSerializer<DroneCharge>(droneCharges, droneChargeXmlPath);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateDroneModel(int droneID, string model)
         {
             XElement droneRoot = loadElementFromXML(droneXmlPath);
@@ -99,6 +102,7 @@ namespace DalXml
         #endregion
 
         #region Remove Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RemoveDrone(int droneID)
         {
             XElement droneRoot = loadElementFromXML(droneXmlPath);
@@ -111,6 +115,7 @@ namespace DalXml
         #endregion
 
         #region Getter Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Drone GetDrone(int droneID)
         {
             XElement droneRoot = loadElementFromXML(droneXmlPath);
@@ -125,6 +130,7 @@ namespace DalXml
             };
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Drone> GetDronesList()
         {
             XElement droneRoot = loadElementFromXML(droneXmlPath);
@@ -139,6 +145,7 @@ namespace DalXml
                    };
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<double> DronePowerConsumption()
         {
             double[] powerConsumptionValues = new double[5];

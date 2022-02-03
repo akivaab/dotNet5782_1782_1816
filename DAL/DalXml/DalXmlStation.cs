@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using DO;
 
 namespace DalXml
@@ -13,6 +12,7 @@ namespace DalXml
     partial class DalXml : DalApi.IDal
     {
         #region Add Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
         {
             List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
@@ -36,6 +36,7 @@ namespace DalXml
         #endregion
 
         #region Update Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateStationName(int stationID, int name)
         {
             List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
@@ -53,6 +54,7 @@ namespace DalXml
             saveListToXMLSerializer<Station>(stations, stationXmlPath);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateStationChargeSlots(int stationID, int availableChargingSlots)
         {
             List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
@@ -72,6 +74,7 @@ namespace DalXml
         #endregion
 
         #region Remove Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RemoveStation(int stationID)
         {
             List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
@@ -91,6 +94,7 @@ namespace DalXml
         #endregion
 
         #region Getter Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Station GetStation(int stationID)
         {
             List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
@@ -104,6 +108,7 @@ namespace DalXml
             return stations[stationIndex];
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Station> GetStationsList()
         {
             List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
@@ -115,6 +120,7 @@ namespace DalXml
         #endregion
 
         #region Find Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Station> FindStations(Predicate<Station> predicate)
         {
             List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using DO;
 
 namespace DalObject
@@ -11,6 +12,7 @@ namespace DalObject
     partial class DalObject : DalApi.IDal
     {
         #region Add Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority)
         {   
             bool senderExists = DataSource.customers.Exists(customer => customer.ID == senderID && customer.Active);
@@ -39,6 +41,7 @@ namespace DalObject
         #endregion
 
         #region Update Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AssignPackage(int packageID, int droneID)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
@@ -55,6 +58,7 @@ namespace DalObject
             DataSource.packages[packageIndex] = package;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void CollectPackage(int packageID, int droneID)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
@@ -70,6 +74,7 @@ namespace DalObject
             DataSource.packages[packageIndex] = package;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void DeliverPackage(int packageID, int droneID)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
@@ -85,6 +90,7 @@ namespace DalObject
             DataSource.packages[packageIndex] = package;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void ModifyPackageStatus(int packageID, DateTime? assigned, DateTime? collected, DateTime? delivered)
         {
             int packageIndex = DataSource.packages.FindIndex(package => package.ID == packageID && package.Active);
@@ -103,6 +109,7 @@ namespace DalObject
         #endregion
 
         #region Remove Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RemovePackage(int packageID)
         {
             int packageIndex = DataSource.packages.FindIndex(package => package.ID == packageID && package.Active);
@@ -119,6 +126,7 @@ namespace DalObject
         #endregion
 
         #region Getter Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Package GetPackage(int packageID)
         {
             int packageIndex = DataSource.packages.FindIndex(package => package.ID == packageID && package.Active);
@@ -131,6 +139,7 @@ namespace DalObject
             return DataSource.packages[packageIndex];
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Package> GetPackagesList()
         {
             return from package in DataSource.packages
@@ -140,6 +149,7 @@ namespace DalObject
         #endregion
 
         #region Find Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Package> FindPackages(Predicate<Package> predicate)
         {
             return from package in DataSource.packages

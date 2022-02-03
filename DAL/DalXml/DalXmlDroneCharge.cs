@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using DO;
 
 namespace DalXml
@@ -13,6 +12,7 @@ namespace DalXml
     partial class DalXml : DalApi.IDal
     {
         #region Getter Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public DateTime GetTimeChargeBegan(int droneID)
         {
             List<DroneCharge> droneCharges = loadListFromXMLSerializer<DroneCharge>(droneChargeXmlPath);
@@ -28,6 +28,7 @@ namespace DalXml
         #endregion
 
         #region Find Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<DroneCharge> FindDroneCharges(Predicate<DroneCharge> predicate)
         {
             List<DroneCharge> droneCharges = loadListFromXMLSerializer<DroneCharge>(droneChargeXmlPath);

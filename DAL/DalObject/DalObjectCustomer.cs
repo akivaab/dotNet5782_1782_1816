@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using DO;
 
 namespace DalObject
@@ -11,6 +12,7 @@ namespace DalObject
     partial class DalObject : DalApi.IDal
     {
         #region Add Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude)
         {
             if (DataSource.customers.Exists(customer => customer.ID == id && customer.Active))
@@ -31,6 +33,7 @@ namespace DalObject
         #endregion
 
         #region Update Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateCustomerName(int customerID, string name)
         {
             int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
@@ -45,6 +48,7 @@ namespace DalObject
             DataSource.customers[customerIndex] = customer;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateCustomerPhone(int customerID, string phone)
         {
             int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
@@ -59,6 +63,7 @@ namespace DalObject
             DataSource.customers[customerIndex] = customer;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateCustomerPassword(int customerID, string password)
         {
             int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
@@ -75,6 +80,7 @@ namespace DalObject
         #endregion
 
         #region Remove Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RemoveCustomer(int customerID)
         {
             int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
@@ -90,6 +96,7 @@ namespace DalObject
         #endregion
 
         #region Getter Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Customer GetCustomer(int customerID)
         {
             int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
@@ -102,6 +109,7 @@ namespace DalObject
             return DataSource.customers[customerIndex];
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Customer> GetCustomersList()
         {
             return from customer in DataSource.customers
@@ -109,6 +117,7 @@ namespace DalObject
                    select customer;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public string GetCustomerPassword(int customerID)
         {
             int customerIndex = DataSource.customers.FindIndex(customer => customer.ID == customerID && customer.Active);
@@ -123,6 +132,7 @@ namespace DalObject
         #endregion
 
         #region Find Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Customer> FindCustomers(Predicate<Customer> predicate)
         {
             return from customer in DataSource.customers

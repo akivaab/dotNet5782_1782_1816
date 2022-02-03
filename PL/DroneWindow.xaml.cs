@@ -389,12 +389,15 @@ namespace PL
         #region Simulator
         private void simulatorButton_Click(object sender, RoutedEventArgs e)
         {
-            bgWorker = new BackgroundWorker();
-            bgWorker.DoWork += bgWorker_DoWork;
-            bgWorker.ProgressChanged += bgWorker_ProgressChanged;
-            bgWorker.RunWorkerCompleted += bgWorker_RunWorkerCompleted;
-            bgWorker.WorkerReportsProgress = true;
-            bgWorker.WorkerSupportsCancellation = true;
+            if (bgWorker == null)
+            {
+                bgWorker = new BackgroundWorker();
+                bgWorker.DoWork += bgWorker_DoWork;
+                bgWorker.ProgressChanged += bgWorker_ProgressChanged;
+                bgWorker.RunWorkerCompleted += bgWorker_RunWorkerCompleted;
+                bgWorker.WorkerReportsProgress = true;
+                bgWorker.WorkerSupportsCancellation = true;
+            }
 
             if (!bgWorker.IsBusy)
             {
@@ -402,7 +405,7 @@ namespace PL
                 simulatorButton.Content = "Manual";
 
                 //disable all other buttons
-                actions.Children.OfType<Button>().Where(btn => !btn.Equals(simulatorButton)).Select(btn => { btn.IsEnabled = false; return btn; });
+                actions.Children.OfType<Button>().Where(btn => !(btn.Equals(simulatorButton) || btn.Equals(closeButton))).Select(btn => { btn.IsEnabled = false; return btn; });
             }
             else
             {
@@ -439,6 +442,10 @@ namespace PL
         /// <param name="e"></param>
         private void closeButton_Click(object sender, RoutedEventArgs e)
         {
+            if (bgWorker != null && bgWorker.IsBusy)
+            {
+                simulatorButton_Click(sender, e); 
+            }
             allowClose = true;
             Close();
         }

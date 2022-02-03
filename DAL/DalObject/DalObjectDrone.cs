@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using DO;
 
 namespace DalObject
@@ -11,6 +12,7 @@ namespace DalObject
     partial class DalObject : DalApi.IDal
     {
         #region Add Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight)
         {
             if (DataSource.drones.Exists(drone => drone.ID == id && drone.Active))
@@ -28,6 +30,7 @@ namespace DalObject
         #endregion
 
         #region Update Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void ChargeDrone(int droneID, int stationID)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
@@ -50,6 +53,7 @@ namespace DalObject
             DataSource.droneCharges.Add(droneCharge);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void ReleaseDroneFromCharging(int droneID, int stationID)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
@@ -74,6 +78,7 @@ namespace DalObject
             DataSource.droneCharges[droneChargeIndex] = droneCharge;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateDroneModel(int droneID, string model)
         {
             int droneIndex = DataSource.drones.FindIndex(d => d.ID == droneID && d.Active);
@@ -90,6 +95,7 @@ namespace DalObject
         #endregion
 
         #region Remove Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RemoveDrone(int droneID)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
@@ -105,6 +111,7 @@ namespace DalObject
         #endregion
 
         #region Getter Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Drone GetDrone(int droneID)
         {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
@@ -117,6 +124,7 @@ namespace DalObject
             return DataSource.drones[droneIndex];
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Drone> GetDronesList()
         {
             return from drone in DataSource.drones
@@ -124,6 +132,7 @@ namespace DalObject
                    select drone;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<double> DronePowerConsumption()
         {
             double[] powerConsumptionValues = new double[5];

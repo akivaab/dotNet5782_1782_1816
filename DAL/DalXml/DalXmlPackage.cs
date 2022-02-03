@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using DO;
 
@@ -14,6 +13,7 @@ namespace DalXml
     partial class DalXml : DalApi.IDal
     {
         #region Add Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public int AddPackage(int senderID, int receiverID, Enums.WeightCategories weight, Enums.Priorities priority)
         {
             List<Customer> customers = loadListFromXMLSerializer<Customer>(customerXmlPath);
@@ -53,6 +53,7 @@ namespace DalXml
         #endregion
 
         #region Update Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AssignPackage(int packageID, int droneID)
         {
             XElement droneRoot = loadElementFromXML(droneXmlPath);
@@ -72,6 +73,7 @@ namespace DalXml
             saveListToXMLSerializer<Package>(packages, packageXmlPath);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void CollectPackage(int packageID, int droneID)
         {
             XElement droneRoot = loadElementFromXML(droneXmlPath);
@@ -90,6 +92,7 @@ namespace DalXml
             saveListToXMLSerializer<Package>(packages, packageXmlPath);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void DeliverPackage(int packageID, int droneID)
         {
             XElement droneRoot = loadElementFromXML(droneXmlPath);
@@ -109,6 +112,7 @@ namespace DalXml
             saveListToXMLSerializer<Package>(packages, packageXmlPath);
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void ModifyPackageStatus(int packageID, DateTime? assigned, DateTime? collected, DateTime? delivered)
         {
             List<Package> packages = loadListFromXMLSerializer<Package>(packageXmlPath);
@@ -129,6 +133,7 @@ namespace DalXml
         #endregion
 
         #region Remove Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RemovePackage(int packageID)
         {
             List<Package> packages = loadListFromXMLSerializer<Package>(packageXmlPath);
@@ -147,6 +152,7 @@ namespace DalXml
         #endregion
 
         #region Getter Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Package GetPackage(int packageID)
         {
             List<Package> packages = loadListFromXMLSerializer<Package>(packageXmlPath);
@@ -159,6 +165,7 @@ namespace DalXml
             return packages[packageIndex];
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Package> GetPackagesList()
         {
             List<Package> packages = loadListFromXMLSerializer<Package>(packageXmlPath);
@@ -169,6 +176,7 @@ namespace DalXml
         #endregion
 
         #region Find Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Package> FindPackages(Predicate<Package> predicate)
         {
             List<Package> packages = loadListFromXMLSerializer<Package>(packageXmlPath);

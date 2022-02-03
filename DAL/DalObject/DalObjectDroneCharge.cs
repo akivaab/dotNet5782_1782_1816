@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using DO;
 
 namespace DalObject
@@ -11,6 +12,7 @@ namespace DalObject
     partial class DalObject : DalApi.IDal
     {
         #region Getter Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public DateTime GetTimeChargeBegan(int droneID)
         {
             int droneChargeIndex = DataSource.droneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID && droneCharge.Active);
@@ -25,6 +27,7 @@ namespace DalObject
         #endregion
 
         #region Find Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<DroneCharge> FindDroneCharges(Predicate<DroneCharge> predicate)
         {
             return from droneCharge in DataSource.droneCharges

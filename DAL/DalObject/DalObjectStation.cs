@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using DO;
 
 namespace DalObject
@@ -11,6 +12,7 @@ namespace DalObject
     partial class DalObject : DalApi.IDal
     {
         #region Add Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude)
         {
             if (DataSource.stations.Exists(station => station.ID == id && station.Active))
@@ -30,6 +32,7 @@ namespace DalObject
         #endregion
 
         #region Update Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateStationName(int stationID, int name)
         {
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
@@ -44,6 +47,7 @@ namespace DalObject
             DataSource.stations[stationIndex] = station;
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateStationChargeSlots(int stationID, int availableChargingSlots)
         {
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
@@ -60,6 +64,7 @@ namespace DalObject
         #endregion
 
         #region Remove Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RemoveStation(int stationID)
         {
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
@@ -75,6 +80,7 @@ namespace DalObject
         #endregion
 
         #region Getter Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Station GetStation(int stationID)
         {
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
@@ -87,6 +93,7 @@ namespace DalObject
             return DataSource.stations[stationIndex];
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Station> GetStationsList()
         {
             return from station in DataSource.stations
@@ -96,6 +103,7 @@ namespace DalObject
         #endregion
 
         #region Find Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<Station> FindStations(Predicate<Station> predicate)
         {
             return from station in DataSource.stations
