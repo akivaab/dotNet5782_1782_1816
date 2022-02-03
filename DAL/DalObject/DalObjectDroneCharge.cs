@@ -22,7 +22,7 @@ namespace DalObject
                 throw new UndefinedObjectException("There is no drone with the given ID currently charging.");
             }
 
-            return DataSource.droneCharges[droneChargeIndex].BeganCharge;
+            return DataSource.droneCharges[droneChargeIndex].Clone().BeganCharge;
         }
         #endregion
 
@@ -32,7 +32,7 @@ namespace DalObject
         {
             return from droneCharge in DataSource.droneCharges
                    where predicate(droneCharge) && droneCharge.Active
-                   select droneCharge;
+                   select droneCharge.Clone();
         }
         #endregion
     }

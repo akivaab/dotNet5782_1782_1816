@@ -23,7 +23,7 @@ namespace DalXml
                 throw new UndefinedObjectException("There is no drone with the given ID currently charging.");
             }
 
-            return droneCharges[droneChargeIndex].BeganCharge;
+            return droneCharges[droneChargeIndex].Clone().BeganCharge;
         }
         #endregion
 
@@ -35,7 +35,7 @@ namespace DalXml
 
             return from droneCharge in droneCharges
                    where predicate(droneCharge) && droneCharge.Active
-                   select droneCharge;
+                   select droneCharge.Clone();
         }
         #endregion
     }

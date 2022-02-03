@@ -162,7 +162,7 @@ namespace DalXml
                 throw new UndefinedObjectException("There is no package with the given ID.");
             }
 
-            return packages[packageIndex];
+            return packages[packageIndex].Clone();
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -171,7 +171,7 @@ namespace DalXml
             List<Package> packages = loadListFromXMLSerializer<Package>(packageXmlPath);
             return from package in packages
                    where package.Active
-                   select package;
+                   select package.Clone();
         }
         #endregion
 
@@ -182,7 +182,7 @@ namespace DalXml
             List<Package> packages = loadListFromXMLSerializer<Package>(packageXmlPath);
             return from package in packages
                    where predicate(package) && package.Active
-                   select package;
+                   select package.Clone();
         }
         #endregion
     }

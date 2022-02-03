@@ -90,7 +90,7 @@ namespace DalObject
                 throw new UndefinedObjectException("There is no station with the given ID.");
             }
             
-            return DataSource.stations[stationIndex];
+            return DataSource.stations[stationIndex].Clone();
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -98,7 +98,7 @@ namespace DalObject
         {
             return from station in DataSource.stations
                    where station.Active
-                   select station;
+                   select station.Clone();
         }
         #endregion
 
@@ -108,7 +108,7 @@ namespace DalObject
         {
             return from station in DataSource.stations
                    where predicate(station) && station.Active
-                   select station;
+                   select station.Clone();
         }
         #endregion
     }

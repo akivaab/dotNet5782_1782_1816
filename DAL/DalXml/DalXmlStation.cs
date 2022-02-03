@@ -105,7 +105,7 @@ namespace DalXml
                 throw new UndefinedObjectException("There is no station with the given ID.");
             }
 
-            return stations[stationIndex];
+            return stations[stationIndex].Clone();
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -115,7 +115,7 @@ namespace DalXml
 
             return from station in stations
                    where station.Active
-                   select station;
+                   select station.Clone();
         }
         #endregion
 
@@ -127,7 +127,7 @@ namespace DalXml
 
             return from station in stations
                    where predicate(station) && station.Active
-                   select station;
+                   select station.Clone();
         }
         #endregion
     }
