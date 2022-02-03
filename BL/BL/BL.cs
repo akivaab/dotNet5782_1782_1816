@@ -53,18 +53,21 @@ namespace BL
                 //initialize fields
                 drones = new();
                 dal = DalApi.DalFactory.GetDal("DalXml");
-                powerConsumption = dal.DronePowerConsumption().Take(4);
-                chargeRatePerSecond = dal.DronePowerConsumption().Last();
-
-                //remove problematic entities from the data layer
-                if (dal.DataCleanupRequired)
+                lock (dal)
                 {
-                    dataCleanup();
-                }
+                    powerConsumption = dal.DronePowerConsumption().Take(4);
+                    chargeRatePerSecond = dal.DronePowerConsumption().Last();
 
-                IEnumerable<DO.Drone> dalDrones = dal.GetDronesList();
-                IEnumerable<DO.Drone> unassignedDalDrones = addAssignedDrones(dalDrones);
-                addUnassignedDrones(unassignedDalDrones);
+                    //remove problematic entities from the data layer
+                    if (dal.DataCleanupRequired)
+                    {
+                        dataCleanup();
+                    }
+
+                    IEnumerable<DO.Drone> dalDrones = dal.GetDronesList();
+                    IEnumerable<DO.Drone> unassignedDalDrones = addAssignedDrones(dalDrones);
+                    addUnassignedDrones(unassignedDalDrones);
+                }
             }
             catch (DO.XMLFileLoadCreateException e)
             {
@@ -83,39 +86,42 @@ namespace BL
         /// <returns>A collection of drones from the DAL layer excluding those assigned a package.</returns>
         private IEnumerable<DO.Drone> addAssignedDrones(IEnumerable<DO.Drone> dalDrones)
         {
-            //copy to avoid changing input
-            List<DO.Drone> dalDronesCopy = new(dalDrones);
-
-            //find all packages undelivered but with a drone assigned
-            IEnumerable<DO.Package> dalPackages = dal.FindPackages(p => p.Delivered == null && p.DroneID != null);
-
-            foreach (DO.Package package in dalPackages)
+            lock (dal)
             {
-                DO.Drone drone = dalDronesCopy.Find(drone => drone.ID == package.DroneID);
-                dalDronesCopy.Remove(drone);
+                //copy to avoid changing input
+                List<DO.Drone> dalDronesCopy = new(dalDrones);
 
-                Location droneLocation = new();
+                //find all packages undelivered but with a drone assigned
+                IEnumerable<DO.Package> dalPackages = dal.FindPackages(p => p.Delivered == null && p.DroneID != null);
 
-                //if package assigned but not collected
-                if (package.Assigned != null && package.Collected == null)
+                foreach (DO.Package package in dalPackages)
                 {
-                    //set station closest to sender as drone location
-                    droneLocation = getClosestStation(getCustomerLocation(package.SenderID));
-                }
-                //if package is collected
-                else if (package.Collected != null)
-                {
-                    //set sender location as drone location
-                    droneLocation = getCustomerLocation(package.SenderID);
-                }
+                    DO.Drone drone = dalDronesCopy.Find(drone => drone.ID == package.DroneID);
+                    dalDronesCopy.Remove(drone);
 
-                //get random battery level
-                double battery = randomBatteryPower(droneLocation, package, powerConsumption.ElementAt((int)package.Weight));
+                    Location droneLocation = new();
 
-                DroneToList droneToList = new(drone.ID, drone.Model, (Enums.WeightCategories)drone.MaxWeight, battery, Enums.DroneStatus.delivery, droneLocation, package.ID);
-                drones.Add(droneToList);
+                    //if package assigned but not collected
+                    if (package.Assigned != null && package.Collected == null)
+                    {
+                        //set station closest to sender as drone location
+                        droneLocation = getClosestStation(getCustomerLocation(package.SenderID));
+                    }
+                    //if package is collected
+                    else if (package.Collected != null)
+                    {
+                        //set sender location as drone location
+                        droneLocation = getCustomerLocation(package.SenderID);
+                    }
+
+                    //get random battery level
+                    double battery = randomBatteryPower(droneLocation, package, powerConsumption.ElementAt((int)package.Weight));
+
+                    DroneToList droneToList = new(drone.ID, drone.Model, (Enums.WeightCategories)drone.MaxWeight, battery, Enums.DroneStatus.delivery, droneLocation, package.ID);
+                    drones.Add(droneToList);
+                }
+                return dalDronesCopy;
             }
-            return dalDronesCopy;
         }
 
         /// <summary>
@@ -124,13 +130,16 @@ namespace BL
         /// <param name="dalDrones">List of drones from the DAL layer.</param>
         private void addUnassignedDrones(IEnumerable<DO.Drone> dalDrones)
         {
-            if (dal.DataCleanupRequired)
+            lock (dal)
             {
-                randomInitialization(dalDrones);
-            }
-            else
-            {
-                xmlInitialization(dalDrones);
+                if (dal.DataCleanupRequired)
+                {
+                    randomInitialization(dalDrones);
+                }
+                else
+                {
+                    xmlInitialization(dalDrones);
+                }
             }
         }
 
@@ -142,47 +151,50 @@ namespace BL
         {
             Random random = new Random();
 
-            //for remaining drones that are not delivering
-            foreach (DO.Drone drone in dalDrones)
+            lock (dal)
             {
-                DroneToList droneToList = new();
-                droneToList.ID = drone.ID;
-                droneToList.Model = drone.Model;
-                droneToList.MaxWeight = (Enums.WeightCategories)drone.MaxWeight;
-
-                //randomly choose state of drone
-                int randInt = random.Next(1, 3);
-                if (randInt == 1)
+                //for remaining drones that are not delivering
+                foreach (DO.Drone drone in dalDrones)
                 {
-                    droneToList.Status = Enums.DroneStatus.maintenance;
+                    DroneToList droneToList = new();
+                    droneToList.ID = drone.ID;
+                    droneToList.Model = drone.Model;
+                    droneToList.MaxWeight = (Enums.WeightCategories)drone.MaxWeight;
 
-                    //get random station as drone location
-                    IEnumerable<DO.Station> dalStations = dal.GetStationsList();
-                    int randStation = random.Next(dalStations.Count());
-                    DO.Station dalStation = dalStations.ElementAt(randStation);
-                    droneToList.Location = new(dalStation.Latitude, dalStation.Longitude);
+                    //randomly choose state of drone
+                    int randInt = random.Next(1, 3);
+                    if (randInt == 1)
+                    {
+                        droneToList.Status = Enums.DroneStatus.maintenance;
 
-                    //get random battery level 0%-20%
-                    droneToList.Battery = random.Next(21);
+                        //get random station as drone location
+                        IEnumerable<DO.Station> dalStations = dal.GetStationsList();
+                        int randStation = random.Next(dalStations.Count());
+                        DO.Station dalStation = dalStations.ElementAt(randStation);
+                        droneToList.Location = new(dalStation.Latitude, dalStation.Longitude);
 
-                    //create appropriate DroneCharge entity in data layer
-                    dal.ChargeDrone(drone.ID, dalStation.ID);
+                        //get random battery level 0%-20%
+                        droneToList.Battery = random.Next(21);
+
+                        //create appropriate DroneCharge entity in data layer
+                        dal.ChargeDrone(drone.ID, dalStation.ID);
+                    }
+                    else if (randInt == 2)
+                    {
+                        droneToList.Status = Enums.DroneStatus.available;
+
+                        //get random customer that received a package as drone location
+                        DO.Customer customer = randomPackageReceiver();
+                        droneToList.Location = new(customer.Latitude, customer.Longitude);
+
+                        //get random battery level
+                        droneToList.Battery = random.Next((int)Math.Ceiling(powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(droneToList.Location, getClosestStation(droneToList.Location))), 101);
+                    }
+
+                    //no package assigned
+                    droneToList.PackageID = null;
+                    drones.Add(droneToList);
                 }
-                else if (randInt == 2)
-                {
-                    droneToList.Status = Enums.DroneStatus.available;
-
-                    //get random customer that received a package as drone location
-                    DO.Customer customer = randomPackageReceiver();
-                    droneToList.Location = new(customer.Latitude, customer.Longitude);
-
-                    //get random battery level
-                    droneToList.Battery = random.Next((int)Math.Ceiling(powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(droneToList.Location, getClosestStation(droneToList.Location))), 101);
-                }
-
-                //no package assigned
-                droneToList.PackageID = null;
-                drones.Add(droneToList);
             }
         }
 
@@ -194,41 +206,44 @@ namespace BL
         {
             Random random = new Random();
 
-            //for remaining drones that are not delivering
-            foreach (DO.Drone drone in dalDrones)
+            lock (dal)
             {
-                DroneToList droneToList = new();
-                droneToList.ID = drone.ID;
-                droneToList.Model = drone.Model;
-                droneToList.MaxWeight = (Enums.WeightCategories)drone.MaxWeight;
-
-                //reinstate the appropriate entity data based on the XML files
-                DO.DroneCharge dalDroneCharge = dal.FindDroneCharges(dc => dc.DroneID == drone.ID).SingleOrDefault();
-                if (dalDroneCharge.Equals(default(DO.DroneCharge)))
+                //for remaining drones that are not delivering
+                foreach (DO.Drone drone in dalDrones)
                 {
-                    droneToList.Status = Enums.DroneStatus.available;
+                    DroneToList droneToList = new();
+                    droneToList.ID = drone.ID;
+                    droneToList.Model = drone.Model;
+                    droneToList.MaxWeight = (Enums.WeightCategories)drone.MaxWeight;
 
-                    //get random customer that received a package as drone location (cannot be determined with DalXml data) 
-                    DO.Customer customer = randomPackageReceiver();
-                    droneToList.Location = new(customer.Latitude, customer.Longitude);
+                    //reinstate the appropriate entity data based on the XML files
+                    DO.DroneCharge dalDroneCharge = dal.FindDroneCharges(dc => dc.DroneID == drone.ID).SingleOrDefault();
+                    if (dalDroneCharge.Equals(default(DO.DroneCharge)))
+                    {
+                        droneToList.Status = Enums.DroneStatus.available;
 
-                    //get random battery level (cannot be determined with DalXml data)
-                    droneToList.Battery = random.Next((int)Math.Ceiling(powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(droneToList.Location, getClosestStation(droneToList.Location))), 101);
+                        //get random customer that received a package as drone location (cannot be determined with DalXml data) 
+                        DO.Customer customer = randomPackageReceiver();
+                        droneToList.Location = new(customer.Latitude, customer.Longitude);
+
+                        //get random battery level (cannot be determined with DalXml data)
+                        droneToList.Battery = random.Next((int)Math.Ceiling(powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(droneToList.Location, getClosestStation(droneToList.Location))), 101);
+                    }
+                    else
+                    {
+                        droneToList.Status = Enums.DroneStatus.maintenance;
+
+                        DO.Station stationChargingIn = dal.GetStation(dalDroneCharge.StationID);
+                        droneToList.Location = new(stationChargingIn.Latitude, stationChargingIn.Longitude);
+
+                        //get random battery level 0%-20% (cannot be determined with DalXml data)
+                        droneToList.Battery = random.Next(21);
+                    }
+
+                    //no package assigned
+                    droneToList.PackageID = null;
+                    drones.Add(droneToList);
                 }
-                else
-                {
-                    droneToList.Status = Enums.DroneStatus.maintenance;
-
-                    DO.Station stationChargingIn = dal.GetStation(dalDroneCharge.StationID);
-                    droneToList.Location = new(stationChargingIn.Latitude, stationChargingIn.Longitude);
-
-                    //get random battery level 0%-20% (cannot be determined with DalXml data)
-                    droneToList.Battery = random.Next(21);
-                }
-
-                //no package assigned
-                droneToList.PackageID = null;
-                drones.Add(droneToList);
             }
         }
         #endregion

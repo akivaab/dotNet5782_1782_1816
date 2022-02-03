@@ -46,18 +46,21 @@ namespace BL
         {
             try
             {
-                DO.Customer sender = dal.GetCustomer(package.SenderID);
-                DO.Customer receiver = dal.GetCustomer(package.ReceiverID);
-                Location senderLocation = new(sender.Latitude, sender.Longitude);
-                Location receiverLocation = new(receiver.Latitude, receiver.Longitude);
+                lock (dal)
+                {
+                    DO.Customer sender = dal.GetCustomer(package.SenderID);
+                    DO.Customer receiver = dal.GetCustomer(package.ReceiverID);
+                    Location senderLocation = new(sender.Latitude, sender.Longitude);
+                    Location receiverLocation = new(receiver.Latitude, receiver.Longitude);
 
-                //distance needed to deliver is from the drone's current location to the sender, to the receiver, to the nearest station
-                double distanceToDeliver = getDistance(droneLocation, senderLocation);
-                distanceToDeliver += getDistance(senderLocation, receiverLocation);
-                distanceToDeliver += getDistance(receiverLocation, getClosestStation(receiverLocation));
+                    //distance needed to deliver is from the drone's current location to the sender, to the receiver, to the nearest station
+                    double distanceToDeliver = getDistance(droneLocation, senderLocation);
+                    distanceToDeliver += getDistance(senderLocation, receiverLocation);
+                    distanceToDeliver += getDistance(receiverLocation, getClosestStation(receiverLocation));
 
-                Random random = new Random();
-                return random.Next((int)Math.Ceiling(distanceToDeliver * powerConsumed), 101);
+                    Random random = new Random();
+                    return random.Next((int)Math.Ceiling(distanceToDeliver * powerConsumed), 101);
+                }
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -80,8 +83,11 @@ namespace BL
         {
             try
             {
-                IEnumerable<DO.Station> dalStations = dal.GetStationsList();
-                return getClosestStation(location, dalStations);
+                lock (dal)
+                {
+                    IEnumerable<DO.Station> dalStations = dal.GetStationsList();
+                    return getClosestStation(location, dalStations);
+                }
             }
             catch (DO.XMLFileLoadCreateException e)
             {
@@ -97,18 +103,21 @@ namespace BL
         /// <returns>The location of the closest station to the location given.</returns>
         private Location getClosestStation(Location location, IEnumerable<DO.Station> stations)
         {
-            if (stations.Count() == 0)
+            lock (dal)
             {
-                throw new EmptyListException("The function recieved an empty list.");
-            }
+                if (stations.Count() == 0)
+                {
+                    throw new EmptyListException("The function recieved an empty list.");
+                }
 
-            IEnumerable<(Location, double)> stationLocDistPairs = from DO.Station station in stations
-                                                                  let stationLocation = new Location(station.Latitude, station.Longitude)
-                                                                  let distance = getDistance(location, stationLocation)
-                                                                  select (stationLocation, distance);
-            
-            double minDist = stationLocDistPairs.Select(pair => pair.Item2).Min();
-            return stationLocDistPairs.Where(pair => pair.Item2 == minDist).Select(pair => pair.Item1).First();
+                IEnumerable<(Location, double)> stationLocDistPairs = from DO.Station station in stations
+                                                                      let stationLocation = new Location(station.Latitude, station.Longitude)
+                                                                      let distance = getDistance(location, stationLocation)
+                                                                      select (stationLocation, distance);
+
+                double minDist = stationLocDistPairs.Select(pair => pair.Item2).Min();
+                return stationLocDistPairs.Where(pair => pair.Item2 == minDist).Select(pair => pair.Item1).First();
+            }
         }
 
         /// <summary>
@@ -120,14 +129,17 @@ namespace BL
         {
             try
             {
-                IEnumerable<DO.Station> availableStations = dal.FindStations(s => s.AvailableChargeSlots > 0);
+                lock (dal)
+                {
+                    IEnumerable<DO.Station> availableStations = dal.FindStations(s => s.AvailableChargeSlots > 0);
 
-                IEnumerable<DO.Station> reachableStations = from DO.Station station in availableStations
-                                                            let stationLocation = new Location(station.Latitude, station.Longitude)
-                                                            let requiredBattery = powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(drone.Location, stationLocation)
-                                                            where requiredBattery <= drone.Battery
-                                                            select station;
-                return reachableStations;
+                    IEnumerable<DO.Station> reachableStations = from DO.Station station in availableStations
+                                                                let stationLocation = new Location(station.Latitude, station.Longitude)
+                                                                let requiredBattery = powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(drone.Location, stationLocation)
+                                                                where requiredBattery <= drone.Battery
+                                                                select station;
+                    return reachableStations;
+                }
             }
             catch (DO.XMLFileLoadCreateException e)
             {
@@ -146,9 +158,12 @@ namespace BL
         {
             try
             {
-                DO.Customer dalCustomer = dal.GetCustomer(customerID);
-                Location customerLocation = new(dalCustomer.Latitude, dalCustomer.Longitude);
-                return customerLocation;
+                lock (dal)
+                {
+                    DO.Customer dalCustomer = dal.GetCustomer(customerID);
+                    Location customerLocation = new(dalCustomer.Latitude, dalCustomer.Longitude);
+                    return customerLocation;
+                }
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -168,19 +183,22 @@ namespace BL
         {
             try
             {
-                //get the packages already delivered
-                IEnumerable<DO.Package> deliveredPackages = dal.FindPackages(package => package.Delivered != null);
-
-                if (deliveredPackages.Count() == 0)
+                lock (dal)
                 {
-                    throw new EmptyListException("No customer has yet received a package.");
+                    //get the packages already delivered
+                    IEnumerable<DO.Package> deliveredPackages = dal.FindPackages(package => package.Delivered != null);
+
+                    if (deliveredPackages.Count() == 0)
+                    {
+                        throw new EmptyListException("No customer has yet received a package.");
+                    }
+
+                    //randomly choose the ID of the receiver of a package
+                    Random random = new Random();
+                    int receiverID = deliveredPackages.ElementAt(random.Next(deliveredPackages.Count())).ReceiverID;
+
+                    return dal.GetCustomer(receiverID);
                 }
-
-                //randomly choose the ID of the receiver of a package
-                Random random = new Random();
-                int receiverID = deliveredPackages.ElementAt(random.Next(deliveredPackages.Count())).ReceiverID;
-
-                return dal.GetCustomer(receiverID);
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -202,33 +220,36 @@ namespace BL
         /// <returns>The ID of the best package.</returns>
         private int findBestPackage(IEnumerable<DO.Package> dalPackages, DroneToList drone)
         {
-            IEnumerable<DO.Package> bestPackages = dalPackages;
-
-            //remove packages too heavy for drone to lift
-            bestPackages = from package in bestPackages
-                           where package.Weight.CompareTo((DO.Enums.WeightCategories)drone.MaxWeight) <= 0
-                           select package;
-
-            //remove packages whose delivery will consume more battery than the drone has
-            bestPackages = from package in bestPackages
-                           let senderLocation = getCustomerLocation(package.SenderID)
-                           let receiverLocation = getCustomerLocation(package.ReceiverID)
-                           let requiredDistance = getDistance(drone.Location, senderLocation) + getDistance(senderLocation, receiverLocation) + getDistance(receiverLocation, getClosestStation(receiverLocation))
-                           let requiredBattery = powerConsumption.ElementAt((int)package.Weight) * requiredDistance
-                           where requiredBattery <= drone.Battery
-                           select package;
-
-            if (bestPackages.Count() == 0)
+            lock (dal)
             {
-                throw new EmptyListException("There are currently no packages that this drone is capable of delivering.");
-            }
+                IEnumerable<DO.Package> bestPackages = dalPackages;
 
-            //order packages by priority, then weight, then distance
-            bestPackages = bestPackages.OrderByDescending(p => p.Priority)
-                .ThenByDescending(p => p.Weight)
-                .ThenBy(p => getDistance(drone.Location, getCustomerLocation(p.SenderID)));
-            
-            return bestPackages.First().ID;
+                //remove packages too heavy for drone to lift
+                bestPackages = from package in bestPackages
+                               where package.Weight.CompareTo((DO.Enums.WeightCategories)drone.MaxWeight) <= 0
+                               select package;
+
+                //remove packages whose delivery will consume more battery than the drone has
+                bestPackages = from package in bestPackages
+                               let senderLocation = getCustomerLocation(package.SenderID)
+                               let receiverLocation = getCustomerLocation(package.ReceiverID)
+                               let requiredDistance = getDistance(drone.Location, senderLocation) + getDistance(senderLocation, receiverLocation) + getDistance(receiverLocation, getClosestStation(receiverLocation))
+                               let requiredBattery = powerConsumption.ElementAt((int)package.Weight) * requiredDistance
+                               where requiredBattery <= drone.Battery
+                               select package;
+
+                if (bestPackages.Count() == 0)
+                {
+                    throw new EmptyListException("There are currently no packages that this drone is capable of delivering.");
+                }
+
+                //order packages by priority, then weight, then distance
+                bestPackages = bestPackages.OrderByDescending(p => p.Priority)
+                    .ThenByDescending(p => p.Weight)
+                    .ThenBy(p => getDistance(drone.Location, getCustomerLocation(p.SenderID)));
+
+                return bestPackages.First().ID;
+            }
         }
 
         /// <summary>
@@ -238,20 +259,23 @@ namespace BL
         /// <returns>The status of the given package.</returns>
         private Enums.PackageStatus getPackageStatus(DO.Package dalPackage)
         {
-            Enums.PackageStatus status = Enums.PackageStatus.created;
-            if (dalPackage.Delivered != null)
+            lock (dal)
             {
-                status = Enums.PackageStatus.delivered;
+                Enums.PackageStatus status = Enums.PackageStatus.created;
+                if (dalPackage.Delivered != null)
+                {
+                    status = Enums.PackageStatus.delivered;
+                }
+                else if (dalPackage.Collected != null)
+                {
+                    status = Enums.PackageStatus.collected;
+                }
+                else if (dalPackage.Assigned != null)
+                {
+                    status = Enums.PackageStatus.assigned;
+                }
+                return status;
             }
-            else if (dalPackage.Collected != null)
-            {
-                status = Enums.PackageStatus.collected;
-            }
-            else if (dalPackage.Assigned != null)
-            {
-                status = Enums.PackageStatus.assigned;
-            }
-            return status;
         }
         #endregion
 
@@ -272,33 +296,36 @@ namespace BL
         {
             try
             {
-                IEnumerable<DO.Package> dalPackages = dal.GetPackagesList();
-
-                for (int i = 0; i < dalPackages.Count(); i++)
+                lock (dal)
                 {
-                    DO.Package package = dalPackages.ElementAt(i);
+                    IEnumerable<DO.Package> dalPackages = dal.GetPackagesList();
 
-                    //if no drone is assigned
-                    if (package.DroneID == null)
+                    for (int i = 0; i < dalPackages.Count(); i++)
                     {
-                        dal.ModifyPackageStatus(package.ID, null, null, null);
-                    }
-                    else
-                    {
-                        //if the package was delivered
-                        if (package.Delivered != null)
+                        DO.Package package = dalPackages.ElementAt(i);
+
+                        //if no drone is assigned
+                        if (package.DroneID == null)
                         {
-                            dal.ModifyPackageStatus(package.ID, DateTime.Now, DateTime.Now, DateTime.Now);
+                            dal.ModifyPackageStatus(package.ID, null, null, null);
                         }
-                        //if the package wasn't delivered but was collected
-                        else if (package.Collected != null)
-                        {
-                            dal.ModifyPackageStatus(package.ID, DateTime.Now, DateTime.Now, null);
-                        }
-                        //even if the package wasn't collected, it was assigned
                         else
                         {
-                            dal.ModifyPackageStatus(package.ID, DateTime.Now, null, null);
+                            //if the package was delivered
+                            if (package.Delivered != null)
+                            {
+                                dal.ModifyPackageStatus(package.ID, DateTime.Now, DateTime.Now, DateTime.Now);
+                            }
+                            //if the package wasn't delivered but was collected
+                            else if (package.Collected != null)
+                            {
+                                dal.ModifyPackageStatus(package.ID, DateTime.Now, DateTime.Now, null);
+                            }
+                            //even if the package wasn't collected, it was assigned
+                            else
+                            {
+                                dal.ModifyPackageStatus(package.ID, DateTime.Now, null, null);
+                            }
                         }
                     }
                 }
@@ -320,35 +347,38 @@ namespace BL
         {
             try
             {
-                IEnumerable<DO.Package> dalPackages = dal.GetPackagesList();
-
-                //iterate through the packages in reverse to avoid skipping any
-                for (int i = dalPackages.Count() - 1; i >= 0; i--)
+                lock (dal)
                 {
-                    DO.Package package = dalPackages.ElementAt(i);
+                    IEnumerable<DO.Package> dalPackages = dal.GetPackagesList();
 
-                    //remove packages whose sender is the receiver
-                    if (package.SenderID == package.ReceiverID)
+                    //iterate through the packages in reverse to avoid skipping any
+                    for (int i = dalPackages.Count() - 1; i >= 0; i--)
                     {
-                        dal.RemovePackage(package.ID);
-                    }
-                    //if this package was assigned to a drone
-                    else if (package.DroneID != null)
-                    {
-                        //remove packages whose weight is greater than the drone assigned to it can handle
-                        if (package.Weight > dal.GetDrone((int)package.DroneID).MaxWeight)
+                        DO.Package package = dalPackages.ElementAt(i);
+
+                        //remove packages whose sender is the receiver
+                        if (package.SenderID == package.ReceiverID)
                         {
                             dal.RemovePackage(package.ID);
                         }
-                        //remove undelivered packages that were assigned to a drone already assigned to a different undelivered package
-                        else if (package.Delivered == null)
+                        //if this package was assigned to a drone
+                        else if (package.DroneID != null)
                         {
-                            for (int j = i - 1; j >= 0; j--)
+                            //remove packages whose weight is greater than the drone assigned to it can handle
+                            if (package.Weight > dal.GetDrone((int)package.DroneID).MaxWeight)
                             {
-                                if (dalPackages.ElementAt(j).Delivered == null && package.DroneID == dalPackages.ElementAt(j).DroneID)
+                                dal.RemovePackage(package.ID);
+                            }
+                            //remove undelivered packages that were assigned to a drone already assigned to a different undelivered package
+                            else if (package.Delivered == null)
+                            {
+                                for (int j = i - 1; j >= 0; j--)
                                 {
-                                    dal.RemovePackage(package.ID);
-                                    break;
+                                    if (dalPackages.ElementAt(j).Delivered == null && package.DroneID == dalPackages.ElementAt(j).DroneID)
+                                    {
+                                        dal.RemovePackage(package.ID);
+                                        break;
+                                    }
                                 }
                             }
                         }

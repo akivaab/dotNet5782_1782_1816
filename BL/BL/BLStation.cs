@@ -1,7 +1,8 @@
-﻿using BO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using BO;
 
 namespace BL
 {
@@ -11,6 +12,7 @@ namespace BL
     partial class BL : BlApi.IBL
     {
         #region Add Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Station AddStation(int stationID, int name, Location location, int numAvailableChargingSlots)
         {
             if (numAvailableChargingSlots < 0)
@@ -24,8 +26,10 @@ namespace BL
 
             try
             {
-                dal.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
-
+                lock (dal)
+                {
+                    dal.AddStation(stationID, name, numAvailableChargingSlots, location.Latitude, location.Longitude);
+                }
                 Station station = new(stationID, name, location, numAvailableChargingSlots, new List<DroneCharging>());
                 return station;
             }
@@ -41,28 +45,32 @@ namespace BL
         #endregion
 
         #region Update Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdateStation(int stationID, int name = -1, int totalChargingSlots = -1)
         {
             try
             {
-                if (name != -1)
+                lock (dal)
                 {
-                    dal.UpdateStationName(stationID, name);
-                }
-                if (totalChargingSlots != -1)
-                {
-                    DO.Station dalStation = dal.GetStation(stationID);
-
-                    //find the amount of drones in this station
-                    IEnumerable<DO.DroneCharge> dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == stationID);
-                    
-                    int availableChargeSlots = totalChargingSlots - dronesAtStation.Count();
-                    if (availableChargeSlots < 0)
+                    if (name != -1)
                     {
-                        throw new IllegalArgumentException("There cannot be less charging slots than drones charging.");
+                        dal.UpdateStationName(stationID, name);
                     }
+                    if (totalChargingSlots != -1)
+                    {
+                        DO.Station dalStation = dal.GetStation(stationID);
 
-                    dal.UpdateStationChargeSlots(stationID, availableChargeSlots);
+                        //find the amount of drones in this station
+                        IEnumerable<DO.DroneCharge> dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == stationID);
+
+                        int availableChargeSlots = totalChargingSlots - dronesAtStation.Count();
+                        if (availableChargeSlots < 0)
+                        {
+                            throw new IllegalArgumentException("There cannot be less charging slots than drones charging.");
+                        }
+
+                        dal.UpdateStationChargeSlots(stationID, availableChargeSlots);
+                    }
                 }
             }
             catch (DO.UndefinedObjectException e)
@@ -77,6 +85,7 @@ namespace BL
         #endregion
 
         #region Remove Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RemoveStation(int stationID)
         {
             try
@@ -85,7 +94,11 @@ namespace BL
                 {
                     throw new UnableToRemoveException("The station has drones charging in it.");
                 }
-                dal.RemoveStation(stationID);
+
+                lock (dal)
+                {
+                    dal.RemoveStation(stationID);
+                }
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -99,23 +112,27 @@ namespace BL
         #endregion
 
         #region Getter Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public Station GetStation(int stationID)
         {
             try
             {
-                DO.Station dalStation = dal.GetStation(stationID);
+                lock (dal)
+                {
+                    DO.Station dalStation = dal.GetStation(stationID);
 
-                Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
+                    Location stationLocation = new(dalStation.Latitude, dalStation.Longitude);
 
-                //find drones at this station
-                IEnumerable<DO.DroneCharge> dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == stationID);
+                    //find drones at this station
+                    IEnumerable<DO.DroneCharge> dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == stationID);
 
-                //initialize DroneCharging entities
-                IEnumerable<DroneCharging> dronesCharging = from DO.DroneCharge droneCharge in dronesAtStation
-                                                            let drone = drones.Find(d => d.ID == droneCharge.DroneID)
-                                                            select new DroneCharging(drone.ID, drone.Battery);
-                
-                return new Station(dalStation.ID, dalStation.Name, stationLocation, dalStation.AvailableChargeSlots, dronesCharging);
+                    //initialize DroneCharging entities
+                    IEnumerable<DroneCharging> dronesCharging = from DO.DroneCharge droneCharge in dronesAtStation
+                                                                let drone = drones.Find(d => d.ID == droneCharge.DroneID)
+                                                                select new DroneCharging(drone.ID, drone.Battery);
+
+                    return new Station(dalStation.ID, dalStation.Name, stationLocation, dalStation.AvailableChargeSlots, dronesCharging);
+                }
             }
             catch (DO.UndefinedObjectException e)
             {
@@ -126,16 +143,20 @@ namespace BL
                 throw new XMLFileLoadCreateException(e.Message, e);
             }
         }
-        
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<StationToList> GetStationsList()
         {
             try
             {
-                IEnumerable<DO.Station> dalStations = dal.GetStationsList();
-                IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
-                                                            let dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == dalStation.ID)
-                                                            select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count());
-                return stationToLists;
+                lock (dal)
+                {
+                    IEnumerable<DO.Station> dalStations = dal.GetStationsList();
+                    IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
+                                                                let dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == dalStation.ID)
+                                                                select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count());
+                    return stationToLists;
+                }
             }
             catch (DO.XMLFileLoadCreateException e)
             {
@@ -145,15 +166,19 @@ namespace BL
         #endregion
 
         #region Find Methods
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<StationToList> FindStations(Predicate<DO.Station> predicate)
         {
             try
             {
-                IEnumerable<DO.Station> dalStations = dal.FindStations(predicate);
-                IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
-                                                            let dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == dalStation.ID)
-                                                            select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count());
-                return stationToLists;
+                lock (dal)
+                {
+                    IEnumerable<DO.Station> dalStations = dal.FindStations(predicate);
+                    IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
+                                                                let dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == dalStation.ID)
+                                                                select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count());
+                    return stationToLists;
+                }
             }
             catch (DO.XMLFileLoadCreateException e)
             {
