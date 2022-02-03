@@ -29,7 +29,7 @@ namespace BL
         /// <summary>
         /// Instance of the DalObject or DalXml class.
         /// </summary>
-        private DalApi.IDal dal;
+        internal DalApi.IDal dal;
 
         /// <summary>
         /// Collection of the values related to the battery usage of drones while carrying packages of varying weights.
@@ -247,5 +247,10 @@ namespace BL
             }
         }
         #endregion
+
+        public void ActivateSimulator(int droneID, Action action, Func<bool> stop)
+        {
+            new Simulator(this, droneID, action, stop);
+        }
     }
 }

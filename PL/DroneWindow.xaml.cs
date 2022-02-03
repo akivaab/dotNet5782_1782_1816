@@ -419,8 +419,7 @@ namespace PL
 
         private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            //activate BL simulator
-            throw new NotImplementedException();
+            bl.ActivateSimulator(drone.ID);
         }
 
         private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)

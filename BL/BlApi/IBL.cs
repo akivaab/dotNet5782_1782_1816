@@ -239,5 +239,13 @@ namespace BlApi
         /// <returns>A collection of CustomerToList entities.</returns>
         public IEnumerable<CustomerToList> FindCustomers(Predicate<DO.Customer> predicate);
         #endregion
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="droneID"></param>
+        /// <param name="action"></param>
+        /// <param name="stop"></param>
+        public void ActivateSimulator(int droneID, Action action, Func<bool> stop);
     }
 }
