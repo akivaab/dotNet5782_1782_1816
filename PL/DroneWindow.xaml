@@ -25,7 +25,7 @@
             <Button Name="addButton" Content="Add" HorizontalAlignment="Center" Margin="0,0,0,90" VerticalAlignment="Bottom" Width="75" FontSize="16" Click="addButton_Click"/>
             <Button Name="cancelButton" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,30,20" VerticalAlignment="Bottom" Width="75" FontSize="16" Click="closeButton_Click"/>
         </Grid>
-        
+
         <Grid x:Name="actions">
             <Label Content="Drone ID:" Margin="100,70,0,0" Style="{StaticResource actionLabelStyle}"/>
             <Label Content="Model:" Margin="100,100,0,0" Style="{StaticResource actionLabelStyle}"/>
@@ -77,6 +77,7 @@
             <Button Name="updateButton" Content="Update" HorizontalAlignment="Right" Margin="0,0,330,20" Style="{StaticResource actionButtonStyle}" Click="updateButton_Click"/>
             <Button Name="chargeButton" Content="Charge" HorizontalAlignment="Right" Margin="0,0,230,20" Style="{StaticResource actionButtonStyle}" Click="chargeButton_Click"/>
             <Button Name="deliverButton" Content="Deliver" HorizontalAlignment="Right" Margin="0,0,130,20" Style="{StaticResource actionButtonStyle}" Click="deliverButton_Click"/>
+            <Button Name="simulatorButton" Content="Automatic" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,30,30,0" Width="112" FontSize="22" FontFamily="Constantia" Background="Linen" Click="simulatorButton_Click"/>
         </Grid>
     </Grid>
 </Window>

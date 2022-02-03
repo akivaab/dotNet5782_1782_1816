@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +35,11 @@ namespace PL
         /// Flag if the close button is clicked.
         /// </summary>
         private bool allowClose = false;
+
+        /// <summary>
+        /// BackgroundWorker for running a simulation of a drone performance. 
+        /// </summary>
+        private BackgroundWorker bgWorker;
         #endregion
 
         #region Constructors
@@ -380,6 +386,51 @@ namespace PL
         }
         #endregion
 
+        #region Simulator
+        private void simulatorButton_Click(object sender, RoutedEventArgs e)
+        {
+            bgWorker = new BackgroundWorker();
+            bgWorker.DoWork += bgWorker_DoWork;
+            bgWorker.ProgressChanged += bgWorker_ProgressChanged;
+            bgWorker.RunWorkerCompleted += bgWorker_RunWorkerCompleted;
+            bgWorker.WorkerReportsProgress = true;
+            bgWorker.WorkerSupportsCancellation = true;
+
+            if (!bgWorker.IsBusy)
+            {
+                bgWorker.RunWorkerAsync();
+                simulatorButton.Content = "Manual";
+
+                //disable all other buttons
+                actions.Children.OfType<Button>().Where(btn => !btn.Equals(simulatorButton)).Select(btn => { btn.IsEnabled = false; return btn; });
+            }
+            else
+            {
+                bgWorker.CancelAsync();
+                simulatorButton.Content = "Automatic";
+
+                //enable all other buttons
+                actions.Children.OfType<Button>().Where(btn => !btn.Equals(simulatorButton)).Select(btn => { btn.IsEnabled = true; return btn; });
+            }
+        }
+
+        private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            //activate BL simulator
+            throw new NotImplementedException();
+        }
+
+        private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
         #region Close
         /// <summary>
         /// Close the window.
@@ -397,7 +448,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void droneWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void droneWindow_Closing(object sender, CancelEventArgs e)
         {
             if (!allowClose)
             {
