@@ -419,12 +419,26 @@ namespace PL
 
         private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            bl.ActivateSimulator(drone.ID);
+            Func<bool> stopSimulation = () =>
+            {
+                try { bl.AssignPackage(drone.ID); }
+                //exception thrown when there are no packages to deliver
+                catch (BO.EmptyListException) { return true; }
+                return false;
+            };
+
+            bl.ActivateSimulator(drone.ID, bgWorker.ReportProgress, stopSimulation);
         }
 
         private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            throw new NotImplementedException();
+            foreach (Window window in Application.Current.Windows)
+            {
+                switch (e.UserState)
+                {
+
+                }
+            }
         }
 
         private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

@@ -313,11 +313,11 @@ namespace BlApi
         #endregion
 
         /// <summary>
-        /// 
+        /// Activate a running simulation of a drone performing its duties.
         /// </summary>
-        /// <param name="droneID"></param>
-        /// <param name="action"></param>
-        /// <param name="stop"></param>
-        public void ActivateSimulator(int droneID, Action action, Func<bool> stop);
+        /// <param name="droneID">The ID of the drone being simulated.</param>
+        /// <param name="action">Delegate for updating the display.</param>
+        /// <param name="stop">Function marking when to stop the simulation.</param>
+        public void ActivateSimulator(int droneID, Action<int, IEnumerable<Enum>> action, Func<bool> stop);
     }
 }
