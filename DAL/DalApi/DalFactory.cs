@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DO;
 
 namespace DalApi
 {
@@ -16,6 +12,7 @@ namespace DalApi
         /// </summary>
         /// <param name="instance">String representing which instantiation to choose.</param>
         /// <returns>An IDal object.</returns>
+        /// <exception cref="IllegalArgumentException">The string does not match any instance.</exception>
         public static IDal GetDal(string instance)
         {
             switch (instance)
@@ -25,7 +22,7 @@ namespace DalApi
                 case "DalXml":
                     return DalXml.DalXml.instance;
                 default:
-                    throw new DO.IllegalArgumentException("The given string does not match any instance.");
+                    throw new IllegalArgumentException("The given string does not match any instance.");
             }
         }
     }

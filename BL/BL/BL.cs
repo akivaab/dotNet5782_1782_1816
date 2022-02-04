@@ -46,6 +46,8 @@ namespace BL
         /// <summary>
         /// Constructor of BL class, private to maintain Singleton design pattern.
         /// </summary>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load XML.</exception>
+        /// <exception cref="IllegalArgumentException">The string does not match a given instance.</exception>
         private BL()
         {
             try

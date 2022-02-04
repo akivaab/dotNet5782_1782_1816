@@ -18,6 +18,7 @@ namespace DalXml
         /// Initialize a directory of XML files (if they don't exist yet).
         /// </summary>
         /// <returns>True if XML files were initialized, false otherwise.</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to create directory.</exception>
         private bool initializeXMLFiles()
         {
             try
@@ -62,6 +63,7 @@ namespace DalXml
         /// <typeparam name="T">The entity being serialized.</typeparam>
         /// <param name="list">A list of T entities.</param>
         /// <param name="filePath">The path to the XML file being written upon.</param>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save to XML.</exception>
         private static void saveListToXMLSerializer<T>(List<T> list, string filePath)
         {
             try
@@ -83,6 +85,7 @@ namespace DalXml
         /// <typeparam name="T">The entity being deserialized.</typeparam>
         /// <param name="filePath">The path to the XML file being read from.</param>
         /// <returns>A list of T entities.</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to load XML.</exception>
         private static List<T> loadListFromXMLSerializer<T>(string filePath)
         {
             try
@@ -114,6 +117,7 @@ namespace DalXml
         /// </summary>
         /// <param name="root">The root element.</param>
         /// <param name="filePath">The path to the XML file.</param>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save to XML.</exception>
         private void saveElementToXML(XElement root, string filePath)
         {
             try
@@ -131,6 +135,7 @@ namespace DalXml
         /// </summary>
         /// <param name="filePath">The path to the XML file.</param>
         /// <returns>The root XElement.</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to load XML.</exception>
         private XElement loadElementFromXML(string filePath)
         {
             try
@@ -151,6 +156,7 @@ namespace DalXml
         /// Sava a list of drones to an XML file.
         /// </summary>
         /// <param name="drones">A list of drones.</param>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save to XML.</exception>
         private void saveDronesList(List<Drone> drones)
         {
             try
@@ -175,6 +181,7 @@ namespace DalXml
         /// Load a list of drones from an XML file.
         /// </summary>
         /// <returns>The list of drones.</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to load XML.</exception>
         private List<Drone> loadDronesList()
         {
             try
@@ -222,15 +229,17 @@ namespace DalXml
         /// <param name="droneRoot">The root element of an XML file.</param>
         /// <param name="droneID">The ID of the drone being searched for.</param>
         /// <returns>The drone child element.</returns>
+        /// <exception cref="UndefinedObjectException">The given drone or file of drones does not exist.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones in the file have this ID.</exception>
         private XElement extractDrone(XElement droneRoot, int droneID)
         {
             try
             {
                 XElement drone = (from d in droneRoot.Elements()
                                 where int.Parse(d.Element("ID").Value) == droneID && bool.Parse(d.Element("Active").Value)
-                                select d).SingleOrDefault(); /*.DefaultIfEmpty(null).Single();*/
+                                select d).SingleOrDefault(); 
 
-                if (drone == null) /*default(XElement)*/
+                if (drone == null)
                 {
                     throw new UndefinedObjectException("There is no drone with the given ID.");
                 }

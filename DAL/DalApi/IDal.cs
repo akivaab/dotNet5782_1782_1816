@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DO;
 
 namespace DalApi
 {
@@ -19,15 +20,16 @@ namespace DalApi
         /// <param name="numChargeSlots">The number of charging slots avaliable.</param>
         /// <param name="latitude">The station latitude coordinates.</param>
         /// <param name="longitude">The station longitude coordinates.</param>
-
+        /// <exception cref="NonUniqueIdException">The given ID is not unique.</exception>
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude);
-        
+
         /// <summary>
         /// Add a new drone to the system.
         /// </summary>
         /// <param name="id">The drone ID.</param>
         /// <param name="model">The drone model.</param>
         /// <param name="maxWeight">The maximum weight the drone can handle.</param>
+        /// <exception cref="NonUniqueIdException">The given ID is not unique.</exception>
         public void AddDrone(int id, string model, DO.Enums.WeightCategories maxWeight);
 
         /// <summary> 
@@ -38,6 +40,7 @@ namespace DalApi
         /// <param name="phone">The customer's phone number.</param>
         /// <param name="latitude">The customer's latitude coordinates.</param>
         /// <param name="longitude">The customer's longitude coordinate.</param>
+        /// <exception cref="NonUniqueIdException">The given ID is not unique.</exception>
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude);
 
         /// <summary>
@@ -48,6 +51,7 @@ namespace DalApi
         /// <param name="weight">The weight of the package.</param>
         /// <param name="priority">The priority of the package.</param>
         /// <returns>The automatic package ID.</returns>
+        /// <exception cref="UndefinedObjectException">Either the sender or receiver given do not exist.</exception>
         public int AddPackage(int senderID, int receiverID, DO.Enums.WeightCategories weight, DO.Enums.Priorities priority);
         #endregion
 
@@ -57,6 +61,7 @@ namespace DalApi
         /// </summary>
         /// <param name="packageID">The package ID.</param>
         /// <param name="droneID">The drone ID.</param>
+        /// <exception cref="UndefinedObjectException">Either the drone or package given does not exist.</exception>
         public void AssignPackage(int packageID, int droneID);
 
         /// <summary>
@@ -64,7 +69,16 @@ namespace DalApi
         /// </summary>
         /// <param name="packageID">The package ID.</param>
         /// <param name="droneID">The drone ID.</param>
+        /// <exception cref="UndefinedObjectException">Either the drone or package given does not exist.</exception>
         public void CollectPackage(int packageID, int droneID);
+
+        /// <summary>
+        /// Have a drone deliver a package.
+        /// </summary>
+        /// <param name="packageID">The package ID.</param>
+        /// <param name="droneID">The drone ID.</param>
+        /// <exception cref="UndefinedObjectException">Either the drone or package given does not exist.</exception>
+        public void DeliverPackage(int packageID, int droneID);
 
         /// <summary>
         /// Modify the assignment, collection, and delivery times of a package.
@@ -73,20 +87,15 @@ namespace DalApi
         /// <param name="assigned">The new assignment time.</param>
         /// <param name="collected">The new collection time.</param>
         /// <param name="delivered">The new delivery time.</param>
+        /// <exception cref="UndefinedObjectException">The package given does not exist.</exception>
         public void ModifyPackageStatus(int packageID, DateTime? assigned, DateTime? collected, DateTime? delivered);
-
-        /// <summary>
-        /// Have a drone deliver a package.
-        /// </summary>
-        /// <param name="packageID">The package ID.</param>
-        /// <param name="droneID">The drone ID.</param>
-        public void DeliverPackage(int packageID, int droneID);
 
         /// <summary>
         /// Send a drone to charge in a station.
         /// </summary>
         /// <param name="droneID">The drone ID.</param>
         /// <param name="stationID">The station ID.</param>
+        /// <exception cref="UndefinedObjectException">Either the drone or station given does not exist.</exception>
         public void ChargeDrone(int droneID, int stationID);
 
         /// <summary>
@@ -94,6 +103,7 @@ namespace DalApi
         /// </summary>
         /// <param name="droneID">The drone ID.</param>
         /// <param name="stationID">The station ID.</param>
+        /// <exception cref="UndefinedObjectException">Either the drone or station given does not exist.</exception>
         public void ReleaseDroneFromCharging(int droneID, int stationID);
 
         /// <summary>
@@ -101,6 +111,7 @@ namespace DalApi
         /// </summary>
         /// <param name="droneID">The drone ID.</param>
         /// <param name="model">The new drone model.</param>
+        /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
         public void UpdateDroneModel(int droneID, string model);
 
         /// <summary>
@@ -108,6 +119,7 @@ namespace DalApi
         /// </summary>
         /// <param name="customerID">The customer ID.</param>
         /// <param name="name">The new customer name.</param>
+        /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
         public void UpdateCustomerName(int customerID, string name);
 
         /// <summary>
@@ -115,6 +127,7 @@ namespace DalApi
         /// </summary>
         /// <param name="customerID">The customer ID.</param>
         /// <param name="phone">The customer's new phone number</param>
+        /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
         public void UpdateCustomerPhone(int customerID, string phone);
 
         /// <summary>
@@ -122,6 +135,7 @@ namespace DalApi
         /// </summary>
         /// <param name="customerID">The customer ID.</param>
         /// <param name="password">The customer's new password</param>
+        /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
         public void UpdateCustomerPassword(int customerID, string password);
 
         /// <summary>
@@ -129,6 +143,7 @@ namespace DalApi
         /// </summary>
         /// <param name="stationID">The station ID.</param>
         /// <param name="name">The new station name.</param>
+        /// <exception cref="UndefinedObjectException">The station given does not exist.</exception>
         public void UpdateStationName(int stationID, int name);
 
         /// <summary>
@@ -136,6 +151,7 @@ namespace DalApi
         /// </summary>
         /// <param name="stationID">The station ID.</param>
         /// <param name="availableChargingSlots">The number of available charging slots at the station.</param>
+        /// <exception cref="UndefinedObjectException">The station given does not exist.</exception>
         public void UpdateStationChargeSlots(int stationID, int availableChargingSlots);
         #endregion
 
@@ -144,24 +160,28 @@ namespace DalApi
         /// Remove a station from the system.
         /// </summary>
         /// <param name="stationID">The station ID.</param>
+        /// <exception cref="UndefinedObjectException">The station given does not exist.</exception>
         public void RemoveStation(int stationID);
 
         /// <summary>
         /// Remove a drone from the system.
         /// </summary>
         /// <param name="droneID">The drone ID.</param>
+        /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
         public void RemoveDrone(int droneID);
 
         /// <summary>
         /// Remove a customer from the system.
         /// </summary>
         /// <param name="customerID">The customer ID.</param>
+        /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
         public void RemoveCustomer(int customerID);
 
         /// <summary>
         /// Remove a package from the system.
         /// </summary>
         /// <param name="packageID"></param>
+        /// <exception cref="UndefinedObjectException">The package given does not exist.</exception>
         public void RemovePackage(int packageID);
         #endregion
 
@@ -171,6 +191,7 @@ namespace DalApi
         /// </summary>
         /// <param name="stationID">The Station ID.</param>
         /// <returns>The station with this ID.</returns>
+        /// <exception cref="UndefinedObjectException">The station given does not exist.</exception>
         public DO.Station GetStation(int stationID);
 
         /// <summary>
@@ -178,6 +199,7 @@ namespace DalApi
         /// </summary>
         /// <param name="droneID">The Drone ID.</param>
         /// <returns>The drone with this ID.</returns>
+        /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
         public DO.Drone GetDrone(int droneID);
 
         /// <summary>
@@ -185,6 +207,7 @@ namespace DalApi
         /// </summary>
         /// <param name="customerID">The customer ID.</param>
         /// <return>The customer with this ID.</return>
+        /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
         public DO.Customer GetCustomer(int customerID);
 
         /// <summary>
@@ -192,6 +215,7 @@ namespace DalApi
         /// </summary>
         /// <param name="packageID">The package ID.</param>
         /// <return>The package with this ID.</return> 
+        /// <exception cref="UndefinedObjectException">The package given does not exist.</exception>
         public DO.Package GetPackage(int packageID);
 
         /// <summary>
@@ -199,6 +223,7 @@ namespace DalApi
         /// </summary>
         /// <param name="droneID">The drone ID.</param>
         /// <returns>DateTime the drone began charging.</returns>
+        /// <exception cref="UndefinedObjectException">The drone given is not charging.</exception>
         public DateTime GetTimeChargeBegan(int droneID);
 
         /// <summary>
@@ -206,6 +231,7 @@ namespace DalApi
         /// </summary>
         /// <param name="customerID">The customer ID.</param>
         /// <returns>The customer password.</returns>
+        /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
         public string GetCustomerPassword(int customerID);
         #endregion
 
