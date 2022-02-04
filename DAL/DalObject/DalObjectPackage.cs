@@ -136,7 +136,7 @@ namespace DalObject
                 throw new UndefinedObjectException("There is no package with the given ID.");
             }
             
-            return DataSource.packages[packageIndex].Clone();
+            return DataSource.packages[packageIndex];
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -144,7 +144,7 @@ namespace DalObject
         {
             return from package in DataSource.packages
                    where package.Active
-                   select package.Clone();
+                   select package;
         }
         #endregion
 
@@ -154,7 +154,7 @@ namespace DalObject
         {
             return from package in DataSource.packages
                    where predicate(package) && package.Active
-                   select package.Clone();
+                   select package;
         }
         #endregion
     }

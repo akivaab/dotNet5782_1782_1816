@@ -106,7 +106,7 @@ namespace DalObject
                 throw new UndefinedObjectException("There is no customer with the given ID.");
             }
             
-            return DataSource.customers[customerIndex].Clone();
+            return DataSource.customers[customerIndex];
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -114,7 +114,7 @@ namespace DalObject
         {
             return from customer in DataSource.customers
                    where customer.Active
-                   select customer.Clone();
+                   select customer;
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -127,7 +127,7 @@ namespace DalObject
                 throw new UndefinedObjectException("There is no customer with the given ID.");
             }
 
-            return DataSource.customers[customerIndex].Clone().Password;
+            return DataSource.customers[customerIndex].Password;
         }
         #endregion
 
@@ -137,7 +137,7 @@ namespace DalObject
         {
             return from customer in DataSource.customers
                    where predicate(customer) && customer.Active
-                   select customer.Clone();
+                   select customer;
         }
         #endregion
     }

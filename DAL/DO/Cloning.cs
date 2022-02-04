@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace DO
 {
     /// <summary>
@@ -11,6 +12,7 @@ namespace DO
         /// </summary>
         /// <param name="original">The Customer being cloned.</param>
         /// <returns>A copy of the Customer.</returns>
+        [Obsolete]
         internal static Customer Clone(this Customer original)
         {
             Customer target = new Customer();
@@ -29,6 +31,7 @@ namespace DO
         /// </summary>
         /// <param name="original">The Drone being cloned.</param>
         /// <returns>A copy of the Drone.</returns>
+        [Obsolete]
         internal static Drone Clone(this Drone original)
         {
             Drone target = new Drone();
@@ -44,6 +47,7 @@ namespace DO
         /// </summary>
         /// <param name="original">The DroneCharge being cloned.</param>
         /// <returns>A copy of the DroneCharge.</returns>
+        [Obsolete]
         internal static DroneCharge Clone(this DroneCharge original)
         {
             DroneCharge target = new DroneCharge();
@@ -59,6 +63,7 @@ namespace DO
         /// </summary>
         /// <param name="original">The Package being cloned.</param>
         /// <returns>A copy of the Package.</returns>
+        [Obsolete]
         internal static Package Clone(this Package original)
         {
             Package target = new Package();
@@ -81,6 +86,7 @@ namespace DO
         /// </summary>
         /// <param name="original">The Station being cloned.</param>
         /// <returns>A copy of the Station.</returns>
+        [Obsolete]
         internal static Station Clone(this Station original)
         {
             Station target = new Station();

@@ -121,7 +121,7 @@ namespace DalObject
                 throw new UndefinedObjectException("There is no drone with the given ID.");
             }
             
-            return DataSource.drones[droneIndex].Clone();
+            return DataSource.drones[droneIndex];
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -129,7 +129,7 @@ namespace DalObject
         {
             return from drone in DataSource.drones
                    where drone.Active
-                   select drone.Clone();
+                   select drone;
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
