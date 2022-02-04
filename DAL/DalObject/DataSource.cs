@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DO;
 
 namespace DalObject
@@ -120,12 +121,9 @@ namespace DalObject
                 package.Requested = DateTime.Now;
 
                 List<DateTime?> dateTimes = new() { DateTime.Now, null };
-                List<int?> droneIDs = new();
-                droneIDs.Add(null);
-                foreach (Drone drone in drones)
-                {
-                    droneIDs.Add(drone.ID);
-                }
+                List<int?> droneIDs = new() { null } ;
+                droneIDs.AddRange(from drone in drones
+                                  select (int?)drone.ID);
 
                 package.Assigned = dateTimes[random.Next(2)];
                 package.Collected = dateTimes[random.Next(2)];

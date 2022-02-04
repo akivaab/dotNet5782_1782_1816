@@ -2,7 +2,7 @@
 namespace DO
 {
     /// <summary>
-    /// Methods to deep-copy every DAL entity in the DO namespace.
+    /// Extension methods for cloning every DAL entity in the DO namespace.
     /// </summary>
     static class Cloning
     {
@@ -11,7 +11,7 @@ namespace DO
         /// </summary>
         /// <param name="original">The Customer being cloned.</param>
         /// <returns>A copy of the Customer.</returns>
-        public static Customer Clone(this Customer original)
+        internal static Customer Clone(this Customer original)
         {
             Customer target = new Customer();
             target.ID = original.ID;
@@ -29,7 +29,7 @@ namespace DO
         /// </summary>
         /// <param name="original">The Drone being cloned.</param>
         /// <returns>A copy of the Drone.</returns>
-        public static Drone Clone(this Drone original)
+        internal static Drone Clone(this Drone original)
         {
             Drone target = new Drone();
             target.ID = original.ID;
@@ -44,7 +44,7 @@ namespace DO
         /// </summary>
         /// <param name="original">The DroneCharge being cloned.</param>
         /// <returns>A copy of the DroneCharge.</returns>
-        public static DroneCharge Clone(this DroneCharge original)
+        internal static DroneCharge Clone(this DroneCharge original)
         {
             DroneCharge target = new DroneCharge();
             target.DroneID = original.DroneID;
@@ -59,7 +59,7 @@ namespace DO
         /// </summary>
         /// <param name="original">The Package being cloned.</param>
         /// <returns>A copy of the Package.</returns>
-        public static Package Clone(this Package original)
+        internal static Package Clone(this Package original)
         {
             Package target = new Package();
             target.ID = original.ID;
@@ -81,7 +81,7 @@ namespace DO
         /// </summary>
         /// <param name="original">The Station being cloned.</param>
         /// <returns>A copy of the Station.</returns>
-        public static Station Clone(this Station original)
+        internal static Station Clone(this Station original)
         {
             Station target = new Station();
             target.ID = original.ID;

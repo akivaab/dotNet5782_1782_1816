@@ -8,7 +8,7 @@ namespace DalApi
     /// </summary>
     public interface IDal
     {
-        public bool DataCleanupRequired { get; }
+        public bool DataCleanupRequired { get; init; }
 
         #region Add Methods
         /// <summary>

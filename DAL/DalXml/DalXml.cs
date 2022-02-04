@@ -14,7 +14,7 @@ namespace DalXml
     /// </summary>
     sealed partial class DalXml : DalApi.IDal
     {
-        public bool DataCleanupRequired { get; }
+        public bool DataCleanupRequired { get; init; }
 
         #region Fields
         /// <summary>
