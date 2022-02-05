@@ -23,13 +23,18 @@ namespace BL
         private const double droneSpeed = 30;
 
         /// <summary>
+        /// Collection of names of the windows that need to be updated.
+        /// </summary>
+        private IEnumerable<string> windowsToUpdate;
+
+        /// <summary>
         /// Simulator constructor, runs the simulation.
         /// </summary>
         /// <param name="bl"></param>
         /// <param name="droneID"></param>
-        /// <param name="action"></param>
+        /// <param name="updateDisplay"></param>
         /// <param name="stop"></param>
-        public Simulator(BlApi.IBL bl, int droneID, Action<int, IEnumerable<Enum>> action, Func<bool> stop)
+        public Simulator(BlApi.IBL bl, int droneID, Action<int, IEnumerable<string>> updateDisplay, Func<bool> stop)
         {
             while(!stop())
             {
@@ -38,11 +43,12 @@ namespace BL
         }
 
         /// <summary>
-        /// Indicators for which windows need to be updated as per the simulation.
+        /// 
         /// </summary>
-        public enum UpdateWindows
+        /// <param name="windows"></param>
+        private void markWindowsToUpdate(params string[] windows)
         {
-            droneList, drone, packageList, package, stationList, station, customerList, customer
+            windowsToUpdate = windows;
         }
     }
 }

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="StationWindow" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="stationWindow_Closing">
+        x:Name="StationWindow"
+        Title="Station" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="stationWindow_Closing">
     <Window.Resources>
         <local:FormatBattery x:Key="format"/>
     </Window.Resources>

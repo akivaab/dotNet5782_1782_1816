@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="CustomerListWindow" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="customerListWindow_Closing">
+        x:Name="CustomerListWindow"
+        Title="Customer List" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="customerListWindow_Closing">
     
     <Grid Name="MainGrid" Height="450" Width="840" Background="MediumTurquoise">
         <ListView x:Name="customerListView" ItemsSource="{Binding}" Margin="0,20,0,50" MouseDoubleClick="customerListView_MouseDoubleClick" Background="LightGreen">

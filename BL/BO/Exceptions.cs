@@ -27,10 +27,22 @@ namespace BO
     public class EmptyListException : Exception
     {
         /// <summary>
-        /// EmptyListException constructor.
+        /// Value representing whether the problem causing the empty list can be easily rectified.
+        /// </summary>
+        public bool Rectifiable;
+
+        /// <summary>
+        /// EmptyListException constructor, initializes "fixable" to false.
         /// </summary>
         /// <param name="s">A message describing the exception.</param>
-        public EmptyListException(string s) : base(s) { }
+        public EmptyListException(string s) : base(s) => Rectifiable = false;
+
+        /// <summary>
+        /// EmptyListException constructor, accepts value to initialize "fixable".
+        /// </summary>
+        /// <param name="s">A message describing the exception.</param>
+        /// <param name="fixable">Value representing whether the cause of the empty list can be rectified.</param>
+        public EmptyListException(string s, bool fixable) : base(s) => Rectifiable = fixable;
     }
 
     /// <summary>

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
+        x:Name="MainWindow"
         Title="Drone Delivery Service" Height="auto" Width="auto" SizeToContent="WidthAndHeight">
     <Window.Resources>
         <local:BoolToVisibility x:Key="visibility"/>

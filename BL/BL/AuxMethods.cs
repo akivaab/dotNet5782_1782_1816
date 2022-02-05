@@ -228,6 +228,10 @@ namespace BL
                 bestPackages = from package in bestPackages
                                where package.Weight.CompareTo((DO.Enums.WeightCategories)drone.MaxWeight) <= 0
                                select package;
+                if (bestPackages.Count() == 0)
+                {
+                    throw new EmptyListException("There are currently no packages that this drone is capable of delivering.");
+                }
 
                 //remove packages whose delivery will consume more battery than the drone has
                 bestPackages = from package in bestPackages
@@ -237,10 +241,9 @@ namespace BL
                                let requiredBattery = powerConsumption.ElementAt((int)package.Weight) * requiredDistance
                                where requiredBattery <= drone.Battery
                                select package;
-
                 if (bestPackages.Count() == 0)
                 {
-                    throw new EmptyListException("There are currently no packages that this drone is capable of delivering.");
+                    throw new EmptyListException("The drone needs more battery in order to deliver any package.", true);
                 }
 
                 //order packages by priority, then weight, then distance

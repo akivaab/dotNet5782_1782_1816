@@ -403,31 +403,19 @@ namespace PL
             {
                 bgWorker.RunWorkerAsync();
                 simulatorButton.Content = "Manual";
-
-                //disable all other buttons
-                actions.Children.OfType<Button>().Where(btn => !(btn.Equals(simulatorButton) || btn.Equals(closeButton))).Select(btn => { btn.IsEnabled = false; return btn; });
+                enableControllers(false);
             }
             else
             {
                 bgWorker.CancelAsync();
                 simulatorButton.Content = "Automatic";
-
-                //enable all other buttons
-                actions.Children.OfType<Button>().Where(btn => !btn.Equals(simulatorButton)).Select(btn => { btn.IsEnabled = true; return btn; });
+                enableControllers(true);
             }
         }
 
         private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            Func<bool> stopSimulation = () =>
-            {
-                try { bl.AssignPackage(drone.ID); }
-                //exception thrown when there are no packages to deliver
-                catch (BO.EmptyListException) { return true; }
-                return false;
-            };
-
-            bl.ActivateSimulator(drone.ID, bgWorker.ReportProgress, stopSimulation);
+            bl.ActivateSimulator(drone.ID, bgWorker.ReportProgress, () => bgWorker.CancellationPending);
         }
 
         private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -444,6 +432,15 @@ namespace PL
         private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void enableControllers(bool enable)
+        {
+            actions_Model.IsReadOnly = !enable;
+            removeButton.IsEnabled = enable;
+            updateButton.IsEnabled = enable;
+            chargeButton.IsEnabled = enable;
+            deliverButton.IsEnabled = enable;
         }
         #endregion
 

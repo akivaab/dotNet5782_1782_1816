@@ -250,9 +250,9 @@ namespace BL
         }
         #endregion
 
-        public void ActivateSimulator(int droneID, Action<int, IEnumerable<Enum>> action, Func<bool> stop)
+        public void ActivateSimulator(int droneID, Action<int, IEnumerable<string>> updateDisplay, Func<bool> stop)
         {
-            new Simulator(this, droneID, action, stop);
+            new Simulator(this, droneID, updateDisplay, stop);
         }
     }
 }

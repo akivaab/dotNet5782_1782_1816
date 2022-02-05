@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Drone Delivery Service" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="droneListWindow_Closing">
+        x:Name="DroneListWindow"
+        Title="Drone List" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="droneListWindow_Closing">
     <Window.Resources>
         <local:FormatBattery x:Key="format"/>
         <Style x:Key="comboBoxStyle" TargetType="ComboBox">

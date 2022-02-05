@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="StationListWindow" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="stationListWindow_Closing">
+        x:Name="StationListWindow"
+        Title="Station List" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="stationListWindow_Closing">
 
     <Grid Name="MainGrid" Height="450" Width="600" Background="MediumTurquoise">
         <ListView x:Name="stationListView" ItemsSource="{Binding}" Margin="0,20,0,50" MouseDoubleClick="stationListView_MouseDoubleClick" Background="LightGreen">

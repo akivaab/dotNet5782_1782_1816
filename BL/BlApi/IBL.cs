@@ -316,8 +316,8 @@ namespace BlApi
         /// Activate a running simulation of a drone performing its duties.
         /// </summary>
         /// <param name="droneID">The ID of the drone being simulated.</param>
-        /// <param name="action">Delegate for updating the display.</param>
+        /// <param name="updateDisplay">Delegate for updating the display.</param>
         /// <param name="stop">Function marking when to stop the simulation.</param>
-        public void ActivateSimulator(int droneID, Action<int, IEnumerable<Enum>> action, Func<bool> stop);
+        public void ActivateSimulator(int droneID, Action<int, IEnumerable<string>> updateDisplay, Func<bool> stop);
     }
 }
