@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace PL
     /// <summary>
     /// Interaction logic for CustomerWindow.xaml
     /// </summary>
-    public partial class CustomerWindow : Window
+    public partial class CustomerWindow : Window, IRefreshable
     {
         #region Fields
         /// <summary>
@@ -147,7 +148,7 @@ namespace PL
                     bl.UpdateCustomer(customer.ID, customer.Name, customer.Phone);
                     MessageBox.Show("Customer successfully updated.");
 
-                    reloadCustomerData();
+                    refresh();
                 }
                 catch (BO.UndefinedObjectException)
                 {
@@ -228,17 +229,19 @@ namespace PL
         }
         #endregion
 
-        #region Reload
+        #region Refresh
         /// <summary>
-        /// Reload the data of the customer to be displayed in the window.
+        /// Refresh the data of the customer to be displayed in the window.
         /// </summary>
-        private void reloadCustomerData()
+        public void refresh()
         {
             try
             {
                 BO.Customer customer = bl.GetCustomer(this.customer.ID);
                 this.customer.Name = customer.Name;
                 this.customer.Phone = customer.Phone;
+                this.customer.PackagesToSend = (ObservableCollection<BO.PackageForCustomer>)customer.PackagesToSend;
+                this.customer.PackagesToReceive = (ObservableCollection<BO.PackageForCustomer>)customer.PackagesToReceive;
             }
             catch (BO.UndefinedObjectException)
             {

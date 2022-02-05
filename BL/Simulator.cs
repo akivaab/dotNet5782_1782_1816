@@ -38,7 +38,11 @@ namespace BL
         {
             while(!stop())
             {
-                
+                try
+                {
+                    bl.AssignPackage(droneID);
+                }
+
             }
         }
 

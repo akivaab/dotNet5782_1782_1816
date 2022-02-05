@@ -250,9 +250,11 @@ namespace BL
         }
         #endregion
 
+        #region Simulator
         public void ActivateSimulator(int droneID, Action<int, IEnumerable<string>> updateDisplay, Func<bool> stop)
         {
             new Simulator(this, droneID, updateDisplay, stop);
         }
+        #endregion
     }
 }

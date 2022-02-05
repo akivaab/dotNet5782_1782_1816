@@ -312,6 +312,7 @@ namespace BlApi
         public IEnumerable<CustomerToList> FindCustomers(Predicate<DO.Customer> predicate);
         #endregion
 
+        #region Simulator
         /// <summary>
         /// Activate a running simulation of a drone performing its duties.
         /// </summary>
@@ -319,5 +320,6 @@ namespace BlApi
         /// <param name="updateDisplay">Delegate for updating the display.</param>
         /// <param name="stop">Function marking when to stop the simulation.</param>
         public void ActivateSimulator(int droneID, Action<int, IEnumerable<string>> updateDisplay, Func<bool> stop);
+        #endregion
     }
 }

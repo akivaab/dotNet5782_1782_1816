@@ -18,7 +18,7 @@ namespace PL
     /// <summary>
     /// Internal logic of CustomerListWindow.xaml
     /// </summary>
-    public partial class CustomerListWindow : Window
+    public partial class CustomerListWindow : Window, IRefreshable
     {
         #region Fields
         /// <summary>
@@ -103,11 +103,19 @@ namespace PL
 
         #region Refresh
         /// <summary>
-        /// Refresh the customernListView.
+        /// Refresh the customerListView.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void refreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            refresh();
+        }
+
+        /// <summary>
+        /// Refresh the customerListView.
+        /// </summary>
+        public void refresh()
         {
             try
             {

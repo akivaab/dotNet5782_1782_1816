@@ -17,7 +17,7 @@ namespace PL
     /// <summary>
     /// Interaction logic for PackageWindow.xaml
     /// </summary>
-    public partial class PackageWindow : Window
+    public partial class PackageWindow : Window, IRefreshable
     {
         #region Fields
         /// <summary>
@@ -229,6 +229,29 @@ namespace PL
             catch (BO.UndefinedObjectException)
             {
                 MessageBox.Show("The customer has been deleted. Refresh by closing and reopening the window.");
+            }
+            catch (BO.XMLFileLoadCreateException)
+            {
+                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
+        }
+        #endregion
+
+        #region Refresh
+        public void refresh()
+        {
+            try
+            {
+                BO.Package package = bl.GetPackage(this.package.ID);
+                this.package.DroneDelivering = package.DroneDelivering;
+                this.package.RequestTime = package.RequestTime;
+                this.package.AssigningTime = package.AssigningTime;
+                this.package.CollectingTime = package.CollectingTime;
+                this.package.DeliveringTime = package.DeliveringTime;
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Error: This package is not in the system.\nTry closing this window and refreshing the list.");
             }
             catch (BO.XMLFileLoadCreateException)
             {

@@ -18,7 +18,7 @@ namespace PL
     /// <summary>
     /// Interaction logic for DroneWindow.xaml
     /// </summary>
-    public partial class DroneWindow : Window
+    public partial class DroneWindow : Window, IRefreshable
     {
         #region Fields
         /// <summary>
@@ -163,9 +163,7 @@ namespace PL
                 {
                     bl.UpdateDroneModel(drone.ID, drone.Model);
                     MessageBox.Show("Model name successfully updated.");
-
-                    //reload this window
-                    reloadDroneData();
+                    refresh();
                 }
                 catch (BO.UndefinedObjectException)
                 {
@@ -207,8 +205,7 @@ namespace PL
                     MessageBox.Show("The drone is currently delivering and cannot be sent to charge.");
                 }
 
-                //reload this window
-                reloadDroneData();
+                refresh();
             }
             catch (BO.UnableToChargeException ex)
             {
@@ -270,8 +267,7 @@ namespace PL
                     MessageBox.Show("The drone is currently unavailable for delivering.\n(Is the drone available?)");
                 }
 
-                //reload this window
-                reloadDroneData();
+                refresh();
             }
             catch (BO.UndefinedObjectException)
             {
@@ -359,11 +355,11 @@ namespace PL
         }
         #endregion
 
-        #region Reload
+        #region Refresh
         /// <summary>
-        /// Reload the data of the drone to be displayed in the window.
+        /// Refresh the data of the drone to be displayed in the window.
         /// </summary>
-        private void reloadDroneData()
+        public void refresh()
         {
             try
             {
@@ -373,7 +369,6 @@ namespace PL
                 this.drone.Status = drone.Status;
                 this.drone.PackageInTransfer = drone.PackageInTransfer;
                 this.drone.Location = drone.Location;
-
             }
             catch (BO.UndefinedObjectException)
             {
@@ -420,12 +415,13 @@ namespace PL
 
         private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            foreach (Window window in Application.Current.Windows)
-            {
-                switch (e.UserState)
-                {
+            IEnumerable<IRefreshable> refreshableWindows = from Window window in Application.Current.Windows
+                                                           where ((IEnumerable<string>)e.UserState).Contains(window.Name)
+                                                           select (IRefreshable)window;
 
-                }
+            foreach (IRefreshable window in refreshableWindows)
+            {
+                window.refresh();
             }
         }
 

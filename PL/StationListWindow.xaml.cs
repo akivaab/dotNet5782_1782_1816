@@ -18,7 +18,7 @@ namespace PL
     /// <summary>
     /// Interaction logic for StationListWindow.xaml
     /// </summary>
-    public partial class StationListWindow : Window
+    public partial class StationListWindow : Window, IRefreshable
     {
         #region Fields
         /// <summary>
@@ -137,6 +137,14 @@ namespace PL
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void refreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            refresh();
+        }
+
+        /// <summary>
+        /// Refresh the stationListView.
+        /// </summary>
+        public void refresh()
         {
             try
             {

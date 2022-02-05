@@ -18,7 +18,7 @@ namespace PL
     /// <summary>
     /// Interaction logic for DroneListWindow.xaml
     /// </summary>
-    public partial class DroneListWindow : Window
+    public partial class DroneListWindow : Window, IRefreshable
     {
         #region Fields
         /// <summary>
@@ -178,7 +178,17 @@ namespace PL
         /// <summary>
         /// Refresh the droneListView to reflect any updates.
         /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void refreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            refresh();
+        }
+
+        /// <summary>
+        /// Refresh the droneListView to reflect any updates.
+        /// </summary>
+        public void refresh()
         {
             bool? grouped = groupByStatusCheckBox.IsChecked;
             BO.Enums.DroneStatus? droneStatus = (BO.Enums.DroneStatus?)statusSelector.SelectedItem;

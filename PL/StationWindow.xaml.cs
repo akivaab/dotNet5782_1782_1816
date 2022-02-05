@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace PL
     /// <summary>
     /// Interaction logic for StationWindow.xaml
     /// </summary>
-    public partial class StationWindow : Window
+    public partial class StationWindow : Window, IRefreshable
     {
         #region Fields
         /// <summary>
@@ -153,7 +154,7 @@ namespace PL
                     bl.UpdateStation(station.ID, station.Name, numTotalChargeSlots);
                     MessageBox.Show("Station successfully updated.");
 
-                    reloadStationData();
+                    refresh();
                 }
                 catch (BO.UndefinedObjectException)
                 {
@@ -234,17 +235,18 @@ namespace PL
         }
         #endregion
 
-        #region Reload
+        #region Refresh
         /// <summary>
-        /// Reload the data of the station to be displayed in the window.
+        /// Refesh the data of the station to be displayed in the window.
         /// </summary>
-        private void reloadStationData()
+        public void refresh()
         {
             try
             {
                 BO.Station station = bl.GetStation(this.station.ID);
                 this.station.Name = station.Name;
                 this.station.AvailableChargeSlots = station.AvailableChargeSlots;
+                this.station.DronesCharging = (ObservableCollection<BO.DroneCharging>)station.DronesCharging;
 
                 actions_TotalChargeSlots.Text = (station.AvailableChargeSlots + station.DronesCharging.Count()).ToString();
             }

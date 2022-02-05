@@ -18,7 +18,7 @@ namespace PL
     /// <summary>
     /// Interaction logic for PackageListWindow.xaml
     /// </summary>
-    public partial class PackageListWindow : Window
+    public partial class PackageListWindow : Window, IRefreshable
     {
         #region Fields
         /// <summary>
@@ -234,7 +234,17 @@ namespace PL
         /// <summary>
         /// Refresh the packageListView to reflect any updates.
         /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void refreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            refresh();
+        }
+
+        /// <summary>
+        /// Refresh the packageListView to reflect any updates.
+        /// </summary>
+        public void refresh()
         {
             bool? groupedBySender = groupBySenderRadioButton.IsChecked;
             bool? groupedByReceiver = groupByReceiverRadioButton.IsChecked;
