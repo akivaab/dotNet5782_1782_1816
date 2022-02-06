@@ -30,12 +30,7 @@ namespace BL
         /// <summary>
         /// Instance of the BL layer.
         /// </summary>
-        private BlApi.IBL bl;
-
-        /// <summary>
-        /// Collection of names of the windows that need to be updated.
-        /// </summary>
-        private IEnumerable<string> windowsToUpdate;
+        private BL bl;
 
         /// <summary>
         /// An action which updates the windows displayed in the application when invoked.
@@ -43,115 +38,115 @@ namespace BL
         private Action<int, IEnumerable<string>> updateDisplay;
 
         /// <summary>
-        /// Value marking whether to end the simulation.
-        /// </summary>
-        private bool endSimulation = false;
-
-        /// <summary>
         /// Simulator constructor, runs the simulation.
         /// </summary>
-        /// <param name="bl"></param>
-        /// <param name="droneID"></param>
-        /// <param name="updateDisplay"></param>
-        /// <param name="stop"></param>
-        public Simulator(BlApi.IBL bl, int droneID, Action<int, IEnumerable<string>> updateDisplay, Func<bool> stop)
+        /// <param name="bl">Instance of the BL layer.</param>
+        /// <param name="droneID">The ID of the drone being simulated.</param>
+        /// <param name="updateDisplay">Action which calls a function that updates the application windows displayed.</param>
+        /// <param name="stop">Function that determines when to stop the simulator.</param>
+        public Simulator(BL bl, int droneID, Action<int, IEnumerable<string>> updateDisplay, Func<bool> stop)
         {
             this.bl = bl;
             this.updateDisplay = updateDisplay;
-            while(!(stop() || endSimulation))
+            while (!stop())
+            {
+                lock (bl)
+                {
+                    drone = bl.GetDrone(droneID);
+                }
+                Thread.Sleep(delay);
+                switch (drone.Status)
+                {
+                    case Enums.DroneStatus.available:
+                        assign();
+                        break;
+                    case Enums.DroneStatus.maintenance:
+                        charge();
+                        break;
+                    case Enums.DroneStatus.delivery:
+                        deliver();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Assign a package to the drone, or send it ot charge if not possible.
+        /// </summary>
+        private void assign()
+        {
+            lock (bl)
             {
                 try
                 {
-                    drone = bl.GetDrone(droneID);
-                    Thread.Sleep(delay);
-                    switch (drone.Status)
+                    bl.AssignPackage(drone.ID);
+                    updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow"));
+                }
+                catch (EmptyListException e)
+                {
+                    if (e.Rectifiable)
                     {
-                        case Enums.DroneStatus.available:
-                            assign();
-                            break;
-                        case Enums.DroneStatus.maintenance:
-                            charge();
-                            break;
-                        case Enums.DroneStatus.delivery:
-                            deliver();
-                            break;
+                        bl.SendDroneToCharge(drone.ID);
+                        updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow", "StationListWindow", "StationWindow"));
+                    }
+                    else
+                    {
+                        //must wait for creation of viable package
+                        return;
                     }
                 }
-                catch (UndefinedObjectException)
-                {
-
-                }
-                catch (XMLFileLoadCreateException)
-                {
-
-                }
             }
         }
 
-        private void assign()
-        {
-            try
-            {
-                bl.AssignPackage(drone.ID);
-            }
-            catch (EmptyListException e)
-            {
-                if (e.Rectifiable)
-                {
-                    bl.SendDroneToCharge(drone.ID);
-                }
-                else
-                {
-                    endSimulation = true;
-                }
-            }
-            updateDisplay.Invoke();
-        }
-
+        /// <summary>
+        /// Charge the drone until its battery reaches 100%.
+        /// </summary>
         private void charge()
         {
-            try
+            lock (bl)
             {
                 if (drone.Battery == 100)
                 {
                     DateTime beganCharging = bl.GetTimeChargeBegan(drone.ID);
                     bl.ReleaseFromCharge(drone.ID, (DateTime.Now - beganCharging).TotalSeconds);
+                    updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow", "StationListWindow", "StationWindow"));
                 }
-            }
-            catch
-            {
-
             }
         }
 
+        /// <summary>
+        /// Have the drone collect or deliver its package.
+        /// </summary>
         private void deliver()
         {
-            try
+            lock (bl)
             {
                 Package package = bl.GetPackage(drone.PackageInTransfer.ID);
 
                 if (package.CollectingTime == null)
                 {
                     bl.CollectPackage(drone.ID);
+                    updateDisplay.Invoke(0, updateWindows("DroneWindow", "PackageListWindow", "PackageWindow"));
                 }
                 else if (package.DeliveringTime == null)
                 {
                     bl.DeliverPackage(drone.ID);
+                    updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow", "CustomerWindow"));
                 }
-            }
-            catch
-            {
-
             }
         }
 
         /// <summary>
-        /// 
+        /// Creates a collection of the names of windows that need to be updated.
         /// </summary>
-        /// <param name="windows"></param>
-        private void markWindowsToUpdate(params string[] windows)
+        /// <param name="windowNames">Names of the windows to be updated.</param>
+        /// <returns>Collection of the names.</returns>
+        private IEnumerable<string> updateWindows(params string[] windowNames)
         {
-            windowsToUpdate = windows;
+            return windowNames;
+            
         }
     }
 }

@@ -427,7 +427,7 @@ namespace PL
 
         private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            throw new NotImplementedException();
+            MessageBox.Show("Simulation Complete!");
         }
 
         private void enableControllers(bool enable)
