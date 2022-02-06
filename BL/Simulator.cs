@@ -24,6 +24,16 @@ namespace BL
         private const double droneSpeed = 30;
 
         /// <summary>
+        /// System used to report simulator progress.
+        /// </summary>
+        private Dictionary<string, int> progressMarkers = new()
+        {
+            { "Running Simulator", 1 },
+            { "Cannot Charge", 2 },
+            { "Completed Deliveries", 3 }
+        };
+
+        /// <summary>
         /// The drone whose duties are being simulated.
         /// </summary>
         private Drone drone;
@@ -90,19 +100,30 @@ namespace BL
                 try
                 {
                     bl.AssignPackage(drone.ID);
-                    updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow"));
+                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow"));
                 }
-                catch (EmptyListException e)
+                //no packages to deliver
+                catch (EmptyListException emptyListException)
                 {
-                    if (drone.Battery != 100 || e.Rectifiable)
+                    if (drone.Battery != 100 || emptyListException.Rectifiable)
                     {
-                        bl.SendDroneToCharge(drone.ID);
-                        updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow", "StationListWindow", "StationWindow"));
-                        lastChargeTime = bl.GetTimeChargeBegan(drone.ID);
+                        try
+                        {
+                            bl.SendDroneToCharge(drone.ID);
+                            updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "StationListWindow", "StationWindow"));
+                            lastChargeTime = bl.GetTimeChargeBegan(drone.ID);
+                        }
+                        //cannot charge at any reachable station
+                        catch (UnableToChargeException)
+                        {
+                            updateDisplay.Invoke(progressMarkers["Cannot Charge"], updateWindows("DroneWindow"));
+                            return;
+                        }
                     }
-                    else if (!e.Rectifiable)
+                    else
                     {
                         //must wait for creation of viable package
+                        updateDisplay.Invoke(progressMarkers["Completed Deliveries"], updateWindows("DroneWindow"));
                         return;
                     }
                 }
@@ -124,13 +145,13 @@ namespace BL
                 if (drone.Battery == 100)
                 {
                     bl.releaseDrone(drone.ID);
-                    updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow", "StationListWindow", "StationWindow"));
+                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "StationListWindow", "StationWindow"));
                 }
                 else
                 {
                     DateTime currentTime = DateTime.Now;
                     bl.chargeDrone(drone.ID, (currentTime - (DateTime)lastChargeTime).TotalSeconds);
-                    updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow"));
+                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
                     lastChargeTime = currentTime;
                 }
             }
@@ -148,12 +169,12 @@ namespace BL
                 if (package.CollectingTime == null)
                 {
                     bl.CollectPackage(drone.ID);
-                    updateDisplay.Invoke(0, updateWindows("DroneWindow", "PackageListWindow", "PackageWindow"));
+                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneWindow", "PackageListWindow", "PackageWindow"));
                 }
                 else if (package.DeliveringTime == null)
                 {
                     bl.DeliverPackage(drone.ID);
-                    updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow", "CustomerWindow"));
+                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow", "CustomerWindow"));
                 }
             }
         }

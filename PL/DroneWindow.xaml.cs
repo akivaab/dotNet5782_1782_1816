@@ -411,8 +411,8 @@ namespace PL
             else
             {
                 bgWorker.CancelAsync();
-                simulatorButton.Content = "Automatic";
-                enableControllers(true);
+                idleMessage.Text = "Stopping simulator...";
+                idleMessage.Visibility = Visibility.Visible;
             }
         }
 
@@ -423,19 +423,35 @@ namespace PL
 
         private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            IEnumerable<IRefreshable> refreshableWindows = from Window window in Application.Current.Windows
-                                                           where ((IEnumerable<string>)e.UserState).Contains(window.GetType().Name)
-                                                           select (IRefreshable)window;
-
-            foreach (IRefreshable window in refreshableWindows)
+            switch (e.ProgressPercentage)
             {
-                window.refresh();
+                case 1:
+                    idleMessage.Visibility = Visibility.Hidden;
+                    IEnumerable<IRefreshable> refreshableWindows = from Window window in Application.Current.Windows
+                                                                   where ((IEnumerable<string>)e.UserState).Contains(window.GetType().Name)
+                                                                   select (IRefreshable)window;
+                    foreach (IRefreshable window in refreshableWindows)
+                    {
+                        window.refresh();
+                    }
+                    break;
+                case 2:
+                    idleMessage.Text = "Waiting for available charge slot...";
+                    idleMessage.Visibility = Visibility.Visible;
+                    break;
+                case 3:
+                    idleMessage.Text = "Waiting for new packages...";
+                    idleMessage.Visibility = Visibility.Visible;
+                    break;
             }
         }
 
         private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            simulatorButton.Content = "Automatic";
+            idleMessage.Visibility = Visibility.Hidden;
             MessageBox.Show("Simulation Complete!");
+            enableControllers(true);
         }
 
         /// <summary>

@@ -78,6 +78,7 @@
             <Button Name="chargeButton" Content="Charge" HorizontalAlignment="Right" Margin="0,0,230,20" Style="{StaticResource actionButtonStyle}" Click="chargeButton_Click"/>
             <Button Name="deliverButton" Content="Deliver" HorizontalAlignment="Right" Margin="0,0,130,20" Style="{StaticResource actionButtonStyle}" Click="deliverButton_Click"/>
             <Button Name="simulatorButton" Content="Automatic" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,30,30,0" Width="112" FontSize="22" FontFamily="Constantia" Background="Linen" Click="simulatorButton_Click"/>
+            <TextBlock Name="idleMessage" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,70,30,0" Height="55" Width="223" TextAlignment="Right" TextWrapping="Wrap" FontSize="22" FontFamily="Constantia" Opacity="0.4" Visibility="Hidden" />
         </Grid>
     </Grid>
 </Window>
