@@ -113,6 +113,10 @@ namespace BL
                     bl.ReleaseFromCharge(drone.ID, (DateTime.Now - beganCharging).TotalSeconds);
                     updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow", "StationListWindow", "StationWindow"));
                 }
+                else
+                {
+                    updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow"));
+                }
             }
         }
 

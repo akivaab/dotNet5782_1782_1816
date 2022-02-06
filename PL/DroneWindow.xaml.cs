@@ -382,6 +382,11 @@ namespace PL
         #endregion
 
         #region Simulator
+        /// <summary>
+        /// Run a simulation of this drone performing its duties.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void simulatorButton_Click(object sender, RoutedEventArgs e)
         {
             if (bgWorker == null)
@@ -430,6 +435,10 @@ namespace PL
             MessageBox.Show("Simulation Complete!");
         }
 
+        /// <summary>
+        /// Disable/enable certain controllers when the simulation starts/stops running.
+        /// </summary>
+        /// <param name="enable">Value indocating whether the controllers should be enabled.</param>
         private void enableControllers(bool enable)
         {
             actions_Model.IsReadOnly = !enable;

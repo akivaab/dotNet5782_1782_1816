@@ -246,7 +246,7 @@ namespace PL
                 BO.Station station = bl.GetStation(this.station.ID);
                 this.station.Name = station.Name;
                 this.station.AvailableChargeSlots = station.AvailableChargeSlots;
-                this.station.DronesCharging = (ObservableCollection<BO.DroneCharging>)station.DronesCharging;
+                this.station.DronesCharging = new ObservableCollection<BO.DroneCharging>(station.DronesCharging);
 
                 actions_TotalChargeSlots.Text = (station.AvailableChargeSlots + station.DronesCharging.Count()).ToString();
             }

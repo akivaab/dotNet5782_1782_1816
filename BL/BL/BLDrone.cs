@@ -143,7 +143,6 @@ namespace BL
                 throw new UndefinedObjectException("There is no drone with the given ID.");
             }
 
-            //check drone status
             if (drones[droneIndex].Status != Enums.DroneStatus.maintenance)
             {
                 throw new UnableToReleaseException("The drone is not currently charging and so cannot be released.");
