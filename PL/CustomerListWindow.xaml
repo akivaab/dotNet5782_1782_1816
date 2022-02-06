@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        x:Name="CustomerListWindow"
         Title="Customer List" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="customerListWindow_Closing">
     
     <Grid Name="MainGrid" Height="450" Width="840" Background="MediumTurquoise">

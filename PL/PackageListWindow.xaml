@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        x:Name="PackageListWindow"
         Title="Package List" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="packageListWindow_Closing">
     <Window.Resources>
         <Style x:Key="comboBoxStyle" TargetType="ComboBox">

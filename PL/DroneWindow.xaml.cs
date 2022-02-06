@@ -416,7 +416,7 @@ namespace PL
         private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             IEnumerable<IRefreshable> refreshableWindows = from Window window in Application.Current.Windows
-                                                           where ((IEnumerable<string>)e.UserState).Contains(window.Name)
+                                                           where ((IEnumerable<string>)e.UserState).Contains(window.GetType().Name)
                                                            select (IRefreshable)window;
 
             foreach (IRefreshable window in refreshableWindows)

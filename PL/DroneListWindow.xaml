@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        x:Name="DroneListWindow"
         Title="Drone List" Height="auto" Width="auto" SizeToContent="WidthAndHeight" Closing="droneListWindow_Closing">
     <Window.Resources>
         <local:FormatBattery x:Key="format"/>
