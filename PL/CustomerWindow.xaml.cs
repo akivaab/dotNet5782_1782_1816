@@ -235,21 +235,24 @@ namespace PL
         /// </summary>
         public void refresh()
         {
-            try
+            if (actions.Visibility == Visibility.Visible)
             {
-                BO.Customer customer = bl.GetCustomer(this.customer.ID);
-                this.customer.Name = customer.Name;
-                this.customer.Phone = customer.Phone;
-                this.customer.PackagesToSend = (ObservableCollection<BO.PackageForCustomer>)customer.PackagesToSend;
-                this.customer.PackagesToReceive = (ObservableCollection<BO.PackageForCustomer>)customer.PackagesToReceive;
-            }
-            catch (BO.UndefinedObjectException)
-            {
-                MessageBox.Show("Error: This customer is not in the system.\nTry closing this window and refreshing the list.");
-            }
-            catch (BO.XMLFileLoadCreateException)
-            {
-                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                try
+                {
+                    BO.Customer customer = bl.GetCustomer(this.customer.ID);
+                    this.customer.Name = customer.Name;
+                    this.customer.Phone = customer.Phone;
+                    this.customer.PackagesToSend = (ObservableCollection<BO.PackageForCustomer>)customer.PackagesToSend;
+                    this.customer.PackagesToReceive = (ObservableCollection<BO.PackageForCustomer>)customer.PackagesToReceive;
+                }
+                catch (BO.UndefinedObjectException)
+                {
+                    MessageBox.Show("Error: This customer is not in the system.\nTry closing this window and refreshing the list.");
+                }
+                catch (BO.XMLFileLoadCreateException)
+                {
+                    MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                }
             }
         }
         #endregion

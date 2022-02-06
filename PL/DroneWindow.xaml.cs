@@ -361,22 +361,25 @@ namespace PL
         /// </summary>
         public void refresh()
         {
-            try
+            if (actions.Visibility == Visibility.Visible)
             {
-                BO.Drone drone = bl.GetDrone(this.drone.ID);
-                this.drone.Model = drone.Model;
-                this.drone.Battery = drone.Battery;
-                this.drone.Status = drone.Status;
-                this.drone.PackageInTransfer = drone.PackageInTransfer;
-                this.drone.Location = drone.Location;
-            }
-            catch (BO.UndefinedObjectException)
-            {
-                MessageBox.Show("Error: This drone is not in the system.\nTry closing this window and refreshing the list.");
-            }
-            catch (BO.XMLFileLoadCreateException)
-            {
-                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                try
+                {
+                    BO.Drone drone = bl.GetDrone(this.drone.ID);
+                    this.drone.Model = drone.Model;
+                    this.drone.Battery = drone.Battery;
+                    this.drone.Status = drone.Status;
+                    this.drone.PackageInTransfer = drone.PackageInTransfer;
+                    this.drone.Location = drone.Location;
+                }
+                catch (BO.UndefinedObjectException)
+                {
+                    MessageBox.Show("Error: This drone is not in the system.\nTry closing this window and refreshing the list.");
+                }
+                catch (BO.XMLFileLoadCreateException)
+                {
+                    MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                }
             }
         }
         #endregion

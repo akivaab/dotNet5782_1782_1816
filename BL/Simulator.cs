@@ -12,6 +12,7 @@ namespace BL
     /// </summary>
     class Simulator
     {
+        #region Fields
         /// <summary>
         /// Delay between checks for the drone to perform actions.
         /// </summary>
@@ -37,6 +38,13 @@ namespace BL
         /// </summary>
         private Action<int, IEnumerable<string>> updateDisplay;
 
+        /// <summary>
+        /// The last time the simulator checked the drone while it was in maintenance.
+        /// </summary>
+        private DateTime? lastChargeTime;
+        #endregion
+
+        #region Constructor (and Helper Methods)
         /// <summary>
         /// Simulator constructor, runs the simulation.
         /// </summary>
@@ -86,12 +94,13 @@ namespace BL
                 }
                 catch (EmptyListException e)
                 {
-                    if (e.Rectifiable)
+                    if (drone.Battery != 100 || e.Rectifiable)
                     {
                         bl.SendDroneToCharge(drone.ID);
                         updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow", "StationListWindow", "StationWindow"));
+                        lastChargeTime = bl.GetTimeChargeBegan(drone.ID);
                     }
-                    else
+                    else if (!e.Rectifiable)
                     {
                         //must wait for creation of viable package
                         return;
@@ -107,15 +116,22 @@ namespace BL
         {
             lock (bl)
             {
+                if (lastChargeTime == null)
+                {
+                    lastChargeTime = bl.GetTimeChargeBegan(drone.ID);
+                }
+
                 if (drone.Battery == 100)
                 {
-                    DateTime beganCharging = bl.GetTimeChargeBegan(drone.ID);
-                    bl.ReleaseFromCharge(drone.ID, (DateTime.Now - beganCharging).TotalSeconds);
+                    bl.releaseDrone(drone.ID);
                     updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow", "StationListWindow", "StationWindow"));
                 }
                 else
                 {
+                    DateTime currentTime = DateTime.Now;
+                    bl.chargeDrone(drone.ID, (currentTime - (DateTime)lastChargeTime).TotalSeconds);
                     updateDisplay.Invoke(0, updateWindows("DroneListWindow", "DroneWindow"));
+                    lastChargeTime = currentTime;
                 }
             }
         }
@@ -150,7 +166,7 @@ namespace BL
         private IEnumerable<string> updateWindows(params string[] windowNames)
         {
             return windowNames;
-            
         }
+        #endregion
     }
 }

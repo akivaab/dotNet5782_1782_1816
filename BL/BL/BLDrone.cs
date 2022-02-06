@@ -147,26 +147,9 @@ namespace BL
             {
                 throw new UnableToReleaseException("The drone is not currently charging and so cannot be released.");
             }
-
-            try 
-            {
-                lock (dal)
-                {
-                    DO.DroneCharge dalDroneCharge = dal.FindDroneCharges(dc => dc.DroneID == droneID).Single();
-                    dal.ReleaseDroneFromCharging(droneID, dalDroneCharge.StationID);
-                }
-
-                drones[droneIndex].Battery = Math.Min(drones[droneIndex].Battery + (chargeRatePerSecond * chargingTimeInSeconds), 100);
-                drones[droneIndex].Status = Enums.DroneStatus.available;
-            }
-            catch (DO.UndefinedObjectException e)
-            {
-                throw new UndefinedObjectException(e.Message, e);
-            }
-            catch (DO.XMLFileLoadCreateException e)
-            {
-                throw new XMLFileLoadCreateException(e.Message, e);
-            }
+            
+            chargeDrone(droneID, chargingTimeInSeconds);
+            releaseDrone(droneID);
         }
         #endregion
 

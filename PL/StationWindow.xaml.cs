@@ -241,22 +241,25 @@ namespace PL
         /// </summary>
         public void refresh()
         {
-            try
+            if (actions.Visibility == Visibility.Visible)
             {
-                BO.Station station = bl.GetStation(this.station.ID);
-                this.station.Name = station.Name;
-                this.station.AvailableChargeSlots = station.AvailableChargeSlots;
-                this.station.DronesCharging = new ObservableCollection<BO.DroneCharging>(station.DronesCharging);
+                try
+                {
+                    BO.Station station = bl.GetStation(this.station.ID);
+                    this.station.Name = station.Name;
+                    this.station.AvailableChargeSlots = station.AvailableChargeSlots;
+                    this.station.DronesCharging = new ObservableCollection<BO.DroneCharging>(station.DronesCharging);
 
-                actions_TotalChargeSlots.Text = (station.AvailableChargeSlots + station.DronesCharging.Count()).ToString();
-            }
-            catch (BO.UndefinedObjectException)
-            {
-                MessageBox.Show("Error: This station is not in the system.\nTry closing this window and refreshing the list.");
-            }
-            catch (BO.XMLFileLoadCreateException)
-            {
-                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                    actions_TotalChargeSlots.Text = (station.AvailableChargeSlots + station.DronesCharging.Count()).ToString();
+                }
+                catch (BO.UndefinedObjectException)
+                {
+                    MessageBox.Show("Error: This station is not in the system.\nTry closing this window and refreshing the list.");
+                }
+                catch (BO.XMLFileLoadCreateException)
+                {
+                    MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                }
             }
         }
         #endregion

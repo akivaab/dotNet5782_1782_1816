@@ -73,6 +73,55 @@ namespace BL
         }
         #endregion
 
+        #region Auxiliary Drone Methods
+        /// <summary>
+        /// Charge the drone, as reflected in the battery.
+        /// </summary>
+        /// <param name="droneID">The ID of the drone charging.</param>
+        /// <param name="chargingTimeInSeconds">The amount of time in seconds the drone has charged.</param>
+        internal void chargeDrone(int droneID, double chargingTimeInSeconds)
+        {
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
+            if (droneIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no drone with the given ID.");
+            }
+
+            drones[droneIndex].Battery = Math.Min(drones[droneIndex].Battery + (chargeRatePerSecond * chargingTimeInSeconds), 100);
+        }
+
+        /// <summary>
+        /// Release the drone from the charging station.
+        /// </summary>
+        /// <param name="droneID">The ID of the drone being releaseed.</param>
+        internal void releaseDrone(int droneID)
+        {
+            try
+            {
+                int droneIndex = drones.FindIndex(d => d.ID == droneID);
+                if (droneIndex == -1)
+                {
+                    throw new UndefinedObjectException("There is no drone with the given ID.");
+                }
+
+                lock (dal)
+                {
+                    DO.DroneCharge dalDroneCharge = dal.FindDroneCharges(dc => dc.DroneID == droneID).Single();
+                    dal.ReleaseDroneFromCharging(droneID, dalDroneCharge.StationID);
+                }
+                drones[droneIndex].Status = Enums.DroneStatus.available;
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
+        }
+        #endregion
+
         #region Auxiliary Station Methods
         /// <summary>
         /// Find the station closest to some location.

@@ -240,22 +240,25 @@ namespace PL
         #region Refresh
         public void refresh()
         {
-            try
+            if (actions.Visibility == Visibility.Visible)
             {
-                BO.Package package = bl.GetPackage(this.package.ID);
-                this.package.DroneDelivering = package.DroneDelivering;
-                this.package.RequestTime = package.RequestTime;
-                this.package.AssigningTime = package.AssigningTime;
-                this.package.CollectingTime = package.CollectingTime;
-                this.package.DeliveringTime = package.DeliveringTime;
-            }
-            catch (BO.UndefinedObjectException)
-            {
-                MessageBox.Show("Error: This package is not in the system.\nTry closing this window and refreshing the list.");
-            }
-            catch (BO.XMLFileLoadCreateException)
-            {
-                MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                try
+                {
+                    BO.Package package = bl.GetPackage(this.package.ID);
+                    this.package.DroneDelivering = package.DroneDelivering;
+                    this.package.RequestTime = package.RequestTime;
+                    this.package.AssigningTime = package.AssigningTime;
+                    this.package.CollectingTime = package.CollectingTime;
+                    this.package.DeliveringTime = package.DeliveringTime;
+                }
+                catch (BO.UndefinedObjectException)
+                {
+                    MessageBox.Show("Error: This package is not in the system.\nTry closing this window and refreshing the list.");
+                }
+                catch (BO.XMLFileLoadCreateException)
+                {
+                    MessageBox.Show("An error occured while saving/loading data from an XML file.");
+                }
             }
         }
         #endregion
