@@ -7,8 +7,6 @@ namespace DalObject
     /// </summary>
     sealed partial class DalObject : DalApi.IDal
     {
-        public bool DataCleanupRequired { get; init; } = true;
-
         #region Fields
         /// <summary>
         /// Lazy and implicitly thread-safe initialization of a DalObject.
@@ -19,6 +17,10 @@ namespace DalObject
         /// Instance of the DalObject that is first instantiated when the getter is called.
         /// </summary>
         internal static DalObject instance { get { return lazyDalObject.Value; } }
+        #endregion
+
+        #region Properties
+        public bool DataCleanupRequired { get; init; } = true;
         #endregion
 
         #region Constructor

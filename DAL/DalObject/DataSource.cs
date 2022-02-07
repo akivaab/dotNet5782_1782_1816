@@ -59,7 +59,7 @@ namespace DalObject
 
         #region Data Initialization
         /// <summary>
-        /// Initialize all entity listss with random variables.
+        /// Initialize all entity lists with random variables.
         /// </summary>/
         internal static void initialize()
         {

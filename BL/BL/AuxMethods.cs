@@ -292,7 +292,7 @@ namespace BL
                                select package;
                 if (bestPackages.Count() == 0)
                 {
-                    throw new EmptyListException("The drone needs more battery in order to deliver any package.", true);
+                    throw new EmptyListException("The drone needs more battery in order to deliver any package.");
                 }
 
                 //order packages by priority, then weight, then distance

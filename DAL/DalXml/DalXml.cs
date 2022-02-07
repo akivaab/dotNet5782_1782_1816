@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using System.IO;
-using DO;
 
 namespace DalXml
 {
@@ -14,8 +7,6 @@ namespace DalXml
     /// </summary>
     sealed partial class DalXml : DalApi.IDal
     {
-        public bool DataCleanupRequired { get; init; }
-
         #region Fields
         /// <summary>
         /// Lazy and implicitly thread-safe initialization of a DalXml.
@@ -30,43 +21,47 @@ namespace DalXml
         /// <summary>
         /// Path to the directory containing the XML files.
         /// </summary>
-        private static string directory = @"Data\";
+        private static readonly string directory = @"Data\";
 
         /// <summary>
         /// Path to the XML file storing configuration data. 
         /// </summary>
-        private string configXmlPath = directory + @"config.xml";
+        private static readonly string configXmlPath = directory + @"config.xml";
 
         /// <summary>
         /// Path to the XML file storing drone data.
         /// </summary>
-        private string droneXmlPath = directory + @"Drones.xml";
+        private static readonly string droneXmlPath = directory + @"Drones.xml";
 
         /// <summary>
         /// Path to the XML file storing station data.
         /// </summary>
-        private string stationXmlPath = directory + @"Stations.xml";
+        private static readonly string stationXmlPath = directory + @"Stations.xml";
 
         /// <summary>
         /// Path to the XML file storing customer data.
         /// </summary>
-        private string customerXmlPath = directory + @"Customers.xml";
+        private static readonly string customerXmlPath = directory + @"Customers.xml";
 
         /// <summary>
         /// Path to the XML file storing package data.
         /// </summary>
-        private string packageXmlPath = directory + @"Packages.xml";
+        private static readonly string packageXmlPath = directory + @"Packages.xml";
 
         /// <summary>
         /// Path to the XML file storing droneCharge data.
         /// </summary>
-        private string droneChargeXmlPath = directory + @"DroneCharges.xml";
+        private static readonly string droneChargeXmlPath = directory + @"DroneCharges.xml";
+        #endregion
+
+        #region Properties
+        public bool DataCleanupRequired { get; init; }
         #endregion
 
         #region Constructors
         /// <summary>
         /// A constructor that ensures the existance of a directory of xml files.
-        /// Visibility is private to maintain Singleton design pattern.
+        /// Private to maintain Singleton design pattern.
         /// </summary>
         private DalXml()
         {

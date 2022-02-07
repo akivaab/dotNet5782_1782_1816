@@ -60,7 +60,7 @@ namespace DalXml
         /// <summary>
         /// Serialize a list to XML.
         /// </summary>
-        /// <typeparam name="T">The entity being serialized.</typeparam>
+        /// <typeparam name="T">The type of entity being serialized.</typeparam>
         /// <param name="list">A list of T entities.</param>
         /// <param name="filePath">The path to the XML file being written upon.</param>
         /// <exception cref="XMLFileLoadCreateException">Failed to save to XML.</exception>
@@ -82,7 +82,7 @@ namespace DalXml
         /// <summary>
         /// Deserialize a list from XML.
         /// </summary>
-        /// <typeparam name="T">The entity being deserialized.</typeparam>
+        /// <typeparam name="T">The type of entity being deserialized.</typeparam>
         /// <param name="filePath">The path to the XML file being read from.</param>
         /// <returns>A list of T entities.</returns>
         /// <exception cref="XMLFileLoadCreateException">Failed to load XML.</exception>

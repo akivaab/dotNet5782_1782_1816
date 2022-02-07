@@ -9,7 +9,12 @@ namespace DalApi
     /// </summary>
     public interface IDal
     {
+        #region Properties
+        /// <summary>
+        /// Value indicating whether the data is flawed and requires cleanup in the BL layer.
+        /// </summary>
         public bool DataCleanupRequired { get; init; }
+        #endregion
 
         #region Add Methods
         /// <summary>
@@ -30,7 +35,7 @@ namespace DalApi
         /// <param name="model">The drone model.</param>
         /// <param name="maxWeight">The maximum weight the drone can handle.</param>
         /// <exception cref="NonUniqueIdException">The given ID is not unique.</exception>
-        public void AddDrone(int id, string model, DO.Enums.WeightCategories maxWeight);
+        public void AddDrone(int id, string model, Enums.WeightCategories maxWeight);
 
         /// <summary> 
         /// Add a new customer to the system.
@@ -192,7 +197,7 @@ namespace DalApi
         /// <param name="stationID">The Station ID.</param>
         /// <returns>The station with this ID.</returns>
         /// <exception cref="UndefinedObjectException">The station given does not exist.</exception>
-        public DO.Station GetStation(int stationID);
+        public Station GetStation(int stationID);
 
         /// <summary>
         /// Get a single drone.
@@ -200,7 +205,7 @@ namespace DalApi
         /// <param name="droneID">The Drone ID.</param>
         /// <returns>The drone with this ID.</returns>
         /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
-        public DO.Drone GetDrone(int droneID);
+        public Drone GetDrone(int droneID);
 
         /// <summary>
         /// Get a single customer.
@@ -208,7 +213,7 @@ namespace DalApi
         /// <param name="customerID">The customer ID.</param>
         /// <return>The customer with this ID.</return>
         /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
-        public DO.Customer GetCustomer(int customerID);
+        public Customer GetCustomer(int customerID);
 
         /// <summary>
         /// Get a single package.
@@ -216,7 +221,7 @@ namespace DalApi
         /// <param name="packageID">The package ID.</param>
         /// <return>The package with this ID.</return> 
         /// <exception cref="UndefinedObjectException">The package given does not exist.</exception>
-        public DO.Package GetPackage(int packageID);
+        public Package GetPackage(int packageID);
 
         /// <summary>
         /// Get the time a drone began charging in a station.
@@ -240,25 +245,25 @@ namespace DalApi
         /// Get all stations.
         /// </summary>
         /// <returns>List of all stations</returns>
-        public IEnumerable<DO.Station> GetStationsList();
+        public IEnumerable<Station> GetStationsList();
 
         /// <summary>
         /// Get all drones in the system.
         /// </summary>
         /// <returns>A collection of all drones.</returns>
-        public IEnumerable<DO.Drone> GetDronesList();
+        public IEnumerable<Drone> GetDronesList();
 
         /// <summary>
         /// Get all customers in the system.
         /// </summary>
         /// <returns>A collection of all customers.</returns>
-        public IEnumerable<DO.Customer> GetCustomersList();
+        public IEnumerable<Customer> GetCustomersList();
 
         /// <summary>
         /// Get all packages in the system.
         /// </summary>
         /// <returns>A collection of all packages.</returns>
-        public IEnumerable<DO.Package> GetPackagesList();
+        public IEnumerable<Package> GetPackagesList();
 
         /// <summary>
         /// Represents the statistics of a drone's power consumption.
@@ -273,28 +278,28 @@ namespace DalApi
         /// </summary>
         /// <param name="predicate">Predicate used as a search parameter.</param>
         /// <returns>A collection of all appropriate packages.</returns>
-        public IEnumerable<DO.Package> FindPackages(Predicate<DO.Package> predicate);
+        public IEnumerable<Package> FindPackages(Predicate<DO.Package> predicate);
 
         /// <summary>
         /// Find all stations according to a given predicate.
         /// </summary>
         /// <param name="predicate">Predicate used as a search parameter.</param>
         /// <returns>A collection of all appropriate stations.</returns>
-        public IEnumerable<DO.Station> FindStations(Predicate<DO.Station> predicate);
+        public IEnumerable<Station> FindStations(Predicate<DO.Station> predicate);
 
         /// <summary>
         /// Find all customers according to a given predicate.
         /// </summary>
         /// <param name="predicate">Predicate used as a search parameter.</param>
         /// <returns>A collection of all appropriate customers.</returns>
-        public IEnumerable<DO.Customer> FindCustomers(Predicate<DO.Customer> predicate);
+        public IEnumerable<Customer> FindCustomers(Predicate<DO.Customer> predicate);
 
         /// <summary>
         /// Find all droneCharges according to a given predicate.
         /// </summary>
         /// <param name="predicate">Predicate used as a search parameter.</param>
         /// <returns>A collection of all appropriate droneCharges.</returns>
-        public IEnumerable<DO.DroneCharge> FindDroneCharges(Predicate<DO.DroneCharge> predicate);
+        public IEnumerable<DroneCharge> FindDroneCharges(Predicate<DO.DroneCharge> predicate);
         #endregion
     }
 }

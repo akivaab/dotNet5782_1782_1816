@@ -103,9 +103,9 @@ namespace BL
                     updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow"));
                 }
                 //no packages to deliver
-                catch (EmptyListException emptyListException)
+                catch (EmptyListException)
                 {
-                    if (drone.Battery != 100 || emptyListException.Rectifiable)
+                    if (drone.Battery != 100)
                     {
                         try
                         {
