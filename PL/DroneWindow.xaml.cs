@@ -407,6 +407,7 @@ namespace PL
                 bgWorker.RunWorkerAsync();
                 simulatorButton.Content = "Manual";
                 enableControllers(false);
+                runningSimulator.Visibility = Visibility.Visible;
             }
             else
             {
@@ -450,6 +451,7 @@ namespace PL
         {
             simulatorButton.Content = "Automatic";
             idleMessage.Visibility = Visibility.Hidden;
+            runningSimulator.Visibility = Visibility.Hidden;
             MessageBox.Show("Simulation Complete!");
             enableControllers(true);
         }
