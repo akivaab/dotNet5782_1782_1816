@@ -92,6 +92,21 @@ namespace BL
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void SendDroneToCharge(int droneID)
         {
+            int chargeStationID = selectChargeStation(droneID);
+            sendToChargeStation(droneID, chargeStationID);
+        }
+
+        #region SendDroneToCharge Helper Methods
+        /// <summary>
+        /// Allot a charging slot in a station for the drone to charge at (and set its state to maintenance).
+        /// </summary>
+        /// <param name="droneID">The ID of the drone needing to be charged.</param>
+        /// <returns>The ID of the alloted charging station.</returns>
+        /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
+        /// <exception cref="UnableToChargeException">The drone cannot be sent to a station to charge.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        internal int selectChargeStation(int droneID)
+        {
             int droneIndex = drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
             {
@@ -103,7 +118,7 @@ namespace BL
                 throw new UnableToChargeException("The drone cannot currently be sent to charge.");
             }
 
-            try 
+            try
             {
                 lock (dal)
                 {
@@ -117,11 +132,10 @@ namespace BL
                     IEnumerable<DO.Station> dalStations = dal.GetStationsList();
                     DO.Station dalStation = dalStations.Where(s => s.Latitude == closestStationLocation.Latitude && s.Longitude == closestStationLocation.Longitude).First();
 
-                    dal.ChargeDrone(droneID, dalStation.ID);
-
-                    drones[droneIndex].Battery = Math.Max(drones[droneIndex].Battery - (powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(drones[droneIndex].Location, closestStationLocation)), 0);
-                    drones[droneIndex].Location = closestStationLocation;
+                    dal.AllotChargeSlot(droneID, dalStation.ID);
                     drones[droneIndex].Status = Enums.DroneStatus.maintenance;
+
+                    return dalStation.ID;
                 }
             }
             catch (DO.UndefinedObjectException e)
@@ -134,8 +148,15 @@ namespace BL
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public void ReleaseFromCharge(int droneID, double chargingTimeInSeconds)
+        /// <summary>
+        /// Send the drone to the station to begin charging.
+        /// </summary>
+        /// <param name="droneID">The ID of the drone arriving to charge.</param>
+        /// <param name="chargeStationID">The ID of the station the drone will charge at.</param>
+        /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
+        /// <exception cref="UnableToChargeException">THe drone cannot start charging if it is not in the maintenance state.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        internal void sendToChargeStation(int droneID, int chargeStationID)
         {
             int droneIndex = drones.FindIndex(d => d.ID == droneID);
             if (droneIndex == -1)
@@ -145,12 +166,101 @@ namespace BL
 
             if (drones[droneIndex].Status != Enums.DroneStatus.maintenance)
             {
-                throw new UnableToReleaseException("The drone is not currently charging and so cannot be released.");
+                throw new UnableToChargeException("The drone cannot be sent to charge unless it is in the maintenance state.");
             }
-            
+
+            try
+            {
+                lock (dal)
+                {
+                    DO.Station chargeStation = dal.GetStation(chargeStationID);
+                    Location chargeStationLocation = new(chargeStation.Latitude, chargeStation.Longitude);
+                    dal.BeginCharge(droneID, chargeStationID);
+                    drones[droneIndex].Battery = Math.Max(drones[droneIndex].Battery - (powerConsumption.ElementAt((int)Enums.WeightCategories.free) * getDistance(drones[droneIndex].Location, chargeStationLocation)), 0);
+                    drones[droneIndex].Location = chargeStationLocation;
+                }
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
+        }
+        #endregion
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void ReleaseFromCharge(int droneID, double chargingTimeInSeconds)
+        {
             chargeDrone(droneID, chargingTimeInSeconds);
             releaseDrone(droneID);
         }
+
+        #region ReleaseFromCharge Helper Methods
+        /// <summary>
+        /// Increase the battery level based on how long the drone was charging.
+        /// </summary>
+        /// <param name="droneID">The ID of the drone charging.</param>
+        /// <param name="chargingTimeInSeconds">The amount of time in seconds the drone has charged.</param>
+        /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
+        /// <exception cref="UnableToReleaseException">Cannot increase the battery level as the drone is not in maintenance.</exception>
+        internal void chargeDrone(int droneID, double chargingTimeInSeconds)
+        {
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
+            if (droneIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no drone with the given ID.");
+            }
+
+            if (drones[droneIndex].Status != Enums.DroneStatus.maintenance)
+            {
+                throw new UnableToReleaseException("The drone is not currently charging.");
+            }
+
+            drones[droneIndex].Battery = Math.Min(drones[droneIndex].Battery + (chargeRatePerSecond * chargingTimeInSeconds), 100);
+        }
+
+        /// <summary>
+        /// Release the drone from the charging station.
+        /// </summary>
+        /// <param name="droneID">The ID of the drone being releaseed.</param>
+        /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
+        /// <exception cref="UnableToReleaseException">Cannot release the drone as it is not currently charging.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        internal void releaseDrone(int droneID)
+        {
+            int droneIndex = drones.FindIndex(d => d.ID == droneID);
+            if (droneIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no drone with the given ID.");
+            }
+            
+            if (drones[droneIndex].Status != Enums.DroneStatus.maintenance)
+            {
+                throw new UnableToReleaseException("The drone is not currently charging and so cannot be released.");
+            }
+
+            try 
+            {
+                lock (dal)
+                {
+                    DO.DroneCharge dalDroneCharge = dal.FindDroneCharges(dc => dc.DroneID == droneID).Single();
+                    dal.ReleaseDroneFromCharging(droneID, dalDroneCharge.StationID);
+                }
+                drones[droneIndex].Status = Enums.DroneStatus.available;
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
+        }
+        #endregion
         #endregion
 
         #region Remove Methods
@@ -256,7 +366,7 @@ namespace BL
             {
                 lock (dal)
                 {
-                    return dal.GetTimeChargeBegan(droneID);
+                    return dal.GetTimeChargeBegan(droneID) ?? throw new UndefinedObjectException("This drone has not yet begun charging.");
                 }
             }
             catch (DO.UndefinedObjectException e)

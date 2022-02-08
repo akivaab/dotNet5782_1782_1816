@@ -33,9 +33,16 @@ namespace DalObject
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void ChargeDrone(int droneID, int stationID)
         {
+            AllotChargeSlot(droneID, stationID);
+            BeginCharge(droneID, stationID);
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void AllotChargeSlot(int droneID, int stationID)
+        {
             int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
             int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
-            
+
             if (droneIndex == -1 || stationIndex == -1)
             {
                 throw new UndefinedObjectException("There is no " + (droneIndex == -1 ? "drone" : "station") + " with the given ID.");
@@ -44,13 +51,34 @@ namespace DalObject
             Station station = DataSource.stations[stationIndex];
             station.AvailableChargeSlots--;
             DataSource.stations[stationIndex] = station;
-            
+
             DroneCharge droneCharge = new DroneCharge();
             droneCharge.DroneID = droneID;
             droneCharge.StationID = stationID;
-            droneCharge.BeganCharge = DateTime.Now;
+            droneCharge.BeganCharge = null;
             droneCharge.Active = true;
             DataSource.droneCharges.Add(droneCharge);
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void BeginCharge(int droneID, int stationID)
+        {
+            int droneIndex = DataSource.drones.FindIndex(drone => drone.ID == droneID && drone.Active);
+            int stationIndex = DataSource.stations.FindIndex(station => station.ID == stationID && station.Active);
+            int droneChargeIndex = DataSource.droneCharges.FindIndex(dc => dc.DroneID == droneID && dc.StationID == stationID && dc.Active);
+
+            if (droneIndex == -1 || stationIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no " + (droneIndex == -1 ? "drone" : "station") + " with the given ID.");
+            }
+            if (droneChargeIndex == -1)
+            {
+                throw new UndefinedObjectException("The given drone is not charging in the given station.");
+            }
+
+            DroneCharge droneCharge = DataSource.droneCharges[droneChargeIndex];
+            droneCharge.BeganCharge = DateTime.Now;
+            DataSource.droneCharges[droneChargeIndex] = droneCharge;
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]

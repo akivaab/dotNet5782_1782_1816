@@ -13,7 +13,7 @@ namespace DalXml
     {
         #region Getter Methods
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public DateTime GetTimeChargeBegan(int droneID)
+        public DateTime? GetTimeChargeBegan(int droneID)
         {
             List<DroneCharge> droneCharges = loadListFromXMLSerializer<DroneCharge>(droneChargeXmlPath);
 

@@ -13,7 +13,7 @@ namespace DalObject
     {
         #region Getter Methods
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public DateTime GetTimeChargeBegan(int droneID)
+        public DateTime? GetTimeChargeBegan(int droneID)
         {
             int droneChargeIndex = DataSource.droneCharges.FindIndex(droneCharge => droneCharge.DroneID == droneID && droneCharge.Active);
 

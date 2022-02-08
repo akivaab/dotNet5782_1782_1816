@@ -33,6 +33,13 @@ namespace DalXml
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void ChargeDrone(int droneID, int stationID)
         {
+            AllotChargeSlot(droneID, stationID);
+            BeginCharge(droneID, stationID);
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void AllotChargeSlot(int droneID, int stationID)
+        {
             XElement droneRoot = loadElementFromXML(droneXmlPath);
 
             List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
@@ -52,9 +59,35 @@ namespace DalXml
             DroneCharge droneCharge = new DroneCharge();
             droneCharge.DroneID = droneID;
             droneCharge.StationID = stationID;
-            droneCharge.BeganCharge = DateTime.Now;
+            droneCharge.BeganCharge = null;
             droneCharge.Active = true;
             droneCharges.Add(droneCharge);
+            saveListToXMLSerializer<DroneCharge>(droneCharges, droneChargeXmlPath);
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void BeginCharge(int droneID, int stationID)
+        {
+            XElement droneRoot = loadElementFromXML(droneXmlPath);
+
+            List<Station> stations = loadListFromXMLSerializer<Station>(stationXmlPath);
+            List<DroneCharge> droneCharges = loadListFromXMLSerializer<DroneCharge>(droneChargeXmlPath);
+
+            int stationIndex = stations.FindIndex(station => station.ID == stationID);
+            int droneChargeIndex = droneCharges.FindIndex(dc => dc.DroneID == droneID && dc.StationID == stationID && dc.Active);
+
+            if (!activeDroneExists(droneRoot, droneID) || stationIndex == -1)
+            {
+                throw new UndefinedObjectException("There is no " + (stationIndex == -1 ? "station" : "drone") + " with the given ID.");
+            }
+            if (droneChargeIndex == -1)
+            {
+                throw new UndefinedObjectException("The given drone is not charging in the given station.");
+            }
+
+            DroneCharge droneCharge = droneCharges[droneChargeIndex];
+            droneCharge.BeganCharge = DateTime.Now;
+            droneCharges[droneChargeIndex] = droneCharge;
             saveListToXMLSerializer<DroneCharge>(droneCharges, droneChargeXmlPath);
         }
 

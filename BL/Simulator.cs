@@ -34,6 +34,11 @@ namespace BL
         };
 
         /// <summary>
+        /// Value marking whether or not the simulation can be cancelled.
+        /// </summary>
+        private bool allowSimulatorCancellation = true;
+
+        /// <summary>
         /// The drone whose duties are being simulated.
         /// </summary>
         private Drone drone;
@@ -44,9 +49,19 @@ namespace BL
         private BL bl;
 
         /// <summary>
+        /// Instance of the DAL layer.
+        /// </summary>
+        private DalApi.IDal dal;
+
+        /// <summary>
         /// An action which updates the windows displayed in the application when invoked.
         /// </summary>
         private Action<int, IEnumerable<string>> updateDisplay;
+
+        /// <summary>
+        /// The ID of the station the drone is currently charging at (or 0 if not charging).
+        /// </summary>
+        private int chargeStationID;
 
         /// <summary>
         /// The last time the simulator checked the drone while it was in maintenance.
@@ -65,12 +80,17 @@ namespace BL
         public Simulator(BL bl, int droneID, Action<int, IEnumerable<string>> updateDisplay, Func<bool> stop)
         {
             this.bl = bl;
+            this.dal = this.bl.dal;
             this.updateDisplay = updateDisplay;
-            while (!stop())
+            lock (this.bl) lock (this.dal)
             {
-                lock (bl)
+                this.chargeStationID = bl.dal.FindDroneCharges(dc => dc.DroneID == droneID).SingleOrDefault().StationID;
+            }
+            while (!(stop() && allowSimulatorCancellation))
+            {
+                lock (this.bl)
                 {
-                    drone = bl.GetDrone(droneID);
+                    drone = this.bl.GetDrone(droneID);
                 }
                 Thread.Sleep(delay);
                 switch (drone.Status)
@@ -109,9 +129,9 @@ namespace BL
                     {
                         try
                         {
-                            bl.SendDroneToCharge(drone.ID);
+                            chargeStationID = bl.selectChargeStation(drone.ID);
                             updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "StationListWindow", "StationWindow"));
-                            lastChargeTime = bl.GetTimeChargeBegan(drone.ID);
+                            allowSimulatorCancellation = false;
                         }
                         //cannot charge at any reachable station
                         catch (UnableToChargeException)
@@ -135,6 +155,17 @@ namespace BL
         /// </summary>
         private void charge()
         {
+            lock (bl) lock (dal)
+            {
+                //if the drone is not yet at its designated station to charge, send it there
+                if (dal.FindDroneCharges(dc => dc.DroneID == drone.ID && dc.StationID == chargeStationID).SingleOrDefault().BeganCharge == null)
+                {
+                    bl.sendToChargeStation(drone.ID, chargeStationID);
+                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
+                    allowSimulatorCancellation = true;
+                    return;
+                }
+            }
             lock (bl)
             {
                 if (lastChargeTime == null)
@@ -146,6 +177,8 @@ namespace BL
                 {
                     bl.releaseDrone(drone.ID);
                     updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "StationListWindow", "StationWindow"));
+                    chargeStationID = 0;
+                    lastChargeTime = null;
                 }
                 else
                 {

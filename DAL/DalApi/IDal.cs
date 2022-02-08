@@ -104,6 +104,22 @@ namespace DalApi
         public void ChargeDrone(int droneID, int stationID);
 
         /// <summary>
+        /// Designate a charge slot in a station.
+        /// </summary>
+        /// <param name="droneID">The drone ID.</param>
+        /// <param name="stationID">The station ID.</param>
+        /// <exception cref="UndefinedObjectException">Either the drone or station given does not exist.</exception>
+        public void AllotChargeSlot(int droneID, int stationID);
+
+        /// <summary>
+        /// Begin the actual charging of a drone at a station.
+        /// </summary>
+        /// <param name="droneID">The drone ID.</param>
+        /// <param name="stationID">The station ID.</param>
+        /// <exception cref="UndefinedObjectException">Either the drone or station given does not exist, or the drone is not charging at the station.</exception>
+        public void BeginCharge(int droneID, int stationID);
+
+        /// <summary>
         /// Release a drone from a charging station.
         /// </summary>
         /// <param name="droneID">The drone ID.</param>
@@ -224,12 +240,12 @@ namespace DalApi
         public Package GetPackage(int packageID);
 
         /// <summary>
-        /// Get the time a drone began charging in a station.
+        /// Get the time a drone began charging in a station (null if it hasn't).
         /// </summary>
         /// <param name="droneID">The drone ID.</param>
         /// <returns>DateTime the drone began charging.</returns>
         /// <exception cref="UndefinedObjectException">The drone given is not charging.</exception>
-        public DateTime GetTimeChargeBegan(int droneID);
+        public DateTime? GetTimeChargeBegan(int droneID);
 
         /// <summary>
         /// Get the customer password.

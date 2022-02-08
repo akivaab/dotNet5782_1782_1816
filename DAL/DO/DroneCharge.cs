@@ -18,9 +18,9 @@ namespace DO
         public int StationID { get; set; }
 
         /// <summary>
-        /// Time a drone began charging in a station.
+        /// Time a drone began charging in a station (null if it hasn't).
         /// </summary>
-        public DateTime BeganCharge { get; set; }
+        public DateTime? BeganCharge { get; set; }
 
         /// <summary>
         /// Represents if a DroneCharge is currently active or not.

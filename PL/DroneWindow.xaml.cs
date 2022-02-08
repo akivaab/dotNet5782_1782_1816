@@ -427,7 +427,11 @@ namespace PL
             switch (e.ProgressPercentage)
             {
                 case 1:
-                    idleMessage.Visibility = Visibility.Hidden;
+                    if (!bgWorker.CancellationPending)
+                    {
+                        idleMessage.Visibility = Visibility.Hidden;
+                    }
+
                     IEnumerable<IRefreshable> refreshableWindows = from Window window in Application.Current.Windows
                                                                    where ((IEnumerable<string>)e.UserState).Contains(window.GetType().Name)
                                                                    select (IRefreshable)window;
@@ -450,6 +454,7 @@ namespace PL
         private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             simulatorButton.Content = "Automatic";
+            idleMessage.Text = "";
             idleMessage.Visibility = Visibility.Hidden;
             runningSimulator.Visibility = Visibility.Hidden;
             MessageBox.Show("Simulation Complete!");
