@@ -157,9 +157,24 @@ namespace BL
         {
             lock (bl) lock (dal)
             {
-                //if the drone is not yet at its designated station to charge, send it there
+                //if the drone is not yet at its designated station to charge, send it there  
                 if (dal.FindDroneCharges(dc => dc.DroneID == drone.ID && dc.StationID == chargeStationID).SingleOrDefault().BeganCharge == null)
                 {
+                        /*
+                    Location chargeStationLocation = bl.GetStation(chargeStationID).Location;
+                    double kilometersPerIncrement = droneSpeed * ((double)delay / 1000);
+                    int increments = (int)Math.Ceiling(getDistance(drone.Location, chargeStationLocation) / kilometersPerIncrement);
+                    for (int i = 0; i < increments; ++i)
+                    {
+                        double distance = Math.Min(kilometersPerIncrement, getDistance(drone.Location, chargeStationLocation));
+                        double battery = drone.Battery - (dal.DronePowerConsumption().ElementAt((int)Enums.WeightCategories.free) * distance);
+                        Location location = calculateMidwayLocation(drone.Location, chargeStationLocation, distance);
+                        bl.updateViaSimulator(drone.ID, battery, location);
+                        updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
+                        Thread.Sleep(delay);
+                        drone = bl.GetDrone(drone.ID);
+                    }
+                        */
                     bl.sendToChargeStation(drone.ID, chargeStationID);
                     updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
                     allowSimulatorCancellation = true;
@@ -220,6 +235,78 @@ namespace BL
         private IEnumerable<string> updateWindows(params string[] windowNames)
         {
             return windowNames;
+        }
+
+        /// <summary>
+        /// Find the coordinate location of some point between two coordinates.
+        /// </summary>
+        /// <param name="source">The source location.</param>
+        /// <param name="destination">The destination location.</param>
+        /// <param name="distance">The distance away from "source" in the direction of "destination".</param>
+        /// <returns>The coordinates of the point "distance" away from "source" in the directiob of "destination".</returns>
+        private static Location calculateMidwayLocation(Location source, Location destination, double distance)
+        {
+            double bearing = calculateBearing(source, destination);
+            return getMidwayLocation(source, bearing, distance);
+        }
+
+        /// <summary>
+        /// Find the coordinates of a point a certain distance away from a given location.
+        /// </summary>
+        /// <param name="location">The starting location.</param>
+        /// <param name="azimuth">The bearing/direction away from the starting location.</param>
+        /// <param name="distance">The distance from the starting location.</param>
+        /// <returns>The coordinates of a point "distance" away from "location" in the direction of "azimuth".</returns>
+        private static Location getMidwayLocation(Location location, double azimuth, double distance)
+        {
+            double radius = 6378.1370;
+            double bearing = toRadians(azimuth);
+            double lat1 = toRadians(location.Latitude);
+            double lon1 = toRadians(location.Longitude);
+            double lat2 = Math.Asin(Math.Sin(lat1) * Math.Cos(distance / radius) + Math.Cos(lat1) * Math.Sin(distance / radius) * Math.Cos(bearing));
+            double lon2 = lon1 + Math.Atan2(Math.Sin(bearing) * Math.Sin(distance / radius) * Math.Cos(lat1), Math.Cos(distance / radius) - Math.Sin(lat1) * Math.Sin(lat2));
+            lat2 = toDegrees(lat2);
+            lon2 = toDegrees(lon2);
+            return new Location(lat2, lon2);
+        }
+
+        /// <summary>
+        /// Calculate the bearing between two location.
+        /// </summary>
+        /// <param name="source">The source location.</param>
+        /// <param name="destination">The destination lovation.</param>
+        /// <returns>The bearing/azimuth from "source" to "destination".</returns>
+        private static double calculateBearing(Location source, Location destination)
+        {
+            double sourceLat = toRadians(source.Latitude);
+            double sourceLong = toRadians(source.Longitude);
+            double destLat = toRadians(destination.Latitude);
+            double destLong = toRadians(destination.Longitude);
+            double dLong = destLong - sourceLong;
+            double dPhi = Math.Log(Math.Tan((destLat / 2.0) + (Math.PI / 4.0)) / Math.Tan((sourceLat / 2.0) + (Math.PI / 4.0)));
+            if (Math.Abs(dLong) > Math.PI)
+            {
+                if (dLong > 0.0)
+                {
+                    dLong = -(2.0 * Math.PI - dLong);
+                }
+                else
+                {
+                    dLong = 2.0 * Math.PI + dLong;
+                }
+            }
+            double bearing = (toDegrees(Math.Atan2(dLong, dPhi)) + 360.0) % 360.0;
+            return bearing;
+        }
+
+        /// <summary>
+        /// Convert a value in radians to degrees.
+        /// </summary>
+        /// <param name="radians">The value in radians to convert.</param>
+        /// <returns>The equivalent value in degrees.</returns>
+        private static double toDegrees(double radians)
+        {
+            return radians * (180 / Math.PI);
         }
         #endregion
     }

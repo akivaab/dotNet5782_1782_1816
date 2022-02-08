@@ -336,7 +336,7 @@ namespace BL
 
                         bool status = dalPackage.Collected != null && dalPackage.Delivered == null ? true : false;
 
-                        double distance = dalPackage.Collected == null ? getDistance(currentLocation, collectLocation) : getDistance(collectLocation, deliveryLocation);
+                        double distance = dalPackage.Collected == null ? getDistance(currentLocation, collectLocation) : getDistance(currentLocation, deliveryLocation);
 
                         packageInTransfer = new(dalPackage.ID, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, status, packageSender, packageReceiver, collectLocation, deliveryLocation, distance);
                     }

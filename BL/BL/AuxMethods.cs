@@ -17,7 +17,7 @@ namespace BL
         /// <param name="location1">The first location.</param>
         /// <param name="location2">The second location.</param>
         /// <returns>The distance between the locations.</returns>
-        private double getDistance(Location location1, Location location2)
+        internal static double getDistance(Location location1, Location location2)
         {
             double lat1 = location1.Latitude;
             double long1 = location1.Longitude;
@@ -25,14 +25,23 @@ namespace BL
             double long2 = location2.Longitude;
 
             double equatorialEarthRadius = 6378.1370;
-            double degreeToRadian = Math.PI / 180;
-            double dlong = (long2 - long1) * degreeToRadian;
-            double dlat = (lat2 - lat1) * degreeToRadian;
-            double a = Math.Pow(Math.Sin(dlat / 2D), 2D) + Math.Cos(lat1 * degreeToRadian) * Math.Cos(lat2 * degreeToRadian) * Math.Pow(Math.Sin(dlong / 2D), 2D);
+            double dlong = toRadians(long2 - long1);
+            double dlat = toRadians(lat2 - lat1);
+            double a = Math.Pow(Math.Sin(dlat / 2D), 2D) + Math.Cos(toRadians(lat1)) * Math.Cos(toRadians(lat2)) * Math.Pow(Math.Sin(dlong / 2D), 2D);
             double c = 2D * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1D - a));
             double d = equatorialEarthRadius * c;
 
             return d;
+        }
+
+        /// <summary>
+        /// Convert a value in degrees to radians.
+        /// </summary>
+        /// <param name="degree">The value in degrees to convert.</param>
+        /// <returns>The equivalent value in radians.</returns>
+        internal static double toRadians(double degree)
+        {
+            return degree * (Math.PI / 180);
         }
 
         /// <summary>
@@ -396,6 +405,21 @@ namespace BL
             {
                 throw new XMLFileLoadCreateException(e.Message, e);
             }
+        }
+        #endregion
+
+        #region Simulator Assisting Methods
+        /// <summary>
+        /// Update the drone list from the simulator.
+        /// </summary>
+        /// <param name="droneID">The ID of the drone,</param>
+        /// <param name="battery">The new battery level of the drone.</param>
+        /// <param name="location">The new location of the drone.</param>
+        internal void updateViaSimulator(int droneID, double battery, Location location)
+        {
+            int droneIndex = drones.FindIndex(drone => drone.ID == droneID);
+            drones[droneIndex].Battery = battery;
+            drones[droneIndex].Location = location;
         }
         #endregion
     }
