@@ -77,15 +77,24 @@ namespace BL
         /// <param name="droneID">The ID of the drone being simulated.</param>
         /// <param name="updateDisplay">Action which calls a function that updates the application windows displayed.</param>
         /// <param name="stop">Function that determines when to stop the simulator.</param>
+        /// <exception cref="UndefinedObjectException">More than one droneCharge was found with the drone.</exception>
         public Simulator(BL bl, int droneID, Action<int, IEnumerable<string>> updateDisplay, Func<bool> stop)
         {
             this.bl = bl;
             this.dal = this.bl.dal;
             this.updateDisplay = updateDisplay;
-            lock (this.bl) lock (this.dal)
+            try
             {
-                this.chargeStationID = bl.dal.FindDroneCharges(dc => dc.DroneID == droneID).SingleOrDefault().StationID;
+                lock (this.bl) lock (this.dal)
+                {
+                    this.chargeStationID = this.bl.dal.FindDroneCharges(dc => dc.DroneID == droneID).SingleOrDefault().StationID;
+                }
             }
+            catch (Exception)
+            {
+                throw new UndefinedObjectException("There are multiple active droneCharges with this drone.");
+            }
+
             while (!(stop() && allowSimulatorCancellation))
             {
                 lock (this.bl)
@@ -109,6 +118,7 @@ namespace BL
                 }
             }
         }
+        
 
         /// <summary>
         /// Assign a package to the drone, or send it ot charge if not possible.
@@ -153,33 +163,41 @@ namespace BL
         /// <summary>
         /// Charge the drone until its battery reaches 100%.
         /// </summary>
+        /// <exception cref="UndefinedObjectException">More than one droneCharge has thos drone-station pair.</exception>
         private void charge()
         {
             lock (bl) lock (dal)
             {
-                //if the drone is not yet at its designated station to charge, send it there  
-                if (dal.FindDroneCharges(dc => dc.DroneID == drone.ID && dc.StationID == chargeStationID).SingleOrDefault().BeganCharge == null)
-                {
-                        /*
-                    Location chargeStationLocation = bl.GetStation(chargeStationID).Location;
-                    double kilometersPerIncrement = droneSpeed * ((double)delay / 1000);
-                    int increments = (int)Math.Ceiling(getDistance(drone.Location, chargeStationLocation) / kilometersPerIncrement);
-                    for (int i = 0; i < increments; ++i)
+                    try
                     {
-                        double distance = Math.Min(kilometersPerIncrement, getDistance(drone.Location, chargeStationLocation));
-                        double battery = drone.Battery - (dal.DronePowerConsumption().ElementAt((int)Enums.WeightCategories.free) * distance);
-                        Location location = calculateMidwayLocation(drone.Location, chargeStationLocation, distance);
-                        bl.updateViaSimulator(drone.ID, battery, location);
-                        updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
-                        Thread.Sleep(delay);
-                        drone = bl.GetDrone(drone.ID);
+                        //if the drone is not yet at its designated station to charge, send it there  
+                        if (dal.FindDroneCharges(dc => dc.DroneID == drone.ID && dc.StationID == chargeStationID).SingleOrDefault().BeganCharge == null)
+                        {
+                            /*
+                        Location chargeStationLocation = bl.GetStation(chargeStationID).Location;
+                        double kilometersPerIncrement = droneSpeed * ((double)delay / 1000);
+                        int increments = (int)Math.Ceiling(getDistance(drone.Location, chargeStationLocation) / kilometersPerIncrement);
+                        for (int i = 0; i < increments; ++i)
+                        {
+                            double distance = Math.Min(kilometersPerIncrement, getDistance(drone.Location, chargeStationLocation));
+                            double battery = drone.Battery - (dal.DronePowerConsumption().ElementAt((int)Enums.WeightCategories.free) * distance);
+                            Location location = calculateMidwayLocation(drone.Location, chargeStationLocation, distance);
+                            bl.updateViaSimulator(drone.ID, battery, location);
+                            updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
+                            Thread.Sleep(delay);
+                            drone = bl.GetDrone(drone.ID);
+                        }
+                            */
+                            bl.sendToChargeStation(drone.ID, chargeStationID);
+                            updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
+                            allowSimulatorCancellation = true;
+                            return;
+                        }
                     }
-                        */
-                    bl.sendToChargeStation(drone.ID, chargeStationID);
-                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
-                    allowSimulatorCancellation = true;
-                    return;
-                }
+                    catch (Exception)
+                    {
+                        throw new UndefinedObjectException("There are multiple active droneCharges with this drone and station pairing.");
+                    }
             }
             lock (bl)
             {

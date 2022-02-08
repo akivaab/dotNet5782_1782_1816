@@ -419,7 +419,38 @@ namespace PL
 
         private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            bl.ActivateSimulator(drone.ID, bgWorker.ReportProgress, () => bgWorker.CancellationPending);
+            try
+            {
+                bl.ActivateSimulator(drone.ID, bgWorker.ReportProgress, () => bgWorker.CancellationPending);
+            }
+            catch (BO.UndefinedObjectException ex)
+            {
+                MessageBox.Show(ex.Message + "Please reset the simulator and try again.");
+            }
+            catch (BO.UnableToAssignException ex)
+            {
+                MessageBox.Show(ex.Message + "Please reset the simulator and try again.");
+            }
+            catch (BO.UnableToCollectException ex)
+            {
+                MessageBox.Show(ex.Message + "Please reset the simulator and try again.");
+            }
+            catch (BO.UnableToDeliverException ex)
+            {
+                MessageBox.Show(ex.Message + "Please reset the simulator and try again.");
+            }
+            catch (BO.UnableToChargeException ex)
+            {
+                MessageBox.Show(ex.Message + "Please reset the simulator and try again.");
+            }
+            catch (BO.UnableToReleaseException ex)
+            {
+                MessageBox.Show(ex.Message + "Please reset the simulator and try again.");
+            }
+            catch (BO.XMLFileLoadCreateException ex)
+            {
+                MessageBox.Show("An error has occured when saving/loading xml.");
+            }
         }
 
         private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
