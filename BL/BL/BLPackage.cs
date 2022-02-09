@@ -256,7 +256,7 @@ namespace BL
                                                                 let senderName = dal.GetCustomer(dalPackage.SenderID).Name
                                                                 let receiverName = dal.GetCustomer(dalPackage.ReceiverID).Name
                                                                 select new PackageToList(dalPackage.ID, senderName, receiverName, (Enums.WeightCategories)dalPackage.Weight, (Enums.Priorities)dalPackage.Priority, getPackageStatus(dalPackage));
-                    return packageToLists;
+                    return packageToLists.OrderBy(p => p.ID);
                 }
             }
             catch (DO.UndefinedObjectException e)

@@ -205,7 +205,7 @@ namespace BL
                                                                   let numPackagesReceived = dal.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered != null).Count()
                                                                   let numPackagesExpected = dal.FindPackages(p => p.ReceiverID == dalCustomer.ID && p.Delivered == null).Count()
                                                                   select new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected);
-                    return customerToLists;
+                    return customerToLists.OrderBy(c => c.ID);
                 }
             }
             catch (DO.XMLFileLoadCreateException e)

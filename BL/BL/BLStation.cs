@@ -159,7 +159,7 @@ namespace BL
                     IEnumerable<StationToList> stationToLists = from DO.Station dalStation in dalStations
                                                                 let dronesAtStation = dal.FindDroneCharges(dc => dc.StationID == dalStation.ID)
                                                                 select new StationToList(dalStation.ID, dalStation.Name, dalStation.AvailableChargeSlots, dronesAtStation.Count());
-                    return stationToLists;
+                    return stationToLists.OrderBy(s => s.ID);
                 }
             }
             catch (DO.XMLFileLoadCreateException e)
