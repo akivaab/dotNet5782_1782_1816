@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PO
 {
@@ -151,7 +146,7 @@ namespace PO
         }
 
         /// <summary>
-        /// The time a package was collected by a drone.
+        /// The time the package was collected by a drone.
         /// </summary>
         private DateTime? collectingTime;
         public DateTime? CollectingTime
@@ -168,7 +163,7 @@ namespace PO
         }
 
         /// <summary>
-        /// The time a package was delivered by a drone.
+        /// The time the package was delivered by a drone.
         /// </summary>
         private DateTime? deliveringTime;
         public DateTime? DeliveringTime
@@ -187,7 +182,7 @@ namespace PO
 
         #region PropertyChanged
         /// <summary>
-        /// An event to implement INotifyPropertyChanged interface
+        /// An event to implement INotifyPropertyChanged interface.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 

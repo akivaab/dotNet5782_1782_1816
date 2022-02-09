@@ -43,7 +43,7 @@ namespace PL
         /// <summary>
         /// DroneWindow constructor for adding a drone.
         /// </summary>
-        /// <param name="bl">A BL object.</param>
+        /// <param name="bl">A BL instance.</param>
         public DroneWindow(BlApi.IBL bl)
         {
             InitializeComponent();
@@ -73,15 +73,15 @@ namespace PL
         /// <summary>
         /// DroneWindow constructor for performing actions on a drone.
         /// </summary>
-        /// <param name="bl">A BL object.</param>
+        /// <param name="bl">A BL instance.</param>
         /// <param name="droneToList">The drone being updated/acted upon.</param>
         public DroneWindow(BlApi.IBL bl, BO.DroneToList droneToList)
         {
             InitializeComponent();
             try
             {
-                drone = new(bl.GetDrone(droneToList.ID));
                 this.bl = bl;
+                drone = new(this.bl.GetDrone(droneToList.ID));
                 DataContext = drone;
             }
             catch (BO.UndefinedObjectException)
@@ -125,13 +125,13 @@ namespace PL
                 {
                     MessageBox.Show(ex.Message + "\nPlease enter a different ID.");
                 }
-                catch (BO.UndefinedObjectException ex)
+                catch (BO.UndefinedObjectException)
                 {
-                    MessageBox.Show(ex.Message + "\nPlease try a different station.");
+                    MessageBox.Show("Error: This station has been removed from the system.\nTry closing and reopening this window to refresh.");
                 }
-                catch (BO.UnableToChargeException ex)
+                catch (BO.UnableToChargeException)
                 {
-                    MessageBox.Show(ex.Message + "\nPlease select a different station.");
+                    MessageBox.Show("There are no available charge slots in the selected station.\nPlease select a different station.");
                 }
                 catch (BO.XMLFileLoadCreateException)
                 {
@@ -140,8 +140,11 @@ namespace PL
             }
             else
             {
-                MessageBox.Show("Some of the information supplied is invalid. Please enter other information." +
-                    (idIsInteger ? "" : "\n(Is your Drone ID a number?)"));
+                MessageBox.Show("Some of the information supplied is invalid. Please enter other information.\n" +
+                    "Suggestions:\n" +
+                        "The ID must consist only of numbers.\n" +
+                        "A model name is required.\n" +
+                        "A maximum weight and station must be selected.\n");
             }
         }
         #endregion
@@ -164,7 +167,11 @@ namespace PL
                 }
                 catch (BO.UndefinedObjectException)
                 {
-                    MessageBox.Show("Error: The relevant station does not exist.");
+                    MessageBox.Show("Error: This drone is not in the system.\nTry closing this window and refreshing the list.");
+                }
+                catch (BO.NonUniqueIdException)
+                {
+                    MessageBox.Show("Critical Error: More than one drone has this ID.");
                 }
                 catch (BO.XMLFileLoadCreateException)
                 {
@@ -173,7 +180,7 @@ namespace PL
             }
             else
             {
-                MessageBox.Show("The model name supplied is invalid.");
+                MessageBox.Show("Please enter a model name.");
             }
         }
 
@@ -206,23 +213,35 @@ namespace PL
             }
             catch (BO.UnableToChargeException ex)
             {
-                MessageBox.Show(ex.Message + "\n(Is the drone available?)");
+                MessageBox.Show(ex.Message + "\n" +
+                    "Suggestions:\n" +
+                        "The drone must be available.");
             }
             catch (BO.UnableToReleaseException ex)
             {
-                MessageBox.Show(ex.Message + "\n(Is the drone in maintenance?)");
+                MessageBox.Show(ex.Message + "\n" +
+                    "Suggestions:\n" +
+                        "The drone must be in maintenance.");
             }
             catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("Error: The relevant station does not exist.");
+                MessageBox.Show("Error: This drone is not in the system.\nTry closing this window and refreshing the list.");
             }
             catch (BO.EmptyListException)
             {
-                MessageBox.Show("Error: There are no stations.");
+                MessageBox.Show("Error: There are currently no stations that the drone can charge at.");
             }
             catch (BO.XMLFileLoadCreateException)
             {
                 MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
+            catch (BO.NonUniqueIdException)
+            {
+                MessageBox.Show("Critical Error: More than one drone has this ID.");
+            }
+            catch (BO.LinqQueryException)
+            {
+                MessageBox.Show("Critical Error: A query has failed.\nTry restarting the system.");
             }
         }
 
@@ -256,39 +275,56 @@ namespace PL
                     }
                     else
                     {
-                        MessageBox.Show("Error: The drone has completed its delivery but is not considered available.");
+                        MessageBox.Show("Critical Error: The drone has completed its delivery but is not considered available.");
                     }
                 }
                 else
                 {
-                    MessageBox.Show("The drone is currently unavailable for delivering.\n(Is the drone available?)");
+                    MessageBox.Show("The drone is currently unavailable for delivering.\n" +
+                        "Suggestions:\n" +
+                        "The drone must be available.");
                 }
 
                 refresh();
             }
             catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("An error has occured in the system. The drone no longer exists.");
+                MessageBox.Show("Error: This drone is not in the system.\nTry closing this window and refreshing the list.");
             }
             catch (BO.UnableToAssignException ex)
             {
-                MessageBox.Show(ex.Message + "\n(Is the drone available?)");
+                MessageBox.Show(ex.Message + "\n" +
+                    "Suggestions:\n" +
+                        "The drone must be available.");
             }
             catch (BO.UnableToCollectException ex)
             {
-                MessageBox.Show(ex.Message + "\n(Is the drone delivering and not mid-transfer?)");
+                MessageBox.Show(ex.Message + "\n" +
+                    "Suggestions:\n" +
+                        "The drone must be in delivery state." +
+                        "The drone must not be in midst of a package transfer.");
             }
             catch (BO.UnableToDeliverException ex)
             {
-                MessageBox.Show(ex.Message + "\n(Is the drone delivering and mid-transfer?)");
+                MessageBox.Show(ex.Message + "\n" +
+                    "Suggestions:\n" +
+                        "The drone must be in delivery state." +
+                        "The drone must be in midst of a transferring the package.");
             }
             catch (BO.EmptyListException ex)
             {
-                MessageBox.Show(ex.Message + "\nTry using a different drone.");
+                MessageBox.Show(ex.Message + "\n" +
+                    "Suggestions:\n" +
+                        "Send the drone to charge." +
+                        "Try using a different drone.");
             }
             catch (BO.XMLFileLoadCreateException)
             {
                 MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
+            catch (BO.NonUniqueIdException)
+            {
+                MessageBox.Show("Critical Error: More than one drone has this ID.");
             }
         }
 
@@ -318,6 +354,10 @@ namespace PL
             catch (BO.XMLFileLoadCreateException)
             {
                 MessageBox.Show("An error occured while saving/loading data from an XML file.");
+            }
+            catch (BO.NonUniqueIdException)
+            {
+                MessageBox.Show("Critical Error: More than one drone has this ID.");
             }
         }
         #endregion
@@ -349,13 +389,14 @@ namespace PL
             {
                 MessageBox.Show("An error occured while saving/loading data from an XML file.");
             }
+            catch (Exception)
+            {
+                MessageBox.Show("Critical Error: Cannot resolve a package with this ID.");
+            }
         }
         #endregion
 
         #region Refresh
-        /// <summary>
-        /// Refresh the data of the drone to be displayed in the window.
-        /// </summary>
         public void refresh()
         {
             if (actions.Visibility == Visibility.Visible)
@@ -398,19 +439,25 @@ namespace PL
                 bgWorker.WorkerReportsProgress = true;
                 bgWorker.WorkerSupportsCancellation = true;
             }
-
-            if (!bgWorker.IsBusy)
+            try
             {
-                bgWorker.RunWorkerAsync();
-                simulatorButton.Content = "Manual";
-                enableControllers(false);
-                runningSimulator.Visibility = Visibility.Visible;
+                if (!bgWorker.IsBusy)
+                {
+                    bgWorker.RunWorkerAsync();
+                    simulatorButton.Content = "Manual";
+                    enableControllers(false);
+                    runningSimulator.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    bgWorker.CancelAsync();
+                    idleMessage.Text = "Stopping simulator...";
+                    idleMessage.Visibility = Visibility.Visible;
+                }
             }
-            else
+            catch (Exception)
             {
-                bgWorker.CancelAsync();
-                idleMessage.Text = "Stopping simulator...";
-                idleMessage.Visibility = Visibility.Visible;
+                MessageBox.Show("Error: Please reset the simulator and try again.");
             }
         }
 
@@ -427,31 +474,43 @@ namespace PL
             }
             catch (BO.UndefinedObjectException ex)
             {
-                MessageBox.Show(ex.Message + "Please reset the simulator and try again.");
+                MessageBox.Show(ex.Message + "\nPlease reset the simulator and try again.");
             }
             catch (BO.UnableToAssignException ex)
             {
-                MessageBox.Show(ex.Message + "Please reset the simulator and try again.");
+                MessageBox.Show(ex.Message + "\nPlease reset the simulator and try again.");
             }
             catch (BO.UnableToCollectException ex)
             {
-                MessageBox.Show(ex.Message + "Please reset the simulator and try again.");
+                MessageBox.Show(ex.Message + "\nPlease reset the simulator and try again.");
             }
             catch (BO.UnableToDeliverException ex)
             {
-                MessageBox.Show(ex.Message + "Please reset the simulator and try again.");
+                MessageBox.Show(ex.Message + "\nPlease reset the simulator and try again.");
             }
             catch (BO.UnableToChargeException ex)
             {
-                MessageBox.Show(ex.Message + "Please reset the simulator and try again.");
+                MessageBox.Show(ex.Message + "\nPlease reset the simulator and try again.");
             }
             catch (BO.UnableToReleaseException ex)
             {
-                MessageBox.Show(ex.Message + "Please reset the simulator and try again.");
+                MessageBox.Show(ex.Message + "\nPlease reset the simulator and try again.");
             }
             catch (BO.XMLFileLoadCreateException)
             {
-                MessageBox.Show("An error has occured when saving/loading xml.");
+                MessageBox.Show("An error has occured when saving/loading xml.\nPlease reset the simulator and try again.");
+            }
+            catch (BO.NonUniqueIdException ex)
+            {
+                MessageBox.Show(ex.Message + "\nPlease reset the simulator and try again.");
+            }
+            catch (BO.EmptyListException ex)
+            {
+                MessageBox.Show(ex.Message + "\nPlease reset the simulator and try again.");
+            }
+            catch (BO.LinqQueryException ex)
+            {
+                MessageBox.Show(ex.Message + "\nPlease reset the simulator and try again.");
             }
         }
 

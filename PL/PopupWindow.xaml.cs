@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PL
 {
@@ -87,13 +75,13 @@ namespace PL
                     bl.UpdateCustomerPassword(customerID, newPassword.Password);
                     Close();
                 }
-                catch (BO.IllegalArgumentException ex)
+                catch (BO.IllegalArgumentException)
                 {
-                    MessageBox.Show(ex.Message + "\nPlease choose a password at least 6 characters long.");
+                    MessageBox.Show("Please choose a password at least 6 characters long for security.");
                 }
                 catch (BO.UndefinedObjectException)
                 {
-                    MessageBox.Show("Error. You do not exist in the system.");
+                    MessageBox.Show("Error: You do not exist in the system.\nTry logging out and logging back in.");
                 }
                 catch (BO.XMLFileLoadCreateException)
                 {

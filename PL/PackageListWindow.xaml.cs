@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PL
 {
@@ -46,7 +40,7 @@ namespace PL
         /// <summary>
         /// PackageListWindow constructor, initializes ItemSources.
         /// </summary>
-        /// <param name="bl">A BL object.</param>
+        /// <param name="bl">A BL instance.</param>
         public PackageListWindow(BlApi.IBL bl)
         {
             InitializeComponent();
@@ -54,9 +48,13 @@ namespace PL
 
             try
             {
-                packageToListCollection = new ObservableCollection<BO.PackageToList>(bl.GetPackagesList());
+                packageToListCollection = new ObservableCollection<BO.PackageToList>(this.bl.GetPackagesList());
                 view = (CollectionView)CollectionViewSource.GetDefaultView(packageToListCollection);
                 DataContext = packageToListCollection;
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Error: Some of the customers transacting the packages do not exist.");
             }
             catch (BO.XMLFileLoadCreateException)
             {
@@ -221,7 +219,7 @@ namespace PL
             }
             catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("This package has been deleted. Please refresh the list.");
+                MessageBox.Show("Error: This package has been deleted. Please refresh the list.");
             }
             catch (BO.XMLFileLoadCreateException)
             {
@@ -241,9 +239,6 @@ namespace PL
             refresh();
         }
 
-        /// <summary>
-        /// Refresh the packageListView to reflect any updates.
-        /// </summary>
         public void refresh()
         {
             bool? groupedBySender = groupBySenderRadioButton.IsChecked;
@@ -259,6 +254,10 @@ namespace PL
                 {
                     packageToListCollection.Add(packageToList);
                 }
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Error: Some of the customers transacting the packages do not exist.");
             }
             catch (BO.XMLFileLoadCreateException)
             {
@@ -290,7 +289,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void packageListWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void packageListWindow_Closing(object sender, CancelEventArgs e)
         {
             if (!allowClose)
             {

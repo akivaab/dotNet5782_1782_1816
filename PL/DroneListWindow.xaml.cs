@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PL
 {
@@ -46,12 +40,12 @@ namespace PL
         /// <summary>
         /// DroneListWindow constructor, initializes ItemSources.
         /// </summary>
-        /// <param name="bl">A BL object.</param>
+        /// <param name="bl">A BL instance.</param>
         public DroneListWindow(BlApi.IBL bl)
         {
             InitializeComponent();
             this.bl = bl;
-            droneToListCollection = new ObservableCollection<BO.DroneToList>(bl.GetDronesList());
+            droneToListCollection = new ObservableCollection<BO.DroneToList>(this.bl.GetDronesList());
             view = (CollectionView)CollectionViewSource.GetDefaultView(droneToListCollection);
             DataContext = droneToListCollection;
 
@@ -185,9 +179,6 @@ namespace PL
             refresh();
         }
 
-        /// <summary>
-        /// Refresh the droneListView to reflect any updates.
-        /// </summary>
         public void refresh()
         {
             bool? grouped = groupByStatusCheckBox.IsChecked;
@@ -223,7 +214,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void droneListWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void droneListWindow_Closing(object sender, CancelEventArgs e)
         {
             if (!allowClose)
             {

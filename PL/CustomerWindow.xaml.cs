@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PL
 {
@@ -41,7 +33,7 @@ namespace PL
         /// <summary>
         /// CustomerWindow constructor for adding a customer.
         /// </summary>
-        /// <param name="bl">A BL object.</param>
+        /// <param name="bl">A BL instance.</param>
         public CustomerWindow(BlApi.IBL bl)
         {
             InitializeComponent();
@@ -55,15 +47,15 @@ namespace PL
         /// <summary>
         /// CustomerWindow constructor for performing actions on a customer.
         /// </summary>
-        /// <param name="bl">A BL object.</param>
-        /// <param name="customerToList">The station being acted upon.</param>
+        /// <param name="bl">A BL instance.</param>
+        /// <param name="customerToList">The customer being acted upon.</param>
         public CustomerWindow(BlApi.IBL bl, BO.CustomerToList customerToList)
         {
             InitializeComponent();
             try
             {
-                customer = new(bl.GetCustomer(customerToList.ID));
                 this.bl = bl;
+                customer = new(this.bl.GetCustomer(customerToList.ID));
                 DataContext = customer;
             }
             catch (BO.UndefinedObjectException)
@@ -110,7 +102,11 @@ namespace PL
                 }
                 catch (BO.IllegalArgumentException ex)
                 {
-                    MessageBox.Show(ex.Message + "\nThe latitude must be between -1 and 1, the longitude between 0 and 2, and the phone number 9 digits long.");
+                    MessageBox.Show(ex.Message + "\n" +
+                        "Suggestions:\n" +
+                        "The latitude must be a floating point value between -1 and 1.\n" +
+                        "The longitude must be a floating point value between 0 and 2.\n" +
+                        "The phone number must be 9 digits long.");
                 }
                 catch (BO.NonUniqueIdException ex)
                 {
@@ -123,9 +119,12 @@ namespace PL
             }
             else
             {
-                MessageBox.Show("Some of the information supplied is invalid. Please enter other information." +
-                    (isInteger1 || isInteger2 ? "" : "\n(Are the ID and phone number numbers?)") +
-                    (isDouble1 || isDouble2 ? "" : "\n(Are the latitude/longitude of the location floating point values?)"));
+                MessageBox.Show("Some of the information supplied is invalid. Please enter other information.\n" +
+                    "Suggestions:\n" +
+                        "The ID must consist only of numbers.\n" +
+                        "The latitude must be a floating point value between -1 and 1.\n" +
+                        "The longitude must be a floating point value between 0 and 2.\n" +
+                        "The phone number must be 9 digits long.");
             }
         }
         #endregion
@@ -154,9 +153,9 @@ namespace PL
                 {
                     MessageBox.Show("Error: This customer is not in the system.\nTry closing this window and refreshing the list.");
                 }    
-                catch (BO.IllegalArgumentException ex)
+                catch (BO.IllegalArgumentException)
                 {
-                    MessageBox.Show(ex.Message + "\nIt must be 9 digits long.");
+                    MessageBox.Show("The phone number must be 9 digits long.");
                 }
                 catch (BO.XMLFileLoadCreateException)
                 {
@@ -165,7 +164,7 @@ namespace PL
             }
             else
             {
-                MessageBox.Show("Please provide a valid phone number");
+                MessageBox.Show("The phone number must be 9 digits long.");
             }
         }
 
@@ -201,7 +200,7 @@ namespace PL
 
         #region Open Window
         /// <summary>
-        /// Open a package detailing a customer package.
+        /// Open a window detailing a customer package.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -226,13 +225,14 @@ namespace PL
             {
                 MessageBox.Show("An error occured while saving/loading data from an XML file.");
             }
+            catch (Exception)
+            {
+                MessageBox.Show("Critical Error: Cannot resolve a package with this ID.");
+            }
         }
         #endregion
 
         #region Refresh
-        /// <summary>
-        /// Refresh the data of the customer to be displayed in the window.
-        /// </summary>
         public void refresh()
         {
             if (actions.Visibility == Visibility.Visible)
@@ -274,7 +274,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void customerWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void customerWindow_Closing(object sender, CancelEventArgs e)
         {
             if (!allowClose)
             {

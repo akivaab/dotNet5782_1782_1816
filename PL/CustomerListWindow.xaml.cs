@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PL
 {
@@ -41,7 +31,7 @@ namespace PL
         /// <summary>
         /// CustomerListWindow constructor.
         /// </summary>
-        /// <param name="bl"></param>
+        /// <param name="bl">Instance of the BL layer.</param>
         public CustomerListWindow(BlApi.IBL bl)
         {
             InitializeComponent();
@@ -65,10 +55,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void addCustomerButton_Click(object sender, RoutedEventArgs e)
-        {
-            new CustomerWindow(bl).Show();
-        }
+        private void addCustomerButton_Click(object sender, RoutedEventArgs e) => new CustomerWindow(bl).Show();
         #endregion
 
         #region Action
@@ -112,9 +99,6 @@ namespace PL
             refresh();
         }
 
-        /// <summary>
-        /// Refresh the customerListView.
-        /// </summary>
         public void refresh()
         {
             try
@@ -149,7 +133,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void customerListWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void customerListWindow_Closing(object sender, CancelEventArgs e)
         {
             if (!allowClose)
             {

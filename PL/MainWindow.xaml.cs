@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PL
 {
@@ -64,9 +53,9 @@ namespace PL
             {
                 bl = BlApi.BlFactory.GetBl();
             }
-            catch (BO.EmptyListException ex)
+            catch (BO.InstanceInitializationException)
             {
-                MessageBox.Show(ex.Message + "\nCongratulations, you achieved the near impossible situation where no randomly generated customer received a package yet!");
+                MessageBox.Show("Error: Initialization of BL has failed.\nTry to restart the system.");
             }
         }
         #endregion
@@ -127,7 +116,7 @@ namespace PL
         }
 
         /// <summary>
-        /// Employee logout.
+        /// Logout of the employee interface.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -178,7 +167,7 @@ namespace PL
             }
             catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("Error. This ID does not match any known customer.");
+                MessageBox.Show("Error: This ID does not match any customer in the system.\nPlease try again.");
             }
             catch (BO.XMLFileLoadCreateException)
             {
@@ -207,6 +196,10 @@ namespace PL
                 sentPackagesCollected.ItemsSource = sentPackagesCollectedCollection;
                 incomingPackagesNotReceived.ItemsSource = incomingPackagesNotReceivedCollection;
                 incomingPackagesReceived.ItemsSource = incomingPackagesReceivedCollection;
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Critical Error: Some of your packages are being transacted with nonexistent customers.\nTry restarting the system.");
             }
             catch (BO.XMLFileLoadCreateException)
             {
@@ -237,11 +230,11 @@ namespace PL
                 }
                 catch (BO.UndefinedObjectException)
                 {
-                    MessageBox.Show("Error: Try logging out and logging back in.");
+                    MessageBox.Show("Error: You are no longer in the system.\nTry logging out and logging back in.");
                 }
-                catch (BO.IllegalArgumentException ex)
+                catch (BO.IllegalArgumentException)
                 {
-                    MessageBox.Show(ex.Message + "\nIt must be 9 digits long.");
+                    MessageBox.Show("The phone number must be 9 digits long.");
                 }
                 catch (BO.XMLFileLoadCreateException)
                 {
@@ -250,7 +243,7 @@ namespace PL
             }
             else
             {
-                MessageBox.Show("Please provide a valid phone number.");
+                MessageBox.Show("The phone number must be 9 digits long.");
             }
         }
 
@@ -285,6 +278,10 @@ namespace PL
                         sentPackagesNotCollectedCollection.Add(package);
                     }
                 });
+            }
+            catch (BO.UndefinedObjectException)
+            {
+                MessageBox.Show("Error: The customer you are sending the package to is not in the system.");
             }
             catch (BO.XMLFileLoadCreateException)
             {

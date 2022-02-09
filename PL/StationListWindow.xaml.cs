@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PL
 {
@@ -46,7 +37,7 @@ namespace PL
         /// <summary>
         /// StationListWindow constructor.
         /// </summary>
-        /// <param name="bl"></param>
+        /// <param name="bl">The BL instance.</param>
         public StationListWindow(BlApi.IBL bl)
         {
             InitializeComponent();
@@ -54,7 +45,7 @@ namespace PL
 
             try
             {
-                stationToListCollection = new ObservableCollection<BO.StationToList>(bl.GetStationsList());
+                stationToListCollection = new ObservableCollection<BO.StationToList>(this.bl.GetStationsList());
                 view = (CollectionView)CollectionViewSource.GetDefaultView(stationToListCollection);
                 DataContext = stationToListCollection;
             }
@@ -141,9 +132,6 @@ namespace PL
             refresh();
         }
 
-        /// <summary>
-        /// Refresh the stationListView.
-        /// </summary>
         public void refresh()
         {
             try
@@ -178,7 +166,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void stationListWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void stationListWindow_Closing(object sender, CancelEventArgs e)
         {
             if (!allowClose)
             {

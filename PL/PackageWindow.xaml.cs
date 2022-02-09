@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PL
 {
@@ -40,7 +33,7 @@ namespace PL
         /// <summary>
         /// PackageWindow constructor for adding a package.
         /// </summary>
-        /// <param name="bl"></param>
+        /// <param name="bl">The BL instance.</param>
         public PackageWindow(BlApi.IBL bl)
         {
             InitializeComponent();
@@ -52,7 +45,7 @@ namespace PL
 
             try
             {
-                IEnumerable<int> customerIDs = from BO.CustomerToList customer in bl.GetCustomersList()
+                IEnumerable<int> customerIDs = from BO.CustomerToList customer in this.bl.GetCustomersList()
                                                select customer.ID;
                 add_SenderID.ItemsSource = customerIDs;
                 add_ReceiverID.ItemsSource = customerIDs;
@@ -91,13 +84,13 @@ namespace PL
             InitializeComponent();
             try
             {
-                package = new(bl.GetPackage(packageToList.ID));
                 this.bl = bl;
+                package = new(this.bl.GetPackage(packageToList.ID));
                 DataContext = package;
             }
             catch (BO.UndefinedObjectException)
             {
-                MessageBox.Show("Error: This package is already removed from the system.\nTry closing this window and refreshing the list.");
+                MessageBox.Show("Error: This package has been removed from the system.\nTry closing this window and refreshing the list.");
             }
             catch (BO.XMLFileLoadCreateException)
             {
@@ -134,7 +127,7 @@ namespace PL
                 }
                 catch (BO.UndefinedObjectException ex)
                 {
-                    MessageBox.Show(ex.Message + "\nPlease try selecting a different option.");
+                    MessageBox.Show("Either the sender, receiver, or both have been removed from the system.\nPlease try selecting a different option.");
                 }
                 catch (BO.XMLFileLoadCreateException)
                 {
@@ -143,7 +136,7 @@ namespace PL
             }
             else
             {
-                MessageBox.Show("Please fill in all necessary information.");
+                MessageBox.Show("A choice must be selected for every field.");
             }
         }
         #endregion
@@ -280,7 +273,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void packageWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void packageWindow_Closing(object sender, CancelEventArgs e)
         {
             if (!allowClose)
             {

@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PL
 {
@@ -41,7 +33,7 @@ namespace PL
         /// <summary>
         /// StationWindow constructor for adding a station.
         /// </summary>
-        /// <param name="bl">A BL object.</param>
+        /// <param name="bl">A BL instance.</param>
         public StationWindow(BlApi.IBL bl)
         {
             InitializeComponent();
@@ -62,8 +54,8 @@ namespace PL
             InitializeComponent();
             try
             {
-                station = new(bl.GetStation(stationToList.ID));
                 this.bl = bl;
+                station = new(this.bl.GetStation(stationToList.ID));
                 DataContext = station;
             }
             catch (BO.UndefinedObjectException)
@@ -114,7 +106,11 @@ namespace PL
                 }
                 catch (BO.IllegalArgumentException ex)
                 {
-                    MessageBox.Show(ex.Message + "\nThe latitude must be between -1 and 1, the longitude between 0 and 2,\nand there cannot be a negative number of charge slots.");
+                    MessageBox.Show(ex.Message + "\n" +
+                        "Suggestions:\n" +
+                        "The latitude must be a floating point value between -1 and 1.\n" +
+                        "The longitude must be a floating point value between 0 and 2.\n" +
+                        "The number of charge slots must be positive.");
                 }
                 catch (BO.NonUniqueIdException ex)
                 {
@@ -127,9 +123,12 @@ namespace PL
             }
             else
             {
-                MessageBox.Show("Some of the information supplied is invalid. Please enter other information." +
-                    (isInteger1 || isInteger2 || isInteger3 ? "" : "\n(Are the ID, name, and number of charging slots all numbers?)") +
-                    (isDouble1 || isDouble2 ? "" : "\n(Are the latitude/longitude of the location floating point values?)"));
+                MessageBox.Show("Some of the information supplied is invalid. Please enter other information.\n" +
+                    "Suggestions:\n" +
+                        "The ID and name must both be numbers.\n" +
+                        "The latitude must be a floating point value between -1 and 1.\n" +
+                        "The longitude must be a floating point value between 0 and 2.\n" +
+                        "The number of charge slots must be positive.");
             }
         }
         #endregion
@@ -171,8 +170,10 @@ namespace PL
             }
             else
             {
-                MessageBox.Show("Some of the information supplied is invalid. Please enter other information." +
-                    "\n(Are the name, and number of charging slots all numbers?)");
+                MessageBox.Show("Some of the information supplied is invalid. Please enter different information.\n" +
+                     "Suggestions:\n" +
+                        "The name must be a number.\n" +
+                        "The number of charge slots must be positive.");
             }
         }
 
@@ -203,6 +204,10 @@ namespace PL
             {
                 MessageBox.Show("An error occured while saving/loading data from an XML file.");
             }
+            catch (BO.LinqQueryException)
+            {
+                MessageBox.Show("Critical Error: A query has failed.\nTry restarting the system.");
+            }
         }
         #endregion
 
@@ -232,13 +237,14 @@ namespace PL
             {
                 MessageBox.Show("An error occured while saving/loading data from an XML file.");
             }
+            catch (Exception)
+            {
+                MessageBox.Show("Critical Error: Cannot resolve a drone with this ID.");
+            }
         }
         #endregion
 
         #region Refresh
-        /// <summary>
-        /// Refesh the data of the station to be displayed in the window.
-        /// </summary>
         public void refresh()
         {
             if (actions.Visibility == Visibility.Visible)
@@ -281,7 +287,7 @@ namespace PL
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void stationWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void stationWindow_Closing(object sender, CancelEventArgs e)
         {
             if (!allowClose)
             {

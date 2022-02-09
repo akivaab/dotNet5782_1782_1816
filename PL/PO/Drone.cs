@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace PO
 {
@@ -135,7 +130,7 @@ namespace PO
 
         #region PropertyChanged
         /// <summary>
-        /// An event to implement INotifyPropertyChanged interface
+        /// An event to implement INotifyPropertyChanged interface.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 

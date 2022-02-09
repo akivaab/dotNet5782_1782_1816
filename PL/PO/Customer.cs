@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PO
 {
@@ -15,7 +10,7 @@ namespace PO
     {
         #region Fields
         /// <summary>
-        /// The customer's ID.
+        /// The customer ID.
         /// </summary>
         private int id;
         public int ID
@@ -66,7 +61,7 @@ namespace PO
         }
 
         /// <summary>
-        /// The customer's location.
+        /// The customer location.
         /// </summary>
         private BO.Location location;
         public BO.Location Location
@@ -119,7 +114,7 @@ namespace PO
 
         #region PropertyChanged
         /// <summary>
-        /// An event to implement INotifyPropertyChanged interface
+        /// An event to implement INotifyPropertyChanged interface.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
