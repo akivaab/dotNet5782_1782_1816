@@ -21,7 +21,12 @@ namespace BL
         /// <summary>
         /// Speed of a drone, in kilometers per second.
         /// </summary>
-        private const double droneSpeed = 30;
+        private const double droneSpeed = 50;
+
+        /// <summary>
+        /// Distance in kilometers a drone travels in the time given by the delay step timer.
+        /// </summary>
+        private const double distancePerIncrement = droneSpeed * ((double)delay / 1000);
 
         /// <summary>
         /// System used to report simulator progress.
@@ -118,10 +123,10 @@ namespace BL
                 }
             }
         }
-        
 
+        #region From Available Status
         /// <summary>
-        /// Assign a package to the drone, or send it ot charge if not possible.
+        /// Assign a package to the drone, or send it to charge if not possible.
         /// </summary>
         private void assign()
         {
@@ -154,50 +159,49 @@ namespace BL
                     {
                         //must wait for creation of viable package
                         updateDisplay.Invoke(progressMarkers["Completed Deliveries"], updateWindows("DroneWindow"));
-                        return;
                     }
                 }
             }
         }
+        #endregion
 
+        #region From Maintenance Status
         /// <summary>
-        /// Charge the drone until its battery reaches 100%.
+        /// Send the drone to charge and charge it until its battery reaches 100%.
         /// </summary>
         /// <exception cref="UndefinedObjectException">More than one droneCharge has thos drone-station pair.</exception>
         private void charge()
         {
             lock (bl) lock (dal)
             {
-                    try
-                    {
-                        //if the drone is not yet at its designated station to charge, send it there  
-                        if (dal.FindDroneCharges(dc => dc.DroneID == drone.ID && dc.StationID == chargeStationID).SingleOrDefault().BeganCharge == null)
+                try
+                {
+                    //if the drone is not yet at its designated station to charge, send it there  
+                    if (dal.FindDroneCharges(dc => dc.DroneID == drone.ID && dc.StationID == chargeStationID).SingleOrDefault().BeganCharge == null)
                         {
-                            /*
-                        Location chargeStationLocation = bl.GetStation(chargeStationID).Location;
-                        double kilometersPerIncrement = droneSpeed * ((double)delay / 1000);
-                        int increments = (int)Math.Ceiling(getDistance(drone.Location, chargeStationLocation) / kilometersPerIncrement);
-                        for (int i = 0; i < increments; ++i)
-                        {
-                            double distance = Math.Min(kilometersPerIncrement, getDistance(drone.Location, chargeStationLocation));
-                            double battery = drone.Battery - (dal.DronePowerConsumption().ElementAt((int)Enums.WeightCategories.free) * distance);
-                            Location location = calculateMidwayLocation(drone.Location, chargeStationLocation, distance);
-                            bl.updateViaSimulator(drone.ID, battery, location);
+                            Location chargeStationLocation = bl.GetStation(chargeStationID).Location;
+                            
+                            //send the drone the distance allowed by the step timer
+                            if (longDistanceTo(chargeStationLocation))
+                            {
+                                double battery = drone.Battery - (dal.DronePowerConsumption().ElementAt((int)Enums.WeightCategories.free) * distancePerIncrement);
+                                Location location = calculateMidwayLocation(drone.Location, chargeStationLocation, distancePerIncrement);
+                                bl.updateViaSimulator(drone.ID, battery, location);
+                            }
+                            //the drone can reach the destination within the time of the step timer
+                            else
+                            {
+                                bl.sendToChargeStation(drone.ID, chargeStationID);
+                                allowSimulatorCancellation = true;
+                            }
                             updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
-                            Thread.Sleep(delay);
-                            drone = bl.GetDrone(drone.ID);
-                        }
-                            */
-                            bl.sendToChargeStation(drone.ID, chargeStationID);
-                            updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
-                            allowSimulatorCancellation = true;
                             return;
                         }
                     }
-                    catch (Exception)
-                    {
-                        throw new UndefinedObjectException("There are multiple active droneCharges with this drone and station pairing.");
-                    }
+                catch (Exception)
+                {
+                    throw new UndefinedObjectException("There are multiple active droneCharges with this drone and station pairing.");
+                }
             }
             lock (bl)
             {
@@ -213,16 +217,19 @@ namespace BL
                     chargeStationID = 0;
                     lastChargeTime = null;
                 }
+                //charge the drone incrementally based on the delay step timer
                 else
                 {
                     DateTime currentTime = DateTime.Now;
                     bl.chargeDrone(drone.ID, (currentTime - (DateTime)lastChargeTime).TotalSeconds);
-                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
+                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "StationWindow"));
                     lastChargeTime = currentTime;
                 }
             }
         }
+        #endregion
 
+        #region From Delivery Status
         /// <summary>
         /// Have the drone collect or deliver its package.
         /// </summary>
@@ -234,14 +241,67 @@ namespace BL
 
                 if (package.CollectingTime == null)
                 {
-                    bl.CollectPackage(drone.ID);
-                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneWindow", "PackageListWindow", "PackageWindow"));
+                    Location senderLocation = bl.GetCustomer(package.Sender.ID).Location;
+
+                    //send the drone the distance allowed by the step timer
+                    if (longDistanceTo(senderLocation))
+                    {
+                        updateIncrement(package, senderLocation);
+                    }
+                    //the drone can reach the destination within the time of the step timer
+                    else
+                    {
+                        bl.CollectPackage(drone.ID);
+                        updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow"));
+                        allowSimulatorCancellation = true;
+                    }
                 }
                 else if (package.DeliveringTime == null)
                 {
-                    bl.DeliverPackage(drone.ID);
-                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow", "CustomerWindow"));
+                    Location receiverLocation = bl.GetCustomer(package.Receiver.ID).Location;
+
+                    //send the drone the distance allowed by the step timer
+                    if (longDistanceTo(receiverLocation))
+                    {
+                        updateIncrement(package, receiverLocation);
+                    }
+                    //the drone can reach the destination within the time of the step timer
+                    else
+                    {
+                        bl.DeliverPackage(drone.ID);
+                        updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow", "CustomerWindow"));
+                        allowSimulatorCancellation = true;
+                    }
                 }
+            }
+        }
+        #endregion
+
+        #region Helper Methods
+        /// <summary>
+        /// Determines if the distance to some location is greater than the drone can travel in one step of the delay timer.
+        /// </summary>
+        /// <param name="destinationLocation">The destination of the drone.</param>
+        /// <returns>True if the incremental distance based on the delay step timer is less than the distance to the destination, false otherwise.</returns>
+        private bool longDistanceTo(Location destinationLocation)
+        {
+            return distancePerIncrement < getDistance(drone.Location, destinationLocation);
+        }
+
+        /// <summary>
+        /// Update the drone based on the incremental changes during a transaction.
+        /// </summary>
+        /// <param name="package">The package the transaction is taking place upon.</param>
+        /// <param name="customerLocation">Location of the relevant customer in the transaction.</param>
+        private void updateIncrement(Package package, Location customerLocation)
+        {
+            lock (bl) lock (dal)
+            {
+                double battery = drone.Battery - (dal.DronePowerConsumption().ElementAt((int)package.Weight) * distancePerIncrement);
+                Location location = calculateMidwayLocation(drone.Location, customerLocation, distancePerIncrement);
+                bl.updateViaSimulator(drone.ID, battery, location);
+                updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
+                allowSimulatorCancellation = false;
             }
         }
 
@@ -255,6 +315,7 @@ namespace BL
             return windowNames;
         }
 
+        #region Calculate Coordinates
         /// <summary>
         /// Find the coordinate location of some point between two coordinates.
         /// </summary>
@@ -326,6 +387,8 @@ namespace BL
         {
             return radians * (180 / Math.PI);
         }
+        #endregion
+        #endregion
         #endregion
     }
 }

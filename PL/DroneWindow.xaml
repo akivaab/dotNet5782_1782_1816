@@ -46,7 +46,7 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
-            <Label Content="Location:" Margin="100,300,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="Location:" Margin="100,325,0,0" Style="{StaticResource actionLabelStyle}"/>
 
             <Label Content="{Binding ID}" Margin="275,70,0,0" Style="{StaticResource actionLabelStyle}"/>
             <TextBox x:Name="actions_Model" Text="{Binding Model}" Margin="275,100,0,0" Style="{StaticResource actionTextBoxStyle}"/>
@@ -71,7 +71,7 @@
                     </Style>
                 </Label.Style>
             </Label>
-            <Label Content="{Binding Location}" Margin="275,300,0,0" Style="{StaticResource actionLabelStyle}"/>
+            <Label Content="{Binding Location}" Margin="275,325,0,0" Style="{StaticResource actionLabelStyle}"/>
 
             <Button Name="removeButton" Content="Remove" HorizontalAlignment="Left" Margin="30,0,0,20" Style="{StaticResource actionButtonStyle}" Click="removeButton_Click"/>
             <Button Name="closeButton" Content="Close" HorizontalAlignment="Right" Margin="0,0,30,20" Style="{StaticResource actionButtonStyle}" Click="closeButton_Click"/>

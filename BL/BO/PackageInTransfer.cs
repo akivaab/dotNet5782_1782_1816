@@ -84,7 +84,8 @@ namespace BO
         public override string ToString()
         {
             return $"Package ID: {ID}, Weight: {Weight}, Priority: {Priority}\n" +
-                $"Package in transfer: {Status}, Distance to deliver: {Math.Round(DeliveryDistance, 2)} km\n" +
+                $"Package in Mid-Transfer: {Status}\n" +
+                $"Distance to deliver: {Math.Round(DeliveryDistance, 2)} km\n" +
                 $"  Collect from {Sender} at {CollectLocation}\n" + 
                 $"  Deliver to {Receiver} at {DeliveryLocation}";
         }

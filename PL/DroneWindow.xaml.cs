@@ -2,16 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PL
 {
@@ -40,6 +32,11 @@ namespace PL
         /// BackgroundWorker for running a simulation of a drone performance. 
         /// </summary>
         private BackgroundWorker bgWorker;
+
+        /// <summary>
+        /// Flag if the simulation should close upon completion.
+        /// </summary>
+        private bool closeFromSimulator = false;
         #endregion
 
         #region Constructors
@@ -417,6 +414,11 @@ namespace PL
             }
         }
 
+        /// <summary>
+        /// The routine assigned to the background worker's DoWork event property, which runs the simulator.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             try
@@ -447,12 +449,17 @@ namespace PL
             {
                 MessageBox.Show(ex.Message + "Please reset the simulator and try again.");
             }
-            catch (BO.XMLFileLoadCreateException ex)
+            catch (BO.XMLFileLoadCreateException)
             {
                 MessageBox.Show("An error has occured when saving/loading xml.");
             }
         }
 
+        /// <summary>
+        /// The routine assigned to the background worker's ProgressChanged event property, which updates the display windows.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             switch (e.ProgressPercentage)
@@ -482,6 +489,11 @@ namespace PL
             }
         }
 
+        /// <summary>
+        /// The routine assigned to the background worker's RunWorkerCompleted event property, which restores the window to its pre-simulator state.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             simulatorButton.Content = "Automatic";
@@ -489,7 +501,15 @@ namespace PL
             idleMessage.Visibility = Visibility.Hidden;
             runningSimulator.Visibility = Visibility.Hidden;
             MessageBox.Show("Simulation Complete!");
+
             enableControllers(true);
+            if (closeFromSimulator)
+            {
+                closeFromSimulator = false;
+                closeButton.IsEnabled = true;
+                allowClose = true;
+                Close();
+            }
         }
 
         /// <summary>
@@ -516,10 +536,16 @@ namespace PL
         {
             if (bgWorker != null && bgWorker.IsBusy)
             {
-                simulatorButton_Click(sender, e); 
+                closeFromSimulator = true;
+                closeButton.IsEnabled = false;
+
+                simulatorButton_Click(sender, e);
             }
-            allowClose = true;
-            Close();
+            else
+            {
+                allowClose = true;
+                Close();
+            }
         }
 
         /// <summary>
