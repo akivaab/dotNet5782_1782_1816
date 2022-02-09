@@ -154,7 +154,7 @@ namespace BL
                 try
                 {
                     bl.AssignPackage(drone.ID);
-                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow"));
+                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow", "CustomerWindow"));
                 }
                 //no packages to deliver
                 catch (EmptyListException)
@@ -286,7 +286,7 @@ namespace BL
                     else
                     {
                         bl.CollectPackage(drone.ID);
-                        updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow"));
+                        updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow", "CustomerWindow"));
                         allowSimulatorCancellation = true;
                     }
                 }
@@ -303,7 +303,7 @@ namespace BL
                     else
                     {
                         bl.DeliverPackage(drone.ID);
-                        updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow", "CustomerWindow"));
+                        updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow", "PackageListWindow", "PackageWindow", "CustomerListWindow", "CustomerWindow"));
                         allowSimulatorCancellation = true;
                     }
                 }

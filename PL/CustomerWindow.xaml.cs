@@ -242,8 +242,8 @@ namespace PL
                     BO.Customer customer = bl.GetCustomer(this.customer.ID);
                     this.customer.Name = customer.Name;
                     this.customer.Phone = customer.Phone;
-                    this.customer.PackagesToSend = (ObservableCollection<BO.PackageForCustomer>)customer.PackagesToSend;
-                    this.customer.PackagesToReceive = (ObservableCollection<BO.PackageForCustomer>)customer.PackagesToReceive;
+                    this.customer.PackagesToSend = new ObservableCollection<BO.PackageForCustomer>(customer.PackagesToSend);
+                    this.customer.PackagesToReceive = new ObservableCollection<BO.PackageForCustomer>(customer.PackagesToReceive);
                 }
                 catch (BO.UndefinedObjectException)
                 {
