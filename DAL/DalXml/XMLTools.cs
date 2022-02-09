@@ -18,7 +18,7 @@ namespace DalXml
         /// Initialize a directory of XML files (if they don't exist yet).
         /// </summary>
         /// <returns>True if XML files were initialized, false otherwise.</returns>
-        /// <exception cref="XMLFileLoadCreateException">Failed to create directory.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to create directory or files.</exception>
         private bool initializeXMLFiles()
         {
             try
@@ -210,6 +210,7 @@ namespace DalXml
         /// <param name="droneRoot">The root element of an XML file.</param>
         /// <param name="droneID">The ID of the drone being searched for.</param>
         /// <returns>True if the drone exists, false otherwise.</returns>
+        /// <exception cref="NonUniqueIdException">Multiple drones in the file have this ID.</exception>
         private bool activeDroneExists(XElement droneRoot, int droneID)
         {
             try
@@ -237,7 +238,7 @@ namespace DalXml
             {
                 XElement drone = (from d in droneRoot.Elements()
                                 where int.Parse(d.Element("ID").Value) == droneID && bool.Parse(d.Element("Active").Value)
-                                select d).SingleOrDefault(); 
+                                select d).SingleOrDefault();
 
                 if (drone == null)
                 {

@@ -38,7 +38,7 @@ namespace DO
 
         /// <summary>
         /// The customer password.
-        /// Defalt password is customerID
+        /// Defalt password is the customer ID.
         /// </summary>
         public string Password { get; set; }
 

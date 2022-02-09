@@ -1,4 +1,5 @@
 ﻿using System;
+using DO;
 
 namespace DalXml
 {
@@ -7,7 +8,7 @@ namespace DalXml
     /// </summary>
     sealed partial class DalXml : DalApi.IDal
     {
-        #region Fields
+        #region Fields and Properties
         /// <summary>
         /// Lazy and implicitly thread-safe initialization of a DalXml.
         /// </summary>
@@ -16,7 +17,7 @@ namespace DalXml
         /// <summary>
         /// Instance of the DalXml that is first instantiated when the getter is called.
         /// </summary>
-        internal static DalXml instance { get { return lazyDalXml.Value; } }
+        internal static DalXml instance => lazyDalXml.Value;
 
         /// <summary>
         /// Path to the directory containing the XML files.
@@ -52,9 +53,7 @@ namespace DalXml
         /// Path to the XML file storing droneCharge data.
         /// </summary>
         private static readonly string droneChargeXmlPath = directory + @"DroneCharges.xml";
-        #endregion
 
-        #region Properties
         public bool DataCleanupRequired { get; init; }
         #endregion
 
@@ -63,6 +62,7 @@ namespace DalXml
         /// A constructor that ensures the existance of a directory of xml files.
         /// Private to maintain Singleton design pattern.
         /// </summary>
+        /// <exception cref="XMLFileLoadCreateException">Failed to initialize directory or files.</exception>
         private DalXml()
         {
             bool initializedNewXMLFiles = initializeXMLFiles();

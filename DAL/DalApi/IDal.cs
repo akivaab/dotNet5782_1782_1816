@@ -26,6 +26,7 @@ namespace DalApi
         /// <param name="latitude">The station latitude coordinates.</param>
         /// <param name="longitude">The station longitude coordinates.</param>
         /// <exception cref="NonUniqueIdException">The given ID is not unique.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public void AddStation(int id, int name, int numChargeSlots, double latitude, double longitude);
 
         /// <summary>
@@ -35,6 +36,7 @@ namespace DalApi
         /// <param name="model">The drone model.</param>
         /// <param name="maxWeight">The maximum weight the drone can handle.</param>
         /// <exception cref="NonUniqueIdException">The given ID is not unique.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public void AddDrone(int id, string model, Enums.WeightCategories maxWeight);
 
         /// <summary> 
@@ -46,6 +48,7 @@ namespace DalApi
         /// <param name="latitude">The customer's latitude coordinates.</param>
         /// <param name="longitude">The customer's longitude coordinate.</param>
         /// <exception cref="NonUniqueIdException">The given ID is not unique.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public void AddCustomer(int id, string name, string phone, double latitude, double longitude);
 
         /// <summary>
@@ -57,6 +60,7 @@ namespace DalApi
         /// <param name="priority">The priority of the package.</param>
         /// <returns>The automatic package ID.</returns>
         /// <exception cref="UndefinedObjectException">Either the sender or receiver given do not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public int AddPackage(int senderID, int receiverID, DO.Enums.WeightCategories weight, DO.Enums.Priorities priority);
         #endregion
 
@@ -67,6 +71,8 @@ namespace DalApi
         /// <param name="packageID">The package ID.</param>
         /// <param name="droneID">The drone ID.</param>
         /// <exception cref="UndefinedObjectException">Either the drone or package given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         public void AssignPackage(int packageID, int droneID);
 
         /// <summary>
@@ -75,6 +81,8 @@ namespace DalApi
         /// <param name="packageID">The package ID.</param>
         /// <param name="droneID">The drone ID.</param>
         /// <exception cref="UndefinedObjectException">Either the drone or package given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         public void CollectPackage(int packageID, int droneID);
 
         /// <summary>
@@ -83,6 +91,8 @@ namespace DalApi
         /// <param name="packageID">The package ID.</param>
         /// <param name="droneID">The drone ID.</param>
         /// <exception cref="UndefinedObjectException">Either the drone or package given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         public void DeliverPackage(int packageID, int droneID);
 
         /// <summary>
@@ -93,6 +103,7 @@ namespace DalApi
         /// <param name="collected">The new collection time.</param>
         /// <param name="delivered">The new delivery time.</param>
         /// <exception cref="UndefinedObjectException">The package given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public void ModifyPackageStatus(int packageID, DateTime? assigned, DateTime? collected, DateTime? delivered);
 
         /// <summary>
@@ -101,6 +112,8 @@ namespace DalApi
         /// <param name="droneID">The drone ID.</param>
         /// <param name="stationID">The station ID.</param>
         /// <exception cref="UndefinedObjectException">Either the drone or station given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         public void ChargeDrone(int droneID, int stationID);
 
         /// <summary>
@@ -109,6 +122,8 @@ namespace DalApi
         /// <param name="droneID">The drone ID.</param>
         /// <param name="stationID">The station ID.</param>
         /// <exception cref="UndefinedObjectException">Either the drone or station given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         public void AllotChargeSlot(int droneID, int stationID);
 
         /// <summary>
@@ -117,6 +132,8 @@ namespace DalApi
         /// <param name="droneID">The drone ID.</param>
         /// <param name="stationID">The station ID.</param>
         /// <exception cref="UndefinedObjectException">Either the drone or station given does not exist, or the drone is not charging at the station.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         public void BeginCharge(int droneID, int stationID);
 
         /// <summary>
@@ -125,6 +142,8 @@ namespace DalApi
         /// <param name="droneID">The drone ID.</param>
         /// <param name="stationID">The station ID.</param>
         /// <exception cref="UndefinedObjectException">Either the drone or station given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         public void ReleaseDroneFromCharging(int droneID, int stationID);
 
         /// <summary>
@@ -133,6 +152,8 @@ namespace DalApi
         /// <param name="droneID">The drone ID.</param>
         /// <param name="model">The new drone model.</param>
         /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         public void UpdateDroneModel(int droneID, string model);
 
         /// <summary>
@@ -141,6 +162,7 @@ namespace DalApi
         /// <param name="customerID">The customer ID.</param>
         /// <param name="name">The new customer name.</param>
         /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public void UpdateCustomerName(int customerID, string name);
 
         /// <summary>
@@ -149,6 +171,7 @@ namespace DalApi
         /// <param name="customerID">The customer ID.</param>
         /// <param name="phone">The customer's new phone number</param>
         /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public void UpdateCustomerPhone(int customerID, string phone);
 
         /// <summary>
@@ -157,6 +180,7 @@ namespace DalApi
         /// <param name="customerID">The customer ID.</param>
         /// <param name="password">The customer's new password</param>
         /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public void UpdateCustomerPassword(int customerID, string password);
 
         /// <summary>
@@ -165,6 +189,7 @@ namespace DalApi
         /// <param name="stationID">The station ID.</param>
         /// <param name="name">The new station name.</param>
         /// <exception cref="UndefinedObjectException">The station given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public void UpdateStationName(int stationID, int name);
 
         /// <summary>
@@ -173,6 +198,7 @@ namespace DalApi
         /// <param name="stationID">The station ID.</param>
         /// <param name="availableChargingSlots">The number of available charging slots at the station.</param>
         /// <exception cref="UndefinedObjectException">The station given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public void UpdateStationChargeSlots(int stationID, int availableChargingSlots);
         #endregion
 
@@ -182,6 +208,7 @@ namespace DalApi
         /// </summary>
         /// <param name="stationID">The station ID.</param>
         /// <exception cref="UndefinedObjectException">The station given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public void RemoveStation(int stationID);
 
         /// <summary>
@@ -189,6 +216,8 @@ namespace DalApi
         /// </summary>
         /// <param name="droneID">The drone ID.</param>
         /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         public void RemoveDrone(int droneID);
 
         /// <summary>
@@ -196,6 +225,7 @@ namespace DalApi
         /// </summary>
         /// <param name="customerID">The customer ID.</param>
         /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public void RemoveCustomer(int customerID);
 
         /// <summary>
@@ -203,6 +233,7 @@ namespace DalApi
         /// </summary>
         /// <param name="packageID"></param>
         /// <exception cref="UndefinedObjectException">The package given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public void RemovePackage(int packageID);
         #endregion
 
@@ -213,6 +244,7 @@ namespace DalApi
         /// <param name="stationID">The Station ID.</param>
         /// <returns>The station with this ID.</returns>
         /// <exception cref="UndefinedObjectException">The station given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public Station GetStation(int stationID);
 
         /// <summary>
@@ -221,6 +253,8 @@ namespace DalApi
         /// <param name="droneID">The Drone ID.</param>
         /// <returns>The drone with this ID.</returns>
         /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         public Drone GetDrone(int droneID);
 
         /// <summary>
@@ -229,6 +263,7 @@ namespace DalApi
         /// <param name="customerID">The customer ID.</param>
         /// <return>The customer with this ID.</return>
         /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public Customer GetCustomer(int customerID);
 
         /// <summary>
@@ -237,6 +272,7 @@ namespace DalApi
         /// <param name="packageID">The package ID.</param>
         /// <return>The package with this ID.</return> 
         /// <exception cref="UndefinedObjectException">The package given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public Package GetPackage(int packageID);
 
         /// <summary>
@@ -245,6 +281,7 @@ namespace DalApi
         /// <param name="droneID">The drone ID.</param>
         /// <returns>DateTime the drone began charging.</returns>
         /// <exception cref="UndefinedObjectException">The drone given is not charging.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public DateTime? GetTimeChargeBegan(int droneID);
 
         /// <summary>
@@ -253,6 +290,7 @@ namespace DalApi
         /// <param name="customerID">The customer ID.</param>
         /// <returns>The customer password.</returns>
         /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public string GetCustomerPassword(int customerID);
         #endregion
 
@@ -261,30 +299,35 @@ namespace DalApi
         /// Get all stations.
         /// </summary>
         /// <returns>List of all stations</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public IEnumerable<Station> GetStationsList();
 
         /// <summary>
         /// Get all drones in the system.
         /// </summary>
         /// <returns>A collection of all drones.</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public IEnumerable<Drone> GetDronesList();
 
         /// <summary>
         /// Get all customers in the system.
         /// </summary>
         /// <returns>A collection of all customers.</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public IEnumerable<Customer> GetCustomersList();
 
         /// <summary>
         /// Get all packages in the system.
         /// </summary>
         /// <returns>A collection of all packages.</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public IEnumerable<Package> GetPackagesList();
 
         /// <summary>
         /// Represents the statistics of a drone's power consumption.
         /// </summary>
         /// <returns>A collection of doubles for how much power is consumed for different tasks.</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public IEnumerable<double> DronePowerConsumption();
         #endregion
 
@@ -294,6 +337,7 @@ namespace DalApi
         /// </summary>
         /// <param name="predicate">Predicate used as a search parameter.</param>
         /// <returns>A collection of all appropriate packages.</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public IEnumerable<Package> FindPackages(Predicate<DO.Package> predicate);
 
         /// <summary>
@@ -301,6 +345,7 @@ namespace DalApi
         /// </summary>
         /// <param name="predicate">Predicate used as a search parameter.</param>
         /// <returns>A collection of all appropriate stations.</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public IEnumerable<Station> FindStations(Predicate<DO.Station> predicate);
 
         /// <summary>
@@ -308,6 +353,7 @@ namespace DalApi
         /// </summary>
         /// <param name="predicate">Predicate used as a search parameter.</param>
         /// <returns>A collection of all appropriate customers.</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public IEnumerable<Customer> FindCustomers(Predicate<DO.Customer> predicate);
 
         /// <summary>
@@ -315,6 +361,7 @@ namespace DalApi
         /// </summary>
         /// <param name="predicate">Predicate used as a search parameter.</param>
         /// <returns>A collection of all appropriate droneCharges.</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         public IEnumerable<DroneCharge> FindDroneCharges(Predicate<DO.DroneCharge> predicate);
         #endregion
     }

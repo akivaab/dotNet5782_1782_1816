@@ -23,6 +23,10 @@ namespace ConsoleUI
             {
                 dal = DalApi.DalFactory.GetDal("DalObject");
             }
+            catch (InstanceInitializationException e)
+            {
+                Console.WriteLine(e.Message);
+            }
             catch (IllegalArgumentException e)
             {
                 Console.WriteLine(e.Message);
@@ -220,6 +224,10 @@ namespace ConsoleUI
                         break;
                 }
             }
+            catch (NonUniqueIdException e)
+            {
+                Console.WriteLine(e.Message);
+            }
             catch (UndefinedObjectException e)
             {
                 Console.WriteLine(e.Message);
@@ -282,6 +290,10 @@ namespace ConsoleUI
                 Console.WriteLine(e.Message);
             }
             catch (XMLFileLoadCreateException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (NonUniqueIdException e)
             {
                 Console.WriteLine(e.Message);
             }

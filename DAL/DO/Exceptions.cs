@@ -49,4 +49,16 @@ namespace DO
         /// <param name="s">A message describing the exception.</param>
         public XMLFileLoadCreateException(string s) : base(s) { }
     }
+
+    /// <summary>
+    /// An exception thrown when a class instance failed to be initialized properly.
+    /// </summary>
+    public class InstanceInitializationException : Exception
+    {
+        /// <summary>
+        /// InstanceInitializationException constructor.
+        /// </summary>
+        /// <param name="s">A message describing the exception.</param>
+        public InstanceInitializationException(string s) : base(s) { }
+    }
 }
