@@ -45,12 +45,38 @@ namespace BL
         }
 
         /// <summary>
+        /// Determine if an exception is system defined.
+        /// </summary>
+        /// <param name="e">The exception.</param>
+        /// <returns>True if the exception is system-defined, false if user-defined.</returns>
+        internal static bool isSystemDefinedException(Exception e)
+        {
+            return !(e is IllegalArgumentException ||
+                e is EmptyListException ||
+                e is NonUniqueIdException ||
+                e is UndefinedObjectException ||
+                e is UnableToChargeException ||
+                e is UnableToReleaseException ||
+                e is UnableToAssignException ||
+                e is UnableToCollectException ||
+                e is UnableToDeliverException ||
+                e is UnableToRemoveException ||
+                e is XMLFileLoadCreateException ||
+                e is LinqQueryException ||
+                e is InstanceInitializationException);
+        }
+
+        /// <summary>
         /// Return a random battery level between the amount a drone needs to deliver a package and return to a station, and 100.
         /// </summary>
         /// <param name="droneLocation">The current location of the drone.</param>
         /// <param name="package">The package being delivered.</param>
         /// <param name="powerConsumed">The amount of battery required for the drone to carry the package one kilometer.</param>
         /// <returns>A random double representing the battery level.</returns>
+        /// <exception cref="UndefinedObjectException">A customer did not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="EmptyListException">There are no stations.</exception>
+        /// <exception cref="LinqQueryException">Failed to get the closest station.</exception>
         private double randomBatteryPower(Location droneLocation, DO.Package package, double powerConsumed)
         {
             try
@@ -88,6 +114,9 @@ namespace BL
         /// </summary>
         /// <param name="location">The location for which the method finds the nearest station.</param>
         /// <returns>The location of the station closest to the location given.</returns>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="EmptyListException">There are no stations.</exception>
+        /// <exception cref="LinqQueryException">Failed to get the closest station.</exception>
         private Location getClosestStation(Location location)
         {
             try
@@ -110,22 +139,31 @@ namespace BL
         /// <param name="location">The location for which the method finds the nearest station.</param>
         /// <param name="stations">The collection of stations considered by the method.</param>
         /// <returns>The location of the closest station to the location given.</returns>
+        /// <exception cref="EmptyListException">There are no stations.</exception>
+        /// <exception cref="LinqQueryException">Failed to get the closest station.</exception>
         private Location getClosestStation(Location location, IEnumerable<DO.Station> stations)
         {
-            lock (dal)
+            try
             {
-                if (stations.Count() == 0)
+                lock (dal)
                 {
-                    throw new EmptyListException("The function recieved an empty list.");
+                    if (stations.Count() == 0)
+                    {
+                        throw new EmptyListException("The function recieved an empty list.");
+                    }
+
+                    IEnumerable<(Location, double)> stationLocDistPairs = from DO.Station station in stations
+                                                                          let stationLocation = new Location(station.Latitude, station.Longitude)
+                                                                          let distance = getDistance(location, stationLocation)
+                                                                          select (stationLocation, distance);
+
+                    double minDist = stationLocDistPairs.Select(pair => pair.Item2).Min();
+                    return stationLocDistPairs.Where(pair => pair.Item2 == minDist).Select(pair => pair.Item1).First();
                 }
-
-                IEnumerable<(Location, double)> stationLocDistPairs = from DO.Station station in stations
-                                                                      let stationLocation = new Location(station.Latitude, station.Longitude)
-                                                                      let distance = getDistance(location, stationLocation)
-                                                                      select (stationLocation, distance);
-
-                double minDist = stationLocDistPairs.Select(pair => pair.Item2).Min();
-                return stationLocDistPairs.Where(pair => pair.Item2 == minDist).Select(pair => pair.Item1).First();
+            }
+            catch (Exception)
+            {
+                throw new LinqQueryException("Could not find a nearby station.");
             }
         }
 
@@ -134,6 +172,8 @@ namespace BL
         /// </summary>
         /// <param name="drone">A drone not carrying any package.</param>
         /// <returns>A collection of stations that the drone is capable of reaching.</returns>
+        /// <exception cref="LinqQueryException">Failed to get reachable station.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         private IEnumerable<DO.Station> getReachableStations(DroneToList drone)
         {
             try
@@ -154,6 +194,10 @@ namespace BL
             {
                 throw new XMLFileLoadCreateException(e.Message, e);
             }
+            catch (Exception)
+            {
+                throw new LinqQueryException("Could not find a reachable station.");
+            }
         }
         #endregion
 
@@ -163,6 +207,8 @@ namespace BL
         /// </summary>
         /// <param name="customerID">ID of the customer.</param>
         /// <returns>The location of the customer.</returns>
+        /// <exception cref="UndefinedObjectException">The customer given does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         private Location getCustomerLocation(int customerID)
         {
             try
@@ -188,6 +234,10 @@ namespace BL
         /// Get a random customer that already received a package.
         /// </summary>
         /// <returns>A random customer that received a package.</returns>
+        /// <exception cref="EmptyListException">No customer received a package.</exception>
+        /// <exception cref="UndefinedObjectException">The receiver obtained does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="LinqQueryException">Failed to find a package receiver.</exception>
         private DO.Customer randomPackageReceiver()
         {
             try
@@ -217,6 +267,10 @@ namespace BL
             {
                 throw new XMLFileLoadCreateException(e.Message, e);
             }
+            catch (Exception)
+            {
+                throw new LinqQueryException("Could not get a package receiver.");
+            }
         }
         #endregion
 
@@ -227,40 +281,49 @@ namespace BL
         /// <param name="dalPackages">A collection of packages to choose from.</param>
         /// <param name="drone">The drone delivering the package to be chosen.</param>
         /// <returns>The ID of the best package.</returns>
+        /// <exception cref="EmptyListException">There are no packages the drone can currently deliver.</exception>
+        /// <exception cref="LinqQueryException">Failed to find the best package for a drone to deliver.</exception>
         private int findBestPackage(IEnumerable<DO.Package> dalPackages, DroneToList drone)
         {
-            lock (dal)
+            try
             {
-                IEnumerable<DO.Package> bestPackages = dalPackages;
-
-                //remove packages too heavy for drone to lift
-                bestPackages = from package in bestPackages
-                               where package.Weight.CompareTo((DO.Enums.WeightCategories)drone.MaxWeight) <= 0
-                               select package;
-                if (bestPackages.Count() == 0)
+                lock (dal)
                 {
-                    throw new EmptyListException("There are currently no packages that this drone is capable of delivering.");
+                    IEnumerable<DO.Package> bestPackages = dalPackages;
+
+                    //remove packages too heavy for drone to lift
+                    bestPackages = from package in bestPackages
+                                   where package.Weight.CompareTo((DO.Enums.WeightCategories)drone.MaxWeight) <= 0
+                                   select package;
+                    if (bestPackages.Count() == 0)
+                    {
+                        throw new EmptyListException("There are currently no packages that this drone is capable of delivering.");
+                    }
+
+                    //remove packages whose delivery will consume more battery than the drone has
+                    bestPackages = from package in bestPackages
+                                   let senderLocation = getCustomerLocation(package.SenderID)
+                                   let receiverLocation = getCustomerLocation(package.ReceiverID)
+                                   let requiredDistance = getDistance(drone.Location, senderLocation) + getDistance(senderLocation, receiverLocation) + getDistance(receiverLocation, getClosestStation(receiverLocation))
+                                   let requiredBattery = powerConsumption.ElementAt((int)package.Weight) * requiredDistance
+                                   where requiredBattery <= drone.Battery
+                                   select package;
+                    if (bestPackages.Count() == 0)
+                    {
+                        throw new EmptyListException("The drone needs more battery in order to deliver any package.");
+                    }
+
+                    //order packages by priority, then weight, then distance
+                    bestPackages = bestPackages.OrderByDescending(p => p.Priority)
+                        .ThenByDescending(p => p.Weight)
+                        .ThenBy(p => getDistance(drone.Location, getCustomerLocation(p.SenderID)));
+
+                    return bestPackages.First().ID;
                 }
-
-                //remove packages whose delivery will consume more battery than the drone has
-                bestPackages = from package in bestPackages
-                               let senderLocation = getCustomerLocation(package.SenderID)
-                               let receiverLocation = getCustomerLocation(package.ReceiverID)
-                               let requiredDistance = getDistance(drone.Location, senderLocation) + getDistance(senderLocation, receiverLocation) + getDistance(receiverLocation, getClosestStation(receiverLocation))
-                               let requiredBattery = powerConsumption.ElementAt((int)package.Weight) * requiredDistance
-                               where requiredBattery <= drone.Battery
-                               select package;
-                if (bestPackages.Count() == 0)
-                {
-                    throw new EmptyListException("The drone needs more battery in order to deliver any package.");
-                }
-
-                //order packages by priority, then weight, then distance
-                bestPackages = bestPackages.OrderByDescending(p => p.Priority)
-                    .ThenByDescending(p => p.Weight)
-                    .ThenBy(p => getDistance(drone.Location, getCustomerLocation(p.SenderID)));
-
-                return bestPackages.First().ID;
+            }
+            catch (Exception e) when (isSystemDefinedException(e))
+            {
+                throw new LinqQueryException("Could not find best package for delivery.");
             }
         }
 
@@ -295,6 +358,10 @@ namespace BL
         /// <summary>
         /// Clean up the information randomly generated in the data layer so it all makes sense.
         /// </summary>
+        /// <exception cref="UndefinedObjectException">An entity obtained does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="LinqQueryException">Failed to fix the problematic packages.</exception>
+        /// <exception cref="NonUniqueIdException">There are multiple drones with the same ID.</exception>
         private void dataCleanup()
         {
             fixPackageStatusTimes();
@@ -304,6 +371,9 @@ namespace BL
         /// <summary>
         /// Modify the information randomly generated in the data layer for the assignment, collection, and delivery times for packages so they make sense.
         /// </summary>
+        /// <exception cref="UndefinedObjectException">A package obtained does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="LinqQueryException">Failed to fix the package status times.</exception>
         private void fixPackageStatusTimes()
         {
             try
@@ -350,11 +420,19 @@ namespace BL
             {
                 throw new XMLFileLoadCreateException(e.Message, e);
             }
+            catch (Exception)
+            {
+                throw new LinqQueryException("Could not get the packages.");
+            }
         }
 
         /// <summary>
         /// Remove all packages generated in the data layer whose own attributes dictate that it cannot exist.
         /// </summary>
+        /// <exception cref="UndefinedObjectException">An entity obtained does not exist.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="NonUniqueIdException">There are multiple drones with the same ID.</exception>
+        /// <exception cref="LinqQueryException">Failed to remove the problematic packages.</exception>
         private void removeProblematicPackages()
         {
             try
@@ -404,6 +482,14 @@ namespace BL
             catch (DO.XMLFileLoadCreateException e)
             {
                 throw new XMLFileLoadCreateException(e.Message, e);
+            }
+            catch (DO.NonUniqueIdException e)
+            {
+                throw new NonUniqueIdException(e.Message, e);
+            }
+            catch (Exception)
+            {
+                throw new LinqQueryException("Could not get the packages.");
             }
         }
         #endregion

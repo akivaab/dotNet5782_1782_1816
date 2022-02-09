@@ -71,6 +71,7 @@ namespace BlApi
         /// <param name="droneID">The ID drone of the drone being updated.</param>
         /// <param name="model">The updated model of the drone.</param>
         /// <exception cref="UndefinedObjectException">Some entity called does not exist.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         /// <exception cref="XMLFileLoadCreateException">Failed to save/load XML.</exception>
         public void UpdateDroneModel(int droneID, string model);
 
@@ -112,7 +113,10 @@ namespace BlApi
         /// <param name="droneID">The ID of the drone being sent to charge.</param>
         /// <exception cref="UnableToChargeException">Cannot send the drone to charge.</exception>
         /// <exception cref="UndefinedObjectException">Some entity called does not exist.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
+        /// <exception cref="EmptyListException">THere are no stations.</exception>
         /// <exception cref="XMLFileLoadCreateException">Failed to save/load XML.</exception>
+        /// <exception cref="LinqQueryException">Failed to perform some query.</exception>
         public void SendDroneToCharge(int droneID);
 
         /// <summary>
@@ -122,7 +126,9 @@ namespace BlApi
         /// <param name="chargingTimeInHours">The amount of time the drone was charging for in hours.</param>
         /// <exception cref="UnableToReleaseException">Cannot release the drone.</exception>
         /// <exception cref="UndefinedObjectException">Some entity called does not exist.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         /// <exception cref="XMLFileLoadCreateException">Failed to save/load XML.</exception>
+        /// <exception cref="LinqQueryException">There is not a single matching droneCharge.</exception>
         public void ReleaseFromCharge(int droneID, double chargingTimeInHours);
 
         /// <summary>
@@ -131,6 +137,8 @@ namespace BlApi
         /// <param name="droneID">The ID of the drone being assigned a package.</param>
         /// <exception cref="UnableToAssignException">Cannot assign the drone to a package.</exception>
         /// <exception cref="UndefinedObjectException">Some entity called does not exist.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
+        /// <exception cref="EmptyListException">No packages to assign.</exception>
         /// <exception cref="XMLFileLoadCreateException">Failed to save/load XML.</exception>
         public void AssignPackage(int droneID);
 
@@ -140,6 +148,7 @@ namespace BlApi
         /// <param name="droneID">The ID of the drone being sent to collect its package.</param>
         /// <exception cref="UnableToCollectException">The drone cannot collect its package.</exception>
         /// <exception cref="UndefinedObjectException">Some entity called does not exist.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         /// <exception cref="XMLFileLoadCreateException">Failed to save/load XML.</exception>
         public void CollectPackage(int droneID);
 
@@ -149,6 +158,7 @@ namespace BlApi
         /// <param name="droneID">The ID of the drone being sent to deliver its package.</param>
         /// <exception cref="UnableToDeliverException">The drone cannot deliver its package.</exception>
         /// <exception cref="UndefinedObjectException">Some entity called does not exist.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         /// <exception cref="XMLFileLoadCreateException">Failed to save/load XML.</exception>
         public void DeliverPackage(int droneID);
         #endregion
@@ -161,6 +171,7 @@ namespace BlApi
         /// <exception cref="UnableToRemoveException">Cannot remove the station.</exception>
         /// <exception cref="UndefinedObjectException">Some entity called does not exist.</exception>
         /// <exception cref="XMLFileLoadCreateException">Failed to save/load XML.</exception>
+        /// <exception cref="LinqQueryException">There is not a single matching station.</exception>
         public void RemoveStation(int stationID);
 
         /// <summary>
@@ -169,6 +180,7 @@ namespace BlApi
         /// <param name="droneID">The drone ID.</param>
         /// <exception cref="UnableToRemoveException">Cannot remove the drone.</exception>
         /// <exception cref="UndefinedObjectException">Some entity called does not exist.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the same ID.</exception>
         /// <exception cref="XMLFileLoadCreateException">Failed to save/load XML.</exception>
         public void RemoveDrone(int droneID);
 
@@ -233,7 +245,7 @@ namespace BlApi
         /// </summary>
         /// <param name="droneID">The ID of the drone.</param>
         /// <returns>The DateTime the drone began charging.</returns>
-        /// <exception cref="UndefinedObjectException">Some entity called does not exist.</exception>
+        /// <exception cref="UndefinedObjectException">Some entity called does not exist, or the drone hasn't begun charging.</exception>
         /// <exception cref="XMLFileLoadCreateException">Failed to save/load XML.</exception>
         public DateTime GetTimeChargeBegan(int droneID);
 
@@ -307,7 +319,6 @@ namespace BlApi
         /// </summary>
         /// <param name="predicate">The predicate used to filter the customers.</param>
         /// <returns>A collection of CustomerToList entities.</returns>
-        /// <exception cref="UndefinedObjectException">Some entity called does not exist.</exception>
         /// <exception cref="XMLFileLoadCreateException">Failed to save/load XML.</exception>
         public IEnumerable<CustomerToList> FindCustomers(Predicate<DO.Customer> predicate);
         #endregion
@@ -319,6 +330,16 @@ namespace BlApi
         /// <param name="droneID">The ID of the drone being simulated.</param>
         /// <param name="updateDisplay">Delegate for updating the display.</param>
         /// <param name="stop">Function marking when to stop the simulation.</param>
+        /// <exception cref="UnableToAssignException">Cannot assign a package to this drone.</exception>
+        /// <exception cref="UnableToCollectException">Cannot collect a package with this drone.</exception>
+        /// <exception cref="UnableToDeliverException">Cannot deliver a package with this drone.</exception>
+        /// <exception cref="UnableToChargeException">Cannot charge this drone.</exception>
+        /// <exception cref="UnableToReleaseException">Cannot release the drone from the station.</exception>
+        /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
+        /// <exception cref="NonUniqueIdException">There are multiple drones with this ID.</exception>
+        /// <exception cref="EmptyListException">There are no packages to assign.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="LinqQueryException">Failed to perform some query.</exception>
         public void ActivateSimulator(int droneID, Action<int, IEnumerable<string>> updateDisplay, Func<bool> stop);
         #endregion
     }

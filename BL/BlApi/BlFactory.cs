@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using BO;
 
 namespace BlApi
 {
@@ -14,10 +11,12 @@ namespace BlApi
         /// <summary>
         /// Get a BL object.
         /// </summary>
-        /// <returns>An IBL object</returns>
+        /// <returns>An IBL object.</returns>
+        /// <exception cref="InstanceInitializationException">The BL instance was not created properly.</exception>
         public static IBL GetBl()
         {
-            return BL.BL.instance;
+            try { return BL.BL.instance; }
+            catch (Exception) { throw new InstanceInitializationException("Failed to instantiate BL."); }
         }
     }
 }

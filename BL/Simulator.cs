@@ -82,7 +82,16 @@ namespace BL
         /// <param name="droneID">The ID of the drone being simulated.</param>
         /// <param name="updateDisplay">Action which calls a function that updates the application windows displayed.</param>
         /// <param name="stop">Function that determines when to stop the simulator.</param>
-        /// <exception cref="UndefinedObjectException">More than one droneCharge was found with the drone.</exception>
+        /// <exception cref="UnableToAssignException">Cannot assign a package to this drone.</exception>
+        /// <exception cref="UnableToCollectException">Cannot collect a package with this drone.</exception>
+        /// <exception cref="UnableToDeliverException">Cannot deliver a package with this drone.</exception>
+        /// <exception cref="UnableToChargeException">Cannot charge this drone.</exception>
+        /// <exception cref="UnableToReleaseException">Cannot release the drone from the station.</exception>
+        /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
+        /// <exception cref="NonUniqueIdException">There are multiple drones with this ID.</exception>
+        /// <exception cref="EmptyListException">There are no packages to assign.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="LinqQueryException">Failed to find proper droneCharge.</exception>
         public Simulator(BL bl, int droneID, Action<int, IEnumerable<string>> updateDisplay, Func<bool> stop)
         {
             this.bl = bl;
@@ -94,33 +103,37 @@ namespace BL
                 {
                     this.chargeStationID = this.bl.dal.FindDroneCharges(dc => dc.DroneID == droneID).SingleOrDefault().StationID;
                 }
-            }
-            catch (Exception)
-            {
-                throw new UndefinedObjectException("There are multiple active droneCharges with this drone.");
-            }
 
-            while (!(stop() && allowSimulatorCancellation))
+                while (!(stop() && allowSimulatorCancellation))
+                {
+                    lock (this.bl)
+                    {
+                        drone = this.bl.GetDrone(droneID);
+                    }
+                    Thread.Sleep(delay);
+                    switch (drone.Status)
+                    {
+                        case Enums.DroneStatus.available:
+                            assign();
+                            break;
+                        case Enums.DroneStatus.maintenance:
+                            charge();
+                            break;
+                        case Enums.DroneStatus.delivery:
+                            deliver();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            catch (DO.XMLFileLoadCreateException e)
             {
-                lock (this.bl)
-                {
-                    drone = this.bl.GetDrone(droneID);
-                }
-                Thread.Sleep(delay);
-                switch (drone.Status)
-                {
-                    case Enums.DroneStatus.available:
-                        assign();
-                        break;
-                    case Enums.DroneStatus.maintenance:
-                        charge();
-                        break;
-                    case Enums.DroneStatus.delivery:
-                        deliver();
-                        break;
-                    default:
-                        break;
-                }
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
+            catch (Exception e) when (isSystemDefinedException(e))
+            {
+                throw new LinqQueryException("There are multiple droneCharges with this drone ID.");
             }
         }
 
@@ -128,6 +141,12 @@ namespace BL
         /// <summary>
         /// Assign a package to the drone, or send it to charge if not possible.
         /// </summary>
+        /// <exception cref="UnableToAssignException">Cannot assign a package to this drone.</exception>
+        /// <exception cref="UnableToChargeException">Cannot select a station to charge the drone in.</exception>
+        /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
+        /// <exception cref="NonUniqueIdException">There are multiple drones with this ID.</exception>
+        /// <exception cref="EmptyListException">There are no packages to assign.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         private void assign()
         {
             lock (bl)
@@ -169,7 +188,12 @@ namespace BL
         /// <summary>
         /// Send the drone to charge and charge it until its battery reaches 100%.
         /// </summary>
-        /// <exception cref="UndefinedObjectException">More than one droneCharge has thos drone-station pair.</exception>
+        /// <exception cref="UnableToChargeException">Cannot charge this drone.</exception>
+        /// <exception cref="UnableToReleaseException">Cannot release the drone from the station.</exception>
+        /// <exception cref="UndefinedObjectException">The given drone does not exist.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones have the given ID.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="LinqQueryException">More than one droneCharge has thos drone-station pair.</exception>
         private void charge()
         {
             lock (bl) lock (dal)
@@ -198,9 +222,13 @@ namespace BL
                             return;
                         }
                     }
-                catch (Exception)
+                catch (DO.XMLFileLoadCreateException e)
                 {
-                    throw new UndefinedObjectException("There are multiple active droneCharges with this drone and station pairing.");
+                    throw new XMLFileLoadCreateException(e.Message, e);
+                }
+                catch (Exception e) when (isSystemDefinedException(e))
+                {
+                    throw new LinqQueryException("There are multiple droneCharges with this drone and station pairing.");
                 }
             }
             lock (bl)
@@ -233,6 +261,12 @@ namespace BL
         /// <summary>
         /// Have the drone collect or deliver its package.
         /// </summary>
+        /// <exception cref="UnableToCollectException">Cannot collect a package with this drone.</exception>
+        /// <exception cref="UnableToDeliverException">Cannot deliver a package with this drone.</exception>
+        /// <exception cref="UndefinedObjectException">The given drone does not exist.</exception>
+        /// <exception cref="NonUniqueIdException">Multiple drones exist with this ID.</exception>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="LinqQueryException">Failed to perform a query.</exception>
         private void deliver()
         {
             lock (bl)
@@ -293,15 +327,28 @@ namespace BL
         /// </summary>
         /// <param name="package">The package the transaction is taking place upon.</param>
         /// <param name="customerLocation">Location of the relevant customer in the transaction.</param>
+        /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="LinqQueryException">Failed to update the drone.</exception>
         private void updateIncrement(Package package, Location customerLocation)
         {
-            lock (bl) lock (dal)
+            try
             {
-                double battery = drone.Battery - (dal.DronePowerConsumption().ElementAt((int)package.Weight) * distancePerIncrement);
-                Location location = calculateMidwayLocation(drone.Location, customerLocation, distancePerIncrement);
-                bl.updateViaSimulator(drone.ID, battery, location);
-                updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
-                allowSimulatorCancellation = false;
+                lock (bl) lock (dal)
+                {
+                    double battery = drone.Battery - (dal.DronePowerConsumption().ElementAt((int)package.Weight) * distancePerIncrement);
+                    Location location = calculateMidwayLocation(drone.Location, customerLocation, distancePerIncrement);
+                    bl.updateViaSimulator(drone.ID, battery, location);
+                    updateDisplay.Invoke(progressMarkers["Running Simulator"], updateWindows("DroneListWindow", "DroneWindow"));
+                    allowSimulatorCancellation = false;
+                }
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
+            catch (Exception e) when (isSystemDefinedException(e))
+            {
+                throw new LinqQueryException("Could not update the drone.");
             }
         }
 

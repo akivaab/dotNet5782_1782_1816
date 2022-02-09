@@ -108,6 +108,10 @@ namespace BL
             {
                 throw new XMLFileLoadCreateException(e.Message, e);
             }
+            catch (Exception e) when (isSystemDefinedException(e))
+            {
+                throw new LinqQueryException("There is not a single matching station.");
+            }
         }
         #endregion
 

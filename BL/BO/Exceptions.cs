@@ -155,4 +155,35 @@ namespace BO
         /// <param name="e">A matching exception thrown from the data layer.</param>
         public XMLFileLoadCreateException(string s, DO.XMLFileLoadCreateException e): base(s, e) { }
     }
+
+    /// <summary>
+    /// An exception throw when some error occured while making a LINQ query.
+    /// </summary>
+    public class LinqQueryException : Exception
+    {
+        /// <summary>
+        /// LinqQueryException constructor.
+        /// </summary>
+        /// <param name="s">A message describing the exception.</param>
+        public LinqQueryException(string s) : base(s) { }
+    }
+
+    /// <summary>
+    /// An exception thrown when a class instance failed to be initialized properly.
+    /// </summary>
+    public class InstanceInitializationException : Exception
+    {
+        /// <summary>
+        /// InstanceInitializationException constructor.
+        /// </summary>
+        /// <param name="s">A message describing the exception.</param>
+        public InstanceInitializationException(string s) : base(s) { }
+
+        /// <summary>
+        /// InstanceInitializationException constructor.
+        /// </summary>
+        /// <param name="s">A message describing the exception.</param>
+        /// <param name="e">A matching exception thrown from the data layer.</param>
+        public InstanceInitializationException(string s, DO.InstanceInitializationException e) : base(s, e) { }
+    }
 }

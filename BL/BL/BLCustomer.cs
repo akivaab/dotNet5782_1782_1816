@@ -172,6 +172,26 @@ namespace BL
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
+        public string GetCustomerPassword(int customerID)
+        {
+            try
+            {
+                lock (dal)
+                {
+                    return dal.GetCustomerPassword(customerID);
+                }
+            }
+            catch (DO.UndefinedObjectException e)
+            {
+                throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.XMLFileLoadCreateException e)
+            {
+                throw new XMLFileLoadCreateException(e.Message, e);
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public IEnumerable<CustomerToList> GetCustomersList()
         {
             try
@@ -187,26 +207,6 @@ namespace BL
                                                                   select new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected);
                     return customerToLists;
                 }
-            }
-            catch (DO.XMLFileLoadCreateException e)
-            {
-                throw new XMLFileLoadCreateException(e.Message, e);
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public string GetCustomerPassword(int customerID)
-        {
-            try
-            {
-                lock (dal)
-                {
-                    return dal.GetCustomerPassword(customerID);
-                }
-            }
-            catch (DO.UndefinedObjectException e)
-            {
-                throw new UndefinedObjectException(e.Message, e);
             }
             catch (DO.XMLFileLoadCreateException e)
             {
@@ -232,10 +232,6 @@ namespace BL
                                                                    select new CustomerToList(dalCustomer.ID, dalCustomer.Name, dalCustomer.Phone, numDeliveredPackagesSent, numUndeliveredPackagesSent, numPackagesReceived, numPackagesExpected);
                     return customersToLists;
                 }
-            }
-            catch (DO.UndefinedObjectException e)
-            {
-                throw new UndefinedObjectException(e.Message, e);
             }
             catch (DO.XMLFileLoadCreateException e)
             {

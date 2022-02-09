@@ -11,7 +11,7 @@ namespace ConsoleUI_BL
         /// <summary>
         /// Instance of BL.
         /// </summary>
-        static BlApi.IBL bl = BlApi.BlFactory.GetBl();
+        static BlApi.IBL bl;
 
         /// <summary>
         /// Main method, runs the main menu.
@@ -19,6 +19,15 @@ namespace ConsoleUI_BL
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            try
+            {
+                bl = BlApi.BlFactory.GetBl();
+            }
+            catch (InstanceInitializationException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
             int option;
             do
             {
@@ -145,6 +154,10 @@ namespace ConsoleUI_BL
                 Console.WriteLine(e.Message);
             }
             catch (UndefinedObjectException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (UnableToChargeException e)
             {
                 Console.WriteLine(e.Message);
             }
@@ -302,7 +315,19 @@ namespace ConsoleUI_BL
             {
                 Console.WriteLine(e.Message);
             }
+            catch (NonUniqueIdException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (EmptyListException e)
+            {
+                Console.WriteLine(e.Message);
+            }
             catch (XMLFileLoadCreateException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            catch (LinqQueryException e)
             {
                 Console.WriteLine(e.Message);
             }
@@ -425,6 +450,10 @@ namespace ConsoleUI_BL
                     default:
                         break;
                 }
+            }
+            catch (UndefinedObjectException e)
+            {
+                Console.WriteLine(e.Message);
             }
             catch (XMLFileLoadCreateException e)
             {

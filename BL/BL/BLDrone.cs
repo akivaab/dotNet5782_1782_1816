@@ -76,17 +76,20 @@ namespace BL
                 {
                     dal.UpdateDroneModel(droneID, model);
                 }
+                drones[droneIndex].Model = model;
             }
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
+            catch (DO.NonUniqueIdException e)
+            {
+                throw new NonUniqueIdException(e.Message, e);
+            }
             catch (DO.XMLFileLoadCreateException e)
             {
                 throw new XMLFileLoadCreateException(e.Message, e);
             }
-
-            drones[droneIndex].Model = model;
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -104,7 +107,10 @@ namespace BL
         /// <returns>The ID of the alloted charging station.</returns>
         /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
         /// <exception cref="UnableToChargeException">The drone cannot be sent to a station to charge.</exception>
+        /// <exception cref="NonUniqueIdException">Multpile drones have the same ID.</exception>
+        /// <exception cref="EmptyListException">THere are no stations.</exception>
         /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="LinqQueryException">Failed to perform some query.</exception>
         internal int selectChargeStation(int droneID)
         {
             int droneIndex = drones.FindIndex(d => d.ID == droneID);
@@ -142,6 +148,10 @@ namespace BL
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
+            catch (DO.NonUniqueIdException e)
+            {
+                throw new NonUniqueIdException(e.Message, e);
+            }
             catch (DO.XMLFileLoadCreateException e)
             {
                 throw new XMLFileLoadCreateException(e.Message, e);
@@ -155,6 +165,7 @@ namespace BL
         /// <param name="chargeStationID">The ID of the station the drone will charge at.</param>
         /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
         /// <exception cref="UnableToChargeException">THe drone cannot start charging if it is not in the maintenance state.</exception>
+        /// <exception cref="NonUniqueIdException">Multpile drones have the same ID.</exception>
         /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
         internal void sendToChargeStation(int droneID, int chargeStationID)
         {
@@ -183,6 +194,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.NonUniqueIdException e)
+            {
+                throw new NonUniqueIdException(e.Message, e);
             }
             catch (DO.XMLFileLoadCreateException e)
             {
@@ -228,7 +243,9 @@ namespace BL
         /// <param name="droneID">The ID of the drone being releaseed.</param>
         /// <exception cref="UndefinedObjectException">The drone given does not exist.</exception>
         /// <exception cref="UnableToReleaseException">Cannot release the drone as it is not currently charging.</exception>
+        /// <exception cref="NonUniqueIdException">Multpile drones have the same ID.</exception>
         /// <exception cref="XMLFileLoadCreateException">Failed to save/load xml.</exception>
+        /// <exception cref="LinqQueryException">There is not a single matching droneCharge.</exception>
         internal void releaseDrone(int droneID)
         {
             int droneIndex = drones.FindIndex(d => d.ID == droneID);
@@ -242,7 +259,7 @@ namespace BL
                 throw new UnableToReleaseException("The drone is not currently charging and so cannot be released.");
             }
 
-            try 
+            try
             {
                 lock (dal)
                 {
@@ -255,9 +272,17 @@ namespace BL
             {
                 throw new UndefinedObjectException(e.Message, e);
             }
+            catch (DO.NonUniqueIdException e)
+            {
+                throw new NonUniqueIdException(e.Message, e);
+            }
             catch (DO.XMLFileLoadCreateException e)
             {
                 throw new XMLFileLoadCreateException(e.Message, e);
+            }
+            catch (Exception e) when (isSystemDefinedException(e))
+            {
+                throw new LinqQueryException("There is not a single matching droneCharge.");
             }
         }
         #endregion
@@ -294,6 +319,10 @@ namespace BL
             catch (DO.UndefinedObjectException e)
             {
                 throw new UndefinedObjectException(e.Message, e);
+            }
+            catch (DO.NonUniqueIdException e)
+            {
+                throw new NonUniqueIdException(e.Message, e);
             }
             catch (DO.XMLFileLoadCreateException e)
             {
