@@ -1,5 +1,3 @@
 # dotNet5782_1782_1816
 Machon Lev Windows Miniproject
-hello its me
-Howdy bola
-finish targil0
+College project to create an application that simulates a delivery system via drones.
